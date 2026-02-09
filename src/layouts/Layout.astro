@@ -7,7 +7,7 @@ interface Props {
 
 const { title, description, image } = Astro.props;
 
-// Schema.org 結構化數據 (加入中文名稱)
+// Schema.org 結構化數據 (維持不變，這部分已經很完美)
 const schemaData = {
   "@context": "https://schema.org",
   "@type": "FoodEstablishment",
@@ -55,11 +55,20 @@ const schemaData = {
 		<meta name="description" content={description} />
         <meta name="keywords" content="សេវាកម្មម្ហូបការ, ម្ហូបការ, ចុងភៅម្ហូបការ, 金边外烩, 金边餐饮服务, 柬埔寨婚宴包办, 商务聚餐, Catering Phnom Penh, Wedding Food Cambodia, Private Chef Cambodia" />
         
+        <meta http-equiv="content-language" content="km, zh-CN, en" />
+        <meta name="geo.region" content="KH-12" />
+        <meta name="geo.placename" content="Phnom Penh" />
+        <meta name="geo.position" content="11.562108;104.888535" />
+        <meta name="ICBM" content="11.562108, 104.888535" />
+        
         <meta property="og:type" content="business.business" />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         <meta property="og:image" content={image} />
         <meta property="og:url" content="https://ckm-catering.pages.dev/" />
+        <meta property="business:contact_data:street_address" content="No:33, St:257, Sangkat Teuk Laak 2" />
+        <meta property="business:contact_data:locality" content="Phnom Penh" />
+        <meta property="business:contact_data:country_name" content="Cambodia" />
 
         <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
 
