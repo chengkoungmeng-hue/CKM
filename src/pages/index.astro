@@ -15,7 +15,7 @@ const facebookLink = "https://www.facebook.com/CKMFOODS";
 const heroImage = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjKv4hBalzPdS9u1tqVpG1vlOzvXG1iFQDL0h7_MjMa99Zjkhsy0Ues7Ot7hZViQqPNr_Ov1R0TJjrL6RrSBmGnB-HB7TxolgCUtOqjF8xKdS-8Sl68lK_H6mn9UoDyCG9a-O1T_52A3x6r0wEB-kGGDMWJzfzGjQWJmVHPlRrAtd9Lij6U5ppr2V4jP44/s2048/Page%20Top.jpg";
 const logo = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgjlGlFKeKB8TkpY2CvclZ1MTY672L-mdX1LGO2feiFxz8usRjTHPzKe3MKcEa5IFzG8qW28Si7LiD2cspCuWkGn6pI5yVmqMIY2ZefjK01kqOY-L8maVmsv9ZaTZjsoGfPRz6r8c4uam5iQEL3gTswT8OTWok5HMHI7Ps9lrGV1znQipJveX_b5JVGrbM/s800/logo.jpg";
 
-// 完整畫廊 (已移除那張過長的菜單圖片，並確保圖片質量)
+// 完整畫廊 (Uniform Grid Layout)
 const gallery = [
   "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgesnI9IcOlhWSBLqwjUoP9UL6O4c3AP0SFg3hYFnrsY_Y7NonjeTsIy_99wcMCG7KcAZhL1bEIf_88jUXK6Xl1oEiK-ThYVajVfUGy1HweHDziofRv2mreJNOf-cISGf7ldQZVWhUmwvOg2wrquQgWu2bFzw2DwGYp0HZXUT-ilfL_zp8Ldx-kGwlyx58/s1080/480307452_1142832204052075_7139202728040977906_n.jpg",
   "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjICFNDyzBBVGhTbv4A-5_oFPxIYeJqkKJvvhPIPG-BDCquVXfLORY-AffIY8j2__lFlrrFiILe7C9jUGOnnRzsJQj0vmzm4UCp9j0HYQwr3KLEnhJtVmMpvb1VDCMM8fO4W34nZQbXwjTv25mMMMUSrmDvFdK-p8a84unzDSgkgl24EbttHv84Tq8tiaY/s1080/483490881_1159095022425793_319434032397558425_n.jpg",
@@ -47,12 +47,12 @@ const gallery = [
         </div>
 
         <div class="flex items-center gap-3">
-           <a href={telegramLink} target="_blank" class="hidden md:flex items-center gap-2 text-white hover:text-[#2AABEE] transition">
+           <a href={telegramLink} target="_blank" class="hidden md:flex items-center gap-2 text-white hover:text-primary transition">
              <i class="fab fa-telegram text-xl"></i>
              <span class="font-heading pt-1">តេឡេក្រាម</span>
            </a>
            
-           <a href="#contact" class="bg-primary hover:bg-primaryLight text-white px-6 py-2 rounded-full font-bold text-sm transition shadow-lg hover:scale-105 flex flex-col items-center leading-none justify-center">
+           <a href="#contact" class="bg-primary hover:bg-red-800 text-white px-6 py-2 rounded-full font-bold text-sm transition shadow-lg hover:scale-105 flex flex-col items-center leading-none justify-center border border-red-800/50">
              <span class="font-heading text-base mb-0.5">ទាក់ទងយើង</span>
              <span class="text-[0.6rem] font-chinese opacity-90">联系我们</span>
            </a>
@@ -93,8 +93,8 @@ const gallery = [
                     <span class="text-[0.7rem] font-chinese opacity-90">线上咨询 / Telegram</span>
                 </div>
             </a>
-            <a href="tel:+85512977696" class="bg-white hover:bg-gray-100 text-dark px-10 py-4 rounded-full font-bold transition flex items-center justify-center gap-3 shadow-lg">
-                <i class="fas fa-phone-alt text-primary text-xl"></i>
+            <a href="tel:+85512977696" class="bg-white hover:bg-gold text-dark hover:text-white px-10 py-4 rounded-full font-bold transition flex items-center justify-center gap-3 shadow-lg group">
+                <i class="fas fa-phone-alt text-primary group-hover:text-white text-xl"></i>
                 <div class="flex flex-col items-start leading-none">
                     <span class="font-heading text-lg">ហៅទូរស័ព្ទ</span>
                     <span class="text-[0.7rem] font-chinese opacity-90 font-bold">立即致电 / Call Now</span>
@@ -195,12 +195,10 @@ const gallery = [
                     class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700" 
                     loading="lazy" 
                 />
-                
                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col items-center justify-center">
                     <div class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white mb-2">
                         <i class="fas fa-search-plus"></i>
                     </div>
-                    <span class="text-white font-heading text-lg tracking-wide border-b border-gold pb-1">មើលរូបភាព / 查看大图</span>
                 </div>
             </div>
         ))}
@@ -233,10 +231,10 @@ const gallery = [
       </div>
       
       <div class="flex justify-center gap-8">
-        <a href={facebookLink} target="_blank" class="w-16 h-16 bg-white text-[#1877F2] rounded-full flex items-center justify-center text-3xl hover:scale-110 transition shadow-lg hover:shadow-blue-900/50">
+        <a href={facebookLink} target="_blank" class="w-16 h-16 bg-white text-primary rounded-full flex items-center justify-center text-3xl hover:scale-110 hover:bg-gold hover:text-white transition shadow-lg hover:shadow-black/30">
           <i class="fab fa-facebook-f"></i>
         </a>
-        <a href={telegramLink} target="_blank" class="w-16 h-16 bg-white text-[#229ED9] rounded-full flex items-center justify-center text-3xl hover:scale-110 transition shadow-lg hover:shadow-blue-900/50">
+        <a href={telegramLink} target="_blank" class="w-16 h-16 bg-white text-primary rounded-full flex items-center justify-center text-3xl hover:scale-110 hover:bg-gold hover:text-white transition shadow-lg hover:shadow-black/30">
           <i class="fab fa-telegram-plane"></i>
         </a>
       </div>
@@ -246,7 +244,7 @@ const gallery = [
   <footer class="bg-[#1e2732] py-12 border-t border-gray-700 text-center">
     <div class="max-w-7xl mx-auto px-6">
       <div class="flex flex-col items-center gap-6 mb-8">
-          <img src={logo} class="h-20 w-20 rounded-full border-2 border-gray-600 opacity-90 grayscale hover:grayscale-0 transition duration-500">
+          <img src={logo} class="h-20 w-20 rounded-full border-2 border-gold shadow-glow">
           <div class="text-gray-400 text-base max-w-lg leading-relaxed">
             <p class="mb-2 font-heading text-lg text-white">ផ្ទះលេខ 33 ផ្លូវ 257 សង្កាត់ទឹកល្អក់ទី២ ខណ្ឌទួលគោក រាជធានីភ្នំពេញ</p>
             <p class="font-chinese opacity-70">地址：金边市堆谷区第257路33号</p>
