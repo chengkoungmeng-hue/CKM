@@ -1,184 +1,221 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-// 資料設定
+// 品牌資訊
 const brandName = "CKM CATERING";
-const phoneNumbers = ["011 827 782", "012 977 696", "015 977 696"];
+const phoneNumbers = [
+  { num: "011 827 782", icon: "fa-mobile-alt" },
+  { num: "012 977 696", icon: "fa-phone" },
+  { num: "015 977 696", icon: "fa-phone-volume" }
+];
 const telegramLink = "https://t.me/CKMSam06";
 const facebookLink = "https://www.facebook.com/CKMFOODS";
 
-// 圖片資源 (改用看起來最好吃的一張作為 Hero 背景)
-const heroBg = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjICFNDyzBBVGhTbv4A-5_oFPxIYeJqkKJvvhPIPG-BDCquVXfLORY-AffIY8j2__lFlrrFiILe7C9jUGOnnRzsJQj0vmzm4UCp9j0HYQwr3KLEnhJtVmMpvb1VDCMM8fO4W34nZQbXwjTv25mMMMUSrmDvFdK-p8a84unzDSgkgl24EbttHv84Tq8tiaY/s1080/483490881_1159095022425793_319434032397558425_n.jpg";
+// 圖片資源 (整理過，選出最適合 Hero 的)
+const heroImage = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgesnI9IcOlhWSBLqwjUoP9UL6O4c3AP0SFg3hYFnrsY_Y7NonjeTsIy_99wcMCG7KcAZhL1bEIf_88jUXK6Xl1oEiK-ThYVajVfUGy1HweHDziofRv2mreJNOf-cISGf7ldQZVWhUmwvOg2wrquQgWu2bFzw2DwGYp0HZXUT-ilfL_zp8Ldx-kGwlyx58/s1080/480307452_1142832204052075_7139202728040977906_n.jpg"; // 魚這張看起來很有份量，適合放首頁
+
 const logo = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgjlGlFKeKB8TkpY2CvclZ1MTY672L-mdX1LGO2feiFxz8usRjTHPzKe3MKcEa5IFzG8qW28Si7LiD2cspCuWkGn6pI5yVmqMIY2ZefjK01kqOY-L8maVmsv9ZaTZjsoGfPRz6r8c4uam5iQEL3gTswT8OTWok5HMHI7Ps9lrGV1znQipJveX_b5JVGrbM/s800/logo.jpg";
 
+// 畫廊圖片 (Bento Grid 用)
 const gallery = [
-  "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgesnI9IcOlhWSBLqwjUoP9UL6O4c3AP0SFg3hYFnrsY_Y7NonjeTsIy_99wcMCG7KcAZhL1bEIf_88jUXK6Xl1oEiK-ThYVajVfUGy1HweHDziofRv2mreJNOf-cISGf7ldQZVWhUmwvOg2wrquQgWu2bFzw2DwGYp0HZXUT-ilfL_zp8Ldx-kGwlyx58/s1080/480307452_1142832204052075_7139202728040977906_n.jpg",
-  "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgxpPtppCCj01gpKjsoe3ypoFmNgmYF9yFOGVTEGCDORNnPw0cGTmn4QNCSfK6nqnj_mnP3D4iQ2J78YSRhMUaUn0jv9uF3V6MS-APC27dJcsRdBMx1zBWHoMCCLMso_reBdwNSqKWYCmoiGWR15aEEMDZmY-ib_vH8nP7pOpuFpikxfK5-zRm0GMpa03Y/s1080/482343274_1159095095759119_8629144020772193243_n.jpg",
-  "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEilq57GbFQ8tlvnJtGidMqAaKYhdu-FizUgYJNs95htAnNonLQpOp2MCjs4DZ8MR5curmcU8idHhudUCpAH_1e-In-ZV-ERdgbFZh1_FCPmyMsw46NypMrjZzbPGfVpuH-pXLidJ27OZ54om5FwUdcfPUhEVP0HgHpr-eROpdoypXpvi0D23dUl6kjo6Co/s1080/482247053_1159094965759132_6357862909442523841_n.jpg",
-  "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiSe1gH8dzbLSTGKBMdmSB9QbADhTNPFYMPk3P3JU74j5jT1_66A9KdFSz9GnQNeUMePZi_JWnrZ3gOjGfT966EeJw-9XF1pXPRwz6JM6afnnbbok0IfRSKxLZpR4Fg_-4WMvF9vPxF2CXiz42nVMdrNYPLYsCMdWZPK3fnFaB0YQlo35iOQMa5cgy2n20/s1080/480277170_1142831867385442_9136499051575589237_n.jpg",
-  "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjDnk1VFZ86PaRGN6vbd60csappulO7D7FCZrHXsPDyQytCc5V4ZeH868-Jl68TzeWyY85IAZGq2Qfmn2HJSgS-iM2TpUEYjh_j4xZ4kVlGWZGO-vft280AFWmWxEhaz8F8yv7fDpM13Vu1Xh6lnbFXnofZk-Ka8Q1TCSV-9S_4jPEUnUsg7tHzxs6Wm6A/s1186/481978684_1157539819247980_2107727663958807043_n.jpg",
-  "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjKv4hBalzPdS9u1tqVpG1vlOzvXG1iFQDL0h7_MjMa99Zjkhsy0Ues7Ot7hZViQqPNr_Ov1R0TJjrL6RrSBmGnB-HB7TxolgCUtOqjF8xKdS-8Sl68lK_H6mn9UoDyCG9a-O1T_52A3x6r0wEB-kGGDMWJzfzGjQWJmVHPlRrAtd9Lij6U5ppr2V4jP44/s2048/Page%20Top.jpg"
-];
-
-// 服務特點
-const features = [
-  { icon: "fa-crown", title: "គុណភាពលំដាប់ខ្ពស់", desc: "គ្រឿងផ្សំប្រណិត រសជាតិដើម និងការចម្អិនដោយយកចិត្តទុកដាក់។" }, // Premium Quality
-  { icon: "fa-leaf", title: "អនាម័យ ១០០%", desc: "យើងផ្តល់ជូននូវអាហារដែលស្អាត និងមានសុវត្ថិភាពបំផុតសម្រាប់ភ្ញៀវរបស់អ្នក។" }, // 100% Hygiene
-  { icon: "fa-users", title: "សេវាកម្មរហ័សទាន់ចិត្ត", desc: "ក្រុមការងារដែលមានបទពិសោធន៍ រួសរាយ និងរួចរាល់ក្នុងការបម្រើ។" } // Fast Service
+  { src: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjICFNDyzBBVGhTbv4A-5_oFPxIYeJqkKJvvhPIPG-BDCquVXfLORY-AffIY8j2__lFlrrFiILe7C9jUGOnnRzsJQj0vmzm4UCp9j0HYQwr3KLEnhJtVmMpvb1VDCMM8fO4W34nZQbXwjTv25mMMMUSrmDvFdK-p8a84unzDSgkgl24EbttHv84Tq8tiaY/s1080/483490881_1159095022425793_319434032397558425_n.jpg", span: "md:col-span-2 md:row-span-2" }, // 大圖
+  { src: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgxpPtppCCj01gpKjsoe3ypoFmNgmYF9yFOGVTEGCDORNnPw0cGTmn4QNCSfK6nqnj_mnP3D4iQ2J78YSRhMUaUn0jv9uF3V6MS-APC27dJcsRdBMx1zBWHoMCCLMso_reBdwNSqKWYCmoiGWR15aEEMDZmY-ib_vH8nP7pOpuFpikxfK5-zRm0GMpa03Y/s1080/482343274_1159095095759119_8629144020772193243_n.jpg", span: "md:col-span-1 md:row-span-1" },
+  { src: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEilq57GbFQ8tlvnJtGidMqAaKYhdu-FizUgYJNs95htAnNonLQpOp2MCjs4DZ8MR5curmcU8idHhudUCpAH_1e-In-ZV-ERdgbFZh1_FCPmyMsw46NypMrjZzbPGfVpuH-pXLidJ27OZ54om5FwUdcfPUhEVP0HgHpr-eROpdoypXpvi0D23dUl6kjo6Co/s1080/482247053_1159094965759132_6357862909442523841_n.jpg", span: "md:col-span-1 md:row-span-2" },
+  { src: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiSe1gH8dzbLSTGKBMdmSB9QbADhTNPFYMPk3P3JU74j5jT1_66A9KdFSz9GnQNeUMePZi_JWnrZ3gOjGfT966EeJw-9XF1pXPRwz6JM6afnnbbok0IfRSKxLZpR4Fg_-4WMvF9vPxF2CXiz42nVMdrNYPLYsCMdWZPK3fnFaB0YQlo35iOQMa5cgy2n20/s1080/480277170_1142831867385442_9136499051575589237_n.jpg", span: "md:col-span-1 md:row-span-1" },
+  { src: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjDnk1VFZ86PaRGN6vbd60csappulO7D7FCZrHXsPDyQytCc5V4ZeH868-Jl68TzeWyY85IAZGq2Qfmn2HJSgS-iM2TpUEYjh_j4xZ4kVlGWZGO-vft280AFWmWxEhaz8F8yv7fDpM13Vu1Xh6lnbFXnofZk-Ka8Q1TCSV-9S_4jPEUnUsg7tHzxs6Wm6A/s1186/481978684_1157539819247980_2107727663958807043_n.jpg", span: "md:col-span-1 md:row-span-1" }
 ];
 ---
 
 <Layout 
-  title="ចុងភៅ ចេង គួងម៉េង | CKM Catering Service" 
-  description="CKM Catering Service - សេវាកម្មម្ហូបការដ៏ល្អបំផុតនៅភ្នំពេញ។ គុណភាព អនាម័យ និងរសជាតិដែលមិនអាចបំភ្លេចបាន។"
+  title="CKM Catering Service | សេវាកម្មម្ហូបការលំដាប់អភិជន" 
+  description="CKM Catering Service - ផ្តល់ជូននូវសេវាកម្មម្ហូបការដ៏ល្អឥតខ្ចោះ រសជាតិដើម និងអនាម័យខ្ពស់។"
 >
   
-  <nav class="fixed w-full z-50 transition-all duration-300 bg-gradient-to-b from-black/80 to-transparent">
+  <nav class="fixed w-full z-50 top-0 left-0 border-b border-white/10 bg-dark/80 backdrop-blur-md">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-24">
-        <div class="flex items-center gap-3">
-          <img src={logo} alt="CKM Logo" class="h-16 w-16 rounded-full border-2 border-gold shadow-[0_0_15px_rgba(212,175,55,0.5)]">
-          <div class="hidden md:block">
-            <span class="block text-white font-bold text-2xl font-heading tracking-wider text-shadow">CKM CATERING</span>
-            <span class="block text-gold text-xs tracking-widest uppercase">Premium Food Service</span>
+      <div class="flex items-center justify-between h-20">
+        <div class="flex items-center gap-3 group cursor-pointer">
+          <div class="relative">
+            <div class="absolute -inset-1 bg-gradient-to-r from-gold to-primary rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+            <img src={logo} alt="CKM Logo" class="relative h-12 w-12 rounded-full border-2 border-gold/50">
+          </div>
+          <div class="flex flex-col">
+            <span class="text-white font-bold text-xl font-heading tracking-wider">CKM CATERING</span>
+            <span class="text-gold text-[0.65rem] tracking-[0.2em] uppercase hidden sm:block">Premium Food Service</span>
           </div>
         </div>
-        <div class="hidden md:flex items-center gap-6">
-          <a href="#gallery" class="text-white hover:text-gold transition font-heading text-lg">ស្នាដៃរបស់យើង</a>
-          <a href="#contact" class="bg-primary hover:bg-red-800 text-white px-8 py-3 rounded-full font-bold transition-all hover:shadow-[0_0_20px_rgba(185,28,28,0.6)] transform hover:-translate-y-1 font-heading tracking-wide">
-            <i class="fas fa-phone-alt mr-2"></i> ទាក់ទងយើង
+
+        <div class="hidden md:flex items-center gap-4">
+          <a href="#menu" class="text-gray-300 hover:text-white transition text-sm font-medium">MENU</a>
+          <a href="#about" class="text-gray-300 hover:text-white transition text-sm font-medium">ABOUT</a>
+          <a href="#contact" class="bg-gold hover:bg-white text-dark hover:text-primary px-6 py-2 rounded-full font-bold transition-all btn-shine shadow-glow text-sm font-heading">
+            CONTACT US
           </a>
         </div>
       </div>
     </div>
   </nav>
 
-  <header class="relative h-[85vh] flex items-center justify-center overflow-hidden">
-    <div class="absolute inset-0 bg-cover bg-center bg-fixed transform scale-105" style={`background-image: url('${heroBg}');`}></div>
-    <div class="absolute inset-0 bg-black/60 bg-gradient-to-t from-black via-transparent to-black/30"></div>
+  <header class="relative min-h-screen flex items-center pt-20 overflow-hidden bg-dark">
+    <div class="absolute top-0 right-0 w-2/3 h-full bg-gradient-to-l from-primary/10 to-transparent pointer-events-none"></div>
+    <div class="absolute -top-40 -right-40 w-96 h-96 bg-gold/10 rounded-full blur-[100px]"></div>
     
-    <div class="relative z-10 text-center px-4 max-w-5xl mx-auto mt-16">
-        <div class="inline-block border border-gold/50 rounded-full px-4 py-1 mb-6 backdrop-blur-sm bg-black/30">
-            <span class="text-gold uppercase tracking-[0.2em] text-sm font-bold">The Best Catering in Phnom Penh</span>
+    <div class="max-w-7xl mx-auto px-4 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+      
+      <div class="text-center lg:text-left order-2 lg:order-1 animate-fade-in-up">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-gold/30 bg-gold/5 mb-6">
+          <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+          <span class="text-gold text-xs font-bold tracking-wider uppercase">Accepting Bookings for 2026</span>
         </div>
         
-        <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 leading-tight drop-shadow-2xl font-heading">
-            រសជាតិដែលអ្នក<br/>
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold to-yellow-200">មិនអាចបំភ្លេចបាន</span>
+        <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight font-heading">
+          រសជាតិពិត<br/>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold via-yellow-200 to-gold">នៃសុភមង្គល</span>
         </h1>
         
-        <p class="text-lg md:text-2xl text-gray-200 mb-10 font-light max-w-3xl mx-auto leading-relaxed">
-            សេវាកម្មម្ហូបការ និងកម្មវិធីជប់លៀងដ៏ល្អឥតខ្ចោះ។ យើងបង្កើតអនុស្សាវរីយ៍ដ៏អស្ចារ្យតាមរយៈរសជាតិអាហារ។
+        <p class="text-lg text-gray-400 mb-8 leading-relaxed max-w-xl mx-auto lg:mx-0 font-light">
+          យើងមិនគ្រាន់តែធ្វើម្ហូបទេ យើងបង្កើតអនុស្សាវរីយ៍។ សេវាកម្មម្ហូបការកម្រិតស្តង់ដារ សម្រាប់ថ្ងៃដ៏វិសេសវិសាលរបស់អ្នក។
         </p>
         
-        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <a href={telegramLink} target="_blank" class="w-full sm:w-auto bg-white text-blue-600 hover:bg-gray-100 px-10 py-4 rounded-full font-bold transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center justify-center gap-2">
-                <i class="fab fa-telegram text-2xl"></i> 
+        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            <a href="tel:+85512977696" class="btn-shine bg-primary hover:bg-primaryLight text-white px-8 py-4 rounded-xl font-bold transition-all flex items-center justify-center gap-3 shadow-lg shadow-primary/30">
+                <i class="fas fa-phone-alt"></i>
+                <span>ទំនាក់ទំនងភ្លាមៗ</span>
+            </a>
+            <a href={telegramLink} target="_blank" class="border border-white/20 hover:border-gold/50 hover:bg-white/5 text-white px-8 py-4 rounded-xl font-bold transition-all flex items-center justify-center gap-3">
+                <i class="fab fa-telegram"></i>
                 <span>Telegram</span>
             </a>
-            <a href="#contact" class="w-full sm:w-auto bg-gradient-to-r from-primary to-red-800 text-white hover:from-red-800 hover:to-primary px-10 py-4 rounded-full font-bold transition-all shadow-lg hover:shadow-red-900/50 transform hover:-translate-y-1 flex items-center justify-center gap-2 border border-red-700">
-                <span>សាកសួរព័ត៌មាន</span>
-                <i class="fas fa-arrow-right"></i>
-            </a>
         </div>
-    </div>
 
-    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce text-white/50">
-        <i class="fas fa-chevron-down text-2xl"></i>
+        <div class="mt-12 flex items-center justify-center lg:justify-start gap-8 border-t border-white/10 pt-8">
+            <div>
+                <span class="block text-3xl font-bold text-white font-heading">10+</span>
+                <span class="text-xs text-gray-500 uppercase tracking-wider">Years Exp</span>
+            </div>
+            <div class="w-px h-10 bg-white/10"></div>
+            <div>
+                <span class="block text-3xl font-bold text-white font-heading">100%</span>
+                <span class="text-xs text-gray-500 uppercase tracking-wider">Halal / Hygienic</span>
+            </div>
+        </div>
+      </div>
+
+      <div class="order-1 lg:order-2 relative">
+        <div class="relative z-10 rounded-[3rem] overflow-hidden border-4 border-white/5 shadow-2xl transform rotate-3 hover:rotate-0 transition duration-700 ease-out">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
+            <img src={heroImage} alt="CKM Signature Dish" class="w-full h-auto object-cover hover:scale-110 transition duration-1000">
+            
+            <div class="absolute bottom-6 right-6 z-20 bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl">
+                <div class="flex items-center gap-2 text-gold mb-1">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <p class="text-white text-xs font-bold">Premium Quality</p>
+            </div>
+        </div>
+        <div class="absolute -inset-4 border-2 border-gold/20 rounded-[3.5rem] -z-10 rotate-6"></div>
+      </div>
     </div>
   </header>
 
-  <section class="py-24 bg-cream relative">
-    <div class="absolute inset-0 opacity-5 bg-pattern pointer-events-none"></div>
+  <section id="about" class="py-24 bg-dark relative">
+    <div class="absolute inset-0 bg-luxury-pattern opacity-5"></div>
     <div class="max-w-7xl mx-auto px-6 relative z-10">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-        {features.map((feature) => (
-          <div class="bg-white p-10 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-b-4 border-gold group hover:-translate-y-2">
-            <div class="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center text-4xl text-primary mb-6 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-              <i class={`fas ${feature.icon}`}></i>
-            </div>
-            <h3 class="text-2xl font-bold mb-4 font-heading text-secondary">{feature.title}</h3>
-            <p class="text-gray-600 leading-relaxed text-lg">{feature.desc}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
+        <div class="text-center mb-16">
+            <h2 class="text-gold text-sm font-bold tracking-[0.3em] uppercase mb-3">Why Choose CKM</h2>
+            <h3 class="text-4xl md:text-5xl font-bold text-white font-heading">ឧត្តមភាពនៃរសជាតិ</h3>
+        </div>
 
-  <section id="gallery" class="py-24 bg-white">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="text-center mb-16">
-        <span class="text-primary font-bold tracking-widest uppercase mb-2 block">Our Masterpieces</span>
-        <h2 class="text-5xl font-bold text-secondary font-heading">កម្រងរូបភាពស្នាដៃ</h2>
-        <div class="w-24 h-1.5 bg-gold mx-auto mt-6 rounded-full"></div>
-      </div>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {gallery.map((img, index) => (
-            <div class="group relative overflow-hidden rounded-2xl shadow-lg aspect-[4/3] cursor-pointer">
-                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 flex items-center justify-center">
-                    <span class="text-white border border-white px-6 py-2 rounded-full font-heading tracking-wide transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">ZOOM</span>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+                {icon: "fa-gem", title: "គុណភាពប្រណិត", desc: "គ្រឿងផ្សំដែលត្រូវបានជ្រើសរើសយ៉ាងសម្រិតសម្រាំងបំផុត។"},
+                {icon: "fa-hand-holding-heart", title: "សេវាកម្មពីបេះដូង", desc: "យើងយកចិត្តទុកដាក់គ្រប់ចំណុចតូចៗនៃកម្មវិធីរបស់អ្នក។"},
+                {icon: "fa-fire-burner", title: "ចុងភៅជំនាញ", desc: "បទពិសោធន៍យូរឆ្នាំក្នុងការចម្អិនម្ហូបដ៏មានរសជាតិ។"}
+            ].map(item => (
+                <div class="group bg-white/5 border border-white/5 p-8 rounded-2xl hover:bg-primary/20 hover:border-primary/50 transition duration-300">
+                    <div class="w-14 h-14 bg-gradient-to-br from-gold to-yellow-600 rounded-lg flex items-center justify-center text-white text-2xl mb-6 shadow-lg group-hover:scale-110 transition">
+                        <i class={`fas ${item.icon}`}></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3 font-heading">{item.title}</h4>
+                    <p class="text-gray-400">{item.desc}</p>
                 </div>
-                <img 
-                    src={img} 
-                    alt={`CKM Food ${index}`} 
-                    class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700 ease-in-out" 
-                    loading="lazy" 
-                />
+            ))}
+        </div>
+    </div>
+  </section>
+
+  <section id="menu" class="py-24 bg-cream text-dark">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+            <div>
+                <h2 class="text-5xl font-bold text-dark font-heading mb-2">វិចិត្រសាលម្ហូប</h2>
+                <p class="text-gray-600">Discover our culinary masterpieces</p>
             </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <section id="contact" class="py-24 bg-secondary text-white relative overflow-hidden">
-    <div class="absolute -top-24 -right-24 w-96 h-96 bg-primary/20 rounded-full blur-3xl"></div>
-    <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-gold/10 rounded-full blur-3xl"></div>
-
-    <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
-      <h2 class="text-5xl font-bold mb-8 font-heading">ទំនាក់ទំនងយើងខ្ញុំ</h2>
-      <p class="text-xl text-gray-300 mb-16 max-w-2xl mx-auto">
-        ត្រៀមខ្លួនសម្រាប់កម្មវិធីដ៏អស្ចារ្យហើយឬនៅ? ទំនាក់ទំនងមកយើងឥឡូវនេះ ដើម្បីទទួលបានការប្រឹក្សាដោយឥតគិតថ្លៃ!
-      </p>
-      
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-        {phoneNumbers.map((num) => (
-            <a href={`tel:+855${num.replace(/\s/g, '').substring(1)}`} class="block p-8 bg-white/5 border border-white/10 rounded-2xl hover:bg-primary hover:border-primary transition-all duration-300 group">
-                <i class="fas fa-phone-volume text-4xl mb-4 text-gold group-hover:text-white transition-colors"></i>
-                <div class="text-2xl font-bold font-heading">{num}</div>
-                <div class="text-sm text-gray-400 group-hover:text-red-100 mt-2">Call Now</div>
+            <a href="#contact" class="text-primary font-bold hover:text-dark transition flex items-center gap-2 group">
+                View Full Menu <i class="fas fa-arrow-right transform group-hover:translate-x-1 transition"></i>
             </a>
-        ))}
-      </div>
+        </div>
 
-      <div class="flex justify-center gap-8">
-        <a href={facebookLink} target="_blank" class="w-16 h-16 bg-[#1877F2] rounded-full flex items-center justify-center text-white text-3xl hover:scale-110 transition-transform shadow-lg shadow-blue-900/50">
-          <i class="fab fa-facebook-f"></i>
-        </a>
-        <a href={telegramLink} target="_blank" class="w-16 h-16 bg-[#229ED9] rounded-full flex items-center justify-center text-white text-3xl hover:scale-110 transition-transform shadow-lg shadow-blue-900/50">
-          <i class="fab fa-telegram-plane"></i>
-        </a>
-      </div>
+        <div class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-4 h-[120vh] md:h-[800px]">
+            {gallery.map((img, idx) => (
+                <div class={`relative group overflow-hidden rounded-2xl shadow-lg ${img.span}`}>
+                    <img src={img.src} alt="CKM Food" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-6">
+                        <span class="text-gold text-xs font-bold uppercase tracking-wider mb-1">CKM Signature</span>
+                        <span class="text-white font-heading text-xl">Delicious Dish {idx + 1}</span>
+                    </div>
+                </div>
+            ))}
+        </div>
     </div>
   </section>
 
-  <footer class="bg-black py-12 border-t border-gray-800">
-    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
-      <div class="flex items-center gap-3">
-        <img src={logo} alt="CKM Logo" class="h-10 w-10 rounded-full border border-gray-700">
-        <span class="text-gray-400 font-heading tracking-wider">CKM CATERING</span>
-      </div>
-      <p class="text-gray-600 text-sm">
-        &copy; 2026 CKM Catering Service. All Rights Reserved.
-      </p>
+  <section id="contact" class="py-24 bg-primary relative overflow-hidden">
+    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+    <div class="absolute -right-20 -bottom-20 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+
+    <div class="max-w-5xl mx-auto px-6 text-center relative z-10">
+        <h2 class="text-4xl md:text-6xl font-bold text-white font-heading mb-6">ត្រៀមខ្លួនសម្រាប់កម្មវិធីរបស់អ្នក?</h2>
+        <p class="text-red-100 text-xl mb-12 max-w-2xl mx-auto">ទាក់ទងមកយើងឥឡូវនេះ ដើម្បីទទួលបានការប្រឹក្សា និងតារាងតម្លៃពិសេស។</p>
+
+        <div class="bg-dark/20 backdrop-blur-lg rounded-3xl p-8 md:p-12 border border-white/10 shadow-2xl">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {phoneNumbers.map(contact => (
+                    <a href={`tel:+855${contact.num.replace(/\s/g, '').substring(1)}`} class="group bg-white rounded-xl p-6 hover:bg-gold transition duration-300 transform hover:-translate-y-1 shadow-lg">
+                        <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-dark text-xl mx-auto mb-4 group-hover:bg-white/30">
+                            <i class={`fas ${contact.icon}`}></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-dark font-heading">{contact.num}</h3>
+                        <p class="text-gray-500 text-sm group-hover:text-dark">Call Now</p>
+                    </a>
+                ))}
+            </div>
+
+            <div class="mt-12 pt-8 border-t border-white/10 flex justify-center gap-8">
+                 <a href={facebookLink} target="_blank" class="flex items-center gap-3 text-white hover:text-gold transition">
+                    <i class="fab fa-facebook text-2xl"></i> <span class="font-bold">Facebook Page</span>
+                 </a>
+                 <a href={telegramLink} target="_blank" class="flex items-center gap-3 text-white hover:text-gold transition">
+                    <i class="fab fa-telegram text-2xl"></i> <span class="font-bold">Chat on Telegram</span>
+                 </a>
+            </div>
+        </div>
     </div>
+  </section>
+
+  <footer class="bg-dark border-t border-white/5 py-8 text-center text-gray-500 text-sm">
+    <p>&copy; 2026 CKM Catering Service. Built with ❤️ in Phnom Penh.</p>
   </footer>
 
 </Layout>
 
 <style>
-    /* 文字陰影效果 */
-    .text-shadow {
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    /* Custom CSS for specific visual effects */
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in-up {
+        animation: fadeInUp 1s ease-out forwards;
     }
 </style>
