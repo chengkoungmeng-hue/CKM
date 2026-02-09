@@ -6,6 +6,23 @@ interface Props {
 }
 
 const { title, description, image = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjICFNDyzBBVGhTbv4A-5_oFPxIYeJqkKJvvhPIPG-BDCquVXfLORY-AffIY8j2__lFlrrFiILe7C9jUGOnnRzsJQj0vmzm4UCp9j0HYQwr3KLEnhJtVmMpvb1VDCMM8fO4W34nZQbXwjTv25mMMMUSrmDvFdK-p8a84unzDSgkgl24EbttHv84Tq8tiaY/s1080/483490881_1159095022425793_319434032397558425_n.jpg" } = Astro.props;
+
+// Schema.org 結構化數據 (讓 Google 讀懂這是一間外燴公司)
+const schemaData = {
+  "@context": "https://schema.org",
+  "@type": "FoodService",
+  "name": "CKM Catering Service",
+  "image": image,
+  "telephone": "+85511827782",
+  "url": "https://ckm-catering.pages.dev/",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Phnom Penh",
+    "addressCountry": "KH"
+  },
+  "priceRange": "$$$",
+  "servesCuisine": "Khmer, Chinese, Wedding Catering"
+};
 ---
 
 <!doctype html>
@@ -18,7 +35,6 @@ const { title, description, image = "https://blogger.googleusercontent.com/img/b
         
         <title>{title}</title>
 		<meta name="description" content={description} />
-        <meta name="author" content="CKM Catering Service" />
         
         <meta property="og:type" content="website" />
         <meta property="og:title" content={title} />
@@ -26,30 +42,39 @@ const { title, description, image = "https://blogger.googleusercontent.com/img/b
         <meta property="og:image" content={image} />
         <meta property="og:url" content="https://ckm-catering.pages.dev/" />
 
+        <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
+
         <link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Koulen&family=Noto+Sans+Khmer:wght@300;400;500;600;700&display=swap" rel="stylesheet">
         
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 	</head>
-	<body class="bg-cream text-secondary font-body antialiased selection:bg-primary selection:text-white">
+	<body class="bg-dark text-gray-100 font-body antialiased selection:bg-gold selection:text-black overflow-x-hidden">
 		<slot />
 	</body>
 </html>
 
 <style is:global>
-    /* 滾動條美化 */
-    ::-webkit-scrollbar {
-        width: 10px;
+    /* 全局樣式微調 */
+    h1, h2, h3 { letter-spacing: 0.5px; }
+    
+    /* 按鈕光澤動畫 */
+    .btn-shine {
+        position: relative;
+        overflow: hidden;
     }
-    ::-webkit-scrollbar-track {
-        background: #f1f1f1; 
+    .btn-shine::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: 0.5s;
     }
-    ::-webkit-scrollbar-thumb {
-        background: #991B1B; 
-        border-radius: 5px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-        background: #7F1D1D; 
+    .btn-shine:hover::after {
+        left: 100%;
     }
 </style>
