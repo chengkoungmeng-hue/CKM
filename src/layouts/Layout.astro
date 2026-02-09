@@ -5,23 +5,33 @@ interface Props {
     image?: string;
 }
 
-const { title, description, image = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjICFNDyzBBVGhTbv4A-5_oFPxIYeJqkKJvvhPIPG-BDCquVXfLORY-AffIY8j2__lFlrrFiILe7C9jUGOnnRzsJQj0vmzm4UCp9j0HYQwr3KLEnhJtVmMpvb1VDCMM8fO4W34nZQbXwjTv25mMMMUSrmDvFdK-p8a84unzDSgkgl24EbttHv84Tq8tiaY/s1080/483490881_1159095022425793_319434032397558425_n.jpg" } = Astro.props;
+const { title, description, image } = Astro.props;
 
-// Schema.org 結構化數據 (讓 Google 讀懂這是一間外燴公司)
+// Schema.org 結構化數據 (加入中文名稱)
 const schemaData = {
   "@context": "https://schema.org",
-  "@type": "FoodService",
-  "name": "CKM Catering Service",
-  "image": image,
+  "@type": "FoodEstablishment",
+  "name": "ចុងភៅ ចេង គួងម៉េង - CKM Catering Service",
+  "alternateName": "金边 CKM 餐饮服务", 
+  "image": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgjlGlFKeKB8TkpY2CvclZ1MTY672L-mdX1LGO2feiFxz8usRjTHPzKe3MKcEa5IFzG8qW28Si7LiD2cspCuWkGn6pI5yVmqMIY2ZefjK01kqOY-L8maVmsv9ZaTZjsoGfPRz6r8c4uam5iQEL3gTswT8OTWok5HMHI7Ps9lrGV1znQipJveX_b5JVGrbM/s800/logo.jpg",
   "telephone": "+85511827782",
   "url": "https://ckm-catering.pages.dev/",
   "address": {
     "@type": "PostalAddress",
+    "streetAddress": "No:33, St:257, Sangkat Teuk Laak 2, Khan Toul Kork",
     "addressLocality": "Phnom Penh",
     "addressCountry": "KH"
   },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 11.562108,
+    "longitude": 104.888535
+  },
   "priceRange": "$$$",
-  "servesCuisine": "Khmer, Chinese, Wedding Catering"
+  "servesCuisine": "Khmer, Chinese, Wedding Banquet",
+  "sameAs": [
+    "https://www.facebook.com/CKMFOODS"
+  ]
 };
 ---
 
@@ -33,10 +43,19 @@ const schemaData = {
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
         
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-EG6D0H2T5K"></script>
+        <script is:inline>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-EG6D0H2T5K');
+        </script>
+
         <title>{title}</title>
 		<meta name="description" content={description} />
+        <meta name="keywords" content="សេវាកម្មម្ហូបការ, ម្ហូបការ, ចុងភៅម្ហូបការ, 金边外烩, 金边餐饮服务, 柬埔寨婚宴包办, 商务聚餐, Catering Phnom Penh, Wedding Food Cambodia, Private Chef Cambodia" />
         
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content="business.business" />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         <meta property="og:image" content={image} />
@@ -46,35 +65,17 @@ const schemaData = {
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Koulen&family=Noto+Sans+Khmer:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-        
+		<link href="https://fonts.googleapis.com/css2?family=Koulen&family=Noto+Sans+Khmer:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 	</head>
-	<body class="bg-dark text-gray-100 font-body antialiased selection:bg-gold selection:text-black overflow-x-hidden">
+	<body class="bg-dark text-gray-100 font-body antialiased selection:bg-gold selection:text-black">
 		<slot />
 	</body>
 </html>
 
 <style is:global>
-    /* 全局樣式微調 */
-    h1, h2, h3 { letter-spacing: 0.5px; }
-    
-    /* 按鈕光澤動畫 */
-    .btn-shine {
-        position: relative;
-        overflow: hidden;
-    }
-    .btn-shine::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-        transition: 0.5s;
-    }
-    .btn-shine:hover::after {
-        left: 100%;
+    /* 定义中文字体 */
+    .font-chinese {
+        font-family: 'Noto Sans SC', sans-serif;
     }
 </style>
