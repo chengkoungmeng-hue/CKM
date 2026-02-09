@@ -2,9 +2,10 @@
 interface Props {
 	title: string;
 	description: string;
+    image?: string;
 }
 
-const { title, description } = Astro.props;
+const { title, description, image = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjICFNDyzBBVGhTbv4A-5_oFPxIYeJqkKJvvhPIPG-BDCquVXfLORY-AffIY8j2__lFlrrFiILe7C9jUGOnnRzsJQj0vmzm4UCp9j0HYQwr3KLEnhJtVmMpvb1VDCMM8fO4W34nZQbXwjTv25mMMMUSrmDvFdK-p8a84unzDSgkgl24EbttHv84Tq8tiaY/s1080/483490881_1159095022425793_319434032397558425_n.jpg" } = Astro.props;
 ---
 
 <!doctype html>
@@ -13,23 +14,42 @@ const { title, description } = Astro.props;
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<title>{title}</title>
+		<meta name="generator" content={Astro.generator} />
+        
+        <title>{title}</title>
 		<meta name="description" content={description} />
-		<link rel="preconnect" href="https://fonts.googleapis.com">
+        <meta name="author" content="CKM Catering Service" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={image} />
+        <meta property="og:url" content="https://ckm-catering.pages.dev/" />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Koulen&family=Noto+Sans+Khmer:wght@300;400;600;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+		<link href="https://fonts.googleapis.com/css2?family=Koulen&family=Noto+Sans+Khmer:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 	</head>
-	<body class="bg-white text-slate-800 antialiased font-sans">
+	<body class="bg-cream text-secondary font-body antialiased selection:bg-primary selection:text-white">
 		<slot />
 	</body>
 </html>
 
 <style is:global>
-	:root {
-		--font-heading: 'Koulen', sans-serif;
-		--font-body: 'Noto Sans Khmer', sans-serif;
-	}
-    body { font-family: var(--font-body); }
-    h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); }
+    /* 滾動條美化 */
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1; 
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #991B1B; 
+        border-radius: 5px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: #7F1D1D; 
+    }
 </style>
