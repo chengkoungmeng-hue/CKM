@@ -1,0 +1,61 @@
+---
+import Layout from '../../layouts/Layout.astro';
+const pageTitle = "វិជ្ជាជីវៈ និងទស្សនវិជ្ជាធ្វើម្ហូបរបស់ចុងភៅ - CKM Catering";
+const pageDescription = "ចុងភៅ គួងម៉េង ប្តេជ្ញាប្រើប្រាស់គ្រឿងផ្សំស្រស់ៗ និងរក្សារសជាតិដើម ដើម្បីលើកកម្ពស់ស្តង់ដារម្ហូបការនៅកម្ពុជា។";
+---
+<Layout title={pageTitle} description={pageDescription}>
+  <main class="blog-wrapper">
+    <div class="blog-paper">
+      <header class="post-header">
+        <div class="category-tag">CKM Chef Story</div>
+        <h1>វិជ្ជាជីវៈ និងទស្សនវិជ្ជាធ្វើម្ហូប<br />របស់ចុងភៅ CKM</h1>
+        <p class="subtitle">មិនមែនគ្រាន់តែជាការចម្អិន ប៉ុន្តែជាសិល្បៈនៃរសជាតិ (The Art of Culinary)</p>
+        <div class="post-meta"><span class="author">By Chef Cheng Kuongmeng</span><span class="date">February 2026</span></div>
+      </header>
+      <div class="featured-image-wrapper"><img src="/images/home/blog-chef-professional-standard.webp" alt="Chef Standard" class="featured-image" width="1280" height="642"/></div>
+      <article class="post-content">
+        <p class="lead-paragraph">នៅក្នុងវិស័យម្ហូបអាហារ <strong>ចុងភៅ</strong> ដ៏ជំនាញម្នាក់មិនមែនគ្រាន់តែជាអ្នកចម្អិនម្ហូបប៉ុណ្ណោះទេ ប៉ុន្តែគឺជា "ព្រលឹង" នៃកម្មវិធីទាំងមូល។</p>
+        <h2>១. ការរក្សានូវរសជាតិដើម (Authentic Taste)</h2>
+        <p>ទោះបីជាការតុបតែងមានភាពទំនើបយ៉ាងណាក៏ដោយ ក៏ "រសជាតិដើម" មិនអាចផ្លាស់ប្តូរបានឡើយ។ យើងប្រើប្រាស់គ្រឿងផ្សំស្រស់ៗ និងបុកគ្រឿងដោយដៃជារៀងរាល់ថ្ងៃ។</p>
+        <blockquote>"ការចម្អិនម្ហូបមិនមានផ្លូវកាត់ទេ។ ពេលវេលា និងការយកចិត្តទុកដាក់ គឺជាគ្រឿងផ្សំដែលមិនអាចខ្វះបាន។"</blockquote>
+        <h2>២. ស្តង់ដារអនាម័យ និងវិន័យ (Hygiene & Discipline)</h2>
+        <p>យើងអនុវត្តយ៉ាងតឹងរ៉ឹងនូវ <strong>ស្តង់ដារអនាម័យ</strong> ដើម្បីសុខភាពរបស់ភ្ញៀវ ចាប់តាំងពីការដឹកជញ្ជូន រហូតដល់ការទុកដាក់ម្ហូបអាហារ។</p>
+        <h2>៣. ការបណ្តុះបណ្តាលក្រុមការងារ (Team Training)</h2>
+        <p>ជំនួយការចុងភៅគ្រប់រូបសុទ្ធតែឆ្លងកាត់ការបណ្តុះបណ្តាលយ៉ាងត្រឹមត្រូវ ដើម្បីធានាថាការចេញម្ហូបរាប់រយតុ មានរសជាតិ និងគុណភាពដូចៗគ្នា។</p>
+        <h3>សំណួរដែលសួរញឹកញាប់ (Q&A)</h3>
+        <div class="faq-section">
+          <div class="faq-item"><strong>តើយើងអាចស្នើសុំឱ្យមេចុងភៅចម្អិនផ្ទាល់បានដែរឬទេ?</strong><p>សម្រាប់កម្មវិធី VIP ពិសេស លោកអ្នកអាចកក់សេវាកម្ម "Chef's Table" ដែលមេចុងភៅនឹងចម្អិន និងរៀបចំជូនដោយផ្ទាល់។</p></div>
+          <div class="faq-item"><strong>តើរសជាតិម្ហូបរបស់ CKM បែបបុរាណ ឬសម័យ?</strong><p>យើងអនុវត្តតាមទស្សនវិជ្ជា "រសជាតិដើម បែបបទសម័យ"។</p></div>
+        </div>
+        <div class="cta-wrapper"><p class="cta-text">ចង់ភ្លក់ស្នាដៃចុងភៅអាជីពដែរឬទេ?</p><a href="/" class="btn-primary">កក់កាលបរិច្ឆេទសាកល្បងម្ហូប (Book a Tasting)</a></div>
+      </article>
+    </div>
+  </main>
+</Layout>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;600;700&family=Source+Sans+Pro:wght@400;600;700&display=swap');
+  .blog-wrapper { width: 100%; min-height: 100vh; padding: 120px 20px 60px 20px; background-color: #0f172a; display: flex; justify-content: center; }
+  .blog-paper { background-color: #ffffff; max-width: 900px; width: 100%; padding: 60px; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); font-family: 'Source Sans Pro', 'Noto Sans Khmer', sans-serif; color: #334155; }
+  .post-header { text-align: center; margin-bottom: 3rem; }
+  .category-tag { display: inline-block; background: #FEF3C7; color: #D97706; padding: 6px 16px; border-radius: 20px; font-size: 14px; font-weight: 700; margin-bottom: 1.5rem; text-transform: uppercase; }
+  h1 { font-family: 'Noto Sans Khmer', sans-serif; color: #1e293b; font-size: 40px; line-height: 1.5; margin-bottom: 0.5rem; font-weight: 800; }
+  .subtitle { font-size: 20px; color: #64748b; margin-bottom: 1.5rem; }
+  .post-meta { font-size: 15px; color: #94a3b8; font-weight: 500; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; display: inline-block; padding: 10px 20px; margin-top: 10px; }
+  .post-meta .date { display: none; }
+  .featured-image-wrapper { width: 100%; margin-bottom: 3rem; border-radius: 12px; overflow: hidden; }
+  .featured-image { width: 100%; height: auto; display: block; }
+  .post-content { font-size: 18px; line-height: 1.9; color: #334155; }
+  .post-content p { margin-bottom: 1.5em; }
+  h2 { font-family: 'Noto Sans Khmer', sans-serif; color: #0f172a; font-size: 28px; margin-top: 3rem; margin-bottom: 1rem; border-left: 5px solid #D97706; padding-left: 1rem; }
+  blockquote { font-family: 'Noto Sans Khmer', serif; background-color: #FFFBEB; border-left: 4px solid #FCD34D; position: relative; padding: 2rem 3rem; margin: 3rem 0; font-size: 22px; font-style: italic; color: #92400E; text-align: center; border-radius: 8px; }
+  blockquote::before { content: "“"; font-size: 60px; color: #FDE68A; position: absolute; top: -10px; left: 10px; }
+  .faq-section { background: #f1f5f9; border-radius: 12px; padding: 2.5rem; margin-top: 1rem; }
+  .faq-item { margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid #cbd5e1; }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-item strong { display: block; font-size: 19px; color: #0f172a; margin-bottom: 0.5rem; font-family: 'Noto Sans Khmer', sans-serif; }
+  .cta-wrapper { margin-top: 5rem; padding: 4rem 2rem; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-radius: 16px; text-align: center; color: white; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+  .cta-text { font-size: 22px; margin-bottom: 2.5rem; color: #e2e8f0; font-family: 'Noto Sans Khmer', sans-serif; }
+  .btn-primary { display: inline-block; background-color: #d97706; color: #ffffff; padding: 16px 48px; border-radius: 50px; font-weight: 700; font-size: 18px; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); font-family: 'Noto Sans Khmer', sans-serif; }
+  .btn-primary:hover { background-color: #b45309; transform: translateY(-2px); }
+  @media (max-width: 768px) { .blog-wrapper { padding: 100px 15px 40px 15px; } .blog-paper { padding: 30px 20px; } h1 { font-size: 26px; } h2 { font-size: 22px; } blockquote { font-size: 18px; padding: 1.5rem; } }
+</style>
