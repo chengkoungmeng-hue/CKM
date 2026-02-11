@@ -1,15 +1,19 @@
-import { defineConfig } from 'astro/config';
-import tailwind from "@astrojs/tailwind";
-// ✅ 1. 引入 Sitemap 套件 (因為 package.json 裡有，不用白不用！)
-import sitemap from "@astrojs/sitemap";
-
-export default defineConfig({
-  // ✅ 2. 網站身分證 (Sitemap 需要這個網址才能生成)
-  site: 'https://ckmkh.com',
-  
-  // ✅ 3. 啟用 Tailwind 和 Sitemap
-  integrations: [
-    tailwind(), 
-    sitemap()
-  ],
-});
+{
+  "name": "ckm-catering",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.0",
+    "@astrojs/tailwind": "^5.1.0",
+    "@fortawesome/fontawesome-free": "^7.2.0",
+    "astro": "^4.15.0",
+    "tailwindcss": "^3.4.0"
+  }
+}
