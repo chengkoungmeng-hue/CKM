@@ -1,10 +1,15 @@
 ---
-// ✅ 1. 本地 FontAwesome (速度由 900ms -> 150ms)
+// ✅ 1. 本地 FontAwesome
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const { title, description } = Astro.props;
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const ogImageURL = new URL("/open-graph.png", Astro.site);
+
+// ✅ 2. 強制指定網域 (解決 Invalid URL Build Error)
+// 這樣寫最保險，不管 Astro 設定檔有沒有寫，這裡都不會錯
+const SITE = "https://ckmkh.com";
+
+const canonicalURL = new URL(Astro.url.pathname, SITE);
+const ogImageURL = new URL("/open-graph.png", SITE);
 ---
 
 <!doctype html>
