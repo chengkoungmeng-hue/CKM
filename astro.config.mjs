@@ -1,9 +1,14 @@
 import { defineConfig } from 'astro/config';
 import tailwind from "@astrojs/tailwind";
+import sitemap from "@astrojs/sitemap";
 
 export default defineConfig({
-  // ✅ 新增這行：這是網站的身分證，SEO 必備！
+  // 網站身分證
   site: 'https://ckmkh.com',
   
-  integrations: [tailwind()],
+  // 啟用 Tailwind 和 Sitemap
+  integrations: [
+    tailwind(), 
+    sitemap()
+  ],
 });
