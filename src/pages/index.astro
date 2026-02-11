@@ -1,37 +1,102 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-// 品牌資訊
-const brandName = "CKM CATERING";
+// 1. 品牌與聯絡資訊
+const telegramLink = "https://t.me/CKMSam06";
+const facebookLink = "https://www.facebook.com/CKMFOODS";
+
+// 2. 圖片路徑 (✅ 改回本地路徑，效能最快)
+const heroImage = "/images/home/home-hero-catering-service.webp";
+const logo = "/images/home/brand-ckm-logo-gold.webp";
+
 const phoneNumbers = [
   { num: "011 827 782", icon: "fa-mobile-alt", type: "Cellcard" },
   { num: "012 977 696", icon: "fa-phone", type: "Cellcard" },
   { num: "015 977 696", icon: "fa-phone-volume", type: "Smart" }
 ];
-const telegramLink = "https://t.me/CKMSam06";
-const facebookLink = "https://www.facebook.com/CKMFOODS";
 
-// 圖片資源
-const heroImage = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjKv4hBalzPdS9u1tqVpG1vlOzvXG1iFQDL0h7_MjMa99Zjkhsy0Ues7Ot7hZViQqPNr_Ov1R0TJjrL6RrSBmGnB-HB7TxolgCUtOqjF8xKdS-8Sl68lK_H6mn9UoDyCG9a-O1T_52A3x6r0wEB-kGGDMWJzfzGjQWJmVHPlRrAtd9Lij6U5ppr2V4jP44/s2048/Page%20Top.jpg";
-const logo = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgjlGlFKeKB8TkpY2CvclZ1MTY672L-mdX1LGO2feiFxz8usRjTHPzKe3MKcEa5IFzG8qW28Si7LiD2cspCuWkGn6pI5yVmqMIY2ZefjK01kqOY-L8maVmsv9ZaTZjsoGfPRz6r8c4uam5iQEL3gTswT8OTWok5HMHI7Ps9lrGV1znQipJveX_b5JVGrbM/s800/logo.jpg";
-
-// 完整畫廊 (Uniform Grid Layout)
+// 3. 畫廊圖片 (✅ 改回本地路徑)
 const gallery = [
-  "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgesnI9IcOlhWSBLqwjUoP9UL6O4c3AP0SFg3hYFnrsY_Y7NonjeTsIy_99wcMCG7KcAZhL1bEIf_88jUXK6Xl1oEiK-ThYVajVfUGy1HweHDziofRv2mreJNOf-cISGf7ldQZVWhUmwvOg2wrquQgWu2bFzw2DwGYp0HZXUT-ilfL_zp8Ldx-kGwlyx58/s1080/480307452_1142832204052075_7139202728040977906_n.jpg",
-  "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjICFNDyzBBVGhTbv4A-5_oFPxIYeJqkKJvvhPIPG-BDCquVXfLORY-AffIY8j2__lFlrrFiILe7C9jUGOnnRzsJQj0vmzm4UCp9j0HYQwr3KLEnhJtVmMpvb1VDCMM8fO4W34nZQbXwjTv25mMMMUSrmDvFdK-p8a84unzDSgkgl24EbttHv84Tq8tiaY/s1080/483490881_1159095022425793_319434032397558425_n.jpg",
-  "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgxpPtppCCj01gpKjsoe3ypoFmNgmYF9yFOGVTEGCDORNnPw0cGTmn4QNCSfK6nqnj_mnP3D4iQ2J78YSRhMUaUn0jv9uF3V6MS-APC27dJcsRdBMx1zBWHoMCCLMso_reBdwNSqKWYCmoiGWR15aEEMDZmY-ib_vH8nP7pOpuFpikxfK5-zRm0GMpa03Y/s1080/482343274_1159095095759119_8629144020772193243_n.jpg",
-  "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEilq57GbFQ8tlvnJtGidMqAaKYhdu-FizUgYJNs95htAnNonLQpOp2MCjs4DZ8MR5curmcU8idHhudUCpAH_1e-In-ZV-ERdgbFZh1_FCPmyMsw46NypMrjZzbPGfVpuH-pXLidJ27OZ54om5FwUdcfPUhEVP0HgHpr-eROpdoypXpvi0D23dUl6kjo6Co/s1080/482247053_1159094965759132_6357862909442523841_n.jpg",
-  "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiSe1gH8dzbLSTGKBMdmSB9QbADhTNPFYMPk3P3JU74j5jT1_66A9KdFSz9GnQNeUMePZi_JWnrZ3gOjGfT966EeJw-9XF1pXPRwz6JM6afnnbbok0IfRSKxLZpR4Fg_-4WMvF9vPxF2CXiz42nVMdrNYPLYsCMdWZPK3fnFaB0YQlo35iOQMa5cgy2n20/s1080/480277170_1142831867385442_9136499051575589237_n.jpg",
-  "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjDnk1VFZ86PaRGN6vbd60csappulO7D7FCZrHXsPDyQytCc5V4ZeH868-Jl68TzeWyY85IAZGq2Qfmn2HJSgS-iM2TpUEYjh_j4xZ4kVlGWZGO-vft280AFWmWxEhaz8F8yv7fDpM13Vu1Xh6lnbFXnofZk-Ka8Q1TCSV-9S_4jPEUnUsg7tHzxs6Wm6A/s1186/481978684_1157539819247980_2107727663958807043_n.jpg",
-  "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgMQno0mo-pyLGWnYfSU6GiF-ZxgFZosjvqyVSo3PJDrVFAEI0FreCNMXvmSp4GO0bWUOVnwl1DqxRfumrEbHMX72ZsKkTiat7sTcJg6N29u6pztFbOt5Y0iI5x-hm-nOyImwIKFIjQYinuqxhiAphXpJ6PLCFdFM-q2sl9iyLTK9Z6ZAldlse9oTyk5gk/s1080/482247616_1159095025759126_8740004195179102028_n.jpg",
-  "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhZCn0ZLpW1tTh3dOU7JSTWqo-7bhITEGXmOnb7eNcaeMjgdoIG8wErzZKobjtJ4TvCl0jnRWjup0-WZjvmsDxyWd5W5eYfAm5Pl-xKGZNg0cPG3FBkC1kHyMQu30LHkQUsnNajqZ80IEuePi51f5QJzcz40e-9aN2uZwKz7KIxc8LdJ21r9AAJl1j59sU/s1080/481821763_1157541522581143_4227203551917324449_n.jpg",
-  "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjfxUcV4Dj_RfVIfSzg-PEhgTx70UXg2Nt94i0UJ3-uHA6ftZqPZt8T7RHEXibCvwnfu2-J2h7mfjrCZ0ETX3hKoi9KertzPE7qwMWDOvK7m7BeudGQrB5Rs65kQFDub9gDNx5cVO4gpYJWpVseVduBfllKGqF3dA-9jnPr98H7OIUhhS6i9SRnVVNrv64/s1080/480479698_1142832207385408_5293290035439329343_n.jpg"
+  "/images/home/home-gallery-wedding-01.webp",
+  "/images/home/home-gallery-wedding-02.webp",
+  "/images/home/home-gallery-wedding-03.webp",
+  "/images/home/home-gallery-wedding-04.webp",
+  "/images/home/home-gallery-wedding-05.webp",
+  "/images/home/home-gallery-wedding-06.webp",
+  "/images/home/home-gallery-wedding-07.webp",
+  "/images/home/home-gallery-wedding-08.webp",
+  "/images/home/home-gallery-wedding-09.webp"
+];
+
+// 4. 六篇部落格文章
+const blogPosts = [
+  {
+    khTitle: "របៀបជ្រើសរើសសេវាកម្មម្ហូបការ", 
+    subTitle: "Wedding Catering Guide | 婚宴外烩指南", // 英文 | 中文
+    link: "/blog/wedding-service-guide/",
+    image: "/images/home/blog-wedding-service-guide.webp"
+  },
+  {
+    khTitle: "សិល្បៈនៃកម្មវិធីជប់លៀង", 
+    subTitle: "Event Planning Art | 宴会规划艺术",
+    link: "/blog/event-party-planning/",
+    image: "/images/home/blog-event-party-planning.webp"
+  },
+  {
+    khTitle: "ចុងភៅម្ហូបការ ភ្នំពេញ", 
+    subTitle: "Chef's Philosophy | 主厨职人精神",
+    link: "/blog/chef-professional-standard/",
+    image: "/images/home/blog-chef-professional-standard.webp"
+  },
+  {
+    khTitle: "សេវាកម្មម្ហូបអាហារ", 
+    subTitle: "Quality & Safety | 食安与品质",
+    link: "/blog/food-safety-quality/",
+    image: "/images/home/blog-food-safety-quality.webp"
+  },
+  {
+    khTitle: "ម្ហូបការខ្មែរ", 
+    subTitle: "Authentic Khmer Menu | 正宗高棉菜单",
+    link: "/blog/khmer-wedding-menu/",
+    image: "/images/home/blog-khmer-wedding-menu.webp"
+  },
+  {
+    khTitle: "ដំណើរការសេវាកម្ម", 
+    subTitle: "Service SOP | 标准服务流程",
+    link: "/blog/service-process-sop/",
+    image: "/images/home/blog-service-process-sop.webp"
+  }
+];
+
+// 5. 服務流程資料 (✅ 高棉文為主，英中為輔)
+const serviceSteps = [
+    {
+      icon: "fa-comments", 
+      step: "1", 
+      title: "ការប្រឹក្សាយោបល់", 
+      subTitle: "Consultation | 需求咨询", 
+      desc: "ពិភាក្សាអំពីតម្រូវការ និងថវិការបស់អ្នក"
+    },
+    {
+      icon: "fa-utensils", 
+      step: "2", 
+      title: "រៀបចំបញ្ជីមុខម្ហូប", 
+      subTitle: "Menu Customization | 定制菜单", 
+      desc: "ជ្រើសរើសមុខម្ហូបពិសេសតាមការចង់បាន"
+    },
+    {
+      icon: "fa-calendar-check", 
+      step: "3", 
+      title: "ការប្រតិបត្តិ", 
+      subTitle: "Perfect Execution | 完美执行", 
+      desc: "រៀបចំកម្មវិធីយ៉ាងល្អឥតខ្ចោះនៅថ្ងៃពិសេស"
+    }
 ];
 ---
 
 <Layout 
-  title="ចុងភៅ ចេង គួងម៉េង - CKM Catering Service | 金边顶级外烩服务" 
-  description="CKM Catering 提供金边最顶级的婚宴外烩、商务聚餐与私人厨师服务。提供正宗高棉菜与中式宴席，品质保证。សេវាកម្មម្ហូបការ និងកម្មវិធីជប់លៀងដ៏ល្អឥតខ្ចោះ។"
+  title="ចុងភៅ ចេង គួងម៉េង - CKM Catering Service | សេវាកម្មម្ហូបការលំដាប់ខ្ពស់" 
+  description="CKM Catering ផ្តល់ជូននូវសេវាកម្មម្ហូបការ ជប់លៀងក្រុមហ៊ុន និងចុងភៅផ្ទាល់ខ្លួនលំដាប់ខ្ពស់នៅភ្នំពេញ។ យើងផ្តោតលើគុណភាពអនាម័យ រសជាតិដើម និងសេវាកម្មស្តង់ដារអន្តរជាតិ។"
   image={heroImage}
 >
   
@@ -39,23 +104,21 @@ const gallery = [
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-20">
         <div class="flex items-center gap-3">
-          <img src={logo} alt="CKM Logo" class="h-12 w-12 rounded-full border-2 border-gold shadow-glow">
+          <img src={logo} alt="CKM Logo" width="48" height="48" class="h-12 w-12 rounded-full border-2 border-gold shadow-glow">
           <div class="flex flex-col">
             <span class="text-white font-bold text-lg font-heading tracking-wider">ចុងភៅ ចេង គួងម៉េង</span>
-            <span class="text-gold text-[0.6rem] tracking-wider uppercase font-chinese">CKM 餐饮服务</span>
+            <span class="text-gold text-[0.6rem] tracking-wider uppercase font-chinese font-bold">CKM Catering Service</span>
           </div>
         </div>
-
         <div class="flex items-center gap-3">
-           <a href={telegramLink} target="_blank" class="hidden md:flex items-center gap-2 text-white hover:text-primary transition">
-             <i class="fab fa-telegram text-xl"></i>
-             <span class="font-heading pt-1">តេឡេក្រាម</span>
-           </a>
-           
-           <a href="#contact" class="bg-primary hover:bg-red-800 text-white px-6 py-2 rounded-full font-bold text-sm transition shadow-lg hover:scale-105 flex flex-col items-center leading-none justify-center border border-red-800/50">
-             <span class="font-heading text-base mb-0.5">ទាក់ទងយើង</span>
-             <span class="text-[0.6rem] font-chinese opacity-90">联系我们</span>
-           </a>
+            <a href={telegramLink} target="_blank" aria-label="Contact us on Telegram" class="hidden md:flex items-center gap-2 text-white hover:text-primary transition">
+              <i class="fab fa-telegram text-xl"></i>
+              <span class="font-heading pt-1">តេឡេក្រាម</span>
+            </a>
+            <a href="#contact" aria-label="Go to Contact Section" class="bg-primary hover:bg-red-800 text-white px-6 py-2 rounded-full font-bold text-sm transition shadow-lg hover:scale-105 flex flex-col items-center leading-none justify-center border border-red-800/50">
+              <span class="font-heading text-base mb-0.5">ទាក់ទងយើង</span>
+              <span class="text-[0.6rem] font-chinese opacity-90">Contact Us | 联系我们</span>
+            </a>
         </div>
       </div>
     </div>
@@ -63,89 +126,99 @@ const gallery = [
 
   <header class="relative h-screen flex items-center justify-center overflow-hidden">
     <div class="absolute inset-0 bg-cover bg-center bg-no-repeat bg-fixed transform scale-105" style={`background-image: url('${heroImage}');`}></div>
-    
     <div class="absolute inset-0 bg-black/60 bg-gradient-to-b from-black/80 via-black/50 to-dark"></div>
     
-    <div class="relative z-10 text-center px-4 max-w-4xl mx-auto animate-fade-in-up pt-10">
-        <img src={logo} alt="CKM Logo" class="w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-gold mx-auto mb-8 shadow-[0_0_40px_rgba(212,175,55,0.5)] animate-pulse-slow">
+    <div class="relative z-10 text-center px-4 max-w-4xl mx-auto pt-10">
+        <img src={logo} alt="CKM Logo" width="128" height="128" class="w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-gold mx-auto mb-8 shadow-[0_0_40px_rgba(212,175,55,0.5)]" fetchpriority="high">
         
         <h1 class="text-5xl md:text-7xl font-bold text-white mb-4 font-heading leading-tight drop-shadow-2xl">
           ចុងភៅ <span class="text-gold">ចេង គួងម៉េង</span>
         </h1>
 
-        <h2 class="text-2xl md:text-4xl font-bold text-white mb-6 font-chinese tracking-wide">
-          金边<span class="text-gold">顶级</span>宴会餐饮服务
+        <h2 class="text-lg md:text-2xl font-bold text-white/90 mb-6 font-chinese tracking-wide">
+          Premier Catering Service | <span class="text-gold">金边顶级宴会餐饮</span>
         </h2>
-        
-        <p class="text-xl md:text-2xl text-gray-200 mb-2 font-light font-heading">
+
+        <p class="text-xl md:text-2xl text-gray-200 mb-8 font-light font-heading">
           សេវាកម្មម្ហូបការ និងកម្មវិធីជប់លៀងដ៏ល្អឥតខ្ចោះនៅភ្នំពេញ
         </p>
         
-        <p class="text-gold text-xs md:text-sm mb-12 tracking-[0.2em] uppercase opacity-80">
-          Premium Wedding & Event Catering Service
-        </p>
-        
-        <div class="flex flex-col sm:flex-row gap-5 justify-center">
-            <a href={telegramLink} target="_blank" class="bg-[#2AABEE] hover:bg-[#1e95d4] text-white px-10 py-4 rounded-full font-bold transition shadow-[0_0_20px_rgba(42,171,238,0.4)] flex items-center justify-center gap-3 group">
+        <div class="flex flex-col sm:flex-row gap-5 justify-center animate-fade-in-up" style="animation-delay: 0.1s;">
+            <a href={telegramLink} target="_blank" aria-label="Chat on Telegram" class="bg-[#0077b5] hover:bg-[#005e93] text-white px-10 py-4 rounded-full font-bold transition shadow-[0_0_20px_rgba(0,119,181,0.4)] flex items-center justify-center gap-3 group">
                 <i class="fab fa-telegram-plane text-2xl group-hover:-translate-y-1 transition"></i> 
                 <div class="flex flex-col items-start leading-none">
                     <span class="font-heading text-lg">ឆាតសួរព័ត៌មាន</span>
-                    <span class="text-[0.7rem] font-chinese opacity-90">线上咨询 / Telegram</span>
+                    <span class="text-[0.7rem] font-chinese opacity-100">Telegram | 线上咨询</span>
                 </div>
             </a>
-            <a href="tel:+85512977696" class="bg-white hover:bg-gold text-dark hover:text-white px-10 py-4 rounded-full font-bold transition flex items-center justify-center gap-3 shadow-lg group">
+            <a href="tel:+85512977696" aria-label="Call Now" class="bg-white hover:bg-gold text-dark hover:text-white px-10 py-4 rounded-full font-bold transition flex items-center justify-center gap-3 shadow-lg group">
                 <i class="fas fa-phone-alt text-primary group-hover:text-white text-xl"></i>
                 <div class="flex flex-col items-start leading-none">
                     <span class="font-heading text-lg">ហៅទូរស័ព្ទ</span>
-                    <span class="text-[0.7rem] font-chinese opacity-90 font-bold">立即致电 / Call Now</span>
+                    <span class="text-[0.7rem] font-chinese opacity-90 font-bold">Call Now | 立即致电</span>
                 </div>
             </a>
         </div>
     </div>
 
-    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce text-white/50">
-        <i class="fas fa-chevron-down text-2xl"></i>
-    </div>
+    <a href="#about" aria-label="Scroll Down" class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer group animate-bounce z-20">
+        <div class="w-10 h-10 rounded-full border border-white/30 bg-white/10 backdrop-blur-sm flex items-center justify-center group-hover:bg-gold group-hover:border-gold transition duration-300 shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+            <i class="fas fa-chevron-down text-white text-sm group-hover:text-dark"></i>
+        </div>
+        <span class="text-[0.6rem] text-white/50 tracking-widest uppercase group-hover:text-white transition">Scroll</span>
+    </a>
   </header>
 
-  <section class="py-24 bg-dark relative">
-     <div class="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-black/20 to-transparent"></div>
-     <div class="max-w-7xl mx-auto px-6">
+  <section id="about" class="py-24 bg-dark relative overflow-hidden">
+     <div class="absolute inset-0 bg-gradient-to-b from-dark via-[#1a222e] to-dark pointer-events-none"></div>
+     
+     <div class="max-w-7xl mx-auto px-6 relative z-10">
         <div class="text-center mb-16">
             <h2 class="text-4xl md:text-5xl font-bold text-white font-heading mb-3">ហេតុអ្វីជ្រើសរើស <span class="text-gold">CKM?</span></h2>
-            <h3 class="text-xl text-gray-400 font-chinese mb-6">为什么选择我们?</h3>
+            <h3 class="text-base text-gray-500 font-chinese mb-6 font-light tracking-wide">
+              Why Choose Us? | 为什么选择我们?
+            </h3>
             <div class="w-24 h-1.5 bg-primary mx-auto rounded-full"></div>
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-             <div class="bg-white/5 p-8 rounded-3xl border border-white/10 hover:border-gold/50 transition duration-300 group hover:-translate-y-2 hover:bg-white/10">
-                <div class="w-16 h-16 bg-dark rounded-full flex items-center justify-center border border-gold/30 mb-6 group-hover:scale-110 transition">
+             <div class="bg-white/5 p-8 rounded-3xl border border-white/10 hover:border-gold/50 transition duration-300 group hover:-translate-y-2 hover:bg-white/10 hover:shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
+                <div class="w-16 h-16 bg-dark rounded-full flex items-center justify-center border border-gold/30 mb-6 group-hover:scale-110 transition shadow-glow">
                     <i class="fas fa-gem text-3xl text-gold"></i>
                 </div>
                 <h3 class="text-2xl font-bold text-white mb-2 font-heading">គុណភាពល្អឯក</h3>
-                <h4 class="text-lg text-gold font-chinese mb-4 font-bold">顶级品质</h4>
-                <p class="text-gray-300 mb-2 leading-relaxed">យើងខ្ញុំជ្រើសរើសតែគ្រឿងផ្សំស្រស់ៗ និងល្អបំផុត ដើម្បីធានានូវរសជាតិ។</p>
-                <p class="text-gray-500 text-sm font-chinese">严选最新鲜、最优质的食材，确保每一道菜肴的完美口感。</p>
+                <h4 class="text-sm text-gold font-chinese mb-4 font-bold opacity-80">Top Quality | 顶级品质</h4>
+                <p class="text-gray-200 mb-2 leading-relaxed">យើងខ្ញុំជ្រើសរើសតែគ្រឿងផ្សំស្រស់ៗ និងល្អបំផុត។</p>
+                <p class="text-gray-500 text-xs font-chinese">
+                  Selected freshest ingredients. <br/> 
+                  严选最新鲜、最优质的食材。
+                </p>
              </div>
              
-             <div class="bg-white/5 p-8 rounded-3xl border border-white/10 hover:border-gold/50 transition duration-300 group hover:-translate-y-2 hover:bg-white/10">
-                <div class="w-16 h-16 bg-dark rounded-full flex items-center justify-center border border-gold/30 mb-6 group-hover:scale-110 transition">
+             <div class="bg-white/5 p-8 rounded-3xl border border-white/10 hover:border-gold/50 transition duration-300 group hover:-translate-y-2 hover:bg-white/10 hover:shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
+                <div class="w-16 h-16 bg-dark rounded-full flex items-center justify-center border border-gold/30 mb-6 group-hover:scale-110 transition shadow-glow">
                     <i class="fas fa-star text-3xl text-gold"></i>
                 </div>
                 <h3 class="text-2xl font-bold text-white mb-2 font-heading">បទពិសោធន៍</h3>
-                <h4 class="text-lg text-gold font-chinese mb-4 font-bold">经验丰富</h4>
-                <p class="text-gray-300 mb-2 leading-relaxed">បទពិសោធន៍ជាច្រើនឆ្នាំក្នុងការរៀបចំកម្មវិធីមង្គលការ និងពិធីជប់លៀង។</p>
-                <p class="text-gray-500 text-sm font-chinese">拥有多年承办大型婚宴与高端商务宴请的丰富经验。</p>
+                <h4 class="text-sm text-gold font-chinese mb-4 font-bold opacity-80">Experience | 经验丰富</h4>
+                <p class="text-gray-200 mb-2 leading-relaxed">បទពិសោធន៍ជាច្រើនឆ្នាំក្នុងការរៀបចំកម្មវិធី។</p>
+                <p class="text-gray-500 text-xs font-chinese">
+                  Years of high-end event experience. <br/>
+                  擁有多年承办高端宴会的经验。
+                </p>
              </div>
              
-             <div class="bg-white/5 p-8 rounded-3xl border border-white/10 hover:border-gold/50 transition duration-300 group hover:-translate-y-2 hover:bg-white/10">
-                <div class="w-16 h-16 bg-dark rounded-full flex items-center justify-center border border-gold/30 mb-6 group-hover:scale-110 transition">
+             <div class="bg-white/5 p-8 rounded-3xl border border-white/10 hover:border-gold/50 transition duration-300 group hover:-translate-y-2 hover:bg-white/10 hover:shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
+                <div class="w-16 h-16 bg-dark rounded-full flex items-center justify-center border border-gold/30 mb-6 group-hover:scale-110 transition shadow-glow">
                     <i class="fas fa-concierge-bell text-3xl text-gold"></i>
                 </div>
                 <h3 class="text-2xl font-bold text-white mb-2 font-heading">សេវាកម្ម</h3>
-                <h4 class="text-lg text-gold font-chinese mb-4 font-bold">至尊服务</h4>
-                <p class="text-gray-300 mb-2 leading-relaxed">ក្រុមការងារជំនាញរបស់យើងនឹងផ្តល់ជូននូវបទពិសោធន៍ដ៏រលូន។</p>
-                <p class="text-gray-500 text-sm font-chinese">专业团队为您提供无微不至的一站式宴会服务體驗。</p>
+                <h4 class="text-sm text-gold font-chinese mb-4 font-bold opacity-80">Premium Service | 至尊服务</h4>
+                <p class="text-gray-200 mb-2 leading-relaxed">ក្រុមការងារជំនាញរបស់យើងនឹងផ្តល់ជូននូវបទពិសោធន៍។</p>
+                <p class="text-gray-500 text-xs font-chinese">
+                   Professional One-stop Service. <br/>
+                   专业团队提供无微不至的服務。
+                </p>
              </div>
         </div>
      </div>
@@ -154,23 +227,20 @@ const gallery = [
   <section class="py-24 bg-cream text-dark">
     <div class="max-w-7xl mx-auto px-6">
         <h2 class="text-4xl md:text-5xl font-bold text-center mb-2 font-heading text-dark">ដំណើរការសេវាកម្ម</h2>
-        <p class="text-center text-gray-500 font-chinese mb-16 text-xl">服务流程</p>
-        
+        <p class="text-center text-gray-400 font-chinese mb-16 text-lg tracking-wide">
+          Service Process | 服务流程
+        </p>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
             <div class="hidden md:block absolute top-12 left-[16%] right-[16%] h-1 bg-gray-200 -z-10"></div>
             
-            {[
-                {icon: "fa-comments", step: "1", title: "ការប្រឹក្សាយោបល់", cnTitle: "需求咨询", desc: "ពិភាក្សាអំពីតម្រូវការ និងថវិការបស់អ្នក"},
-                {icon: "fa-utensils", step: "2", title: "រៀបចំបញ្ជីមុខម្ហូប", cnTitle: "定制菜单", desc: "ជ្រើសរើសមុខម្ហូបពិសេសតាមការចង់បាន"},
-                {icon: "fa-calendar-check", step: "3", title: "ការប្រតិបត្តិ", cnTitle: "完美执行", desc: "រៀបចំកម្មវិធីយ៉ាងល្អឥតខ្ចោះនៅថ្ងៃពិសេស"}
-            ].map(item => (
+            {serviceSteps.map(item => (
                 <div class="text-center bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition relative group border-b-4 border-transparent hover:border-primary">
                     <div class="w-24 h-24 bg-primary text-white text-3xl rounded-full flex items-center justify-center mx-auto mb-6 border-4 border-white shadow-md relative z-10 group-hover:bg-gold transition transform group-hover:rotate-12">
                         <i class={`fas ${item.icon}`}></i>
                         <span class="absolute -top-2 -right-2 w-8 h-8 bg-gold rounded-full flex items-center justify-center text-sm font-bold border-2 border-white">{item.step}</span>
                     </div>
                     <h3 class="text-2xl font-bold mb-1 font-heading">{item.title}</h3>
-                    <h4 class="text-lg font-bold text-primary mb-3 font-chinese">{item.cnTitle}</h4>
+                    <h4 class="text-sm font-bold text-primary mb-3 font-chinese opacity-80">{item.subTitle}</h4>
                     <p class="text-gray-600 text-base">{item.desc}</p>
                 </div>
             ))}
@@ -182,27 +252,56 @@ const gallery = [
     <div class="max-w-7xl mx-auto px-6">
       <div class="text-center mb-16">
         <h2 class="text-5xl font-bold text-dark font-heading mb-3">ស្នាដៃម្ហូបការរបស់យើង</h2>
-        <p class="text-xl text-gray-500 font-chinese tracking-wide">我们的宴会作品展示</p>
+        <p class="text-lg text-gray-400 font-chinese tracking-wide">
+          Our Masterpieces | 宴会作品展示
+        </p>
         <div class="w-24 h-1 bg-gold mx-auto mt-6 rounded-full"></div>
       </div>
-      
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {gallery.map((img, index) => (
             <div class="relative group overflow-hidden rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 aspect-[4/3] cursor-pointer bg-gray-100">
                 <img 
                     src={img} 
-                    alt={`CKM Food ${index}`} 
+                    alt={`CKM Catering Gallery Wedding ${index + 1}`} 
+                    width="800"
+                    height="600"
                     class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700" 
                     loading="lazy" 
+                    fetchpriority="low"
                 />
-                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col items-center justify-center">
-                    <div class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white mb-2">
-                        <i class="fas fa-search-plus"></i>
-                    </div>
-                </div>
             </div>
         ))}
       </div>
+    </div>
+  </section>
+
+  <section class="py-24 bg-gray-50 border-t border-gray-200">
+    <div class="max-w-7xl mx-auto px-6">
+       <div class="text-center mb-12">
+          <h2 class="text-4xl font-bold text-dark font-heading mb-2">គន្លឹះ និងចំណេះដឹង</h2>
+          <p class="text-lg text-gray-400 font-chinese tracking-wide">
+            Insights & Guide | 专业宴会指南
+          </p>
+       </div>
+       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {blogPosts.map(post => (
+            <div class="group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition transform hover:-translate-y-1 h-full flex flex-col">
+               <a href={post.link} class="block aspect-[2/1] overflow-hidden relative">
+                  <img src={post.image} alt={post.khTitle} width="800" height="400" class="w-full h-full object-cover group-hover:scale-105 transition duration-500"/>
+                  <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition"></div>
+               </a>
+               <div class="p-6 flex flex-col flex-grow">
+                  <h3 class="text-xl font-bold text-dark font-heading mb-2 group-hover:text-primary transition line-clamp-2">{post.khTitle}</h3>
+                  <p class="text-gray-500 font-chinese text-sm mb-4 line-clamp-2 font-bold opacity-80">{post.subTitle}</p>
+                  <div class="mt-auto">
+                      <a href={post.link} class="inline-flex items-center text-primary text-sm font-bold uppercase tracking-wider hover:text-red-700 transition">
+                          Read More <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                      </a>
+                  </div>
+               </div>
+            </div>
+          ))}
+       </div>
     </div>
   </section>
 
@@ -212,17 +311,21 @@ const gallery = [
     
     <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
       <h2 class="text-4xl md:text-6xl font-bold text-white mb-4 font-heading">ទាក់ទងមកយើងខ្ញុំ</h2>
-      <h3 class="text-2xl text-white/90 font-chinese mb-8">立即联系我们，打造完美盛宴</h3>
-      
+      <h3 class="text-2xl text-white/90 font-chinese mb-8 tracking-wide">
+        Contact Us Today | 立即联系我们
+      </h3>
       <p class="text-xl text-red-100 mb-12 max-w-2xl mx-auto leading-relaxed">
         កម្មវិធីដ៏ល្អឥតខ្ចោះមួយ ចាប់ផ្តើមពីការពិភាក្សាដ៏សាមញ្ញ។
         <br/>
-        <span class="text-base font-chinese opacity-80 mt-2 block">一场完美的活动，始于一次简单的沟通。</span>
+        <span class="text-base font-chinese opacity-80 mt-2 block">
+          A perfect event starts with a simple conversation. <br/>
+          一场完美的活动，始于一次简单的沟通。
+        </span>
       </p>
       
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
         {phoneNumbers.map((contact) => (
-            <a href={`tel:+855${contact.num.replace(/\s/g, '').substring(1)}`} class="bg-white/10 hover:bg-white hover:text-primary text-white border border-white/20 p-8 rounded-2xl transition duration-300 flex flex-col items-center gap-3 group hover:-translate-y-2 shadow-lg">
+            <a href={`tel:+855${contact.num.replace(/\s/g, '').substring(1)}`} aria-label={`Call ${contact.num}`} class="bg-white/10 hover:bg-white hover:text-primary text-white border border-white/20 p-8 rounded-2xl transition duration-300 flex flex-col items-center gap-3 group hover:-translate-y-2 shadow-lg">
                 <i class={`fas ${contact.icon} text-4xl mb-2 text-gold group-hover:text-primary transition`}></i>
                 <span class="text-2xl font-bold font-heading">{contact.num}</span>
                 <span class="text-xs opacity-70 group-hover:opacity-100 uppercase tracking-widest font-bold">{contact.type}</span>
@@ -231,10 +334,10 @@ const gallery = [
       </div>
       
       <div class="flex justify-center gap-8">
-        <a href={facebookLink} target="_blank" class="w-16 h-16 bg-white text-primary rounded-full flex items-center justify-center text-3xl hover:scale-110 hover:bg-gold hover:text-white transition shadow-lg hover:shadow-black/30">
+        <a href={facebookLink} target="_blank" aria-label="Facebook" class="w-16 h-16 bg-white text-primary rounded-full flex items-center justify-center text-3xl hover:scale-110 hover:bg-gold hover:text-white transition shadow-lg">
           <i class="fab fa-facebook-f"></i>
         </a>
-        <a href={telegramLink} target="_blank" class="w-16 h-16 bg-white text-primary rounded-full flex items-center justify-center text-3xl hover:scale-110 hover:bg-gold hover:text-white transition shadow-lg hover:shadow-black/30">
+        <a href={telegramLink} target="_blank" aria-label="Telegram" class="w-16 h-16 bg-white text-primary rounded-full flex items-center justify-center text-3xl hover:scale-110 hover:bg-gold hover:text-white transition shadow-lg">
           <i class="fab fa-telegram-plane"></i>
         </a>
       </div>
@@ -244,36 +347,20 @@ const gallery = [
   <footer class="bg-[#1e2732] py-12 border-t border-gray-700 text-center">
     <div class="max-w-7xl mx-auto px-6">
       <div class="flex flex-col items-center gap-6 mb-8">
-          <img src={logo} class="h-20 w-20 rounded-full border-2 border-gold shadow-glow">
+          <img src={logo} alt="CKM Logo" width="80" height="80" class="h-20 w-20 rounded-full border-2 border-gold shadow-glow">
           <div class="text-gray-400 text-base max-w-lg leading-relaxed">
             <p class="mb-2 font-heading text-lg text-white">ផ្ទះលេខ 33 ផ្លូវ 257 សង្កាត់ទឹកល្អក់ទី២ ខណ្ឌទួលគោក រាជធានីភ្នំពេញ</p>
-            <p class="font-chinese opacity-70">地址：金边市堆谷区第257路33号</p>
           </div>
       </div>
       <div class="w-full h-px bg-gray-700 mb-8"></div>
-      <p class="text-gray-500 text-sm">
-        &copy; 2026 CKM Catering Service. All Rights Reserved.
-      </p>
+      <p class="text-gray-400 text-sm">&copy; 2026 CKM Catering Service. All Rights Reserved.</p>
     </div>
   </footer>
-
 </Layout>
 
 <style>
-    /* 讓 Logo 緩慢呼吸 */
-    @keyframes pulseSlow {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-    }
-    .animate-pulse-slow {
-        animation: pulseSlow 3s infinite ease-in-out;
-    }
-    
-    .animate-fade-in-up {
-        animation: fadeInUp 1s ease-out forwards;
-    }
-    @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes pulseSlow { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+    .animate-pulse-slow { animation: pulseSlow 3s infinite ease-in-out; }
+    .animate-fade-in-up { animation: fadeInUp 1s ease-out forwards; opacity: 0; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 </style>
