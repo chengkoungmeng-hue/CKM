@@ -5,7 +5,7 @@ import Layout from '../layouts/Layout.astro';
 const telegramLink = "https://t.me/CKMSam06";
 const facebookLink = "https://www.facebook.com/CKMFOODS";
 
-// 2. 圖片路徑 (✅ 改回本地路徑，效能最快)
+// 2. 核心圖片路徑
 const heroImage = "/images/home/home-hero-catering-service.webp";
 const logo = "/images/home/brand-ckm-logo-gold.webp";
 
@@ -15,24 +15,129 @@ const phoneNumbers = [
   { num: "015 977 696", icon: "fa-phone-volume", type: "Smart" }
 ];
 
-// 3. 畫廊圖片 (✅ 改回本地路徑)
-const gallery = [
-  "/images/home/home-gallery-wedding-01.webp",
-  "/images/home/home-gallery-wedding-02.webp",
-  "/images/home/home-gallery-wedding-03.webp",
-  "/images/home/home-gallery-wedding-04.webp",
-  "/images/home/home-gallery-wedding-05.webp",
-  "/images/home/home-gallery-wedding-06.webp",
-  "/images/home/home-gallery-wedding-07.webp",
-  "/images/home/home-gallery-wedding-08.webp",
-  "/images/home/home-gallery-wedding-09.webp"
+// 3. ✅ 15道精選菜單 (三語分離：高棉文為主，英中為輔)
+const menuItems = [
+  // 第一排
+  { 
+    title_kh: "ណែមសាច់", // 高棉文 (請確認)
+    title_en: "Signature Spring Rolls", 
+    title_cn: "招牌春卷", // 簡中
+    image: "/images/home/menu-01.webp", 
+    desc: "Fresh handmade rolls with special sauce." 
+  },
+  { 
+    title_kh: "ញាំបង្គា", 
+    title_en: "Spicy Prawn Salad", 
+    title_cn: "香辣大虾沙拉", 
+    image: "/images/home/menu-02.webp", 
+    desc: "Local herbs, chili, and lime dressing." 
+  },
+  { 
+    title_kh: "ទាអាំងទឹកឃ្មុំ", 
+    title_en: "Roasted Duck", 
+    title_cn: "法式烤鸭胸", 
+    image: "/images/home/menu-03.webp", 
+    desc: "Slow-cooked with honey glaze." 
+  },
+  
+  // 第二排
+  { 
+    title_kh: "ត្រីចំហុយក្រូចឆ្មា", 
+    title_en: "Steamed Fish", 
+    title_cn: "清蒸柠檬鱼", 
+    image: "/images/home/menu-04.webp", 
+    desc: "Fresh catch of the day with lime sauce." 
+  },
+  { 
+    title_kh: "សម្លការីខ្មែរ", 
+    title_en: "Khmer Red Curry", 
+    title_cn: "高棉红咖喱", 
+    image: "/images/home/menu-05.webp", 
+    desc: "Traditional style with coconut milk." 
+  },
+  { 
+    title_kh: "ឡុកឡាក់សាច់គោ", 
+    title_en: "Beef Lok Lak", 
+    title_cn: "黑胡椒骰子牛", 
+    image: "/images/home/menu-06.webp", 
+    desc: "Premium beef with Kampot pepper." 
+  },
+
+  // 第三排
+  { 
+    title_kh: "ស្ងោរជ្រក់សមុទ្រ", 
+    title_en: "Seafood Soup", 
+    title_cn: "酸辣海鲜汤", 
+    image: "/images/home/menu-07.webp", 
+    desc: "Authentic Tom Yum flavor." 
+  },
+  { 
+    title_kh: "មាន់អាំងស្លឹកគ្រៃ", 
+    title_en: "Grilled Chicken", 
+    title_cn: "香茅烤鸡", 
+    image: "/images/home/menu-08.webp", 
+    desc: "Marinated with lemongrass." 
+  },
+  { 
+    title_kh: "បាយឆាយ៉ាងចូវ", 
+    title_en: "Yangzhou Fried Rice", 
+    title_cn: "扬州炒饭", 
+    image: "/images/home/menu-09.webp", 
+    desc: "Wok-fried with BBQ pork." 
+  },
+
+  // 第四排
+  { 
+    title_kh: "ឆ្អឹងជំនីជ្រូកអាំង", 
+    title_en: "BBQ Pork Ribs", 
+    title_cn: "蜜汁烤肋排", 
+    image: "/images/home/menu-10.webp", 
+    desc: "Tender ribs with BBQ sauce." 
+  },
+  { 
+    title_kh: "ឆាkuyteav", 
+    title_en: "Vegetable Stir-fry", 
+    title_cn: "清炒时蔬", 
+    image: "/images/home/menu-11.webp", 
+    desc: "Seasonal mixed vegetables." 
+  },
+  { 
+    title_kh: "ញាំមឹក", 
+    title_en: "Spicy Squid Salad", 
+    title_cn: "凉拌花枝", 
+    image: "/images/home/menu-12.webp", 
+    desc: "Spicy and sour Thai style." 
+  },
+
+  // 第五排
+  { 
+    title_kh: "បាយដំណើបស្វាយ", 
+    title_en: "Mango Sticky Rice", 
+    title_cn: "芒果糯米饭", 
+    image: "/images/home/menu-13.webp", 
+    desc: "Sweet coconut milk dessert." 
+  },
+  { 
+    title_kh: "ផ្លែឈើ", 
+    title_en: "Fruit Platter", 
+    title_cn: "季节水果盘", 
+    image: "/images/home/menu-14.webp", 
+    desc: "Selected tropical fruits." 
+  },
+  { 
+    title_kh: "ម្ហូបពិសេស", 
+    title_en: "Chef Special", 
+    title_cn: "主厨特制", 
+    image: "/images/home/menu-15.webp", 
+    desc: "Daily surprise menu." 
+  },
 ];
 
-// 4. 六篇部落格文章
+// 4. 部落格文章
 const blogPosts = [
   {
     khTitle: "របៀបជ្រើសរើសសេវាកម្មម្ហូបការ", 
-    subTitle: "Wedding Catering Guide | 婚宴外烩指南", // 英文 | 中文
+    subTitle: "Wedding Catering Guide | 婚宴外烩指南", 
     link: "/blog/wedding-service-guide/",
     image: "/images/home/blog-wedding-service-guide.webp"
   },
@@ -68,7 +173,7 @@ const blogPosts = [
   }
 ];
 
-// 5. 服務流程資料 (✅ 高棉文為主，英中為輔)
+// 5. 服務流程
 const serviceSteps = [
     {
       icon: "fa-comments", 
@@ -204,7 +309,7 @@ const serviceSteps = [
                 <p class="text-gray-200 mb-2 leading-relaxed">បទពិសោធន៍ជាច្រើនឆ្នាំក្នុងការរៀបចំកម្មវិធី។</p>
                 <p class="text-gray-500 text-xs font-chinese">
                   Years of high-end event experience. <br/>
-                  擁有多年承办高端宴会的经验。
+                  拥有多年承办高端宴会的经验。
                 </p>
              </div>
              
@@ -217,11 +322,64 @@ const serviceSteps = [
                 <p class="text-gray-200 mb-2 leading-relaxed">ក្រុមការងារជំនាញរបស់យើងនឹងផ្តល់ជូននូវបទពិសោធន៍។</p>
                 <p class="text-gray-500 text-xs font-chinese">
                    Professional One-stop Service. <br/>
-                   专业团队提供无微不至的服務。
+                   专业团队提供无微不至的服务。
                 </p>
              </div>
         </div>
      </div>
+  </section>
+
+  <section id="menu" class="py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="text-5xl font-bold text-dark font-heading mb-3">ស្នាដៃម្ហូបការរបស់យើង</h2>
+        <p class="text-lg text-gray-400 font-chinese tracking-wide">
+          Our Masterpieces | 精选宴会菜单
+        </p>
+        <div class="w-24 h-1 bg-gold mx-auto mt-6 rounded-full"></div>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {menuItems.map((item) => (
+            <div class="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 bg-gray-50">
+                
+                {/* 圖片區 */}
+                <div class="aspect-square overflow-hidden relative">
+                  <img 
+                    src={item.image} 
+                    alt={item.title_en} 
+                    class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700"
+                    loading="lazy"
+                    width="800"
+                    height="800"
+                  />
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
+                </div>
+
+                {/* 文字區：三語階層排版 */}
+                <div class="absolute inset-0 flex flex-col justify-end p-6">
+                  
+                  {/* 1. 高棉文 (最大，金色) */}
+                  <h3 class="text-2xl font-heading text-gold mb-1 translate-y-2 group-hover:translate-y-0 transition duration-300 shadow-sm">
+                    {item.title_kh}
+                  </h3>
+
+                  {/* 2. 英文 | 簡體中文 (次要，白色小字) */}
+                  <div class="text-white text-sm font-bold tracking-wider mb-2 translate-y-2 group-hover:translate-y-0 transition duration-300 delay-75 flex items-center gap-2">
+                    <span>{item.title_en}</span>
+                    <span class="w-px h-3 bg-white/50"></span>
+                    <span class="font-chinese opacity-90">{item.title_cn}</span>
+                  </div>
+
+                  {/* 3. 描述 (隱藏內容) */}
+                  <p class="text-gray-300 text-xs line-clamp-2 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-100">
+                    {item.desc}
+                  </p>
+                </div>
+            </div>
+        ))}
+      </div>
+    </div>
   </section>
 
   <section class="py-24 bg-cream text-dark">
@@ -245,33 +403,6 @@ const serviceSteps = [
                 </div>
             ))}
         </div>
-    </div>
-  </section>
-
-  <section id="gallery" class="py-24 bg-white">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="text-center mb-16">
-        <h2 class="text-5xl font-bold text-dark font-heading mb-3">ស្នាដៃម្ហូបការរបស់យើង</h2>
-        <p class="text-lg text-gray-400 font-chinese tracking-wide">
-          Our Masterpieces | 宴会作品展示
-        </p>
-        <div class="w-24 h-1 bg-gold mx-auto mt-6 rounded-full"></div>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {gallery.map((img, index) => (
-            <div class="relative group overflow-hidden rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 aspect-[4/3] cursor-pointer bg-gray-100">
-                <img 
-                    src={img} 
-                    alt={`CKM Catering Gallery Wedding ${index + 1}`} 
-                    width="800"
-                    height="600"
-                    class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700" 
-                    loading="lazy" 
-                    fetchpriority="low"
-                />
-            </div>
-        ))}
-      </div>
     </div>
   </section>
 
