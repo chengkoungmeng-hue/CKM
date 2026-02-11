@@ -2,13 +2,18 @@
 // ✅ 1. 本地 FontAwesome
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
-const { title, description } = Astro.props;
+// ✅ 2. 接收頁面傳來的參數 (新增 image)
+const { title, description, image } = Astro.props;
 
-// ✅ 2. 強制指定網域 (解決 Invalid URL Build Error)
+// ✅ 3. 強制指定網域
 const SITE = "https://ckmkh.com";
 
 const canonicalURL = new URL(Astro.url.pathname, SITE);
-const ogImageURL = new URL("/open-graph.png", SITE);
+
+// ✅ 4. 智慧圖片邏輯：如果有傳 image 進來就用，沒有就用預設的 open-graph.png
+const ogImageURL = image 
+    ? new URL(image, SITE) 
+    : new URL("/open-graph.png", SITE);
 ---
 
 <!doctype html>
@@ -50,12 +55,12 @@ const ogImageURL = new URL("/open-graph.png", SITE);
 		<meta name="twitter:description" content={description} />
 		<meta name="twitter:image" content={ogImageURL} />
 		
-		<script type="application/ld+json" is:inline>
+		<script type="application/ld+json" is:inline define:vars={{ SITE }}>
 			{
 			  "@context": "https://schema.org",
 			  "@type": "Organization",
-			  "url": "https://www.ckmkh.com/",
-			  "logo": "https://www.ckmkh.com/favicon.svg"
+			  "url": SITE,
+			  "logo": SITE + "/favicon.svg"
 			}
 		</script>
 	</head>
@@ -67,26 +72,28 @@ const ogImageURL = new URL("/open-graph.png", SITE);
 <style is:global>
 	/* 定義字體變數 */
 	:root {
-		--font-khmer-display: 'Koulen', cursive; 
-		--font-khmer-body: 'Noto Sans Khmer', sans-serif; 
+		--font-khmer-display: 'Koulen', cursive;
+		--font-khmer-body: 'Noto Sans Khmer', sans-serif;
 	}
 	
-	/* 字體設定 */
+	/* 標題字體設定 (使用 Koulen) */
 	h1, h2, h3, h4, h5, h6, .font-heading {
 		font-family: var(--font-khmer-display), system-ui, sans-serif;
-		letter-spacing: 0.05em; 
+		letter-spacing: 0.05em;
 		line-height: 1.4;
 	}
 
+	/* 內文字體設定 (使用 Noto Sans Khmer) */
 	body, p, span, a, li {
 		font-family: var(--font-khmer-body), system-ui, sans-serif;
 	}
 
+	/* 中文/英文輔助字體 */
 	.font-chinese {
 		font-family: system-ui, "Microsoft YaHei", sans-serif;
 	}
 
-	/* 捲軸設定 */
+	/* 捲軸美化 */
 	::-webkit-scrollbar { width: 10px; }
 	::-webkit-scrollbar-track { background: #1e293b; }
 	::-webkit-scrollbar-thumb { background: #d97706; border-radius: 5px; }
