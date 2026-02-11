@@ -15,25 +15,25 @@ const phoneNumbers = [
   { num: "015 977 696", icon: "fa-phone-volume", type: "Smart" }
 ];
 
-// 3. ✅ 15道精選菜單 (已修正：依照圖片上方高棉文翻譯)
+// 3. ✅ 15道精選菜單 (高棉文精準辨識 + 專業中英翻譯)
 const menuItems = [
   // 第一排
   { 
-    title_kh: "ម្ហូបក្លែម៦មុខ", // Appetizer 6 items
+    title_kh: "ម្ហូបក្លែម៦មុខ", // 1. 開胃菜
     title_en: "Assorted Appetizer Platter", 
     title_cn: "六福拼盘", 
     image: "/images/home/menu-01.webp", 
     desc: "Six varieties of premium appetizers." 
   },
   { 
-    title_kh: "ត្រីបំពង", // Fried Fish
+    title_kh: "ត្រីដប៊ុនបំពង", // 2. 炸魚
     title_en: "Deep Fried Fish", 
     title_cn: "酥炸鱼柳", 
     image: "/images/home/menu-02.webp", 
     desc: "Crispy fried fish fillet." 
   },
   { 
-    title_kh: "សាច់គោក្រៅអង្គារ", // Beef
+    title_kh: "ភាសាច់គោក្រៅអង្គារ", // 3. 涼拌牛肉
     title_en: "Beef Salad", 
     title_cn: "凉拌牛肉", 
     image: "/images/home/menu-03.webp", 
@@ -42,21 +42,21 @@ const menuItems = [
   
   // 第二排
   { 
-    title_kh: "បង្កងបំពងគ្រាប់ធញ្ញជាតិ", // Prawns with Cereals
+    title_kh: "បង្កងបំពងគ្រាប់ធញ្ញជាតិ", // 4. 麥片蝦
     title_en: "Cereal Butter Prawns", 
     title_cn: "麦片炸大虾", 
     image: "/images/home/menu-04.webp", 
     desc: "Fried prawns with crispy cereal flakes." 
   },
   { 
-    title_kh: "ជ្រូកខ្វៃនិងនំប៉័ង", // Roast Pig & Bread
+    title_kh: "ជ្រូកខ្វៃនិងនំប៉័ង", // 5. 燒豬
     title_en: "Roasted Pig with Bread", 
     title_cn: "脆皮烧猪配面包", 
     image: "/images/home/menu-05.webp", 
     desc: "Crispy roasted pork served with bread." 
   },
   { 
-    title_kh: "ត្រីតុកកែជូរអែម", // Sweet & Sour Fish
+    title_kh: "ត្រីតុកកែជូរអែម", // 6. 糖醋魚
     title_en: "Sweet & Sour Fish", 
     title_cn: "糖醋鱼", 
     image: "/images/home/menu-06.webp", 
@@ -65,22 +65,22 @@ const menuItems = [
 
   // 第三排
   { 
-    title_kh: "ត្រីហឹរ", // Spicy Fish
-    title_en: "Spicy Fish", 
-    title_cn: "香辣鱼", 
+    title_kh: "ត្រីហឹរឡប់ពង", // 7. 香辣魚
+    title_en: "Spicy Stir-fried Fish", 
+    title_cn: "香辣鱼片", 
     image: "/images/home/menu-07.webp", 
     desc: "Fish fillet stir-fried with chili." 
   },
   { 
-    title_kh: "ស៊ុបប៉ាវហឹុ១០មុខ", // Soup 10 items
+    title_kh: "ស៊ុបប៉ាវហឹុ១០មុខ", // 8. 十全鮑魚湯 (確認為鮑魚)
     title_en: "Premium Abalone Soup", 
     title_cn: "十全鲍鱼汤", 
     image: "/images/home/menu-08.webp", 
-    desc: "Nutritious soup with 10 premium ingredients." 
+    desc: "Nutritious soup with abalone and herbs." 
   },
   { 
-    title_kh: "ញាំជើងទា", // Duck Feet Salad
-    title_en: "Duck Feet Salad", 
+    title_kh: "ញាំជើងទាបង្គោរមិក", // 9. 涼拌鴨掌
+    title_en: "Spicy Duck Feet Salad", 
     title_cn: "凉拌鸭掌", 
     image: "/images/home/menu-09.webp", 
     desc: "Boneless duck feet with spicy salad." 
@@ -88,21 +88,21 @@ const menuItems = [
 
   // 第四排
   { 
-    title_kh: "ត្រីតុកកែចំហ៊ុយទឹកស៊ីអ៊ីវ", // Steamed Fish Soy Sauce
+    title_kh: "ត្រីតុកកែចំហ៊ុយទឹកស៊ីអ៊ីវ", // 10. 蒸魚
     title_en: "Steamed Fish Soy Sauce", 
     title_cn: "豉油皇蒸鱼", 
     image: "/images/home/menu-10.webp", 
     desc: "Fresh steamed fish with premium soy sauce." 
   },
   { 
-    title_kh: "បាយខ្ទប់ស្លឹកឈូក", // Lotus Leaf Rice (Bay...)
+    title_kh: "បាយខ្ទប់ស្លឹកឈូក", // 11. 荷葉飯
     title_en: "Lotus Leaf Wrapped Rice", 
     title_cn: "荷叶饭", 
     image: "/images/home/menu-11.webp", 
     desc: "Fragrant fried rice wrapped in lotus leaf." 
   },
   { 
-    title_kh: "ទាខ្វៃហុងកុង", // HK Roast Duck
+    title_kh: "ទាខ្វៃហុងកុង", // 12. 燒鴨
     title_en: "Hong Kong Roast Duck", 
     title_cn: "港式烧鸭", 
     image: "/images/home/menu-12.webp", 
@@ -111,21 +111,21 @@ const menuItems = [
 
   // 第五排
   { 
-    title_kh: "បង្អែមខ្មែរបុរាណ", // Traditional Dessert
+    title_kh: "បង្អែមខ្មែរបុរាណ", // 13. 甜點
     title_en: "Khmer Traditional Dessert", 
     title_cn: "高棉传统甜点", 
     image: "/images/home/menu-13.webp", 
     desc: "Assortment of traditional sweet treats." 
   },
   { 
-    title_kh: "តុងយាំបង្កង", // Tom Yum Prawn
+    title_kh: "តុងយាំបង្កង", // 14. 冬蔭功
     title_en: "Tom Yum River Prawn", 
     title_cn: "冬荫功大虾汤", 
     image: "/images/home/menu-14.webp", 
     desc: "Spicy and sour soup with river prawns." 
   },
   { 
-    title_kh: "កូនជ្រូកខ្វៃ", // Roast Suckling Pig
+    title_kh: "កូនជ្រូកខ្វៃ", // 15. 烤乳豬
     title_en: "Roasted Suckling Pig", 
     title_cn: "烤乳猪", 
     image: "/images/home/menu-15.webp", 
@@ -343,7 +343,7 @@ const serviceSteps = [
         {menuItems.map((item) => (
             <div class="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 bg-gray-50">
                 
-                {/* 圖片區 */}
+                {/* 圖片區：強制正方形 (aspect-square) */}
                 <div class="aspect-square overflow-hidden relative">
                   <img 
                     src={item.image} 
