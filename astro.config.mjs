@@ -1,14 +1,12 @@
 import { defineConfig } from 'astro/config';
 import tailwind from "@astrojs/tailwind";
-import sitemap from "@astrojs/sitemap";
+// import sitemap from "@astrojs/sitemap"; // ❌ 先暫時關掉這行
 
 export default defineConfig({
-  // 網站身分證
   site: 'https://ckmkh.com',
   
-  // 啟用 Tailwind 和 Sitemap
   integrations: [
     tailwind(), 
-    sitemap()
+    // sitemap() // ❌ 先暫時關掉這行
   ],
 });
