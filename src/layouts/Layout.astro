@@ -2,18 +2,31 @@
 // ✅ 1. 本地 FontAwesome
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
-// ✅ 2. 接收頁面傳來的參數 (新增 image)
+// ✅ 2. 接收頁面傳來的參數
 const { title, description, image } = Astro.props;
 
 // ✅ 3. 強制指定網域
 const SITE = "https://ckmkh.com";
-
 const canonicalURL = new URL(Astro.url.pathname, SITE);
 
-// ✅ 4. 智慧圖片邏輯：如果有傳 image 進來就用，沒有就用預設的 open-graph.png
+// ✅ 4. 智慧圖片邏輯
 const ogImageURL = image 
     ? new URL(image, SITE) 
     : new URL("/open-graph.png", SITE);
+
+// ✅ 5. 定義結構化資料 (在伺服器端建立物件)
+const schemaData = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "url": SITE,
+  "logo": `${SITE}/favicon.svg`,
+  "name": "CKM Catering Service", // 建議補上名稱
+  "contactPoint": { // 建議補上聯絡資訊
+    "@type": "ContactPoint",
+    "telephone": "+855-12-977-696",
+    "contactType": "customer service" 
+  }
+};
 ---
 
 <!doctype html>
@@ -55,14 +68,7 @@ const ogImageURL = image
 		<meta name="twitter:description" content={description} />
 		<meta name="twitter:image" content={ogImageURL} />
 		
-		<script type="application/ld+json" is:inline define:vars={{ SITE }}>
-			{
-			  "@context": "https://schema.org",
-			  "@type": "Organization",
-			  "url": SITE,
-			  "logo": SITE + "/favicon.svg"
-			}
-		</script>
+		<script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
 	</head>
 	<body class="bg-dark text-gray-100 font-body antialiased selection:bg-gold selection:text-black">
 		<slot />
