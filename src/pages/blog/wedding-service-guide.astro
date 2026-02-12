@@ -1,61 +1,141 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+
+// 1. 定義頁面變數
+const siteUrl = "https://ckmkh.com";
 const pageTitle = "របៀបជ្រើសរើសសេវាកម្មម្ហូបការសម្រាប់ថ្ងៃមង្គល - CKM Catering";
 const pageDescription = "គន្លឹះសំខាន់ៗក្នុងការជ្រើសរើសសេវាកម្មម្ហូបការ ដើម្បីឱ្យថ្ងៃមង្គលរបស់អ្នកពោរពេញដោយភាពរីករាយ និងការចងចាំដ៏ល្អ។";
+const pageImage = "/images/home/blog-wedding-service-guide.webp";
+const absoluteImageUrl = `${siteUrl}${pageImage}`;
+
+// 2. 建構正確的 Schema (JSON-LD)
+// 注意：我們在這裡用 JS 建構物件，避免在 HTML script 標籤中發生語法錯誤
+const schemaData = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": pageTitle,
+  "description": pageDescription,
+  "image": absoluteImageUrl,
+  "author": {
+    "@type": "Person",
+    "name": "Chef Cheng Kuongmeng",
+    "jobTitle": "Head Chef",
+    "url": siteUrl
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "CKM Catering",
+    "logo": {
+      "@type": "ImageObject",
+      "url": `${siteUrl}/logo.png` // 若有 Logo 圖片請確認路徑
+    }
+  },
+  "datePublished": "2026-02-12",
+  "dateModified": "2026-02-12",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": `${siteUrl}/blog/wedding-catering-guide` // 建議替換為實際的 slug
+  }
+};
 ---
+
 <Layout title={pageTitle} description={pageDescription}>
+  
+  <Fragment slot="head">
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:image" content={absoluteImageUrl} />
+    <meta property="og:url" content={siteUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={absoluteImageUrl} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
+  </Fragment>
+
   <main class="blog-wrapper">
     <div class="blog-paper">
       <header class="post-header">
         <div class="category-tag">CKM Wedding Guide</div>
         <h1>របៀបជ្រើសរើសសេវាកម្មម្ហូបការ<br />ដ៏ល្អឥតខ្ចោះសម្រាប់ថ្ងៃមង្គល</h1>
         <p class="subtitle">សិល្បៈនៃរសជាតិ និងការបម្រើលំដាប់ខ្ពស់ (The Art of Taste & Service)</p>
-        <div class="post-meta"><span class="author">By Chef Cheng Kuongmeng</span><span class="date">February 2026</span></div>
+        <div class="post-meta">
+          <span class="author">By Chef Cheng Kuongmeng</span>
+          <span class="date">February 2026</span>
+        </div>
       </header>
-      <div class="featured-image-wrapper"><img src="/images/home/blog-wedding-service-guide.webp" alt="Wedding Guide" class="featured-image" width="1280" height="642"/></div>
+
+      <div class="featured-image-wrapper">
+        <img src={pageImage} alt="Wedding Catering Guide" class="featured-image" width="1280" height="642"/>
+      </div>
+
       <article class="post-content">
         <p class="lead-paragraph">អាពាហ៍ពិពាហ៍មិនមែនត្រឹមតែជាពិធីជប់លៀងប៉ុណ្ណោះទេ ប៉ុន្តែវាគឺជាការចាប់ផ្តើមនៃជីវិតថ្មី។ នៅក្នុងវប្បធម៌របស់យើង "ម្ហូបអាហារ" គឺជាបេះដូងនៃកម្មវិធី។</p>
+
         <h2>១. គុណភាពនៃរសជាតិ និងគ្រឿងផ្សំ (Quality of Taste)</h2>
         <p>សម្រាប់ខ្ញុំផ្ទាល់ រសជាតិដែលល្អឥតខ្ចោះចាប់ផ្តើមពីការជ្រើសរើសគ្រឿងផ្សំស្រស់ៗនៅពេលព្រឹកព្រលឹម។ <strong>ម្ហូបការខ្មែរ</strong> ពិតប្រាកដ ត្រូវតែមានរសជាតិ "ដើម" ដែលដក់ជាប់ក្នុងអារម្មណ៍។</p>
+        
         <blockquote>"ចុងភៅដ៏ជំនាញ មិនគ្រាន់តែចម្អិនអាហារទេ តែពួកយើងចម្អិននូវសេចក្តីសុខជូនភ្ញៀវបរិភោគ។"</blockquote>
+
         <h2>២. សេវាកម្មប្រកបដោយវិជ្ជាជីវៈ (Professional Service)</h2>
         <p>ក្រុមការងារ CKM ត្រូវបានបណ្តុះបណ្តាលយ៉ាងយកចិត្តទុកដាក់លើ <strong>ដំណើរការសេវាកម្ម</strong>។ ការបម្រើជូនភ្ញៀវត្រូវតែមានភាពរហ័សរហួន និងប្រកបដោយស្នាមញញឹម។</p>
+
         <h2>៣. អនាម័យ និងទំនុកចិត្ត (Hygiene & Trust)</h2>
         <p>ផ្ទះបាយរបស់យើងអនុវត្តតាមស្តង់ដារអនាម័យខ្ពស់បំផុត ដើម្បីធានាថាគ្រប់មុខម្ហូបមិនត្រឹមតែឆ្ងាញ់ពិសាប៉ុណ្ណោះទេ ថែមទាំងមានសុវត្ថិភាព។</p>
+
         <h3>សំណួរដែលសួរញឹកញាប់ (Q&A)</h3>
         <div class="faq-section">
-          <div class="faq-item"><strong>តើយើងគួរកក់សេវាកម្មម្ហូបការទុកមុនរយៈពេលប៉ុន្មាន?</strong><p>យើងខ្ញុំសូមណែនាំឱ្យធ្វើការកក់ទុកមុនយ៉ាងតិច ៣ ទៅ ៦ ខែ។</p></div>
-          <div class="faq-item"><strong>តើ CKM មានទទួលរៀបចំម្ហូបតាមតម្រូវការដែរឬទេ?</strong><p>ពិតប្រាកដណាស់! យើងត្រៀមខ្លួនជាស្រេចក្នុងការប្រឹក្សាយោបល់ និងរៀបចំបញ្ជីមុខម្ហូបពិសេស។</p></div>
+          <div class="faq-item">
+            <strong>តើយើងគួរកក់សេវាកម្មម្ហូបការទុកមុនរយៈពេលប៉ុន្មាន?</strong>
+            <p>យើងខ្ញុំសូមណែនាំឱ្យធ្វើការកក់ទុកមុនយ៉ាងតិច ៣ ទៅ ៦ ខែ។</p>
+          </div>
+          <div class="faq-item">
+            <strong>តើ CKM មានទទួលរៀបចំម្ហូបតាមតម្រូវការដែរឬទេ?</strong>
+            <p>ពិតប្រាកដណាស់! យើងត្រៀមខ្លួនជាស្រេចក្នុងការប្រឹក្សាយោបល់ និងរៀបចំបញ្ជីមុខម្ហូបពិសេស។</p>
+          </div>
         </div>
-        <div class="cta-wrapper"><p class="cta-text">ផ្តល់កិត្តិយសឱ្យ CKM បានក្លាយជាផ្នែកមួយនៃថ្ងៃដ៏វិសេសវិសាលរបស់អ្នក។</p><a href="/" class="btn-primary">ទាក់ទងមកយើងខ្ញុំឥឡូវនេះ (Contact Us)</a></div>
+
+        <div class="cta-wrapper">
+          <p class="cta-text">ផ្តល់កិត្តិយសឱ្យ CKM បានក្លាយជាផ្នែកមួយនៃថ្ងៃដ៏វិសេសវិសាលរបស់អ្នក។</p>
+          <a href="/" class="btn-primary">ទាក់ទងមកយើងខ្ញុំឥឡូវនេះ (Contact Us)</a>
+        </div>
       </article>
     </div>
   </main>
 </Layout>
+
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;600;700&family=Source+Sans+Pro:wght@400;600;700&display=swap');
+  
   .blog-wrapper { width: 100%; min-height: 100vh; padding: 120px 20px 60px 20px; background-color: #0f172a; display: flex; justify-content: center; }
   .blog-paper { background-color: #ffffff; max-width: 900px; width: 100%; padding: 60px; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); font-family: 'Source Sans Pro', 'Noto Sans Khmer', sans-serif; color: #334155; }
+  
   .post-header { text-align: center; margin-bottom: 3rem; }
   .category-tag { display: inline-block; background: #E0F2FE; color: #0284C7; padding: 6px 16px; border-radius: 20px; font-size: 14px; font-weight: 700; margin-bottom: 1.5rem; text-transform: uppercase; }
   h1 { font-family: 'Noto Sans Khmer', sans-serif; color: #1e293b; font-size: 40px; line-height: 1.5; margin-bottom: 0.5rem; font-weight: 800; }
   .subtitle { font-size: 20px; color: #64748b; margin-bottom: 1.5rem; }
   .post-meta { font-size: 15px; color: #94a3b8; font-weight: 500; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; display: inline-block; padding: 10px 20px; margin-top: 10px; }
-  .post-meta .date { display: none; }
+  
   .featured-image-wrapper { width: 100%; margin-bottom: 3rem; border-radius: 12px; overflow: hidden; }
   .featured-image { width: 100%; height: auto; display: block; }
+  
   .post-content { font-size: 18px; line-height: 1.9; color: #334155; }
   .post-content p { margin-bottom: 1.5em; }
+  
   h2 { font-family: 'Noto Sans Khmer', sans-serif; color: #0f172a; font-size: 28px; margin-top: 3rem; margin-bottom: 1rem; border-left: 5px solid #0284C7; padding-left: 1rem; }
+  
   blockquote { font-family: 'Noto Sans Khmer', serif; background-color: #F0F9FF; border-left: 4px solid #7DD3FC; position: relative; padding: 2rem 3rem; margin: 3rem 0; font-size: 22px; font-style: italic; color: #0369A1; text-align: center; border-radius: 8px; }
   blockquote::before { content: "“"; font-size: 60px; color: #BAE6FD; position: absolute; top: -10px; left: 10px; }
+  
   .faq-section { background: #f1f5f9; border-radius: 12px; padding: 2.5rem; margin-top: 1rem; }
   .faq-item { margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid #cbd5e1; }
   .faq-item:last-child { border-bottom: none; }
   .faq-item strong { display: block; font-size: 19px; color: #0f172a; margin-bottom: 0.5rem; font-family: 'Noto Sans Khmer', sans-serif; }
+  
   .cta-wrapper { margin-top: 5rem; padding: 4rem 2rem; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-radius: 16px; text-align: center; color: white; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
   .cta-text { font-size: 22px; margin-bottom: 2.5rem; color: #e2e8f0; font-family: 'Noto Sans Khmer', sans-serif; }
   .btn-primary { display: inline-block; background-color: #d97706; color: #ffffff; padding: 16px 48px; border-radius: 50px; font-weight: 700; font-size: 18px; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); font-family: 'Noto Sans Khmer', sans-serif; }
   .btn-primary:hover { background-color: #b45309; transform: translateY(-2px); }
+  
   @media (max-width: 768px) { .blog-wrapper { padding: 100px 15px 40px 15px; } .blog-paper { padding: 30px 20px; } h1 { font-size: 26px; } h2 { font-size: 22px; } blockquote { font-size: 18px; padding: 1.5rem; } }
 </style>
