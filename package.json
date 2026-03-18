@@ -9,8 +9,7 @@
     "preview": "astro preview",
     "astro": "astro"
   },
-  "dependencies": {
-    "@astrojs/sitemap": "^3.7.0",
+  "devDependencies": {
     "@astrojs/tailwind": "^5.1.0",
     "@fortawesome/fontawesome-free": "^7.2.0",
     "astro": "^4.15.0",

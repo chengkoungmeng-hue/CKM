@@ -1,0 +1,189 @@
+---
+// 實體路徑: src/pages/zh/index.astro
+import Layout from '../../layouts/Layout.astro'; 
+
+const telegramLink = "https://t.me/CKMSam06";
+const facebookLink = "https://www.facebook.com/CKMFOODS";
+const heroImage = "/images/home/hero-luxury-banquet-setup.webp";
+const logo = "/images/home/brand-ckm-logo-gold.webp";
+
+const phoneNumbers = [
+  { num: "011 827 782", icon: "fa-mobile-alt", type: "Cellcard" },
+  { num: "012 977 696", icon: "fa-phone", type: "Cellcard" },
+  { num: "015 977 696", icon: "fa-phone-volume", type: "Smart" }
+];
+
+const menuItems = [
+  { title: "六福拼盘", image: "/images/home/menu-01.webp", desc: "荟萃六款顶级开胃珍馐，以层次丰富的口感精准唤醒味蕾。" },
+  { title: "酥炸深海鱼柳", image: "/images/home/menu-02.webp", desc: "精控油温炸至金黄酥脆，完美锁住深海鱼肉的盈润汁水与鲜甜。" },
+  { title: "高棉风味凉拌牛肉", image: "/images/home/menu-03.webp", desc: "萃取高棉独有香料，酸辣清透，完美平衡顶级牛肉的醇厚油脂。" },
+  { title: "麦片黄油炸大虾", image: "/images/home/menu-04.webp", desc: "特选肥美大虾，裹覆酥脆麦片与浓郁黄油，呈现极致的咀嚼层次。" },
+  { title: "脆皮烧猪配软包", image: "/images/home/menu-05.webp", desc: "炉火纯青的烤乳猪工艺，皮脆肉嫩，搭配绵密软包化解油腻。" },
+  { title: "秘制糖醋鱼", image: "/images/home/menu-06.webp", desc: "刀工精湛的深海鱼，淋上按黄金比例调制的糖醋酱汁，酸甜开胃。" },
+  { title: "猛火香辣鱼片", image: "/images/home/menu-07.webp", desc: "仰赖主厨对猛火的精准把控，鱼片滑嫩入味，辛香气息瞬间迸发。" },
+  { title: "十全珍品鲍鱼汤", image: "/images/home/menu-08.webp", desc: "历经数小时文火慢熬，融汇鲍鱼与顶级药材的精华，温润滋补。" },
+  { title: "凉拌剔骨鸭掌", image: "/images/home/menu-09.webp", desc: "纯手工剔骨保留爽脆筋腱，佐以秘制清透酸辣汁，清爽解腻。" },
+  { title: "豉油皇火候蒸鱼", image: "/images/home/menu-10.webp", desc: "以秒计算的清蒸火候，佐以顶级头抽，还原鲜活海产的纯粹真味。" },
+  { title: "古法荷叶飘香饭", image: "/images/home/menu-11.webp", desc: "精选长粒香米与丰富配料同炒，借由荷叶包裹蒸制，清香入骨。" },
+  { title: "正宗港式明炉烧鸭", image: "/images/home/menu-12.webp", desc: "还原正宗港式明炉烤制技术，逼出多余油脂，鸭皮香脆、肉质红润。" },
+  { title: "高棉皇家御用甜点", image: "/images/home/menu-13.webp", desc: "承袭高棉古法，融合鲜榨椰浆与斑斓叶的自然清甜，圆满收官。" },
+  { title: "冬荫功野生大虾汤", image: "/images/home/menu-14.webp", desc: "极具侵略性的东南亚纯正酸辣风味，野生河虾肉质紧实弹牙。" },
+  { title: "金牌原只烤乳猪", image: "/images/home/menu-15.webp", desc: "高端商宴的排场之选，色泽金红发亮，入口即化，尽显尊荣。" },
+];
+
+const blogPosts = [
+  { title: "场地尽职调查与物理极限", subTitle: "空间动线与基础设施审计", link: "/zh/blog/01-venue-logistics/", image: "/images/home/blog-wedding-service-guide.webp" },
+  { title: "大型宴席吞吐量控制矩阵", subTitle: "千人量级的热力学品控", link: "/zh/blog/02-event-party-planning/", image: "/images/home/blog-event-party-planning.webp" },
+  { title: "主厨职人精神与跨国冷链", subTitle: "顶级原物料溯源与风味一致性", link: "/zh/blog/03-chef-professional-standard/", image: "/images/home/blog-chef-professional-standard.webp" },
+  { title: "零容错的医疗级食安防线", subTitle: "75°C 杀菌阈值与物理隔离", link: "/zh/blog/04-food-safety-quality/", image: "/images/home/blog-food-safety-quality.webp" },
+  { title: "菜单工程与跨文化味觉分布", subTitle: "精准平衡高棉与中式风味", link: "/zh/blog/05-khmer-wedding-menu/", image: "/images/home/blog-khmer-wedding-menu.webp" },
+  { title: "服务标准流程与危机容错", subTitle: "T-Minus 倒数部署与现场压制", link: "/zh/blog/06-service-process-sop/", image: "/images/home/blog-service-process-sop.webp" }
+];
+---
+<Layout title="主厨钟光明 - CKM 金边顶级宴会外烩" description="CKM 专为金边高规格企业年会与世纪婚宴打造零容错的外烩执行方案。严守冷链物流、物理隔离食安标准与千人级宴会精准温控。" image={heroImage} lang="zh">
+  <Fragment slot="head">
+    <link rel="preload" as="image" href={heroImage} />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+  </Fragment>
+
+  <style>
+    .font-zh-serif { font-family: 'Noto Serif SC', serif; }
+  </style>
+
+  <header class="relative h-screen flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 bg-cover bg-center bg-no-repeat bg-fixed transform scale-105" style={`background-image: url('${heroImage}');`}></div>
+    <div class="absolute inset-0 bg-black/60 bg-gradient-to-b from-black/80 via-black/50 to-slate-900"></div>
+    <div class="relative z-10 text-center px-4 max-w-4xl mx-auto pt-10">
+        <img src={logo} alt="CKM Logo" width="128" height="128" class="w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-amber-500 mx-auto mb-8 shadow-[0_0_40px_rgba(245,158,11,0.5)]">
+        <h1 class="text-4xl md:text-6xl font-zh-serif font-bold text-white mb-6 tracking-widest">主厨 <span class="text-amber-500">钟光明</span></h1>
+        <h2 class="text-xl md:text-2xl font-sans font-medium text-white/90 mb-6 tracking-[0.2em] uppercase">金边顶级宴会外烩智库</h2>
+        <p class="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl mx-auto font-sans font-light leading-relaxed tracking-wide">专为高规格企业年会与世纪婚宴打造的零容错执行方案。</p>
+        <div class="flex flex-col sm:flex-row gap-5 justify-center animate-fade-in-up" style="animation-delay: 0.1s;">
+            <a href={telegramLink} target="_blank" class="bg-[#0077b5] hover:bg-[#005e93] text-white px-10 py-4 rounded-sm font-sans font-medium tracking-widest uppercase transition flex items-center justify-center gap-3">
+                <i class="fab fa-telegram-plane text-2xl"></i> <span>专属顾问私密咨询</span>
+            </a>
+        </div>
+    </div>
+  </header>
+
+  <section class="py-24 bg-slate-900 relative overflow-hidden">
+     <div class="max-w-7xl mx-auto px-6 relative z-10">
+        <div class="text-center mb-16"><h2 class="text-3xl md:text-4xl font-zh-serif font-bold text-white tracking-widest">绝对执行矩阵</h2></div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+             <div class="bg-slate-800/50 p-10 rounded-lg border border-slate-700/50 hover:border-amber-500/30 transition-colors duration-500">
+                <div class="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-8"><i class="fas fa-gem text-2xl text-amber-500"></i></div>
+                <h3 class="text-2xl font-zh-serif font-bold text-white mb-4 tracking-wider">顶级食材全链保鲜</h3>
+                <p class="text-gray-400 font-sans font-light leading-relaxed">严格把控冷链运输网络。从深海捕捞至宴会餐桌，以最高标准锁定极品食材的极致鲜度，绝不在原物料上作任何妥协。</p>
+             </div>
+             <div class="bg-slate-800/50 p-10 rounded-lg border border-slate-700/50 hover:border-amber-500/30 transition-colors duration-500">
+                <div class="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-8"><i class="fas fa-project-diagram text-2xl text-amber-500"></i></div>
+                <h3 class="text-2xl font-zh-serif font-bold text-white mb-4 tracking-wider">千人宴席精准品控</h3>
+                <p class="text-gray-400 font-sans font-light leading-relaxed">结合烹饪艺术与严密后厨动线。无论首桌或末席，皆能精确控制菜品上桌时的核心温度与化口柔嫩度，撑起顶级商宴的非凡排场。</p>
+             </div>
+             <div class="bg-slate-800/50 p-10 rounded-lg border border-slate-700/50 hover:border-amber-500/30 transition-colors duration-500">
+                <div class="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-8"><i class="fas fa-shield-alt text-2xl text-amber-500"></i></div>
+                <h3 class="text-2xl font-zh-serif font-bold text-white mb-4 tracking-wider">零容错食安防线</h3>
+                <p class="text-gray-400 font-sans font-light leading-relaxed">摒弃表象的卫生承诺。强制执行生熟食物理隔离操作，热食出餐严守 75°C 杀菌阈值，以绝对的数据基准保障政商名流的健康。</p>
+             </div>
+        </div>
+     </div>
+  </section>
+
+  <section class="py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-16"><h2 class="text-3xl md:text-4xl font-zh-serif font-bold text-slate-900 tracking-widest">传世臻选名菜</h2></div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {menuItems.map((item) => (
+            <div class="group relative overflow-hidden rounded-sm shadow-md bg-slate-50">
+                <div class="aspect-square overflow-hidden relative">
+                  <img src={item.image} alt={item.title} class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700" loading="lazy"/>
+                  <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent opacity-80 group-hover:opacity-95 transition-opacity duration-500"></div>
+                </div>
+                <div class="absolute inset-0 flex flex-col justify-end p-8">
+                  <h3 class="text-xl font-zh-serif font-bold text-amber-400 mb-3 translate-y-4 group-hover:translate-y-0 transition duration-500 tracking-wider">{item.title}</h3>
+                  <p class="text-gray-300 text-sm font-sans font-light leading-relaxed opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-100">{item.desc}</p>
+                </div>
+            </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="py-24 bg-slate-50 border-t border-slate-200">
+    <div class="max-w-7xl mx-auto px-6">
+       <div class="text-center mb-16"><h2 class="text-3xl md:text-4xl font-zh-serif font-bold text-slate-900 tracking-widest">顶级宴会统筹智库</h2></div>
+       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {blogPosts.map(post => (
+            <div class="group bg-white rounded-sm overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-500 border border-slate-100 flex flex-col">
+               <a href={post.link} class="block aspect-[16/9] overflow-hidden relative">
+                  <img src={post.image} alt={post.title} loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-700"/>
+               </a>
+               <div class="p-8 flex flex-col flex-grow">
+                  <h3 class="text-xl font-zh-serif font-bold text-slate-900 mb-3 group-hover:text-amber-600 transition-colors duration-300 leading-snug tracking-wider">{post.title}</h3>
+                  <p class="text-slate-500 text-sm font-sans font-light mb-6 tracking-wide">{post.subTitle}</p>
+                  <a href={post.link} class="mt-auto inline-flex items-center text-amber-600 text-xs font-sans font-medium uppercase tracking-widest hover:text-amber-700 transition-colors">探索专栏 <i class="fas fa-arrow-right ml-2"></i></a>
+               </div>
+            </div>
+          ))}
+       </div>
+    </div>
+  </section>
+
+  <section id="contact" class="relative py-32 bg-slate-950 border-t border-slate-800 overflow-hidden">
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-[1px] bg-gradient-to-r from-transparent via-amber-500/30 to-transparent"></div>
+      
+      <div class="max-w-7xl mx-auto px-6 relative z-10">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-8 items-center">
+              <div class="lg:col-span-5 text-left">
+                  <div class="inline-flex items-center gap-4 mb-8">
+                      <span class="w-12 h-[1px] bg-amber-500"></span>
+                      <span class="text-amber-500 text-xs font-sans font-medium tracking-[0.2em] uppercase">专属联系专线</span>
+                  </div>
+                  <h2 class="text-4xl md:text-5xl font-zh-serif font-bold text-white mb-8 leading-tight tracking-widest">启动高阶协议</h2>
+                  <p class="text-slate-400 text-lg font-sans font-light leading-relaxed mb-10 tracking-wide">
+                      一场无懈可击的顶级盛宴，始于基于客观数据与场地基础设施的严谨勘测与深度对齐。
+                  </p>
+              </div>
+
+              <div class="lg:col-span-6 lg:col-start-7">
+                  <div class="bg-slate-900 border border-slate-800 p-8 md:p-12 rounded-sm shadow-2xl">
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
+                          {phoneNumbers.map((contact) => (
+                              <a href={`tel:+855${contact.num.replace(/\s/g, '').substring(1)}`} class="group flex flex-col p-8 rounded-sm bg-slate-950 border border-slate-800 hover:border-amber-500/50 transition-colors duration-500">
+                                  <i class={`fas ${contact.icon} text-amber-500 mb-5 text-2xl opacity-80 group-hover:opacity-100 transition-opacity`}></i>
+                                  <span class="text-white font-sans font-semibold text-2xl tracking-wide mb-2">{contact.num}</span>
+                                  <span class="text-slate-500 text-xs font-sans tracking-[0.2em] uppercase">{contact.type}</span>
+                              </a>
+                          ))}
+                          <div class="flex items-center justify-center gap-6 p-8 rounded-sm bg-slate-950 border border-slate-800">
+                              <a href={telegramLink} target="_blank" aria-label="Telegram" class="w-14 h-14 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:bg-amber-500 hover:text-slate-950 hover:border-amber-500 transition-all duration-500">
+                                  <i class="fab fa-telegram-plane text-xl"></i>
+                              </a>
+                              <a href={facebookLink} target="_blank" aria-label="Facebook" class="w-14 h-14 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:bg-amber-500 hover:text-slate-950 hover:border-amber-500 transition-all duration-500">
+                                  <i class="fab fa-facebook-f text-xl"></i>
+                              </a>
+                          </div>
+                      </div>
+                      <div class="pt-8 border-t border-slate-800">
+                          <div class="flex items-start gap-6">
+                              <div class="w-12 h-12 rounded-full bg-slate-950 border border-slate-800 flex items-center justify-center shrink-0">
+                                  <i class="fas fa-map-marker-alt text-amber-500"></i>
+                              </div>
+                              <div>
+                                  <h4 class="text-white font-sans font-medium text-xs tracking-[0.2em] uppercase mb-3">金边总部</h4>
+                                  <p class="text-slate-400 text-sm font-sans font-light leading-relaxed tracking-wide">
+                                      金边市 堆谷区 万谷二分区<br/>257街 33号
+                                  </p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </section>
+
+  <footer class="bg-slate-950 py-10 border-t border-slate-900 text-center font-sans">
+      <p class="text-slate-600 text-xs font-light tracking-widest uppercase">&copy; 2026 CKM Catering Service. 保留所有权利。</p>
+  </footer>
+</Layout>

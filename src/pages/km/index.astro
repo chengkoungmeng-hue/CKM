@@ -1,0 +1,190 @@
+---
+// 實體路徑: src/pages/km/index.astro
+import Layout from '../../layouts/Layout.astro'; 
+
+const telegramLink = "https://t.me/CKMSam06";
+const facebookLink = "https://www.facebook.com/CKMFOODS";
+const heroImage = "/images/home/hero-luxury-banquet-setup.webp";
+const logo = "/images/home/brand-ckm-logo-gold.webp";
+
+const phoneNumbers = [
+  { num: "011 827 782", icon: "fa-mobile-alt", type: "Cellcard" },
+  { num: "012 977 696", icon: "fa-phone", type: "Cellcard" },
+  { num: "015 977 696", icon: "fa-phone-volume", type: "Smart" }
+];
+
+const menuItems = [
+  { title: "ម្ហូបក្លែម៦មុខដ៏វិសេសវិសាល", image: "/images/home/menu-01.webp", desc: "ការរៀបចំមុខម្ហូបក្លែម៦មុខដ៏ពិសេស ដែលចម្រាញ់ចេញពីគ្រឿងផ្សំកំពូល ដើម្បីដាស់រសជាតិមាត់មុនពេលទទួលទានម្ហូបចម្បង។" },
+  { title: "ត្រីដប៊ុនបំពងស្រួយ", image: "/images/home/menu-02.webp", desc: "ត្រីសមុទ្របំពងដោយការគ្រប់គ្រងកម្តៅប្រេងយ៉ាងល្អឥតខ្ចោះ ដើម្បីរក្សាភាពស្រួយខាងក្រៅ និងរក្សាជាតិទឹកខាងក្នុង។" },
+  { title: "ភាសាច់គោក្រៅអង្គារបែបប្រពៃណី", image: "/images/home/menu-03.webp", desc: "សាច់គោស្រស់ៗ លាយឡំជាមួយគ្រឿងទេសខ្មែរពិតៗ ផ្តល់នូវរសជាតិជូរហិរដ៏ល្អឥតខ្ចោះ។" },
+  { title: "បង្កងបំពងគ្រាប់ធញ្ញជាតិ", image: "/images/home/menu-04.webp", desc: "បង្កងទន្លេស្រស់ៗ បំពងជាមួយគ្រាប់ធញ្ញជាតិនិងប៊័រក្រអូបឈ្ងុយ ផ្តល់នូវរសជាតិស្រួយឆ្ងាញ់មិនអាចបំភ្លេចបាន។" },
+  { title: "ជ្រូកខ្វៃនិងនំប៉័ង", image: "/images/home/menu-05.webp", desc: "សាច់ជ្រូកខ្វៃដែលមានស្បែកស្រួយ និងសាច់ផុយ ញ៉ាំផ្ទាប់ជាមួយនំប៉័ងទន់ៗដ៏ស័ក្តិសម។" },
+  { title: "ត្រីតុកកែជូរអែម", image: "/images/home/menu-06.webp", desc: "ត្រីសមុទ្របំពងស្រួយ ស្រូបទឹកជ្រលក់ជូរអែមដែលមានតុល្យភាពរសជាតិយ៉ាងល្អ។" },
+  { title: "ត្រីហឹរឡប់ពង", image: "/images/home/menu-07.webp", desc: "សាច់ត្រីចម្អិនដោយភ្លើងខ្លាំងជាមួយគ្រឿងទេសហិរៗ ផ្តល់នូវក្លិនឈ្ងុយនិងរសជាតិមុត។" },
+  { title: "ស៊ុបប៉ាវហឺ១០មុខ", image: "/images/home/menu-08.webp", desc: "ស៊ុបប៉ាវហឺដែលរម្ងាស់ជាច្រើនម៉ោងជាមួយឱសថបុរាណចិន ដើម្បីទាញយករសជាតិដើម និងអត្ថប្រយោជន៍ចំពោះសុខភាព។" },
+  { title: "ញាំជើងទាបង្គោរមិក", image: "/images/home/menu-09.webp", desc: "ជើងទាដកឆ្អឹងចេញ រក្សាបាននូវភាពស្រួយ ញាំជាមួយទឹកជ្រលក់ជូរហិរដ៏ស្រស់ស្រាយ។" },
+  { title: "ត្រីតុកកែចំហ៊ុយទឹកស៊ីអ៊ីវ", image: "/images/home/menu-10.webp", desc: "ត្រីស្រស់ចំហ៊ុយក្នុងរយៈពេលដ៏ជាក់លាក់ បន្ថែមដោយទឹកស៊ីអ៊ីវគុណភាពខ្ពស់ ដើម្បីរក្សារសជាតិធម្មជាតិ។" },
+  { title: "បាយខ្ទប់ស្លឹកឈូក", image: "/images/home/menu-11.webp", desc: "បាយឆាជាមួយគ្រឿងផ្សំពិសេស រុំក្នុងស្លឹកឈូកចំហ៊ុយ ផ្តល់នូវក្លិនក្រអូបប្រហើរ។" },
+  { title: "ទាខ្វៃហុងកុង", image: "/images/home/menu-12.webp", desc: "ទាខ្វៃតាមរូបមន្តហុងកុងពិតៗ មានស្បែកស្រួយ និងសាច់ទន់ឈ្ងុយឆ្ងាញ់។" },
+  { title: "បង្អែមខ្មែរបុរាណ", image: "/images/home/menu-13.webp", desc: "បង្អែមរៀបចំតាមបែបប្រពៃណីខ្មែរ ដោយប្រើខ្ទិះដូងស្រស់ និងស្លឹកតើយ ដើម្បីបញ្ចប់អាហារដ៏ល្អឥតខ្ចោះ។" },
+  { title: "តុងយាំបង្កងទន្លេ", image: "/images/home/menu-14.webp", desc: "ស៊ុបជូរហិររសជាតិដើម ជាមួយបង្កងទន្លេដែលមានសាច់ណែនល្អ។" },
+  { title: "កូនជ្រូកខ្វៃទាំងមូល", image: "/images/home/menu-15.webp", desc: "ជម្រើសដ៏ឧត្តុង្គឧត្តមសម្រាប់កម្មវិធីធំៗ មានពណ៌មាសស្រស់ស្អាត និងរសជាតិឆ្ងាញ់ពិសា។" },
+];
+
+const blogPosts = [
+  { title: "របៀបជ្រើសរើសសេវាកម្មម្ហូបការ", subTitle: "ការវាយតម្លៃទីតាំង និងដំណើរការ", link: "/km/blog/01-venue-logistics/", image: "/images/home/blog-wedding-service-guide.webp" },
+  { title: "សិល្បៈនៃការគ្រប់គ្រងកម្មវិធីខ្នាតធំ", subTitle: "ការរក្សាសីតុណ្ហភាព និងគុណភាពមុខម្ហូប", link: "/km/blog/02-event-party-planning/", image: "/images/home/blog-event-party-planning.webp" },
+  { title: "ស្តង់ដារគុណភាពវត្ថុធាតុដើម", subTitle: "ការថែរក្សាភាពស្រស់ និងរសជាតិដើម", link: "/km/blog/03-chef-professional-standard/", image: "/images/home/blog-chef-professional-standard.webp" },
+  { title: "ស្តង់ដារអនាម័យនិងសុវត្ថិភាពខ្ពស់បំផុត", subTitle: "ការការពារបាក់តេរីក្នុងកម្រិត 75°C", link: "/km/blog/04-food-safety-quality/", image: "/images/home/blog-food-safety-quality.webp" },
+  { title: "សិល្បៈនៃការរៀបចំម៉ឺនុយ", subTitle: "ការរួមបញ្ចូលគ្នានៃរសជាតិខ្មែរ និងចិន", link: "/km/blog/05-khmer-wedding-menu/", image: "/images/home/blog-khmer-wedding-menu.webp" },
+  { title: "ដំណើរការសេវាកម្មកម្រិតអន្តរជាតិ", subTitle: "ការរៀបចំទុកជាមុនសម្រាប់ការងារគ្មានកំហុស", link: "/km/blog/06-service-process-sop/", image: "/images/home/blog-service-process-sop.webp" }
+];
+---
+<Layout title="ចុងភៅ ចេង គួងម៉េង - CKM Premium Catering" description="CKM Catering ផ្តល់ជូននូវសេវាកម្មម្ហូបការ និងជប់លៀងលំដាប់ខ្ពស់ ដោយផ្តោតលើគុណភាព សុវត្ថិភាព និងភាពល្អឥតខ្ចោះ។" image={heroImage} lang="km">
+  <Fragment slot="head">
+    <link rel="preload" as="image" href={heroImage} />
+    <link href="https://fonts.googleapis.com/css2?family=Hanuman:wght@400;700&family=Kantumruy+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
+  </Fragment>
+
+  <style>
+    .font-km-serif { font-family: 'Hanuman', serif; }
+    .font-km-sans { font-family: 'Kantumruy Pro', sans-serif; }
+  </style>
+
+  <header class="relative h-screen flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 bg-cover bg-center bg-no-repeat bg-fixed transform scale-105" style={`background-image: url('${heroImage}');`}></div>
+    <div class="absolute inset-0 bg-black/60 bg-gradient-to-b from-black/80 via-black/50 to-slate-900"></div>
+    <div class="relative z-10 text-center px-4 max-w-4xl mx-auto pt-10">
+        <img src={logo} alt="CKM Logo" width="128" height="128" class="w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-amber-500 mx-auto mb-8 shadow-[0_0_40px_rgba(245,158,11,0.5)]">
+        <h1 class="text-4xl md:text-6xl font-km-serif font-bold text-white mb-6 leading-tight">ចុងភៅ <span class="text-amber-500">ចេង គួងម៉េង</span></h1>
+        <h2 class="text-xl md:text-2xl font-km-sans font-medium text-white/90 mb-6 uppercase">សេវាកម្មម្ហូបការលំដាប់ខ្ពស់នៅភ្នំពេញ</h2>
+        <p class="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl mx-auto font-km-sans font-light leading-relaxed">ធានាបាននូវការរៀបចំកម្មវិធីដ៏ល្អឥតខ្ចោះ សម្រាប់ពិធីមង្គលការ និងកម្មវិធីជប់លៀងខ្នាតធំ។</p>
+        <div class="flex flex-col sm:flex-row gap-5 justify-center animate-fade-in-up" style="animation-delay: 0.1s;">
+            <a href={telegramLink} target="_blank" class="bg-[#0077b5] hover:bg-[#005e93] text-white px-10 py-4 rounded-sm font-km-sans font-medium transition flex items-center justify-center gap-3">
+                <i class="fab fa-telegram-plane text-2xl"></i> <span>ពិគ្រោះយោបល់ឯកជន</span>
+            </a>
+        </div>
+    </div>
+  </header>
+
+  <section class="py-24 bg-slate-900 relative overflow-hidden">
+     <div class="max-w-7xl mx-auto px-6 relative z-10">
+        <div class="text-center mb-16"><h2 class="text-3xl md:text-4xl font-km-serif font-bold text-white">ស្តង់ដារប្រតិបត្តិការឥតខ្ចោះ</h2></div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+             <div class="bg-slate-800/50 p-10 rounded-lg border border-slate-700/50 hover:border-amber-500/30 transition-colors duration-500">
+                <div class="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-8"><i class="fas fa-gem text-2xl text-amber-500"></i></div>
+                <h3 class="text-2xl font-km-serif font-bold text-white mb-4">វត្ថុធាតុដើមគុណភាពកំពូល</h3>
+                <p class="text-gray-400 font-km-sans font-light leading-relaxed">ការជ្រើសរើសគ្រឿងផ្សំស្រស់ៗបំផុតពីប្រភពដើម ដោយរក្សាបាននូវរសជាតិធម្មជាតិពិតៗ ដើម្បីផ្តល់ជូននូវបទពិសោធន៍ម្ហូបអាហារដ៏ឧត្តុង្គឧត្តម។</p>
+             </div>
+             <div class="bg-slate-800/50 p-10 rounded-lg border border-slate-700/50 hover:border-amber-500/30 transition-colors duration-500">
+                <div class="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-8"><i class="fas fa-project-diagram text-2xl text-amber-500"></i></div>
+                <h3 class="text-2xl font-km-serif font-bold text-white mb-4">ការគ្រប់គ្រងកម្មវិធីខ្នាតធំ</h3>
+                <p class="text-gray-400 font-km-sans font-light leading-relaxed">សមត្ថភាពរៀបចំម្ហូបសម្រាប់ភ្ញៀវរាប់ពាន់នាក់ ដោយរក្សាបាននូវរសជាតិ និងសីតុណ្ហភាពស្តង់ដារដូចគ្នាពីតុដំបូងរហូតដល់តូចុងក្រោយ។</p>
+             </div>
+             <div class="bg-slate-800/50 p-10 rounded-lg border border-slate-700/50 hover:border-amber-500/30 transition-colors duration-500">
+                <div class="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-8"><i class="fas fa-shield-alt text-2xl text-amber-500"></i></div>
+                <h3 class="text-2xl font-km-serif font-bold text-white mb-4">ស្តង់ដារអនាម័យវេជ្ជសាស្ត្រ</h3>
+                <p class="text-gray-400 font-km-sans font-light leading-relaxed">អនុវត្តយ៉ាងតឹងរ៉ឹងនូវការបំបែកម្ហូបឆៅនិងឆ្អិន ព្រមទាំងធានាសីតុណ្ហភាពចម្អិនលើសពី 75°C ដើម្បីសុវត្ថិភាពសុខភាពជាដាច់ខាត។</p>
+             </div>
+        </div>
+     </div>
+  </section>
+
+  <section class="py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-16"><h2 class="text-3xl md:text-4xl font-km-serif font-bold text-slate-900">កំពូលស្នាដៃម្ហូបឯក</h2></div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {menuItems.map((item) => (
+            <div class="group relative overflow-hidden rounded-sm shadow-md bg-slate-50">
+                <div class="aspect-square overflow-hidden relative">
+                  <img src={item.image} alt={item.title} class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700" loading="lazy"/>
+                  <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent opacity-80 group-hover:opacity-95 transition-opacity duration-500"></div>
+                </div>
+                <div class="absolute inset-0 flex flex-col justify-end p-8">
+                  <h3 class="text-xl font-km-serif font-bold text-amber-400 mb-3 translate-y-4 group-hover:translate-y-0 transition duration-500">{item.title}</h3>
+                  <p class="text-gray-300 text-sm font-km-sans font-light leading-relaxed opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-100">{item.desc}</p>
+                </div>
+            </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="py-24 bg-slate-50 border-t border-slate-200">
+    <div class="max-w-7xl mx-auto px-6">
+       <div class="text-center mb-16"><h2 class="text-3xl md:text-4xl font-km-serif font-bold text-slate-900">ទស្សនៈ និងការវិភាគកម្រិតកំពូល</h2></div>
+       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {blogPosts.map(post => (
+            <div class="group bg-white rounded-sm overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-500 border border-slate-100 flex flex-col">
+               <a href={post.link} class="block aspect-[16/9] overflow-hidden relative">
+                  <img src={post.image} alt={post.title} loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-700"/>
+               </a>
+               <div class="p-8 flex flex-col flex-grow">
+                  <h3 class="text-xl font-km-serif font-bold text-slate-900 mb-3 group-hover:text-amber-600 transition-colors duration-300 leading-snug">{post.title}</h3>
+                  <p class="text-slate-500 text-sm font-km-sans font-light mb-6 leading-relaxed">{post.subTitle}</p>
+                  <a href={post.link} class="mt-auto inline-flex items-center text-amber-600 text-sm font-km-sans font-medium hover:text-amber-700 transition-colors">ស្វែងយល់បន្ថែម <i class="fas fa-arrow-right ml-2"></i></a>
+               </div>
+            </div>
+          ))}
+       </div>
+    </div>
+  </section>
+
+  <section id="contact" class="relative py-32 bg-slate-950 border-t border-slate-800 overflow-hidden">
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-[1px] bg-gradient-to-r from-transparent via-amber-500/30 to-transparent"></div>
+      
+      <div class="max-w-7xl mx-auto px-6 relative z-10">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-8 items-center">
+              <div class="lg:col-span-5 text-left">
+                  <div class="inline-flex items-center gap-4 mb-8">
+                      <span class="w-12 h-[1px] bg-amber-500"></span>
+                      <span class="text-amber-500 text-xs font-km-sans font-medium uppercase">ទំនាក់ទំនងផ្ទាល់</span>
+                  </div>
+                  <h2 class="text-4xl md:text-5xl font-km-serif font-bold text-white mb-8 leading-tight">ពិគ្រោះយោបល់កម្រិតខ្ពស់</h2>
+                  <p class="text-slate-400 text-lg font-km-sans font-light leading-relaxed mb-10">
+                      កម្មវិធីដ៏ល្អឥតខ្ចោះមួយ ចាប់ផ្តើមពីការពិភាក្សាផ្អែកលើទិន្នន័យជាក់ស្តែង និងការវាយតម្លៃហេដ្ឋារចនាសម្ព័ន្ធយ៉ាងច្បាស់លាស់។
+                  </p>
+              </div>
+
+              <div class="lg:col-span-6 lg:col-start-7">
+                  <div class="bg-slate-900 border border-slate-800 p-8 md:p-12 rounded-sm shadow-2xl">
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
+                          {phoneNumbers.map((contact) => (
+                              <a href={`tel:+855${contact.num.replace(/\s/g, '').substring(1)}`} class="group flex flex-col p-8 rounded-sm bg-slate-950 border border-slate-800 hover:border-amber-500/50 transition-colors duration-500">
+                                  <i class={`fas ${contact.icon} text-amber-500 mb-5 text-2xl opacity-80 group-hover:opacity-100 transition-opacity`}></i>
+                                  <span class="text-white font-serif font-semibold text-2xl tracking-wide mb-2">{contact.num}</span>
+                                  <span class="text-slate-500 text-xs font-sans uppercase">{contact.type}</span>
+                              </a>
+                          ))}
+                          <div class="flex items-center justify-center gap-6 p-8 rounded-sm bg-slate-950 border border-slate-800">
+                              <a href={telegramLink} target="_blank" aria-label="Telegram" class="w-14 h-14 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:bg-amber-500 hover:text-slate-950 hover:border-amber-500 transition-all duration-500">
+                                  <i class="fab fa-telegram-plane text-xl"></i>
+                              </a>
+                              <a href={facebookLink} target="_blank" aria-label="Facebook" class="w-14 h-14 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:bg-amber-500 hover:text-slate-950 hover:border-amber-500 transition-all duration-500">
+                                  <i class="fab fa-facebook-f text-xl"></i>
+                              </a>
+                          </div>
+                      </div>
+                      <div class="pt-8 border-t border-slate-800">
+                          <div class="flex items-start gap-6">
+                              <div class="w-12 h-12 rounded-full bg-slate-950 border border-slate-800 flex items-center justify-center shrink-0">
+                                  <i class="fas fa-map-marker-alt text-amber-500"></i>
+                              </div>
+                              <div>
+                                  <h4 class="text-white font-km-sans font-medium text-sm mb-3">ទីស្នាក់ការកណ្តាល</h4>
+                                  <p class="text-slate-400 text-sm font-km-sans font-light leading-relaxed">
+                                      ផ្ទះលេខ 33 ផ្លូវ 257 សង្កាត់ទឹកល្អក់ទី២<br/>ខណ្ឌទួលគោក រាជធានីភ្នំពេញ
+                                  </p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </section>
+
+  <footer class="bg-slate-950 py-10 border-t border-slate-900 text-center font-km-sans">
+      <p class="text-slate-600 text-xs font-light">&copy; 2026 CKM Catering Service. រក្សាសិទ្ធិគ្រប់យ៉ាង។</p>
+  </footer>
+</Layout>

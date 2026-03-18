@@ -1,12 +1,21 @@
-# public/_headers
+# =========================================
+# CKM Catering - 邊緣節點快取防禦矩陣
+# =========================================
+
+# 1. 核心 HTML 視圖層 (絕對即時性：確保文章或文案修改後，前端毫秒級刷新)
+/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+# 2. Astro 核心渲染資產 (具備 Hash 指紋，開啟 1 年物理級別絕對快取)
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# 3. 靜態影像資料庫 (彈性容錯：快取 24 小時，兼顧頂級載入速度與圖片替換的彈性)
 /images/*
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=86400, stale-while-revalidate=86400
 
-/*.css
+# 4. 全域字型防禦 (字型極少變動，直接鎖死 1 年以節省頻寬)
+/*.woff
   Cache-Control: public, max-age=31536000, immutable
-
-/*.js
-  Cache-Control: public, max-age=31536000, immutable
-
 /*.woff2
   Cache-Control: public, max-age=31536000, immutable

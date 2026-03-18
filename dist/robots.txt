@@ -1,0 +1,20 @@
+# 核心導航指令：指引主流搜尋引擎前往 Sitemap 矩陣
+Sitemap: https://www.ckmkh.com/sitemap.xml
+
+# 主流搜尋引擎全域放行 (Google, Bing, Yahoo 等)
+User-agent: *
+Allow: /
+
+# 邊界防禦：封殺無 SEO 價值且消耗運算資源的 AI 採集爬蟲
+User-agent: GPTBot
+Disallow: /
+User-agent: ChatGPT-User
+Disallow: /
+User-agent: anthropic-ai
+Disallow: /
+User-agent: Claude-Web
+Disallow: /
+User-agent: CCBot
+Disallow: /
+User-agent: Google-Extended
+Disallow: /
