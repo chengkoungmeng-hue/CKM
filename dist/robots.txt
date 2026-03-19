@@ -5,6 +5,15 @@ Sitemap: https://www.ckmkh.com/sitemap.xml
 User-agent: *
 Allow: /
 
+# [新增防禦] 阻斷動態參數陷阱，防止爬行預算 (Crawl Budget) 物理性耗損
+Disallow: /*?*
+Disallow: /*&*
+
+# [新增防禦] 封鎖常見的無效或後台探測路徑
+Disallow: /admin/
+Disallow: /wp-admin/
+Disallow: /private/
+
 # 邊界防禦：封殺無 SEO 價值且消耗運算資源的 AI 採集爬蟲
 User-agent: GPTBot
 Disallow: /

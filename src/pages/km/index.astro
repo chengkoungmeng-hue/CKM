@@ -1,10 +1,16 @@
 ---
 // 實體路徑: src/pages/km/index.astro
+// 狀態: 終極字元淨化與 OG 絕對路徑校準 (Sanitized & Absolute OG Locked)
 import Layout from '../../layouts/Layout.astro'; 
 
+// 注入絕對網域以防禦社群爬蟲抓取失效
+const siteDomain = "https://www.ckmkh.com";
 const telegramLink = "https://t.me/CKMSam06";
 const facebookLink = "https://www.facebook.com/CKMFOODS";
-const heroImage = "/images/home/hero-luxury-banquet-setup.webp";
+
+// 強制 OG 視覺資產使用絕對路徑
+const heroImageRelative = "/images/home/hero-luxury-banquet-setup.webp";
+const heroImageAbsolute = `${siteDomain}${heroImageRelative}`;
 const logo = "/images/home/brand-ckm-logo-gold.webp";
 
 const phoneNumbers = [
@@ -14,35 +20,64 @@ const phoneNumbers = [
 ];
 
 const menuItems = [
-  { title: "ម្ហូបក្លែម៦មុខដ៏វិសេសវិសាល", image: "/images/home/menu-01.webp", desc: "ការរៀបចំមុខម្ហូបក្លែម៦មុខដ៏ពិសេស ដែលចម្រាញ់ចេញពីគ្រឿងផ្សំកំពូល ដើម្បីដាស់រសជាតិមាត់មុនពេលទទួលទានម្ហូបចម្បង។" },
-  { title: "ត្រីដប៊ុនបំពងស្រួយ", image: "/images/home/menu-02.webp", desc: "ត្រីសមុទ្របំពងដោយការគ្រប់គ្រងកម្តៅប្រេងយ៉ាងល្អឥតខ្ចោះ ដើម្បីរក្សាភាពស្រួយខាងក្រៅ និងរក្សាជាតិទឹកខាងក្នុង។" },
-  { title: "ភាសាច់គោក្រៅអង្គារបែបប្រពៃណី", image: "/images/home/menu-03.webp", desc: "សាច់គោស្រស់ៗ លាយឡំជាមួយគ្រឿងទេសខ្មែរពិតៗ ផ្តល់នូវរសជាតិជូរហិរដ៏ល្អឥតខ្ចោះ។" },
-  { title: "បង្កងបំពងគ្រាប់ធញ្ញជាតិ", image: "/images/home/menu-04.webp", desc: "បង្កងទន្លេស្រស់ៗ បំពងជាមួយគ្រាប់ធញ្ញជាតិនិងប៊័រក្រអូបឈ្ងុយ ផ្តល់នូវរសជាតិស្រួយឆ្ងាញ់មិនអាចបំភ្លេចបាន។" },
-  { title: "ជ្រូកខ្វៃនិងនំប៉័ង", image: "/images/home/menu-05.webp", desc: "សាច់ជ្រូកខ្វៃដែលមានស្បែកស្រួយ និងសាច់ផុយ ញ៉ាំផ្ទាប់ជាមួយនំប៉័ងទន់ៗដ៏ស័ក្តិសម។" },
-  { title: "ត្រីតុកកែជូរអែម", image: "/images/home/menu-06.webp", desc: "ត្រីសមុទ្របំពងស្រួយ ស្រូបទឹកជ្រលក់ជូរអែមដែលមានតុល្យភាពរសជាតិយ៉ាងល្អ។" },
-  { title: "ត្រីហឹរឡប់ពង", image: "/images/home/menu-07.webp", desc: "សាច់ត្រីចម្អិនដោយភ្លើងខ្លាំងជាមួយគ្រឿងទេសហិរៗ ផ្តល់នូវក្លិនឈ្ងុយនិងរសជាតិមុត។" },
-  { title: "ស៊ុបប៉ាវហឺ១០មុខ", image: "/images/home/menu-08.webp", desc: "ស៊ុបប៉ាវហឺដែលរម្ងាស់ជាច្រើនម៉ោងជាមួយឱសថបុរាណចិន ដើម្បីទាញយករសជាតិដើម និងអត្ថប្រយោជន៍ចំពោះសុខភាព។" },
-  { title: "ញាំជើងទាបង្គោរមិក", image: "/images/home/menu-09.webp", desc: "ជើងទាដកឆ្អឹងចេញ រក្សាបាននូវភាពស្រួយ ញាំជាមួយទឹកជ្រលក់ជូរហិរដ៏ស្រស់ស្រាយ។" },
-  { title: "ត្រីតុកកែចំហ៊ុយទឹកស៊ីអ៊ីវ", image: "/images/home/menu-10.webp", desc: "ត្រីស្រស់ចំហ៊ុយក្នុងរយៈពេលដ៏ជាក់លាក់ បន្ថែមដោយទឹកស៊ីអ៊ីវគុណភាពខ្ពស់ ដើម្បីរក្សារសជាតិធម្មជាតិ។" },
-  { title: "បាយខ្ទប់ស្លឹកឈូក", image: "/images/home/menu-11.webp", desc: "បាយឆាជាមួយគ្រឿងផ្សំពិសេស រុំក្នុងស្លឹកឈូកចំហ៊ុយ ផ្តល់នូវក្លិនក្រអូបប្រហើរ។" },
-  { title: "ទាខ្វៃហុងកុង", image: "/images/home/menu-12.webp", desc: "ទាខ្វៃតាមរូបមន្តហុងកុងពិតៗ មានស្បែកស្រួយ និងសាច់ទន់ឈ្ងុយឆ្ងាញ់។" },
-  { title: "បង្អែមខ្មែរបុរាណ", image: "/images/home/menu-13.webp", desc: "បង្អែមរៀបចំតាមបែបប្រពៃណីខ្មែរ ដោយប្រើខ្ទិះដូងស្រស់ និងស្លឹកតើយ ដើម្បីបញ្ចប់អាហារដ៏ល្អឥតខ្ចោះ។" },
-  { title: "តុងយាំបង្កងទន្លេ", image: "/images/home/menu-14.webp", desc: "ស៊ុបជូរហិររសជាតិដើម ជាមួយបង្កងទន្លេដែលមានសាច់ណែនល្អ។" },
-  { title: "កូនជ្រូកខ្វៃទាំងមូល", image: "/images/home/menu-15.webp", desc: "ជម្រើសដ៏ឧត្តុង្គឧត្តមសម្រាប់កម្មវិធីធំៗ មានពណ៌មាសស្រស់ស្អាត និងរសជាតិឆ្ងាញ់ពិសា។" },
+  // 01. 前菜：移除「非凡」，強調味覺喚醒機制
+  { title: "ម្ហូបក្លែម៦មុខ", image: "/images/home/menu-01.webp", desc: "ការរួមបញ្ចូលគ្នានៃវាយនភាព និងសីតុណ្ហភាពខុសៗគ្នាទាំង៦មុខ ដើម្បីជម្រុញក្រពេញទឹកមាត់ និងរៀបចំប្រព័ន្ធរំលាយអាហារមុនពេលទទួលទានម្ហូបចម្បង។" },
+  
+  // 02. 炸魚：強化熱力學（精確油溫控制）與水分保留
+  { title: "ត្រីដប៊ុនបំពងស្រួយ", image: "/images/home/menu-02.webp", desc: "អនុវត្តបច្ចេកទេសបំពងដោយសីតុណ្ហភាពប្រេងថេរ ដើម្បីបង្កើតសំបកក្រៅស្រួយ និងទប់ស្កាត់ការបាត់បង់ជាតិទឹក (Moisture retention) នៅក្នុងសាច់ត្រី។" },
+  
+  // 03. 烤牛肉：強調生化反應（酸辣平衡）
+  { title: "ភាសាច់គោក្រៅអង្គារ", image: "/images/home/menu-03.webp", desc: "សាច់គោចម្អិនក្នុងកម្រិតមធ្យម (Medium Rare) លាយជាមួយអាស៊ីតពីក្រូចឆ្មារ និងសារធាតុ Capsaicin ពីម្ទេស បង្កើតបានជាតុល្យភាពរសជាតិជូរហិរ។" },
+  
+  // 04. 麥片蝦：移除「難忘」，強調美拉德反應與油脂乳化
+  { title: "បង្កងបំពងគ្រាប់ធញ្ញជាតិ", image: "/images/home/menu-04.webp", desc: "បង្កងទន្លេបំពង រួមបញ្ចូលជាមួយគ្រាប់ធញ្ញជាតិលីង និងប៊័រ ដើម្បីទាញយកក្លិនក្រអូបតាមរយៈប្រតិកម្ម Maillard (Maillard reaction)។" },
+  
+  // 05. 烤乳豬：強調質地對比 (Texture contrast)
+  { title: "ជ្រូកខ្វៃនិងនំប៉័ង", image: "/images/home/menu-05.webp", desc: "ការចម្អិនដោយកម្តៅស្ងួត (Dry heat) ដើម្បីបំបែកជាតិខ្លាញ់ និងធ្វើឱ្យស្បែកស្រួយ ញ៉ាំផ្ទាប់ជាមួយនំប៉័ងទន់ បង្កើតនូវភាពផ្ទុយគ្នានៃវាយនភាព (Texture contrast)។" },
+  
+  // 06. 糖醋魚：強調酸鹼中和與流體動力學（醬汁包覆）
+  { title: "ត្រីតុកកែជូរអែម", image: "/images/home/menu-06.webp", desc: "សាច់ត្រីបំពងស្រួយ គ្របដណ្តប់ដោយទឹកជ្រលក់ដែលមានកម្រិត pH តុល្យភាពរវាងជាតិជូរ និងផ្អែម ធានាបាននូវការស្រូបយករសជាតិស្មើគ្នា។" },
+  
+  // 07. 辣炒魚：強調高溫破壞與風味萃取
+  { title: "ត្រីហឹរឡប់ពង", image: "/images/home/menu-07.webp", desc: "ប្រើប្រាស់បច្ចេកទេសឆាភ្លើងខ្លាំង (Wok hei) ក្នុងរយៈពេលខ្លី ដើម្បីទាញយកប្រេងសំខាន់ៗពីគ្រឿងទេស និងរក្សាភាពតឹងណែននៃសាច់ត្រី។" },
+  
+  // 08. 鮑魚湯：強調長時間水解與營養萃取
+  { title: "ស៊ុបប៉ាវហឺ១០មុខ", image: "/images/home/menu-08.webp", desc: "ដំណើរការរម្ងាស់កម្តៅទាបរយៈពេលយូរ (Slow simmer) ដើម្បីបំបែកប្រូតេអ៊ីនខូឡាជែន និងស្រង់យកសារធាតុរ៉ែពីឱសថបុរាណចិនទាំង១០មុខ។" },
+  
+  // 09. 涼拌鴨掌：強調除骨工藝與結締組織處理
+  { title: "ញាំជើងទាបង្គោរមិក", image: "/images/home/menu-09.webp", desc: "ជើងទាដកឆ្អឹងដោយរក្សានូវរចនាសម្ព័ន្ធសរសៃពួរ និងឆ្អឹងខ្ចី លាយជាមួយទឹកជ្រលក់ដែលមានជាតិអាស៊ីតខ្ពស់ ដើម្បីបន្សាបជាតិខាញ់។" },
+  
+  // 10. 清蒸魚：強調蛋白質變性控制
+  { title: "ត្រីតុកកែចំហ៊ុយទឹកស៊ីអ៊ីវ", image: "/images/home/menu-10.webp", desc: "ការចំហ៊ុយដោយគ្រប់គ្រងពេលវេលាយ៉ាងតឹងរ៉ឹង ដើម្បីទប់ស្កាត់ការកកិតប្រូតេអ៊ីនហួសកម្រិត (Over-coagulation) រក្សាបាននូវសាច់ត្រីទន់ និងរលោង។" },
+  
+  // 11. 荷葉飯：強調澱粉糊化與芳香烴轉移
+  { title: "បាយខ្ទប់ស្លឹកឈូក", image: "/images/home/menu-11.webp", desc: "បាយចម្អិនតាមរយៈការចំហ៊ុយក្នុងបរិយាកាសបិទជិត ដើម្បីឱ្យម៉ូលេគុលក្លិនក្រអូបពីស្លឹកឈូកជ្រាបចូលទៅក្នុងគ្រាប់បាយនីមួយៗ។" },
+  
+  // 12. 港式烤鴨：強調熱風循環與脫水工藝
+  { title: "ទាខ្វៃហុងកុង", image: "/images/home/menu-12.webp", desc: "ឆ្លងកាត់ដំណើរការសម្ងួតស្បែកដោយខ្យល់ត្រជាក់ និងការខ្វៃក្នុងឡកម្តៅខ្ពស់ ដើម្បីរំលាយខ្លាញ់ក្រោមស្បែក និងធ្វើឱ្យស្បែកស្រួយ។" },
+  
+  // 13. 傳統甜點：強調乳化與結尾收斂
+  { title: "បង្អែមខ្មែរបុរាណ", image: "/images/home/menu-13.webp", desc: "ការប្រើប្រាស់ជាតិខ្លាញ់រុក្ខជាតិពីខ្ទិះដូង លាយបញ្ជូលជាមួយក្លិនក្រអូបពីស្លឹកតើយ ដើរតួជាសារធាតុជួយសម្រួលប្រព័ន្ធរំលាយអាហារនៅចុងបញ្ចប់នៃអាហារ។" },
+  
+  // 14. 冬蔭功：強調複雜湯底的風味矩陣
+  { title: "តុងយាំបង្កងទន្លេ", image: "/images/home/menu-14.webp", desc: "រចនាសម្ព័ន្ធស៊ុបដែលមានមូលដ្ឋានលើអាស៊ីតស៊ីទ្រិច ផ្សំជាមួយប្រូតេអ៊ីនពីបង្កងទន្លេ បង្កើតបានជាទម្រង់រសជាតិ (Flavor profile) ដ៏ស្មុគស្មាញ។" },
+  
+  // 15. 烤全豬：強調整體結構展示與梅納反應最大化
+  { title: "កូនជ្រូកខ្វៃទាំងមូល", image: "/images/home/menu-15.webp", desc: "បច្ចេកទេសខ្វៃសាច់ជ្រូកទាំងមូលដោយការបង្វិលជាបន្តបន្ទាប់ ដើម្បីចែកចាយកម្តៅស្មើគ្នា និងធ្វើឱ្យប្រតិកម្ម Maillard កើតឡើងលើផ្ទៃស្បែកទាំងអស់។" },
 ];
 
 const blogPosts = [
-  { title: "របៀបជ្រើសរើសសេវាកម្មម្ហូបការ", subTitle: "ការវាយតម្លៃទីតាំង និងដំណើរការ", link: "/km/blog/01-venue-logistics/", image: "/images/home/blog-wedding-service-guide.webp" },
-  { title: "សិល្បៈនៃការគ្រប់គ្រងកម្មវិធីខ្នាតធំ", subTitle: "ការរក្សាសីតុណ្ហភាព និងគុណភាពមុខម្ហូប", link: "/km/blog/02-event-party-planning/", image: "/images/home/blog-event-party-planning.webp" },
-  { title: "ស្តង់ដារគុណភាពវត្ថុធាតុដើម", subTitle: "ការថែរក្សាភាពស្រស់ និងរសជាតិដើម", link: "/km/blog/03-chef-professional-standard/", image: "/images/home/blog-chef-professional-standard.webp" },
-  { title: "ស្តង់ដារអនាម័យនិងសុវត្ថិភាពខ្ពស់បំផុត", subTitle: "ការការពារបាក់តេរីក្នុងកម្រិត 75°C", link: "/km/blog/04-food-safety-quality/", image: "/images/home/blog-food-safety-quality.webp" },
-  { title: "សិល្បៈនៃការរៀបចំម៉ឺនុយ", subTitle: "ការរួមបញ្ចូលគ្នានៃរសជាតិខ្មែរ និងចិន", link: "/km/blog/05-khmer-wedding-menu/", image: "/images/home/blog-khmer-wedding-menu.webp" },
-  { title: "ដំណើរការសេវាកម្មកម្រិតអន្តរជាតិ", subTitle: "ការរៀបចំទុកជាមុនសម្រាប់ការងារគ្មានកំហុស", link: "/km/blog/06-service-process-sop/", image: "/images/home/blog-service-process-sop.webp" }
+  { title: "ម៉ាទ្រីសវាយតម្លៃសេវាកម្មម្ហូបការ", subTitle: "ការគណនាទំហំទីតាំង និងប្រសិទ្ធភាពចរាចរណ៍ការងារ", link: "/km/blog/01-venue-logistics/", image: "/images/home/blog-wedding-service-guide.webp" },
+  { title: "ប្រព័ន្ធគ្រប់គ្រងសីតុណ្ហភាពខ្នាតធំ", subTitle: "បច្ចេកទេសទប់ស្កាត់ការបាត់បង់កម្តៅ និងរក្សាសំណើមអាហារ", link: "/km/blog/02-event-party-planning/", image: "/images/home/blog-event-party-planning.webp" },
+  { title: "ខ្សែចង្វាក់ផ្គត់ផ្គង់ និងការគ្រប់គ្រងវត្ថុធាតុដើម", subTitle: "ការអនុវត្តខ្សែសង្វាក់ត្រជាក់ទប់ស្កាត់ប្រតិកម្មអុកស៊ីតកម្ម", link: "/km/blog/03-chef-professional-standard/", image: "/images/home/blog-chef-professional-standard.webp" },
+  { title: "ពិធីសារសុវត្ថិភាពជីវសាស្រ្តអាហារ", subTitle: "បច្ចេកទេសកម្ចាត់ភ្នាក់ងារបង្កជំងឺតាមរយៈការគ្រប់គ្រងកម្តៅ", link: "/km/blog/04-food-safety-quality/", image: "/images/home/blog-food-safety-quality.webp" },
+  { title: "រចនាសម្ព័ន្ធរសជាតិ និងជីវគីមីនៃអាហារ", subTitle: "សមាមាត្រនៃគ្រឿងទេសខ្មែរនិងបច្ចេកទេសចម្អិនបែបចិន", link: "/km/blog/05-khmer-wedding-menu/", image: "/images/home/blog-khmer-wedding-menu.webp" },
+  { title: "ស្តង់ដារប្រតិបត្តិការ (SOP) និងការកាត់បន្ថយហានិភ័យ", subTitle: "ការរៀបចំប្រព័ន្ធការពារជាមុនដើម្បីអត្រាកំហុសស្មើសូន្យ", link: "/km/blog/06-service-process-sop/", image: "/images/home/blog-service-process-sop.webp" }
 ];
 ---
-<Layout title="ចុងភៅ ចេង គួងម៉េង - CKM Premium Catering" description="CKM Catering ផ្តល់ជូននូវសេវាកម្មម្ហូបការ និងជប់លៀងលំដាប់ខ្ពស់ ដោយផ្តោតលើគុណភាព សុវត្ថិភាព និងភាពល្អឥតខ្ចោះ។" image={heroImage} lang="km">
+<Layout title="ចុងភៅ ចេង គួងម៉េង - CKM Premium Catering" description="CKM Catering ផ្តល់ជូននូវសេវាកម្មម្ហូបការ និងជប់លៀងលំដាប់ខ្ពស់ ដោយផ្តោតលើគុណភាព សុវត្ថិភាព និងភាពល្អឥតខ្ចោះ។" image={heroImageAbsolute} lang="km">
   <Fragment slot="head">
-    <link rel="preload" as="image" href={heroImage} />
+    <link rel="preload" as="image" href={heroImageRelative} />
     <link href="https://fonts.googleapis.com/css2?family=Hanuman:wght@400;700&family=Kantumruy+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
   </Fragment>
 
@@ -52,7 +87,7 @@ const blogPosts = [
   </style>
 
   <header class="relative h-screen flex items-center justify-center overflow-hidden">
-    <div class="absolute inset-0 bg-cover bg-center bg-no-repeat bg-fixed transform scale-105" style={`background-image: url('${heroImage}');`}></div>
+    <div class="absolute inset-0 bg-cover bg-center bg-no-repeat bg-fixed transform scale-105" style={`background-image: url('${heroImageRelative}');`}></div>
     <div class="absolute inset-0 bg-black/60 bg-gradient-to-b from-black/80 via-black/50 to-slate-900"></div>
     <div class="relative z-10 text-center px-4 max-w-4xl mx-auto pt-10">
         <img src={logo} alt="CKM Logo" width="128" height="128" class="w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-amber-500 mx-auto mb-8 shadow-[0_0_40px_rgba(245,158,11,0.5)]">
@@ -152,7 +187,7 @@ const blogPosts = [
                           {phoneNumbers.map((contact) => (
                               <a href={`tel:+855${contact.num.replace(/\s/g, '').substring(1)}`} class="group flex flex-col p-8 rounded-sm bg-slate-950 border border-slate-800 hover:border-amber-500/50 transition-colors duration-500">
                                   <i class={`fas ${contact.icon} text-amber-500 mb-5 text-2xl opacity-80 group-hover:opacity-100 transition-opacity`}></i>
-                                  <span class="text-white font-serif font-semibold text-2xl tracking-wide mb-2">{contact.num}</span>
+                                  <span class="text-white font-serif font-semibold text-2xl tracking-wide mb-2 whitespace-nowrap">{contact.num}</span>
                                   <span class="text-slate-500 text-xs font-sans uppercase">{contact.type}</span>
                               </a>
                           ))}
