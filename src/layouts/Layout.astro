@@ -1,23 +1,27 @@
 ---
-// 實體路徑: src/layouts/Layout.astro
-// 負責全域 HTML 骨架、字體編碼、與智慧導覽列
+// src/layouts/Layout.astro
+// 狀態: 結構淨化與全域行動端轉換矩陣 (Global Mobile Conversion Anchor) 鎖定
 
 const { title, description, image, lang = 'zh' } = Astro.props;
 
-// 建立 Navbar 智慧翻譯字典
+// 擴充全域智慧翻譯字典 (導入通話與 Telegram 實體意圖)
 const navTranslations = {
-  km: { contact: "ទាក់ទងយើង", menu: "ម៉ឺនុយ" },
-  zh: { contact: "联系我们", menu: "精选菜单" },
-  en: { contact: "Contact Us", menu: "Menu" }
+  km: { contact: "ទាក់ទងយើង", menu: "ម៉ឺនុយ", call: "ទូរស័ព្ទ", telegram: "Telegram" },
+  zh: { contact: "联系我们", menu: "精选菜单", call: "立即致电", telegram: "Telegram" },
+  en: { contact: "Contact Us", menu: "Menu", call: "Call Now", telegram: "Telegram" }
 };
-const t = navTranslations[lang] || navTranslations.zh;
+const t = navTranslations[lang as keyof typeof navTranslations] || navTranslations.zh;
+
+// 全域終極轉換參數
+const mainPhone = "011 827 782";
+const telegramLink = "https://t.me/CKMSam06";
 ---
 
 <!doctype html>
 <html lang={lang} class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -34,7 +38,6 @@ const t = navTranslations[lang] || navTranslations.zh;
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-EG6D0H2T5K');
     </script>
   </head>
@@ -45,7 +48,7 @@ const t = navTranslations[lang] || navTranslations.zh;
         <div class="flex items-center justify-between h-20">
           
           <div class="flex items-center gap-3">
-            <a href={`/${lang}/`} class="flex items-center gap-3 group">
+            <a href={`/${lang}/`} class="flex items-center gap-3 group focus:outline-none rounded-sm">
                 <img src="/images/home/brand-ckm-logo-gold.webp" alt="CKM Logo" width="48" height="48" class="h-12 w-12 rounded-full border border-amber-500/50 shadow-[0_0_15px_rgba(245,158,11,0.2)] group-hover:scale-105 transition-transform" decoding="async">
                 <div class="flex flex-col">
                   <span class="text-white font-bold text-lg tracking-wider">CKM CATERING</span>
@@ -61,8 +64,8 @@ const t = navTranslations[lang] || navTranslations.zh;
                   <a href="/en/" class={`px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-300 ${lang === 'en' ? 'bg-amber-500 text-slate-950 shadow-md' : 'text-slate-400 hover:text-white'}`}>English</a>
               </div>
               
-              <a href="#contact" class="hidden md:inline-flex bg-amber-500 hover:bg-amber-400 text-slate-950 px-6 py-2 rounded-full font-bold text-sm transition-all shadow-[0_0_15px_rgba(245,158,11,0.3)] hover:shadow-[0_0_25px_rgba(245,158,11,0.5)]">
-                  {t.contact}
+              <a href="#contact" class="hidden md:inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-6 min-h-[44px] rounded-full font-bold text-sm transition-all shadow-[0_0_15px_rgba(245,158,11,0.3)] hover:shadow-[0_0_25px_rgba(245,158,11,0.5)] focus:ring-2 focus:ring-amber-300 focus:outline-none">
+                  <i class="fas fa-phone-alt"></i> {t.contact}
               </a>
           </div>
 
@@ -70,9 +73,25 @@ const t = navTranslations[lang] || navTranslations.zh;
       </div>
     </nav>
 
-    <main class="pt-20">
+    <main class="pt-20 pb-24 md:pb-0">
         <slot />
     </main>
 
+    <div class="fixed bottom-0 left-0 right-0 w-full z-[60] flex md:hidden bg-white border-t border-slate-200 shadow-[0_-10px_20px_-5px_rgba(0,0,0,0.15)] pb-safe">
+        <a href={`tel:+855${mainPhone.replace(/\s/g, '').substring(1)}`} class="flex-1 flex items-center justify-center gap-2 bg-amber-500 active:bg-amber-600 text-slate-900 font-bold py-4 min-h-[60px] transition-colors focus:outline-none">
+            <i class="fas fa-phone-alt"></i> {t.call}
+        </a>
+        <a href={telegramLink} target="_blank" rel="noopener noreferrer" class="flex-1 flex items-center justify-center gap-2 bg-[#0088cc] active:bg-[#007ab8] text-white font-bold py-4 min-h-[60px] transition-colors focus:outline-none border-l border-white/20">
+            <i class="fab fa-telegram-plane text-lg"></i> {t.telegram}
+        </a>
+    </div>
+
   </body>
 </html>
+
+<style is:global>
+  /* 視口安全區 (Safe Area) 注入：防止 iOS 底部 Home Indicator 阻斷觸控事件 */
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+</style>
