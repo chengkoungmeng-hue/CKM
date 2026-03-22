@@ -1,6 +1,5 @@
 ---
 // src/pages/zh/index.astro
-// 状态: 架构物理学同步 (Structural Physics Synced) & 中文实体精准校准
 import Layout from '../../layouts/Layout.astro'; 
 
 const siteDomain = "https://www.ckmkh.com";
@@ -10,7 +9,6 @@ const facebookLink = "https://www.facebook.com/CKMFOODS";
 const heroImageRelative = "/images/home/hero-luxury-banquet-setup.webp";
 const logo = "/images/home/brand-ckm-logo-gold.webp";
 
-// 提取主号码供按钮使用
 const mainPhone = "011 827 782";
 const phoneNumbers = [
   { num: "011 827 782", icon: "fa-mobile-alt", type: "Cellcard" },
@@ -53,7 +51,6 @@ const blogPosts = [
 
   <style>
     .font-zh-serif { font-family: 'Noto Serif SC', serif; }
-    /* 横向滑动隐藏卷轴 */
     .scrollbar-hide::-webkit-scrollbar { display: none; }
     .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
@@ -61,8 +58,7 @@ const blogPosts = [
   <div class="w-full">
       <header class="relative h-screen flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0 bg-cover bg-center bg-no-repeat bg-fixed transform scale-105" style={`background-image: url('${heroImageRelative}');`}></div>
-        
-        <div class="absolute inset-0 bg-black/40 bg-gradient-to-b from-black/70 via-black/30 to-slate-900/90"></div>
+        <div class="absolute inset-0 bg-black/70 bg-gradient-to-b from-black/80 via-black/50 to-slate-900/90"></div>
         
         <div class="relative z-10 text-center px-4 max-w-4xl mx-auto pt-10">
             <img src={logo} alt="CKM Logo" width="128" height="128" class="w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-amber-500 mx-auto mb-8 shadow-[0_0_40px_rgba(245,158,11,0.5)]">
@@ -108,7 +104,7 @@ const blogPosts = [
         </div>
       </section>
 
-      <section class="py-16 md:py-24 bg-slate-900 relative overflow-hidden">
+      <section id="service" class="py-16 md:py-24 bg-slate-900 relative overflow-hidden">
          <div class="max-w-7xl mx-auto px-6 relative z-10">
             <div class="text-center mb-12 md:mb-16"><h2 class="text-3xl md:text-4xl font-zh-serif font-bold text-white tracking-widest">绝对执行矩阵</h2></div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
@@ -131,7 +127,7 @@ const blogPosts = [
          </div>
       </section>
 
-      <section class="py-16 md:py-24 bg-white overflow-hidden">
+      <section id="portfolio" class="py-16 md:py-24 bg-white overflow-hidden">
         <div class="max-w-7xl mx-auto px-6">
           <div class="text-center mb-10 md:mb-16"><h2 class="text-3xl md:text-4xl font-zh-serif font-bold text-slate-900 tracking-widest">传世臻选名菜</h2></div>
           
@@ -152,7 +148,7 @@ const blogPosts = [
         </div>
       </section>
 
-      <section class="py-16 md:py-24 bg-slate-50 border-t border-slate-200">
+      <section id="insights" class="py-16 md:py-24 bg-slate-50 border-t border-slate-200">
         <div class="max-w-7xl mx-auto px-6">
            <div class="text-center mb-10 md:mb-16"><h2 class="text-3xl md:text-4xl font-zh-serif font-bold text-slate-900 tracking-widest">顶级宴会统筹智库</h2></div>
            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
@@ -232,9 +228,5 @@ const blogPosts = [
               </div>
           </div>
       </section>
-
-      <footer class="bg-slate-950 py-8 md:py-10 border-t border-slate-900 text-center font-sans">
-          <p class="text-slate-600 text-[10px] md:text-xs font-light tracking-widest uppercase">&copy; 2026 CKM Catering Service. 保留所有权利。</p>
-      </footer>
   </div>
 </Layout>
