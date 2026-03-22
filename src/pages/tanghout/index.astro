@@ -1,6 +1,6 @@
 ---
 // 實體路徑: src/pages/tanghout/index.astro
-// 狀態: 單頁面架構封裝完畢 (包含在地 SEO 結構化資料、LCP 預先載入與行動端吸頂 CTA)
+// 狀態: 單頁面架構封裝完畢。已修復 Sticky Footer 的聯絡方式，並套用烘焙營運、精準溫控的實戰語感。
 // 核心識別: គាំង ហួត (Kiang Huat Bakery)
 ---
 
@@ -12,23 +12,23 @@
   
   <link rel="icon" type="image/x-icon" href="/thicon.ico" />
   
-  <title>ហាងនំ គាំង ហួត | នំលោកខែ និងនំប្រពៃណីលំដាប់កំពូលនៅភ្នំពេញ</title>
+  <title>ហាងនំ គាំង ហួត | ស្តង់ដារផលិតនំព្រះខែ និងនំហ្វាកាវខ្នាតធំ</title>
   
-  <meta name="description" content="ហាងនំ គាំង ហួត ផ្តល់ជូននូវនំលោកខែ និងនំប្រពៃណីខ្មែរ-ចិន លំដាប់កំពូលប្រចាំរាជធានីភ្នំពេញ។ រូបមន្តបុរាណចៅចូវពិតៗ គ្មានសារធាតុរក្សាទុក សម្រាប់ការជូនកាដូដ៏មានតម្លៃ។" />
+  <meta name="description" content="ហាងនំ គាំង ហួត ឯកទេសផលិតនំព្រះខែ និងនំហ្វាកាវខ្នាតធំ។ យើងធានាគុណភាពតាមរយៈការគ្រប់គ្រងកម្តៅឡដុត និងសម្ពាធចំហុយយ៉ាងជាក់លាក់។" />
 
   <link rel="preload" as="image" href="/images/tanghout/nom-lok-khae-logo-image_29.webp" fetchpriority="high" />
 
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="ហាងនំ គាំង ហួត | នំលោកខែ និងនំប្រពៃណីលំដាប់ខ្ពស់" />
+  <meta property="og:title" content="ហាងនំ គាំង ហួត | ស្តង់ដារផលិតនំព្រះខែ និងនំហ្វាកាវខ្នាតធំ" />
   <meta property="og:url" content="https://www.ckmkh.com/tanghout/" />
   <meta property="og:image" content="https://www.ckmkh.com/th-image.jpg" />
-  <meta property="og:description" content="មរតកបីជំនាន់នៃរសជាតិដើម។ ជំនាញខាងនំលោកខែ និងនំសែនតាមបែបធម្មជាតិ គ្មានសារធាតុរក្សាទុក សម្រាប់ការជូនកាដូដ៏មានតម្លៃ។" />
+  <meta property="og:description" content="ឯកទេសផលិតនំព្រះខែ និងនំហ្វាកាវ។ ធានាគុណភាពរាប់ពាន់ដុំដូចគ្នាបេះបិទ តាមរយៈការគ្រប់គ្រងកម្តៅ និងអនាម័យផលិតកម្មយ៉ាងម៉ត់ចត់។" />
   <meta property="og:site_name" content="ហាងនំ គាំង ហួត (Kiang Huat)" />
   <meta property="og:locale" content="km_KH" />
 
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="ហាងនំ គាំង ហួត | នំលោកខែ និងនំប្រពៃណីលំដាប់ខ្ពស់" />
-  <meta name="twitter:description" content="មរតកបីជំនាន់នៃរសជាតិដើម។ ជំនាញខាងនំលោកខែ និងនំសែនតាមបែបធម្មជាតិ គ្មានសារធាតុរក្សាទុក។" />
+  <meta name="twitter:title" content="ហាងនំ គាំង ហួត | ស្តង់ដារផលិតនំខ្នាតធំ" />
+  <meta name="twitter:description" content="ឯកទេសផលិតនំព្រះខែ និងនំហ្វាកាវ។ ធានាគុណភាពរាប់ពាន់ដុំដូចគ្នាបេះបិទ តាមរយៈការគ្រប់គ្រងកម្តៅ និងអនាម័យ។" />
   <meta name="twitter:image" content="https://www.ckmkh.com/th-image.jpg" />
 
   <script type="application/ld+json" set:html={JSON.stringify({
@@ -36,7 +36,7 @@
     "@type": "Bakery",
     "name": "ហាងនំ គាំង ហួត (Kiang Huat Bakery)",
     "image": "https://www.ckmkh.com/images/tanghout/nom-lok-khae-logo-image_29.webp",
-    "description": "នំលោកខែ និងនំប្រពៃណីខ្មែរ-ចិន លំដាប់កំពូលប្រចាំរាជធានីភ្នំពេញ។",
+    "description": "រោងនំប្រពៃណីដែលមានស្តង់ដារផលិតកម្មខ្នាតធំប្រចាំរាជធានីភ្នំពេញ។",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "ផ្ទះលេខ៤៥៤ ផ្លូវលំភូមិត្រពាំងថ្លឹង១ សង្កាត់ចោមចៅ ខណ្ឌពោធិ៍សែនជ័យ",
@@ -86,14 +86,14 @@
           ហាងនំ គាំង ហួត
         </h1>
         <h2 class="text-2xl md:text-4xl font-bold text-white/90 tracking-widest font-heading drop-shadow-lg">
-          មរតករសជាតិចៅចូវតាំងពីឆ្នាំ ១៩៦០ <br class="md:hidden" /><span class="text-kh-red drop-shadow-md">និមិត្តរូបនៃកិត្យានុភាព និងការគោរព</span>
+          ស្តង់ដារប្រតិបត្តិការដុតនំខ្នាតធំ <br class="md:hidden" /><span class="text-kh-red drop-shadow-md">គុណភាពថេរ ១០០%</span>
         </h2>
         <p class="text-lg md:text-2xl text-white mb-16 max-w-3xl mx-auto font-light leading-loose tracking-wide drop-shadow-md">
-          រក្សាភាពដើមនៃរូបមន្តប្រពៃណីចៅចូវជាង ៦ ទសវត្សរ៍។ រាល់វត្ថុធាតុដើមត្រូវបានជ្រើសរើសយ៉ាងសម្រិតសម្រាំងបំផុត ដើម្បីធានាបាននូវគុណភាពស្តង់ដារខ្ពស់ និងសេចក្តីថ្លៃថ្នូរសម្រាប់រាល់ការជាវជូនដៃគូពាណិជ្ជកម្ម ឬក្រុមគ្រួសារ។
+          ការផលិតនំព្រះខែ និងនំហ្វាកាវរាប់ពាន់ដុំ មិនមែនពឹងលើសំណាងនោះទេ។ យើងអនុវត្តការគ្រប់គ្រងកម្តៅឡ និងសម្ពាធចំហុយយ៉ាងម៉ត់ចត់ ដើម្បីធានាថាគុណភាព ទំហំ និងរសជាតិនំគ្រប់ប្រអប់គឺស្តង់ដារតែមួយ។
         </p>
         <div class="flex flex-col sm:flex-row gap-6 justify-center pt-8">
           <a href="#contact" class="bg-kh-red hover:bg-red-700 text-white px-14 py-5 rounded-sm font-bold text-lg transition flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(227,29,43,0.5)] tracking-wider">
-            ទំនាក់ទំនងកក់ទុកមុន
+            ទាក់ទងបញ្ជាទិញ
           </a>
         </div>
       </div>
@@ -106,11 +106,11 @@
         </div>
         <div class="flex flex-col justify-center p-12 md:p-20 lg:p-24 space-y-8 bg-slate-900/50">
           <h3 class="text-4xl md:text-5xl font-black text-white leading-tight font-heading drop-shadow-lg">
-            មរតកបីជំនាន់<br/>រសជាតិដើមឥតខ្ចោះ
+            នំព្រះខែ៖<br/>ការគ្រប់គ្រងសំណើមស្នូល
           </h3>
           <div class="w-20 h-1 bg-kh-red shadow-[0_0_10px_rgba(227,29,43,0.5)]"></div>
           <p class="text-xl md:text-2xl text-gray-300 font-light leading-loose tracking-wide drop-shadow-sm">
-            អនុវត្តយ៉ាងតឹងរ៉ឹងនូវបច្គេចទេសផ្អាប់មេដំបែធម្មជាតិ។ រក្សាសំណើមនិងសីតុណ្ហភាពតាមស្តង់ដាររូបមន្តដើម។ យើងធានាភាពបរិសុទ្ធ ១០០% ដោយគ្មានសារធាតុគីមី និងសារធាតុរក្សាទុក ផ្តល់នូវសុវត្ថិភាពខ្ពស់បំផុតសម្រាប់សុខភាព។
+            ការផលិតនំព្រះខែខ្នាតធំ បញ្ហាប្រឈមគឺការឆ្អិនមិនស្មើគ្នា។ យើងប្រើប្រាស់ឡដុតខ្នាតឧស្សាហកម្មគ្រប់គ្រងសីតុណ្ហភាពកម្រិតខ្ពស់ ដើម្បីឱ្យសំបកនំឆ្អិនស្មើពណ៌មាស ដោយរក្សាសំណើមស្នូលខាងក្នុងមិនឱ្យស្ងួត ឬរឹង។
           </p>
         </div>
       </div>
@@ -120,14 +120,14 @@
       <div class="grid grid-cols-1 lg:grid-cols-2">
         <div class="order-2 lg:order-1 flex flex-col justify-center p-12 md:p-20 lg:p-24 space-y-8 bg-slate-50">
           <h3 class="text-4xl md:text-5xl font-black text-slate-900 leading-tight font-heading">
-            សក្ការៈបូជាដ៏បរិសុទ្ធ<br/>តំណាងសិរីសួស្តី
+            នំហ្វាកាវ៖<br/>ការគ្រប់គ្រងសម្ពាធចំហុយ
           </h3>
           <div class="w-20 h-1 bg-kh-red shadow-[0_0_10px_rgba(227,29,43,0.3)]"></div>
           <p class="text-xl md:text-2xl text-slate-700 font-light leading-loose tracking-wide">
-            នំហ្វាកាវរបស់យើងត្រូវបានផលិតឡើងដោយឆ្លងកាត់ដំណើរការផ្អាប់តាមបែបធម្មជាតិ ១០០% ដែលធ្វើឱ្យសាច់នំរីកល្អស្រស់ស្អាត។
+            ការធ្វើឱ្យនំហ្វាកាវរីកបែកមាត់ មិនមែនពឹងលើសំណាង ឬអបិយជំនឿទេ។
           </p>
           <p class="text-xl md:text-2xl text-slate-700 font-light leading-loose tracking-wide">
-            នេះគឺជាតំណាងនៃភាពរុងរឿង និងការលូតលាស់ ជាជម្រើសដ៏ស័ក្តិសមបំផុតសម្រាប់ពិធីសែនព្រះ និងដូនតា ដើម្បីនាំមកនូវសិរីសួស្តី និងហុងស៊ុយល្អ។
+            វាគឺជាការគ្រប់គ្រងមេដំបែ និងសម្ពាធចំហាយទឹកយ៉ាងជាក់លាក់។ យើងប្រើប្រាស់ប្រព័ន្ធចំហុយសម្ពាធខ្ពស់ ដើម្បីរុញកម្តៅចូលសាច់នំភ្លាមៗ ធានាថានំគ្រប់ខាប់រីកបែកស្រទាប់បានល្អ ១០០%។
           </p>
         </div>
         <div class="order-1 lg:order-2 relative h-[40vh] sm:h-[50vh] lg:h-auto overflow-hidden">
@@ -145,7 +145,7 @@
         
         <div class="flex flex-col justify-center p-12 md:p-20 lg:p-24 space-y-12">
           <h2 class="text-5xl md:text-6xl font-black text-white font-heading leading-tight drop-shadow-2xl">
-            ទំនាក់ទំនងជាវផ្ទាល់
+            ទំនាក់ទំនងបញ្ជាទិញ
           </h2>
           
           <div class="bg-slate-900/80 border border-white/10 p-8 md:p-12 rounded-sm shadow-2xl space-y-10">
@@ -163,7 +163,7 @@
             
             <address class="pt-8 border-t border-slate-800 not-italic">
               <p class="text-gray-300 text-lg leading-relaxed font-light">
-                សាខាទី១: ផ្ទះលេខ៤៥៤ ផ្លូវលំភូមិត្រពាំងថ្លឹង១ សង្កាត់ចោមចៅ ខណ្ឌពោធិ៍សែនជ័យ រាជធានីភ្នំពេញ
+                ទីតាំងផលិតកម្ម: ផ្ទះលេខ៤៥៤ ផ្លូវលំភូមិត្រពាំងថ្លឹង១ សង្កាត់ចោមចៅ ខណ្ឌពោធិ៍សែនជ័យ រាជធានីភ្នំពេញ
               </p>
             </address>
           </div>
@@ -172,7 +172,7 @@
     </section>
 
     <footer class="bg-slate-950 pt-12 pb-[calc(3rem+env(safe-area-inset-bottom)+2rem)] md:pb-12 border-t border-slate-900 text-center">
-      <p class="text-slate-600 text-sm font-light tracking-wide">© 2026 ហាងនំ គាំង ហួត. រក្សាសិទ្ធិគ្រប់យ៉ាង。</p>
+      <p class="text-slate-600 text-sm font-light tracking-wide">© 2026 ហាងនំ គាំង ហួត. រក្សាសិទ្ធិគ្រប់យ៉ាង។</p>
     </footer>
 
   </main>
@@ -182,7 +182,7 @@
           <a href="tel:+85512677710" class="flex-1 flex items-center justify-center gap-2 bg-kh-red text-white font-body font-bold text-sm transition-colors active:bg-red-800">
               <i class="fas fa-phone-alt"></i> ទាក់ទងទិញ
           </a>
-          <a href="https://t.me/CKMSam06" target="_blank" rel="noopener noreferrer" class="flex-1 flex items-center justify-center gap-2 bg-[#0088cc] text-white font-body font-bold text-sm transition-colors active:bg-[#007ab8]">
+          <a href="https://t.me/+85512677710" target="_blank" rel="noopener noreferrer" class="flex-1 flex items-center justify-center gap-2 bg-[#0088cc] text-white font-body font-bold text-sm transition-colors active:bg-[#007ab8]">
               <i class="fab fa-telegram-plane text-lg"></i> Telegram
           </a>
       </div>
