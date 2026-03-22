@@ -1,5 +1,6 @@
 ---
 // src/pages/en/index.astro
+// Status: Copy optimized for operational realism, catering logistics, and execution.
 import Layout from '../../layouts/Layout.astro'; 
 
 const siteDomain = "https://www.ckmkh.com";
@@ -9,6 +10,7 @@ const facebookLink = "https://www.facebook.com/CKMFOODS";
 const heroImageRelative = "/images/home/hero-luxury-banquet-setup.webp";
 const logo = "/images/home/brand-ckm-logo-gold.webp";
 
+// 提取主號碼供按鈕使用
 const mainPhone = "011 827 782";
 const phoneNumbers = [
   { num: "011 827 782", icon: "fa-mobile-alt", type: "Cellcard" },
@@ -17,33 +19,33 @@ const phoneNumbers = [
 ];
 
 const menuItems = [
-  { title: "Assorted Premium Appetizers", image: "/images/home/menu-01.webp", desc: "A curated symphony of six premium appetizers designed to awaken the palate." },
-  { title: "Deep-Fried Fish Fillet", image: "/images/home/menu-02.webp", desc: "Flash-fried at precise temperatures to achieve a golden crust while retaining oceanic moisture." },
-  { title: "Authentic Khmer Beef Salad", image: "/images/home/menu-03.webp", desc: "A masterclass in balance, pairing tender beef with vibrant, citrus-infused Khmer spices." },
-  { title: "Cereal Butter Prawns", image: "/images/home/menu-04.webp", desc: "Plump, wild-caught prawns coated in crispy cereal flakes and rich, aromatic butter." },
-  { title: "Roasted Suckling Pig with Bread", image: "/images/home/menu-05.webp", desc: "Meticulously roasted for a glass-like crackling skin, served with soft bread for textural contrast." },
-  { title: "Sweet & Sour Fish", image: "/images/home/menu-06.webp", desc: "Expertly carved deep-sea fish draped in an impeccably balanced sweet and sour glaze." },
-  { title: "Spicy Stir-Fried Fish Fillet", image: "/images/home/menu-07.webp", desc: "Wok-tossed over extreme heat to impart a smoky essence and a burst of fiery aromatics." },
-  { title: "Premium Abalone Herb Broth", image: "/images/home/menu-08.webp", desc: "A restorative elixir slow-simmered for hours, extracting the deep essence of abalone and herbs." },
-  { title: "Spicy Duck Feet Salad", image: "/images/home/menu-09.webp", desc: "De-boned duck feet offering a crisp texture, tossed in a sharp, refreshing vinaigrette." },
-  { title: "Steamed Fish with Premium Soy", image: "/images/home/menu-10.webp", desc: "Steamed to exact seconds to preserve delicate protein structures, finished with superior soy sauce." },
-  { title: "Lotus Leaf Wrapped Fragrant Rice", image: "/images/home/menu-11.webp", desc: "Long-grain rice wok-fried and steamed within a lotus leaf, absorbing deep, earthy aromas." },
-  { title: "Hong Kong Style Roast Duck", image: "/images/home/menu-12.webp", desc: "Traditional open-oven roasting renders the fat perfectly, resulting in crisp skin and succulent meat." },
-  { title: "Royal Khmer Desserts", image: "/images/home/menu-13.webp", desc: "An elegant conclusion featuring the natural sweetness of fresh coconut milk and pandan." },
-  { title: "Tom Yum River Prawn Soup", image: "/images/home/menu-14.webp", desc: "An intensely aromatic, spicy and sour broth featuring firm, wild-caught river prawns." },
-  { title: "Signature Whole Roasted Pig", image: "/images/home/menu-15.webp", desc: "The centerpiece of high-end banquets, showcasing flawless roasting technique and prestige." },
+  { title: "Assorted Appetizer Platter", image: "/images/home/menu-01.webp", desc: "Six classic cold starters, portioned and temperature-controlled to begin the service efficiently without overwhelming the palate." },
+  { title: "Deep-Fried Fish Fillet", image: "/images/home/menu-02.webp", desc: "Batch-fried at exact temperatures to maintain a crispy exterior and preserve internal moisture during high-volume service." },
+  { title: "Khmer Style Beef Salad", image: "/images/home/menu-03.webp", desc: "Freshly prepared with authentic Khmer spices, providing a high-acid, refreshing contrast to heavy banquet proteins." },
+  { title: "Cereal Butter Prawns", image: "/images/home/menu-04.webp", desc: "Wild-caught prawns wok-tossed in butter and cereal flakes, utilizing high heat for rapid execution and flavor." },
+  { title: "Roasted Suckling Pig with Bread", image: "/images/home/menu-05.webp", desc: "Traditional suckling pig roasted with strict temperature control to ensure a consistent crispy skin, served with soft bread." },
+  { title: "Sweet & Sour Fish", image: "/images/home/menu-06.webp", desc: "Crispy fried whole fish coated in a standardized sweet and sour glaze, engineered to hold its texture during transit." },
+  { title: "Spicy Stir-Fried Fish Fillet", image: "/images/home/menu-07.webp", desc: "High-heat wok execution to seal the fish quickly and infuse consistent, fiery aromatics across every batch." },
+  { title: "Abalone Herb Broth", image: "/images/home/menu-08.webp", desc: "Slow-simmered in large batches using precise ratios of abalone and herbs to ensure a consistent, temperature-stable hot soup." },
+  { title: "Spicy Duck Feet Salad", image: "/images/home/menu-09.webp", desc: "Hand-deboned duck feet prepared under strict hygiene controls, tossed in a sharp vinaigrette for a clean palate reset." },
+  { title: "Steamed Fish with Premium Soy", image: "/images/home/menu-10.webp", desc: "Steamed on a strict timer to prevent overcooking, served with a standardized soy sauce base." },
+  { title: "Lotus Leaf Fragrant Rice", image: "/images/home/menu-11.webp", desc: "Wok-fried rice steamed in lotus leaves, a reliable carbohydrate staple that holds heat exceptionally well during service." },
+  { title: "Hong Kong Style Roast Duck", image: "/images/home/menu-12.webp", desc: "Batch-roasted using traditional techniques to render fat evenly, ensuring the meat stays moist until plated." },
+  { title: "Traditional Khmer Desserts", image: "/images/home/menu-13.webp", desc: "Fresh coconut milk and pandan prepared with strict sanitation protocols to securely close the meal." },
+  { title: "Tom Yum River Prawn Soup", image: "/images/home/menu-14.webp", desc: "A robust, high-acid soup base that retains its heat and flavor profile perfectly from the kitchen to the table." },
+  { title: "Signature Whole Roasted Pig", image: "/images/home/menu-15.webp", desc: "The centerpiece of large banquets, requiring exact timing and heat management to deliver a crispy, uniform finish." },
 ];
 
 const blogPosts = [
-  { title: "Venue Logistics & Due Diligence", subTitle: "Site Audit & Execution Limits", link: "/en/blog/01-venue-logistics/", image: "/images/home/blog-wedding-service-guide.webp" },
-  { title: "Throughput Control Matrix", subTitle: "Thermodynamics in Catering", link: "/en/blog/02-event-party-planning/", image: "/images/home/blog-event-party-planning.webp" },
-  { title: "Supply Chain Defense Protocols", subTitle: "Yield Control & Sourcing", link: "/en/blog/03-chef-professional-standard/", image: "/images/home/blog-chef-professional-standard.webp" },
-  { title: "Medical-Grade Food Safety", subTitle: "Core Temp & Isolation Rules", link: "/en/blog/04-food-safety-quality/", image: "/images/home/blog-food-safety-quality.webp" },
-  { title: "Cross-Cultural Menu Engineering", subTitle: "Precision Flavor Architecture", link: "/en/blog/05-khmer-wedding-menu/", image: "/images/home/blog-khmer-wedding-menu.webp" },
-  { title: "T-Minus Deployment SOP", subTitle: "Crisis Management & Tolerance", link: "/en/blog/06-service-process-sop/", image: "/images/home/blog-service-process-sop.webp" }
+  { title: "Venue Audits & Logistics", subTitle: "Electrical Loads & Setup Constraints", link: "/en/blog/01-venue-logistics/", image: "/images/home/blog-wedding-service-guide.webp" },
+  { title: "100-Table Capacity Control", subTitle: "Managing Heat Loss & Service Flow", link: "/en/blog/02-event-party-planning/", image: "/images/home/blog-event-party-planning.webp" },
+  { title: "Sourcing & Cold Chain", subTitle: "Ingredient Preservation & Batch Consistency", link: "/en/blog/03-chef-professional-standard/", image: "/images/home/blog-chef-professional-standard.webp" },
+  { title: "Catering Food Safety", subTitle: "Cross-Contamination & The 75°C Kill Step", link: "/en/blog/04-food-safety-quality/", image: "/images/home/blog-food-safety-quality.webp" },
+  { title: "Khmer-Chinese Menus", subTitle: "Flavor Sequencing & Palate Fatigue", link: "/en/blog/05-khmer-wedding-menu/", image: "/images/home/blog-khmer-wedding-menu.webp" },
+  { title: "Execution & Contingency", subTitle: "T-Minus Schedules & Power Outages", link: "/en/blog/06-service-process-sop/", image: "/images/home/blog-service-process-sop.webp" }
 ];
 ---
-<Layout title="Chef Cheng Kuongmeng - CKM Premium Catering" description="CKM provides zero-error, high-end catering in Phnom Penh. Strict adherence to food safety protocols, unbroken cold chains, and logistical precision." lang="en">
+<Layout title="Chef Cheng Koung Meng - CKM Professional Catering" description="CKM provides precision-driven, high-volume catering in Phnom Penh. Strict adherence to food safety protocols, unbroken cold chains, and logistical execution." lang="en">
   <Fragment slot="head">
     <link rel="preload" as="image" href={heroImageRelative} />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
@@ -62,9 +64,9 @@ const blogPosts = [
         
         <div class="relative z-10 text-center px-4 max-w-4xl mx-auto pt-10">
             <img src={logo} alt="CKM Logo" width="128" height="128" class="w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-amber-500 mx-auto mb-8 shadow-[0_0_40px_rgba(245,158,11,0.5)]">
-            <h1 class="text-4xl md:text-6xl font-luxury-serif font-bold text-white mb-4 tracking-wide">Chef <span class="text-amber-500">Cheng Kuongmeng</span></h1>
-            <h2 class="text-lg md:text-xl font-sans font-light text-white/90 mb-6 tracking-[0.2em] uppercase">Premier Catering Service</h2>
-            <p class="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto font-sans font-light leading-relaxed hidden sm:block">Uncompromising execution for high-end corporate banquets and premium weddings in Phnom Penh.</p>
+            <h1 class="text-4xl md:text-6xl font-luxury-serif font-bold text-white mb-4 tracking-wide">Chef <span class="text-amber-500">Cheng Koung Meng</span></h1>
+            <h2 class="text-lg md:text-xl font-sans font-light text-white/90 mb-6 tracking-[0.2em] uppercase">Professional Banquet Catering</h2>
+            <p class="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto font-sans font-light leading-relaxed hidden sm:block">Precision-driven catering and logistics for large-scale corporate banquets and weddings in Phnom Penh.</p>
             
             <div class="flex flex-row gap-3 justify-center animate-fade-in-up w-full max-w-sm mx-auto sm:max-w-none" style="animation-delay: 0.1s;">
                 <a href={`tel:+855${mainPhone.replace(/\s/g, '').substring(1)}`} class="flex-1 sm:flex-none bg-amber-500 hover:bg-amber-600 text-slate-900 px-2 sm:px-8 py-3 sm:py-4 min-h-[48px] rounded-sm font-sans font-bold text-sm sm:text-base uppercase tracking-widest transition-colors flex items-center justify-center gap-2 shadow-lg">
@@ -82,23 +84,23 @@ const blogPosts = [
           <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 text-center divide-x divide-amber-600/30">
             <div class="flex flex-col items-center justify-center">
               <span class="text-3xl md:text-5xl font-luxury-serif font-bold text-slate-950 mb-1 md:mb-2 tracking-wider">60+</span>
-              <span class="text-slate-800 text-[10px] sm:text-xs md:text-sm font-sans font-medium uppercase tracking-widest">Years of Legacy</span>
+              <span class="text-slate-800 text-[10px] sm:text-xs md:text-sm font-sans font-medium uppercase tracking-widest">Years of Experience</span>
             </div>
             <div class="flex flex-col items-center justify-center">
               <div class="h-[28px] md:h-[48px] flex items-center mb-1 md:mb-2">
                   <i class="fas fa-gem text-2xl md:text-4xl text-slate-950 opacity-90"></i>
               </div>
-              <span class="text-slate-800 text-[10px] sm:text-xs md:text-sm font-sans font-medium uppercase tracking-widest">Premium Quality</span>
+              <span class="text-slate-800 text-[10px] sm:text-xs md:text-sm font-sans font-medium uppercase tracking-widest">Consistent Quality</span>
             </div>
             <div class="flex flex-col items-center justify-center">
               <div class="h-[28px] md:h-[48px] flex items-center mb-1 md:mb-2">
                   <i class="fas fa-concierge-bell text-2xl md:text-4xl text-slate-950 opacity-90"></i>
               </div>
-              <span class="text-slate-800 text-[10px] sm:text-xs md:text-sm font-sans font-medium uppercase tracking-widest">Culinary Artistry</span>
+              <span class="text-slate-800 text-[10px] sm:text-xs md:text-sm font-sans font-medium uppercase tracking-widest">High-Volume Capacity</span>
             </div>
             <div class="flex flex-col items-center justify-center">
               <span class="text-3xl md:text-5xl font-luxury-serif font-bold text-slate-950 mb-1 md:mb-2 tracking-wider">100%</span>
-              <span class="text-slate-800 text-[10px] sm:text-xs md:text-sm font-sans font-medium uppercase tracking-widest">Safety & Trust</span>
+              <span class="text-slate-800 text-[10px] sm:text-xs md:text-sm font-sans font-medium uppercase tracking-widest">Food Safety Audited</span>
             </div>
           </div>
         </div>
@@ -106,22 +108,22 @@ const blogPosts = [
 
       <section id="service" class="py-16 md:py-24 bg-slate-900 relative overflow-hidden">
          <div class="max-w-7xl mx-auto px-6 relative z-10">
-            <div class="text-center mb-12 md:mb-16"><h2 class="text-3xl md:text-4xl font-luxury-serif font-bold text-white tracking-wide">The Execution Matrix</h2></div>
+            <div class="text-center mb-12 md:mb-16"><h2 class="text-3xl md:text-4xl font-luxury-serif font-bold text-white tracking-wide">Operational Standards</h2></div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
                  <div class="bg-slate-800/50 p-8 md:p-10 rounded-lg border border-slate-700/50 hover:border-amber-500/30 transition-colors duration-500">
                     <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-6 md:mb-8"><i class="fas fa-gem text-xl md:text-2xl text-amber-500"></i></div>
-                    <h3 class="text-xl md:text-2xl font-luxury-serif font-semibold text-white mb-3 md:mb-4 tracking-wide">Uncompromised Sourcing</h3>
-                    <p class="text-gray-400 text-sm md:text-base font-sans font-light leading-relaxed">Rigorous cold-chain logistics bridging the gap between origin and table. We lock in the absolute freshness of premium ingredients, refusing any degradation in quality.</p>
+                    <h3 class="text-xl md:text-2xl font-luxury-serif font-semibold text-white mb-3 md:mb-4 tracking-wide">Cold Chain Logistics</h3>
+                    <p class="text-gray-400 text-sm md:text-base font-sans font-light leading-relaxed">We operate a strict cold chain from supplier to site. Ingredients are maintained below 4°C to prevent degradation and ensure absolute food safety before hitting the pan.</p>
                  </div>
                  <div class="bg-slate-800/50 p-8 md:p-10 rounded-lg border border-slate-700/50 hover:border-amber-500/30 transition-colors duration-500">
                     <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-6 md:mb-8"><i class="fas fa-project-diagram text-xl md:text-2xl text-amber-500"></i></div>
-                    <h3 class="text-xl md:text-2xl font-luxury-serif font-semibold text-white mb-3 md:mb-4 tracking-wide">Flawless Orchestration</h3>
-                    <p class="text-gray-400 text-sm md:text-base font-sans font-light leading-relaxed">From the first table to the thousandth guest, we guarantee the optimal serving temperature and texture, conquering the complexities of massive throughput.</p>
+                    <h3 class="text-xl md:text-2xl font-luxury-serif font-semibold text-white mb-3 md:mb-4 tracking-wide">High-Volume Execution</h3>
+                    <p class="text-gray-400 text-sm md:text-base font-sans font-light leading-relaxed">We rely on strict prep schedules and batch-cooking mathematics. Whether serving 10 or 100 tables, our logistics ensure the food arrives hot and consistent across the room.</p>
                  </div>
                  <div class="bg-slate-800/50 p-8 md:p-10 rounded-lg border border-slate-700/50 hover:border-amber-500/30 transition-colors duration-500">
                     <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-6 md:mb-8"><i class="fas fa-shield-alt text-xl md:text-2xl text-amber-500"></i></div>
-                    <h3 class="text-xl md:text-2xl font-luxury-serif font-semibold text-white mb-3 md:mb-4 tracking-wide">Medical-Grade Safety</h3>
-                    <p class="text-gray-400 text-sm md:text-base font-sans font-light leading-relaxed">Absolute physical isolation between raw and cooked preparations. Every hot dish surpasses the 75°C bactericidal threshold, utilizing hard data to secure well-being.</p>
+                    <h3 class="text-xl md:text-2xl font-luxury-serif font-semibold text-white mb-3 md:mb-4 tracking-wide">Strict Food Safety</h3>
+                    <p class="text-gray-400 text-sm md:text-base font-sans font-light leading-relaxed">We enforce physical separation between raw and cooked prep zones. Every hot dish is temperature-probed to cross the 75°C kill step before leaving the kitchen.</p>
                  </div>
             </div>
          </div>
@@ -129,7 +131,7 @@ const blogPosts = [
 
       <section id="portfolio" class="py-16 md:py-24 bg-white overflow-hidden">
         <div class="max-w-7xl mx-auto px-6">
-          <div class="text-center mb-10 md:mb-16"><h2 class="text-3xl md:text-4xl font-luxury-serif font-bold text-slate-900 tracking-wide">Signature Masterpieces</h2></div>
+          <div class="text-center mb-10 md:mb-16"><h2 class="text-3xl md:text-4xl font-luxury-serif font-bold text-slate-900 tracking-wide">Banquet Menu Signatures</h2></div>
           
           <div class="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 pb-6 -mx-6 px-6 md:mx-0 md:px-0 snap-x snap-mandatory scrollbar-hide">
             {menuItems.map((item) => (
@@ -150,7 +152,7 @@ const blogPosts = [
 
       <section id="insights" class="py-16 md:py-24 bg-slate-50 border-t border-slate-200">
         <div class="max-w-7xl mx-auto px-6">
-           <div class="text-center mb-10 md:mb-16"><h2 class="text-3xl md:text-4xl font-luxury-serif font-bold text-slate-900 tracking-wide">Premium Catering Insights</h2></div>
+           <div class="text-center mb-10 md:mb-16"><h2 class="text-3xl md:text-4xl font-luxury-serif font-bold text-slate-900 tracking-wide">Catering Operations Insights</h2></div>
            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {blogPosts.map(post => (
                 <div class="group bg-white rounded-sm overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-500 border border-slate-100 flex flex-col">
@@ -160,7 +162,7 @@ const blogPosts = [
                    <div class="p-6 md:p-8 flex flex-col flex-grow">
                       <h3 class="text-lg md:text-xl font-luxury-serif font-semibold text-slate-900 mb-2 md:mb-3 group-hover:text-amber-600 transition-colors duration-300 leading-snug tracking-wide">{post.title}</h3>
                       <p class="text-slate-500 text-xs md:text-sm font-sans font-light mb-4 md:mb-6">{post.subTitle}</p>
-                      <a href={post.link} class="mt-auto inline-flex items-center text-amber-600 text-xs md:text-sm font-sans font-medium uppercase tracking-widest hover:text-amber-700 transition-colors">Explore <i class="fas fa-arrow-right ml-2"></i></a>
+                      <a href={post.link} class="mt-auto inline-flex items-center text-amber-600 text-xs md:text-sm font-sans font-medium uppercase tracking-widest hover:text-amber-700 transition-colors">Read Log <i class="fas fa-arrow-right ml-2"></i></a>
                    </div>
                 </div>
               ))}
@@ -176,12 +178,12 @@ const blogPosts = [
                   <div class="lg:col-span-5 text-left text-center lg:text-left">
                       <div class="inline-flex items-center gap-4 mb-6 md:mb-8">
                           <span class="w-8 md:w-12 h-[1px] bg-amber-500"></span>
-                          <span class="text-amber-500 text-[10px] md:text-xs font-sans font-medium tracking-[0.2em] uppercase">Private Consultation</span>
+                          <span class="text-amber-500 text-[10px] md:text-xs font-sans font-medium tracking-[0.2em] uppercase">Catering Consultation</span>
                           <span class="w-8 h-[1px] bg-amber-500 lg:hidden"></span>
                       </div>
-                      <h2 class="text-3xl md:text-4xl lg:text-5xl font-luxury-serif font-bold text-white mb-6 md:mb-8 leading-tight tracking-wide">Initialize Protocol</h2>
+                      <h2 class="text-3xl md:text-4xl lg:text-5xl font-luxury-serif font-bold text-white mb-6 md:mb-8 leading-tight tracking-wide">Start the Planning Process</h2>
                       <p class="text-slate-400 text-sm md:text-lg font-sans font-light leading-relaxed mb-8 md:mb-10 max-w-md mx-auto lg:mx-0">
-                          A flawless premium banquet begins with a rigorous consultation based on objective data and infrastructure assessment.
+                          A successful banquet starts with a hard assessment of your venue's infrastructure and logistical limits. Contact us to begin planning.
                       </p>
                   </div>
 
