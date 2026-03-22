@@ -34,8 +34,8 @@ CKM builds operational safety nets into every event. For outdoor banquets, we pr
 
 ### Event Execution: Frequently Asked Questions
 
-**How is the payment structure organized to ensure smooth procurement and setup?**
-To guarantee we can lock down our supply chain for fresh, premium ingredients and secure the necessary logistical equipment, CKM operates on a standard 3-tier payment structure: a 30% deposit to secure your date and begin planning; 50% one week prior to the event to execute food purchasing and lock in staffing; and the final 20% settled after the successful completion of the banquet. This ensures the kitchen has the necessary cash flow to execute without compromises.
+**How much space do you need to build the temporary kitchen, and what does the venue need to provide?**
+To execute a large-scale banquet, CKM brings 100% of our own cooking equipment, from commercial high-pressure woks to thermal holding cabinets. We do not rely on the venue's kitchen facilities. During our site audit, we calculate the exact square footage required for a safe, high-volume prep zone. If the venue's backstage footprint is tight, we deploy modular, vertical holding racks to maximize efficiency. All we require from the venue is the physical space and the pre-audited power and water access points.
 
 **What happens if the venue loses power in the middle of the event?**
 We never risk the safety of the food on an untested power grid. During our initial site audit, if we determine the venue's power is unstable, we require backup generators. If a sudden blackout occurs during the event, our commercial holding cabinets, kitchen lighting, and essential equipment are immediately switched over to generator power. The food remains at a safe, hot temperature, the kitchen keeps working, and the service continues without interruption.
