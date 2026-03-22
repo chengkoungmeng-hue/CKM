@@ -1,6 +1,6 @@
 ---
 // 實體路徑: src/pages/index.astro (高棉語)
-// 狀態: 參數已全域淨化，轉譯為在地實戰辦桌語感
+// 狀態: 終極渲染封裝 (實體首圖 img 提權 + JSON-LD + H3 無障礙校準)
 import Layout from '../layouts/Layout.astro'; 
 
 const siteDomain = "https://www.ckmkh.com";
@@ -84,7 +84,7 @@ const blogPosts = [
 
   <div class="w-full">
       <header class="relative h-screen flex items-center justify-center overflow-hidden">
-        <div class="absolute inset-0 bg-cover bg-center bg-no-repeat bg-fixed transform scale-105" style={`background-image: url('${heroImageRelative}');`}></div>
+        <img src={heroImageRelative} alt="CKM Luxury Banquet Setup" class="absolute inset-0 w-full h-full object-cover object-center transform scale-105" fetchpriority="high" decoding="sync" />
         
         <div class="absolute inset-0 bg-black/70 bg-gradient-to-b from-black/80 via-black/50 to-slate-900/90"></div>
         
