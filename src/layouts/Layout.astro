@@ -1,6 +1,6 @@
 ---
 // 實體路徑: src/layouts/Layout.astro
-// 狀態: 終極佈局裝甲 & 行動端視覺對比度校準 (Mobile Contrast Calibration)
+// 狀態: 終極佈局裝甲 & 導航動線壓縮 (語言切換器外顯化)
 const { title, description, image = '/open-graph.png', lang = 'km' } = Astro.props;
 
 // 動態根節點演算
@@ -24,7 +24,7 @@ const brandDict = {
 };
 const brand = brandDict[lang as keyof typeof brandDict] || brandDict.zh;
 
-// 導航與 CTA 字典擴充
+// 導航與 CTA 字典
 const navTranslations = {
   km: { service: "ស្តង់ដារប្រតិបត្តិការ", portfolio: "កំពូលស្នាដៃម្ហូប", insights: "ទស្សនៈកម្រិតកំពូល", contact: "ទាក់ទងយើង", call: "ហៅទូរស័ព្ទ", telegram: "Telegram" },
   zh: { service: "绝对执行矩阵", portfolio: "传世臻选名菜", insights: "统筹智库", contact: "啟動協議", call: "立即致电", telegram: "私密咨询" },
@@ -72,57 +72,49 @@ const t = navTranslations[lang as keyof typeof navTranslations] || navTranslatio
   </head>
   <body class="bg-slate-900 selection:bg-amber-200 selection:text-slate-900">
     
-    <nav class="fixed top-0 left-0 w-full bg-slate-950/90 backdrop-blur-sm z-50 border-b border-slate-800 shadow-lg">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between h-20">
-            <a href={homeUrl} class="flex items-center gap-3 relative z-50">
-                <img src="/images/home/brand-ckm-logo-gold.webp" alt="CKM Logo" width="48" height="48" class="w-12 h-12 rounded-full border border-amber-500 shadow-md">
+    <nav class="fixed top-0 left-0 w-full bg-slate-950/95 backdrop-blur-sm z-50 border-b border-slate-800 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 md:px-6 py-2 md:py-4 flex items-center justify-between h-16 md:h-20">
+            <a href={homeUrl} class="flex items-center gap-2 md:gap-3 relative z-50 shrink-0">
+                <img src="/images/home/brand-ckm-logo-gold.webp" alt="CKM Logo" width="48" height="48" class="w-10 h-10 md:w-12 md:h-12 rounded-full border border-amber-500 shadow-md">
                 <div class="flex flex-col">
-                    <span class={`text-white font-serif font-semibold tracking-wide ${lang === 'km' ? 'text-xl' : 'text-lg'}`}>{brand.title}</span>
-                    <span class="text-slate-400 text-[10px] md:text-xs font-sans tracking-widest uppercase mt-0.5">{brand.subtitle}</span>
+                    <span class={`text-white font-serif font-semibold tracking-wide ${lang === 'km' ? 'text-lg md:text-xl' : 'text-base md:text-lg'}`}>{brand.title}</span>
+                    <span class="text-slate-400 text-[9px] md:text-xs font-sans tracking-widest uppercase mt-[1px]">{brand.subtitle}</span>
                 </div>
             </a>
 
-            <div class="hidden md:flex items-center gap-8 text-slate-300 font-sans text-sm font-medium tracking-wide">
-                <a href={`${homeUrl}#service`} class="hover:text-amber-400 transition-colors">{t.service}</a>
-                <a href={`${homeUrl}#portfolio`} class="hover:text-amber-400 transition-colors">{t.portfolio}</a>
-                <a href={`${homeUrl}#insights`} class="hover:text-amber-400 transition-colors">{t.insights}</a>
+            <div class="flex items-center gap-3 md:gap-6">
+                <div class="hidden md:flex items-center gap-8 text-slate-300 font-sans text-sm font-medium tracking-wide">
+                    <a href={`${homeUrl}#service`} class="hover:text-amber-400 transition-colors">{t.service}</a>
+                    <a href={`${homeUrl}#portfolio`} class="hover:text-amber-400 transition-colors">{t.portfolio}</a>
+                    <a href={`${homeUrl}#insights`} class="hover:text-amber-400 transition-colors">{t.insights}</a>
+                </div>
+
+                <div class="flex items-center bg-slate-900/80 rounded-sm p-1 border border-slate-800 relative z-50 shadow-inner">
+                    <a href="/" class={`px-2 py-1 text-[10px] md:text-xs font-sans font-bold rounded-sm transition-all ${lang === 'km' ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}`}>KM</a>
+                    <a href="/zh/" class={`px-2 py-1 text-[10px] md:text-xs font-sans font-bold rounded-sm transition-all ${lang === 'zh' ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}`}>ZH</a>
+                    <a href="/en/" class={`px-2 py-1 text-[10px] md:text-xs font-sans font-bold rounded-sm transition-all ${lang === 'en' ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}`}>EN</a>
+                </div>
+
+                <a href={`${homeUrl}#contact`} class="hidden md:inline-flex relative z-50 items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-5 min-h-[40px] rounded-full font-bold text-sm transition-all shadow-[0_0_15px_rgba(245,158,11,0.3)] hover:shadow-[0_0_25px_rgba(245,158,11,0.5)]">
+                    <i class="fas fa-phone-alt"></i> {t.contact}
+                </a>
                 
-                <div class="flex items-center gap-2 border-l border-slate-700 pl-6 ml-2">
-                    <a href="/" class={`${lang === 'km' ? 'bg-amber-500 text-slate-950' : 'text-slate-400 hover:text-white'} px-3 py-1 text-xs rounded-sm font-sans font-bold transition-colors`}>ខ្មែរ</a>
-                    <a href="/zh/" class={`${lang === 'zh' ? 'bg-amber-500 text-slate-950' : 'text-slate-400 hover:text-white'} px-3 py-1 text-xs rounded-sm font-sans font-bold transition-colors`}>中文</a>
-                    <a href="/en/" class={`${lang === 'en' ? 'bg-amber-500 text-slate-950' : 'text-slate-400 hover:text-white'} px-3 py-1 text-xs rounded-sm font-sans font-bold transition-colors`}>English</a>
-                </div>
+                <button id="mobile-menu-btn" class="md:hidden text-amber-500 text-xl relative z-50 p-2 focus:outline-none" aria-label="Toggle Menu">
+                    <i class="fas fa-bars transition-transform duration-300"></i>
+                </button>
             </div>
-
-            <a href={`${homeUrl}#contact`} class="hidden md:inline-flex relative z-50 items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-6 min-h-[44px] rounded-full font-bold text-sm transition-all shadow-[0_0_15px_rgba(245,158,11,0.3)] hover:shadow-[0_0_25px_rgba(245,158,11,0.5)]">
-                <i class="fas fa-phone-alt"></i> {t.contact}
-            </a>
-            
-            <button id="mobile-menu-btn" class="md:hidden text-amber-500 text-2xl relative z-50 p-2 focus:outline-none" aria-label="Toggle Menu">
-                <i class="fas fa-bars transition-transform duration-300"></i>
-            </button>
         </div>
 
-        <div id="mobile-menu-overlay" class="fixed inset-0 bg-slate-950 z-40 hidden flex-col items-center justify-center opacity-0 transition-opacity duration-300 pt-20">
-            <div class="flex flex-col items-center gap-8 text-white font-serif text-2xl w-full px-6">
+        <div id="mobile-menu-overlay" class="fixed inset-0 bg-slate-950 z-40 hidden flex-col items-center justify-center opacity-0 transition-opacity duration-300 pt-16">
+            <div class="flex flex-col items-center gap-10 text-white font-serif text-2xl w-full px-6">
                 <a href={`${homeUrl}#service`} class="mobile-link hover:text-amber-500 transition-colors">{t.service}</a>
                 <a href={`${homeUrl}#portfolio`} class="mobile-link hover:text-amber-500 transition-colors">{t.portfolio}</a>
                 <a href={`${homeUrl}#insights`} class="mobile-link hover:text-amber-500 transition-colors">{t.insights}</a>
-                
-                <div class="w-16 h-[1px] bg-slate-800 my-4"></div>
-                
-                <div class="flex items-center gap-6">
-                    <a href="/" class={`${lang === 'km' ? 'text-amber-500' : 'text-slate-300'} hover:text-white font-sans font-bold text-lg transition-colors`}>ខ្មែរ</a>
-                    <span class="text-slate-700">|</span>
-                    <a href="/zh/" class={`${lang === 'zh' ? 'text-amber-500' : 'text-slate-300'} hover:text-white font-sans font-bold text-lg transition-colors`}>中文</a>
-                    <span class="text-slate-700">|</span>
-                    <a href="/en/" class={`${lang === 'en' ? 'text-amber-500' : 'text-slate-300'} hover:text-white font-sans font-bold text-lg transition-colors`}>EN</a>
-                </div>
             </div>
         </div>
     </nav>
 
-    <main class="pt-20 pb-0">
+    <main class="pt-16 md:pt-20 pb-0">
         <slot />
     </main>
     
