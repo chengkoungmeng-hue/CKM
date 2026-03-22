@@ -121,7 +121,7 @@ const t = navTranslations[lang as keyof typeof navTranslations] || navTranslatio
 
   /* 行動端與桌面端基礎 Padding 降維校準 */
   main > div {
-    min-h-[calc(100vh-80px)];
+    min-height: calc(100vh - 80px); /* 修正：使用原生 CSS 語法 */
     padding-top: 2.5rem; /* pt-10 */
     padding-bottom: 4rem; /* pb-16 */
   }
@@ -130,5 +130,10 @@ const t = navTranslations[lang as keyof typeof navTranslations] || navTranslatio
       padding-top: 4rem; /* md:py-16 */
       padding-bottom: 4rem; /* md:py-16 */
     }
+  }
+
+  /* 視口安全區 (Safe Area) 注入：防止 iOS 底部 Home Indicator 阻斷觸控事件 */
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
   }
 </style>
