@@ -1,0 +1,62 @@
+---
+// 實體路徑: src/pages/404.astro
+// 狀態: 流量迷航捕獲與強制引流 (Traffic Capture & Forced Redirection)
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="404 - ទំព័រមិនត្រូវបានរកឃើញ | CKM Catering" description="Page Not Found" lang="km">
+  <Fragment slot="head">
+    <meta http-equiv="refresh" content="10;url=/" />
+  </Fragment>
+
+  <div class="min-h-screen bg-slate-950 flex flex-col items-center justify-center px-6 relative overflow-hidden">
+    
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.08)_0%,transparent_60%)]"></div>
+
+    <div class="relative z-10 text-center max-w-2xl mx-auto mt-[-10vh]">
+      <h1 class="text-8xl md:text-[150px] font-serif font-bold text-amber-500 mb-2 leading-none drop-shadow-[0_0_40px_rgba(245,158,11,0.3)]">
+        404
+      </h1>
+      
+      <h2 class="text-xl md:text-3xl font-sans font-medium text-white mb-6 uppercase tracking-wider">
+        ទំព័រមិនត្រូវបានរកឃើញ / Page Not Found
+      </h2>
+      
+      <p class="text-slate-400 font-sans font-light mb-12 text-lg md:text-xl">
+        ប្រព័ន្ធកំពុងបញ្ជូនអ្នកត្រឡប់ទៅទំព័រដើមវិញក្នុងរយៈពេល 
+        <span id="countdown" class="text-amber-500 font-bold text-2xl inline-block w-8 text-center">10</span> 
+        វិនាទី...
+      </p>
+
+      <a href="/" class="inline-flex items-center justify-center gap-3 bg-amber-500 hover:bg-amber-400 text-slate-950 px-10 py-4 min-h-[56px] rounded-sm font-sans font-bold tracking-widest uppercase transition-all shadow-[0_0_20px_rgba(245,158,11,0.25)] hover:shadow-[0_0_30px_rgba(245,158,11,0.5)] focus:ring-2 focus:ring-amber-300 focus:outline-none">
+        <i class="fas fa-home text-lg"></i> ត្រឡប់ទៅទំព័រដើម (Return Home)
+      </a>
+    </div>
+  </div>
+
+  <script is:inline>
+    // 客戶端時間降維引擎 (Client-side Time Degradation Engine)
+    let timeLeft = 10;
+    const countdownEl = document.getElementById('countdown');
+    
+    const timer = setInterval(() => {
+      timeLeft--;
+      if (countdownEl) {
+        countdownEl.innerText = timeLeft;
+      }
+      
+      // 當熵值歸零，觸發強制路由轉換
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        window.location.href = '/';
+      }
+    }, 1000);
+  </script>
+</Layout>
+
+<style>
+  /* 強制隱藏 Layout 可能帶入的全域 Navbar 或 Footer，確保 404 畫面純淨度 */
+  :global(nav), :global(footer), :global(.fixed.bottom-0) {
+    display: none !important;
+  }
+</style>
