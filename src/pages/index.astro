@@ -11,7 +11,6 @@ const heroImageRelative = "/images/home/hero-luxury-banquet-setup.webp";
 const heroImageAbsolute = `${siteDomain}${heroImageRelative}`;
 const logo = "/images/home/brand-ckm-logo-gold.webp";
 
-// 提取主號碼供按鈕使用
 const mainPhone = "011 827 782";
 const phoneNumbers = [
   { num: "011 827 782", icon: "fa-mobile-alt", type: "Cellcard" },
@@ -55,7 +54,6 @@ const blogPosts = [
   <style>
     .font-km-serif { font-family: 'Hanuman', serif; }
     .font-km-sans { font-family: 'Kantumruy Pro', sans-serif; }
-    /* 橫向滑動隱藏捲軸 */
     .scrollbar-hide::-webkit-scrollbar { display: none; }
     .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
@@ -85,24 +83,24 @@ const blogPosts = [
         <div class="max-w-7xl mx-auto px-6">
           <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 text-center divide-x divide-amber-600/30">
             <div class="flex flex-col items-center justify-center">
-              <span class="text-3xl md:text-5xl font-serif font-bold text-slate-950 mb-1 md:mb-2">៥០+</span>
-              <span class="text-slate-800 text-[10px] sm:text-xs md:text-sm font-sans font-medium uppercase tracking-wider">ឆ្នាំនៃកេរដំណែល<br/>(半世紀傳承)</span>
+              <span class="text-3xl md:text-5xl font-serif font-bold text-slate-950 mb-1 md:mb-2">៦០+</span>
+              <span class="text-slate-800 text-xs md:text-sm font-sans font-medium uppercase tracking-wider">ឆ្នាំនៃកេរដំណែល</span>
             </div>
             <div class="flex flex-col items-center justify-center">
               <div class="h-[28px] md:h-[48px] flex items-center mb-1 md:mb-2">
                   <i class="fas fa-gem text-2xl md:text-4xl text-slate-950 opacity-90"></i>
               </div>
-              <span class="text-slate-800 text-[10px] sm:text-xs md:text-sm font-sans font-medium uppercase tracking-wider">គុណភាពលំដាប់កំពូល<br/>(頂級品質保證)</span>
+              <span class="text-slate-800 text-xs md:text-sm font-sans font-medium uppercase tracking-wider">គុណភាពលំដាប់កំពូល</span>
             </div>
             <div class="flex flex-col items-center justify-center">
               <div class="h-[28px] md:h-[48px] flex items-center mb-1 md:mb-2">
                   <i class="fas fa-concierge-bell text-2xl md:text-4xl text-slate-950 opacity-90"></i>
               </div>
-              <span class="text-slate-800 text-[10px] sm:text-xs md:text-sm font-sans font-medium uppercase tracking-wider">សិល្បៈធ្វើម្ហូបឯកទេស<br/>(專屬烹飪藝術)</span>
+              <span class="text-slate-800 text-xs md:text-sm font-sans font-medium uppercase tracking-wider">សិល្បៈធ្វើម្ហូបឯកទេស</span>
             </div>
             <div class="flex flex-col items-center justify-center">
               <span class="text-3xl md:text-5xl font-serif font-bold text-slate-950 mb-1 md:mb-2">១០០%</span>
-              <span class="text-slate-800 text-[10px] sm:text-xs md:text-sm font-sans font-medium uppercase tracking-wider">ទំនុកចិត្តនិងសុវត្ថិភាព<br/>(絕對安全信任)</span>
+              <span class="text-slate-800 text-xs md:text-sm font-sans font-medium uppercase tracking-wider">ទំនុកចិត្តនិងសុវត្ថិភាព</span>
             </div>
           </div>
         </div>
@@ -137,7 +135,7 @@ const blogPosts = [
           
           <div class="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 pb-6 -mx-6 px-6 md:mx-0 md:px-0 snap-x snap-mandatory scrollbar-hide">
             {menuItems.map((item) => (
-                <div class="group relative overflow-hidden rounded-sm shadow-md bg-slate-50 flex-none w-[80%] sm:w-[50%] md:w-auto snap-center">
+                <div class="group relative overflow-hidden rounded-sm shadow-md bg-slate-50 flex-none w-[80%] sm:w-[50%] md:w-auto snap-center snap-always">
                     <div class="aspect-square overflow-hidden relative bg-slate-200">
                       <img src={item.image} alt={item.title} width="600" height="600" decoding="async" loading="lazy" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700"/>
                       <div class="absolute inset-0 bg-gradient-to-t from-slate-900/95 via-slate-900/30 to-transparent opacity-85 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -191,25 +189,25 @@ const blogPosts = [
 
                   <div class="lg:col-span-7 lg:col-start-6">
                       <div class="bg-slate-900 border border-slate-800 p-6 md:p-12 rounded-sm shadow-2xl">
-                          <div class="grid grid-cols-2 gap-3 md:gap-4 mb-6 md:mb-10">
+                          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 mb-6 md:mb-10">
                               {phoneNumbers.map((contact) => (
-                                  <a href={`tel:+855${contact.num.replace(/\s/g, '').substring(1)}`} class="group flex items-center p-3 md:p-6 rounded-sm bg-slate-950 border border-slate-800 hover:border-amber-500/50 transition-colors duration-300 min-h-[64px] md:min-h-[88px]">
-                                      <div class="w-8 h-8 md:w-12 md:h-12 rounded-full bg-slate-900 flex items-center justify-center shrink-0 mr-3 md:mr-4 group-hover:bg-amber-500/10 transition-colors">
+                                  <a href={`tel:+855${contact.num.replace(/\s/g, '').substring(1)}`} class="group flex items-center p-4 md:p-6 rounded-sm bg-slate-950 border border-slate-800 hover:border-amber-500/50 transition-colors duration-300 min-h-[64px] md:min-h-[88px]">
+                                      <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-slate-900 flex items-center justify-center shrink-0 mr-4 group-hover:bg-amber-500/10 transition-colors">
                                         <i class={`fas ${contact.icon} text-amber-500 text-sm md:text-xl`}></i>
                                       </div>
-                                      <div class="overflow-hidden">
-                                        <div class="text-white font-serif font-semibold text-sm md:text-lg tracking-wide truncate">{contact.num}</div>
-                                        <div class="text-slate-500 text-[9px] md:text-xs font-sans uppercase mt-0.5 md:mt-1">{contact.type}</div>
+                                      <div>
+                                        <div class="text-white font-serif font-semibold text-base md:text-lg tracking-wide">{contact.num}</div>
+                                        <div class="text-slate-500 text-[10px] md:text-xs font-sans uppercase mt-0.5 md:mt-1">{contact.type}</div>
                                       </div>
                                   </a>
                               ))}
                               
-                              <div class="flex items-center gap-2 md:gap-4 p-3 md:p-6 rounded-sm bg-slate-950 border border-slate-800 min-h-[64px] md:min-h-[88px]">
-                                  <a href={telegramLink} target="_blank" rel="noopener noreferrer" aria-label="Telegram" class="flex-1 h-8 md:h-12 rounded-sm bg-[#0088cc] hover:bg-[#007ab8] flex items-center justify-center text-white transition-colors duration-300">
-                                      <i class="fab fa-telegram-plane text-sm md:text-xl"></i>
+                              <div class="flex items-center gap-3 md:gap-4 p-4 md:p-6 rounded-sm bg-slate-950 border border-slate-800 min-h-[64px] md:min-h-[88px]">
+                                  <a href={telegramLink} target="_blank" rel="noopener noreferrer" aria-label="Telegram" class="flex-1 h-10 md:h-12 rounded-sm bg-[#0088cc] hover:bg-[#007ab8] flex items-center justify-center text-white transition-colors duration-300">
+                                      <i class="fab fa-telegram-plane text-base md:text-xl"></i>
                                   </a>
-                                  <a href={facebookLink} target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="flex-1 h-8 md:h-12 rounded-sm bg-[#1877F2] hover:bg-[#166FE5] flex items-center justify-center text-white transition-colors duration-300">
-                                      <i class="fab fa-facebook-f text-sm md:text-xl"></i>
+                                  <a href={facebookLink} target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="flex-1 h-10 md:h-12 rounded-sm bg-[#1877F2] hover:bg-[#166FE5] flex items-center justify-center text-white transition-colors duration-300">
+                                      <i class="fab fa-facebook-f text-base md:text-xl"></i>
                                   </a>
                               </div>
                           </div>
@@ -220,7 +218,7 @@ const blogPosts = [
                                       <i class="fas fa-map-marker-alt text-amber-500 text-sm md:text-base"></i>
                                   </div>
                                   <div>
-                                      <h4 class="text-white font-km-sans font-medium text-xs md:text-sm mb-1.5 md:mb-2">ទីស្នាក់ការកណ្តាល</h4>
+                                      <h4 class="text-white font-km-sans font-medium text-sm md:text-sm mb-1.5 md:mb-2">ទីស្នាក់ការកណ្តាល</h4>
                                       <p class="text-slate-400 text-xs md:text-sm font-km-sans font-light leading-relaxed">
                                           ផ្ទះលេខ 33 ផ្លូវ 257 សង្កាត់ទឹកល្អក់ទី២<br class="hidden sm:block"/>ខណ្ឌទួលគោក រាជធានីភ្នំពេញ
                                       </p>
