@@ -1,7 +1,6 @@
 ---
 // src/pages/index.astro
 // 狀態: 根節點高棉語實體 (Root Node Khmer Entity) & 轉換摩擦力歸零
-// [修正] Layout 引入路徑已從 '../../' 降階為 '../'
 import Layout from '../layouts/Layout.astro'; 
 
 const siteDomain = "https://www.ckmkh.com";
@@ -38,7 +37,6 @@ const menuItems = [
   { title: "កូនជ្រូកខ្វៃទាំងមូល", image: "/images/home/menu-15.webp", desc: "បច្ចេកទេសខ្វៃសាច់ជ្រូកទាំងមូលដោយការបង្វិលជាបន្តបន្ទាប់ ដើម្បីចែកចាយកម្តៅស្មើគ្នា និងធ្វើឱ្យប្រតិកម្ម Maillard កើតឡើងលើផ្ទៃស្បែកទាំងអស់។" },
 ];
 
-// Blog 連結無需更改，因為 /km/blog/... 目錄依然存在
 const blogPosts = [
   { title: "ម៉ាទ្រីសវាយតម្លៃសេវាកម្មម្ហូបការ", subTitle: "ការគណនាទំហំទីតាំង និងប្រសិទ្ធភាពចរាចរណ៍ការងារ", link: "/km/blog/01-venue-logistics/", image: "/images/home/blog-wedding-service-guide.webp" },
   { title: "ប្រព័ន្ធគ្រប់គ្រងសីតុណ្ហភាពខ្នាតធំ", subTitle: "បច្ចេកទេសទប់ស្កាត់ការបាត់បង់កម្តៅ និងរក្សាសំណើមអាហារ", link: "/km/blog/02-event-party-planning/", image: "/images/home/blog-event-party-planning.webp" },
@@ -57,6 +55,9 @@ const blogPosts = [
   <style>
     .font-km-serif { font-family: 'Hanuman', serif; }
     .font-km-sans { font-family: 'Kantumruy Pro', sans-serif; }
+    /* 橫向滑動隱藏捲軸 */
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 
   <div class="w-full">
@@ -67,55 +68,83 @@ const blogPosts = [
             <img src={logo} alt="CKM Logo" width="128" height="128" class="w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-amber-500 mx-auto mb-8 shadow-[0_0_40px_rgba(245,158,11,0.5)]">
             <h1 class="text-4xl md:text-6xl font-km-serif font-bold text-white mb-6 leading-tight">ចុងភៅ <span class="text-amber-500">ចេង គួងម៉េង</span></h1>
             <h2 class="text-xl md:text-2xl font-km-sans font-medium text-white/90 mb-6 uppercase">សេវាកម្មម្ហូបការលំដាប់ខ្ពស់នៅភ្នំពេញ</h2>
-            <p class="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl mx-auto font-km-sans font-light leading-relaxed">ធានាបាននូវការរៀបចំកម្មវិធីដ៏ល្អឥតខ្ចោះ សម្រាប់ពិធីមង្គលការ និងកម្មវិធីជប់លៀងខ្នាតធំ។</p>
+            <p class="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto font-km-sans font-light leading-relaxed hidden sm:block">ធានាបាននូវការរៀបចំកម្មវិធីដ៏ល្អឥតខ្ចោះ សម្រាប់ពិធីមង្គលការ និងកម្មវិធីជប់លៀងខ្នាតធំ។</p>
             
-            <div class="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up" style="animation-delay: 0.1s;">
-                <a href={`tel:+855${mainPhone.replace(/\s/g, '').substring(1)}`} class="bg-amber-500 hover:bg-amber-600 text-slate-900 px-8 py-4 min-h-[48px] rounded-sm font-km-sans font-bold uppercase tracking-wider transition-colors flex items-center justify-center gap-3 shadow-lg">
-                    <i class="fas fa-phone-alt"></i> <span>ហៅទូរស័ព្ទឥឡូវនេះ</span>
+            <div class="flex flex-row gap-3 justify-center animate-fade-in-up w-full max-w-sm mx-auto sm:max-w-none" style="animation-delay: 0.1s;">
+                <a href={`tel:+855${mainPhone.replace(/\s/g, '').substring(1)}`} class="flex-1 sm:flex-none bg-amber-500 hover:bg-amber-600 text-slate-900 px-2 sm:px-8 py-3 sm:py-4 min-h-[48px] rounded-sm font-km-sans font-bold text-sm sm:text-base uppercase tracking-wider transition-colors flex items-center justify-center gap-2 shadow-lg">
+                    <i class="fas fa-phone-alt"></i> <span class="whitespace-nowrap">ហៅទូរស័ព្ទឥឡូវនេះ</span>
                 </a>
-                <a href={telegramLink} target="_blank" rel="noopener noreferrer" class="bg-[#0088cc] hover:bg-[#007ab8] text-white px-8 py-4 min-h-[48px] rounded-sm font-km-sans font-medium transition-colors flex items-center justify-center gap-3 shadow-lg">
-                    <i class="fab fa-telegram-plane text-xl"></i> <span>ពិគ្រោះយោបល់ឯកជន</span>
+                <a href={telegramLink} target="_blank" rel="noopener noreferrer" class="flex-1 sm:flex-none bg-[#0088cc] hover:bg-[#007ab8] text-white px-2 sm:px-8 py-3 sm:py-4 min-h-[48px] rounded-sm font-km-sans font-medium text-sm sm:text-base transition-colors flex items-center justify-center gap-2 shadow-lg">
+                    <i class="fab fa-telegram-plane text-lg"></i> <span class="whitespace-nowrap">ពិគ្រោះយោបល់</span>
                 </a>
             </div>
         </div>
       </header>
 
-      <section class="py-24 bg-slate-900 relative overflow-hidden">
+      <section class="py-12 bg-amber-500 relative z-20 shadow-xl">
+        <div class="max-w-7xl mx-auto px-6">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 text-center divide-x divide-amber-600/30">
+            <div class="flex flex-col items-center justify-center">
+              <span class="text-3xl md:text-5xl font-serif font-bold text-slate-950 mb-1 md:mb-2">៥០+</span>
+              <span class="text-slate-800 text-[10px] sm:text-xs md:text-sm font-sans font-medium uppercase tracking-wider">ឆ្នាំនៃកេរដំណែល<br/>(半世紀傳承)</span>
+            </div>
+            <div class="flex flex-col items-center justify-center">
+              <div class="h-[28px] md:h-[48px] flex items-center mb-1 md:mb-2">
+                  <i class="fas fa-gem text-2xl md:text-4xl text-slate-950 opacity-90"></i>
+              </div>
+              <span class="text-slate-800 text-[10px] sm:text-xs md:text-sm font-sans font-medium uppercase tracking-wider">គុណភាពលំដាប់កំពូល<br/>(頂級品質保證)</span>
+            </div>
+            <div class="flex flex-col items-center justify-center">
+              <div class="h-[28px] md:h-[48px] flex items-center mb-1 md:mb-2">
+                  <i class="fas fa-concierge-bell text-2xl md:text-4xl text-slate-950 opacity-90"></i>
+              </div>
+              <span class="text-slate-800 text-[10px] sm:text-xs md:text-sm font-sans font-medium uppercase tracking-wider">សិល្បៈធ្វើម្ហូបឯកទេស<br/>(專屬烹飪藝術)</span>
+            </div>
+            <div class="flex flex-col items-center justify-center">
+              <span class="text-3xl md:text-5xl font-serif font-bold text-slate-950 mb-1 md:mb-2">១០០%</span>
+              <span class="text-slate-800 text-[10px] sm:text-xs md:text-sm font-sans font-medium uppercase tracking-wider">ទំនុកចិត្តនិងសុវត្ថិភាព<br/>(絕對安全信任)</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="py-16 md:py-24 bg-slate-900 relative overflow-hidden">
          <div class="max-w-7xl mx-auto px-6 relative z-10">
-            <div class="text-center mb-16"><h2 class="text-3xl md:text-4xl font-km-serif font-bold text-white">ស្តង់ដារប្រតិបត្តិការឥតខ្ចោះ</h2></div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                 <div class="bg-slate-800/50 p-10 rounded-lg border border-slate-700/50 hover:border-amber-500/30 transition-colors duration-500">
-                    <div class="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-8"><i class="fas fa-gem text-2xl text-amber-500"></i></div>
-                    <h3 class="text-2xl font-km-serif font-bold text-white mb-4">វត្ថុធាតុដើមគុណភាពកំពូល</h3>
-                    <p class="text-gray-400 font-km-sans font-light leading-relaxed">ការជ្រើសរើសគ្រឿងផ្សំស្រស់ៗបំផុតពីប្រភពដើម ដោយរក្សាបាននូវរសជាតិធម្មជាតិពិតៗ ដើម្បីផ្តល់ជូននូវបទពិសោធន៍ម្ហូបអាហារដ៏ឧត្តុង្គឧត្តម។</p>
+            <div class="text-center mb-12 md:mb-16"><h2 class="text-3xl md:text-4xl font-km-serif font-bold text-white">ស្តង់ដារប្រតិបត្តិការឥតខ្ចោះ</h2></div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                 <div class="bg-slate-800/50 p-8 md:p-10 rounded-lg border border-slate-700/50 hover:border-amber-500/30 transition-colors duration-500">
+                    <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-6 md:mb-8"><i class="fas fa-gem text-xl md:text-2xl text-amber-500"></i></div>
+                    <h3 class="text-xl md:text-2xl font-km-serif font-bold text-white mb-3 md:mb-4">វត្ថុធាតុដើមគុណភាពកំពូល</h3>
+                    <p class="text-gray-400 text-sm md:text-base font-km-sans font-light leading-relaxed">ការជ្រើសរើសគ្រឿងផ្សំស្រស់ៗបំផុតពីប្រភពដើម ដោយរក្សាបាននូវរសជាតិធម្មជាតិពិតៗ ដើម្បីផ្តល់ជូននូវបទពិសោធន៍ម្ហូបអាហារដ៏ឧត្តុង្គឧត្តម។</p>
                  </div>
-                 <div class="bg-slate-800/50 p-10 rounded-lg border border-slate-700/50 hover:border-amber-500/30 transition-colors duration-500">
-                    <div class="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-8"><i class="fas fa-project-diagram text-2xl text-amber-500"></i></div>
-                    <h3 class="text-2xl font-km-serif font-bold text-white mb-4">ការគ្រប់គ្រងកម្មវិធីខ្នាតធំ</h3>
-                    <p class="text-gray-400 font-km-sans font-light leading-relaxed">សមត្ថភាពរៀបចំម្ហូបសម្រាប់ភ្ញៀវរាប់ពាន់នាក់ ដោយរក្សាបាននូវរសជាតិ និងសីតុណ្ហភាពស្តង់ដារដូចគ្នាពីតុដំបូងរហូតដល់តូចុងក្រោយ។</p>
+                 <div class="bg-slate-800/50 p-8 md:p-10 rounded-lg border border-slate-700/50 hover:border-amber-500/30 transition-colors duration-500">
+                    <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-6 md:mb-8"><i class="fas fa-project-diagram text-xl md:text-2xl text-amber-500"></i></div>
+                    <h3 class="text-xl md:text-2xl font-km-serif font-bold text-white mb-3 md:mb-4">ការគ្រប់គ្រងកម្មវិធីខ្នាតធំ</h3>
+                    <p class="text-gray-400 text-sm md:text-base font-km-sans font-light leading-relaxed">សមត្ថភាពរៀបចំម្ហូបសម្រាប់ភ្ញៀវរាប់ពាន់នាក់ ដោយរក្សាបាននូវរសជាតិ និងសីតុណ្ហភាពស្តង់ដារដូចគ្នាពីតុដំបូងរហូតដល់តូចុងក្រោយ។</p>
                  </div>
-                 <div class="bg-slate-800/50 p-10 rounded-lg border border-slate-700/50 hover:border-amber-500/30 transition-colors duration-500">
-                    <div class="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-8"><i class="fas fa-shield-alt text-2xl text-amber-500"></i></div>
-                    <h3 class="text-2xl font-km-serif font-bold text-white mb-4">ស្តង់ដារអនាម័យវេជ្ជសាស្ត្រ</h3>
-                    <p class="text-gray-400 font-km-sans font-light leading-relaxed">អនុវត្តយ៉ាងតឹងរ៉ឹងនូវការបំបែកម្ហូបឆៅនិងឆ្អិន ព្រមទាំងធានាសីតុណ្ហភាពចម្អិនលើសពី 75°C ដើម្បីសុវត្ថិភាពសុខភាពជាដាច់ខាត។</p>
+                 <div class="bg-slate-800/50 p-8 md:p-10 rounded-lg border border-slate-700/50 hover:border-amber-500/30 transition-colors duration-500">
+                    <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-6 md:mb-8"><i class="fas fa-shield-alt text-xl md:text-2xl text-amber-500"></i></div>
+                    <h3 class="text-xl md:text-2xl font-km-serif font-bold text-white mb-3 md:mb-4">ស្តង់ដារអនាម័យវេជ្ជសាស្ត្រ</h3>
+                    <p class="text-gray-400 text-sm md:text-base font-km-sans font-light leading-relaxed">អនុវត្តយ៉ាងតឹងរ៉ឹងនូវការបំបែកម្ហូបឆៅនិងឆ្អិន ព្រមទាំងធានាសីតុណ្ហភាពចម្អិនលើសពី 75°C ដើម្បីសុវត្ថិភាពសុខភាពជាដាច់ខាត។</p>
                  </div>
             </div>
          </div>
       </section>
 
-      <section class="py-24 bg-white">
+      <section class="py-16 md:py-24 bg-white overflow-hidden">
         <div class="max-w-7xl mx-auto px-6">
-          <div class="text-center mb-16"><h2 class="text-3xl md:text-4xl font-km-serif font-bold text-slate-900">កំពូលស្នាដៃម្ហូបឯក</h2></div>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="text-center mb-10 md:mb-16"><h2 class="text-3xl md:text-4xl font-km-serif font-bold text-slate-900">កំពូលស្នាដៃម្ហូបឯក</h2></div>
+          
+          <div class="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 pb-6 -mx-6 px-6 md:mx-0 md:px-0 snap-x snap-mandatory scrollbar-hide">
             {menuItems.map((item) => (
-                <div class="group relative overflow-hidden rounded-sm shadow-md bg-slate-50">
-                    <div class="aspect-square overflow-hidden relative">
-                      <img src={item.image} alt={item.title} class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700" loading="lazy"/>
-                      <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent opacity-80 group-hover:opacity-95 transition-opacity duration-500"></div>
+                <div class="group relative overflow-hidden rounded-sm shadow-md bg-slate-50 flex-none w-[80%] sm:w-[50%] md:w-auto snap-center">
+                    <div class="aspect-square overflow-hidden relative bg-slate-200">
+                      <img src={item.image} alt={item.title} width="600" height="600" decoding="async" loading="lazy" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700"/>
+                      <div class="absolute inset-0 bg-gradient-to-t from-slate-900/95 via-slate-900/30 to-transparent opacity-85 group-hover:opacity-100 transition-opacity duration-500"></div>
                     </div>
-                    <div class="absolute inset-0 flex flex-col justify-end p-8">
-                      <h3 class="text-xl font-km-serif font-bold text-amber-400 mb-3 translate-y-4 group-hover:translate-y-0 transition duration-500">{item.title}</h3>
-                      <p class="text-gray-300 text-sm font-km-sans font-light leading-relaxed opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-100">{item.desc}</p>
+                    <div class="absolute inset-0 flex flex-col justify-end p-5 md:p-8 pointer-events-none">
+                      <h3 class="text-lg md:text-xl font-km-serif font-bold text-amber-400 mb-2 md:mb-3 md:translate-y-4 md:group-hover:translate-y-0 transition duration-500">{item.title}</h3>
+                      <p class="text-gray-200 text-xs md:text-sm font-km-sans font-light leading-relaxed md:opacity-0 md:group-hover:opacity-100 transform md:translate-y-4 md:group-hover:translate-y-0 transition-all duration-500 delay-100 line-clamp-3 md:line-clamp-none">{item.desc}</p>
                     </div>
                 </div>
             ))}
@@ -123,19 +152,19 @@ const blogPosts = [
         </div>
       </section>
 
-      <section class="py-24 bg-slate-50 border-t border-slate-200">
+      <section class="py-16 md:py-24 bg-slate-50 border-t border-slate-200">
         <div class="max-w-7xl mx-auto px-6">
-           <div class="text-center mb-16"><h2 class="text-3xl md:text-4xl font-km-serif font-bold text-slate-900">ទស្សនៈ និងការវិភាគកម្រិតកំពូល</h2></div>
-           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+           <div class="text-center mb-10 md:mb-16"><h2 class="text-3xl md:text-4xl font-km-serif font-bold text-slate-900">ទស្សនៈ និងការវិភាគកម្រិតកំពូល</h2></div>
+           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {blogPosts.map(post => (
                 <div class="group bg-white rounded-sm overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-500 border border-slate-100 flex flex-col">
-                   <a href={post.link} class="block aspect-[16/9] overflow-hidden relative">
-                      <img src={post.image} alt={post.title} loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-700"/>
+                   <a href={post.link} class="block aspect-[16/9] overflow-hidden relative bg-slate-200">
+                      <img src={post.image} alt={post.title} width="600" height="337" decoding="async" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-700"/>
                    </a>
-                   <div class="p-8 flex flex-col flex-grow">
-                      <h3 class="text-xl font-km-serif font-bold text-slate-900 mb-3 group-hover:text-amber-600 transition-colors duration-300 leading-snug">{post.title}</h3>
-                      <p class="text-slate-500 text-sm font-km-sans font-light mb-6 leading-relaxed">{post.subTitle}</p>
-                      <a href={post.link} class="mt-auto inline-flex items-center text-amber-600 text-sm font-km-sans font-medium hover:text-amber-700 transition-colors">ស្វែងយល់បន្ថែម <i class="fas fa-arrow-right ml-2"></i></a>
+                   <div class="p-6 md:p-8 flex flex-col flex-grow">
+                      <h3 class="text-lg md:text-xl font-km-serif font-bold text-slate-900 mb-2 md:mb-3 group-hover:text-amber-600 transition-colors duration-300 leading-snug">{post.title}</h3>
+                      <p class="text-slate-500 text-xs md:text-sm font-km-sans font-light mb-4 md:mb-6 leading-relaxed">{post.subTitle}</p>
+                      <a href={post.link} class="mt-auto inline-flex items-center text-amber-600 text-xs md:text-sm font-km-sans font-medium hover:text-amber-700 transition-colors">ស្វែងយល់បន្ថែម <i class="fas fa-arrow-right ml-2"></i></a>
                    </div>
                 </div>
               ))}
@@ -143,56 +172,57 @@ const blogPosts = [
         </div>
       </section>
 
-      <section id="contact" class="relative py-32 bg-slate-950 border-t border-slate-800 overflow-hidden">
+      <section id="contact" class="relative py-20 md:py-32 bg-slate-950 border-t border-slate-800 overflow-hidden">
           <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-[1px] bg-gradient-to-r from-transparent via-amber-500/30 to-transparent"></div>
           
           <div class="max-w-7xl mx-auto px-6 relative z-10">
-              <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-8 items-center">
-                  <div class="lg:col-span-5 text-left">
-                      <div class="inline-flex items-center gap-4 mb-8">
-                          <span class="w-12 h-[1px] bg-amber-500"></span>
-                          <span class="text-amber-500 text-xs font-km-sans font-medium uppercase">ទំនាក់ទំនងផ្ទាល់</span>
+              <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16 lg:gap-8 items-center">
+                  <div class="lg:col-span-5 text-left text-center lg:text-left">
+                      <div class="inline-flex items-center gap-4 mb-6 md:mb-8">
+                          <span class="w-8 md:w-12 h-[1px] bg-amber-500"></span>
+                          <span class="text-amber-500 text-[10px] md:text-xs font-km-sans font-medium uppercase">ទំនាក់ទំនងផ្ទាល់</span>
+                          <span class="w-8 h-[1px] bg-amber-500 lg:hidden"></span>
                       </div>
-                      <h2 class="text-4xl md:text-5xl font-km-serif font-bold text-white mb-8 leading-tight">ពិគ្រោះយោបល់កម្រិតខ្ពស់</h2>
-                      <p class="text-slate-400 text-lg font-km-sans font-light leading-relaxed mb-10">
+                      <h2 class="text-3xl md:text-4xl lg:text-5xl font-km-serif font-bold text-white mb-6 md:mb-8 leading-tight">ពិគ្រោះយោបល់កម្រិតខ្ពស់</h2>
+                      <p class="text-slate-400 text-sm md:text-lg font-km-sans font-light leading-relaxed mb-8 md:mb-10 max-w-md mx-auto lg:mx-0">
                           កម្មវិធីដ៏ល្អឥតខ្ចោះមួយ ចាប់ផ្តើមពីការពិភាក្សាផ្អែកលើទិន្នន័យជាក់ស្តែង និងការវាយតម្លៃហេដ្ឋារចនាសម្ព័ន្ធយ៉ាងច្បាស់លាស់។
                       </p>
                   </div>
 
-                  <div class="lg:col-span-6 lg:col-start-7">
-                      <div class="bg-slate-900 border border-slate-800 p-8 md:p-12 rounded-sm shadow-2xl">
-                          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
+                  <div class="lg:col-span-7 lg:col-start-6">
+                      <div class="bg-slate-900 border border-slate-800 p-6 md:p-12 rounded-sm shadow-2xl">
+                          <div class="grid grid-cols-2 gap-3 md:gap-4 mb-6 md:mb-10">
                               {phoneNumbers.map((contact) => (
-                                  <a href={`tel:+855${contact.num.replace(/\s/g, '').substring(1)}`} class="group flex items-center p-6 rounded-sm bg-slate-950 border border-slate-800 hover:border-amber-500/50 transition-colors duration-300 min-h-[88px]">
-                                      <div class="w-12 h-12 rounded-full bg-slate-900 flex items-center justify-center shrink-0 mr-4 group-hover:bg-amber-500/10 transition-colors">
-                                        <i class={`fas ${contact.icon} text-amber-500 text-xl`}></i>
+                                  <a href={`tel:+855${contact.num.replace(/\s/g, '').substring(1)}`} class="group flex items-center p-3 md:p-6 rounded-sm bg-slate-950 border border-slate-800 hover:border-amber-500/50 transition-colors duration-300 min-h-[64px] md:min-h-[88px]">
+                                      <div class="w-8 h-8 md:w-12 md:h-12 rounded-full bg-slate-900 flex items-center justify-center shrink-0 mr-3 md:mr-4 group-hover:bg-amber-500/10 transition-colors">
+                                        <i class={`fas ${contact.icon} text-amber-500 text-sm md:text-xl`}></i>
                                       </div>
-                                      <div>
-                                        <div class="text-white font-serif font-semibold text-lg tracking-wide">{contact.num}</div>
-                                        <div class="text-slate-500 text-xs font-sans uppercase mt-1">{contact.type}</div>
+                                      <div class="overflow-hidden">
+                                        <div class="text-white font-serif font-semibold text-sm md:text-lg tracking-wide truncate">{contact.num}</div>
+                                        <div class="text-slate-500 text-[9px] md:text-xs font-sans uppercase mt-0.5 md:mt-1">{contact.type}</div>
                                       </div>
                                   </a>
                               ))}
                               
-                              <div class="flex items-center gap-4 p-6 rounded-sm bg-slate-950 border border-slate-800 min-h-[88px]">
-                                  <a href={telegramLink} target="_blank" rel="noopener noreferrer" aria-label="Telegram" class="flex-1 h-12 rounded-sm bg-[#0088cc] hover:bg-[#007ab8] flex items-center justify-center text-white transition-colors duration-300">
-                                      <i class="fab fa-telegram-plane text-xl"></i>
+                              <div class="flex items-center gap-2 md:gap-4 p-3 md:p-6 rounded-sm bg-slate-950 border border-slate-800 min-h-[64px] md:min-h-[88px]">
+                                  <a href={telegramLink} target="_blank" rel="noopener noreferrer" aria-label="Telegram" class="flex-1 h-8 md:h-12 rounded-sm bg-[#0088cc] hover:bg-[#007ab8] flex items-center justify-center text-white transition-colors duration-300">
+                                      <i class="fab fa-telegram-plane text-sm md:text-xl"></i>
                                   </a>
-                                  <a href={facebookLink} target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="flex-1 h-12 rounded-sm bg-[#1877F2] hover:bg-[#166FE5] flex items-center justify-center text-white transition-colors duration-300">
-                                      <i class="fab fa-facebook-f text-xl"></i>
+                                  <a href={facebookLink} target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="flex-1 h-8 md:h-12 rounded-sm bg-[#1877F2] hover:bg-[#166FE5] flex items-center justify-center text-white transition-colors duration-300">
+                                      <i class="fab fa-facebook-f text-sm md:text-xl"></i>
                                   </a>
                               </div>
                           </div>
                           
-                          <div class="pt-8 border-t border-slate-800">
-                              <div class="flex items-start gap-6">
-                                  <div class="w-12 h-12 rounded-full bg-slate-950 border border-slate-800 flex items-center justify-center shrink-0">
-                                      <i class="fas fa-map-marker-alt text-amber-500"></i>
+                          <div class="pt-6 md:pt-8 border-t border-slate-800">
+                              <div class="flex items-start gap-4 md:gap-6">
+                                  <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-slate-950 border border-slate-800 flex items-center justify-center shrink-0">
+                                      <i class="fas fa-map-marker-alt text-amber-500 text-sm md:text-base"></i>
                                   </div>
                                   <div>
-                                      <h4 class="text-white font-km-sans font-medium text-sm mb-2">ទីស្នាក់ការកណ្តាល</h4>
-                                      <p class="text-slate-400 text-sm font-km-sans font-light leading-relaxed">
-                                          ផ្ទះលេខ 33 ផ្លូវ 257 សង្កាត់ទឹកល្អក់ទី២<br/>ខណ្ឌទួលគោក រាជធានីភ្នំពេញ
+                                      <h4 class="text-white font-km-sans font-medium text-xs md:text-sm mb-1.5 md:mb-2">ទីស្នាក់ការកណ្តាល</h4>
+                                      <p class="text-slate-400 text-xs md:text-sm font-km-sans font-light leading-relaxed">
+                                          ផ្ទះលេខ 33 ផ្លូវ 257 សង្កាត់ទឹកល្អក់ទី២<br class="hidden sm:block"/>ខណ្ឌទួលគោក រាជធានីភ្នំពេញ
                                       </p>
                                   </div>
                               </div>
@@ -203,8 +233,8 @@ const blogPosts = [
           </div>
       </section>
 
-      <footer class="bg-slate-950 py-10 border-t border-slate-900 text-center font-km-sans mb-[56px] md:mb-0">
-          <p class="text-slate-600 text-xs font-light">&copy; 2026 CKM Catering Service. រក្សាសិទ្ធិគ្រប់យ៉ាង។</p>
+      <footer class="bg-slate-950 py-8 md:py-10 border-t border-slate-900 text-center font-km-sans">
+          <p class="text-slate-600 text-[10px] md:text-xs font-light">&copy; 2026 CKM Catering Service. រក្សាសិទ្ធិគ្រប់យ៉ាង។</p>
       </footer>
   </div>
 </Layout>
