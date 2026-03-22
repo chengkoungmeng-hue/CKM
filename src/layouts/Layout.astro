@@ -1,10 +1,10 @@
 ---
 // src/layouts/Layout.astro
-// 狀態: 結構淨化與全域行動端轉換矩陣 (Global Mobile Conversion Anchor) 鎖定
+// 狀態: 非對稱根節點路由鎖定 (Asymmetric Root Routing Locked)
 
-const { title, description, image, lang = 'zh' } = Astro.props;
+const { title, description, image, lang = 'km' } = Astro.props; // 全域預設降維至 km
 
-// 擴充全域智慧翻譯字典 (導入通話與 Telegram 實體意圖)
+// 擴充全域智慧翻譯字典
 const navTranslations = {
   km: { contact: "ទាក់ទងយើង", menu: "ម៉ឺនុយ", call: "ទូរស័ព្ទ", telegram: "Telegram" },
   zh: { contact: "联系我们", menu: "精选菜单", call: "立即致电", telegram: "Telegram" },
@@ -15,6 +15,9 @@ const t = navTranslations[lang as keyof typeof navTranslations] || navTranslatio
 // 全域終極轉換參數
 const mainPhone = "011 827 782";
 const telegramLink = "https://t.me/CKMSam06";
+
+// 動態根節點演算：若為 km 則回傳根目錄 '/'，否則回傳對應語系目錄 '/zh/' 或 '/en/'
+const homeUrl = lang === 'km' ? '/' : `/${lang}/`;
 ---
 
 <!doctype html>
@@ -48,7 +51,7 @@ const telegramLink = "https://t.me/CKMSam06";
         <div class="flex items-center justify-between h-20">
           
           <div class="flex items-center gap-3">
-            <a href={`/${lang}/`} class="flex items-center gap-3 group focus:outline-none rounded-sm">
+            <a href={homeUrl} class="flex items-center gap-3 group focus:outline-none rounded-sm">
                 <img src="/images/home/brand-ckm-logo-gold.webp" alt="CKM Logo" width="48" height="48" class="h-12 w-12 rounded-full border border-amber-500/50 shadow-[0_0_15px_rgba(245,158,11,0.2)] group-hover:scale-105 transition-transform" decoding="async">
                 <div class="flex flex-col">
                   <span class="text-white font-bold text-lg tracking-wider">CKM CATERING</span>
@@ -59,7 +62,7 @@ const telegramLink = "https://t.me/CKMSam06";
 
           <div class="flex items-center gap-4">
               <div class="bg-slate-900 rounded-full p-1 flex items-center border border-slate-800">
-                  <a href="/km/" class={`px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-300 ${lang === 'km' ? 'bg-amber-500 text-slate-950 shadow-md' : 'text-slate-400 hover:text-white'}`}>ខ្មែរ</a>
+                  <a href="/" class={`px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-300 ${lang === 'km' ? 'bg-amber-500 text-slate-950 shadow-md' : 'text-slate-400 hover:text-white'}`}>ខ្មែរ</a>
                   <a href="/zh/" class={`px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-300 ${lang === 'zh' ? 'bg-amber-500 text-slate-950 shadow-md' : 'text-slate-400 hover:text-white'}`}>中文</a>
                   <a href="/en/" class={`px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-300 ${lang === 'en' ? 'bg-amber-500 text-slate-950 shadow-md' : 'text-slate-400 hover:text-white'}`}>English</a>
               </div>
@@ -90,7 +93,6 @@ const telegramLink = "https://t.me/CKMSam06";
 </html>
 
 <style is:global>
-  /* 視口安全區 (Safe Area) 注入：防止 iOS 底部 Home Indicator 阻斷觸控事件 */
   .pb-safe {
     padding-bottom: env(safe-area-inset-bottom);
   }
