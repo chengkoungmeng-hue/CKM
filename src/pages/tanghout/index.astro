@@ -1,6 +1,6 @@
 ---
 // 實體路徑: src/pages/tanghout/index.astro
-// 狀態: 終極光學校準、SEO/OG 矩陣重構完畢，且已掛載全域監聽探針
+// 狀態: 終極光學校準、50/50 實體切割 (Block Split) 重構完畢
 // 核心識別: គាំង ហួត (Kiang Huat)
 // 技術棧: Astro v5, Tailwind Slate-950, 零表單直撥通訊
 ---
@@ -9,7 +9,7 @@
 <html lang="km" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   
   <link rel="icon" type="image/x-icon" href="/thicon.ico" />
   
@@ -34,10 +34,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@300;400;700&family=Hanuman:wght@300;400;700;900&display=swap" rel="stylesheet">
   
-  <style>
-    .bg-kh-red { background-color: #E31D2B; }
-    .text-kh-red { color: #E31D2B; }
-    .border-kh-red { border-color: #E31D2B; }
+  <style is:global>
+    :root { --kh-red: #E31D2B; }
+    .bg-kh-red { background-color: var(--kh-red); }
+    .text-kh-red { color: var(--kh-red); }
+    .border-kh-red { border-color: var(--kh-red); }
     .font-heading { font-family: "Hanuman", serif; }
     .font-body { font-family: "Battambang", sans-serif; }
   </style>
@@ -47,11 +48,10 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-EG6D0H2T5K');
   </script>
 </head>
-<body class="bg-slate-950 text-slate-200 font-body antialiased selection:bg-kh-red selection:text-white">
+<body class="bg-slate-950 text-slate-200 font-body antialiased selection:bg-kh-red selection:text-white pb-[env(safe-area-inset-bottom)]">
 
   <main>
     <header class="relative min-h-screen flex items-center justify-center overflow-hidden border-b border-white/5">
@@ -80,81 +80,73 @@
       </div>
     </header>
 
-    <section class="relative py-40 border-t border-white/5 overflow-hidden">
-      <div class="absolute inset-0 bg-cover bg-center bg-fixed opacity-75" style="background-image: url('/images/tanghout/hero-steamer-tradition.webp');" role="img" aria-label="សិល្បៈនៃការចំហុយ"></div>
-      <div class="absolute inset-0 bg-gradient-to-b from-slate-950/95 via-slate-950/45 to-slate-950/95"></div>
-
-      <div class="max-w-7xl mx-auto px-8 relative z-10">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
-          <div class="order-1">
-            <div class="bg-slate-900/60 backdrop-blur-md p-6 rounded-sm border border-white/10 relative transform hover:scale-[1.02] transition duration-500 shadow-2xl">
-              <img src="/images/tanghout/nom-lok-khae-slice-image_2.webp" alt="ផ្ទៃកាត់នៃនំលោកខែ" class="w-full border border-white/5 shadow-inner rounded-sm object-cover aspect-[4/3]" />
-            </div>
-          </div>
-          <div class="order-2">
-            <h3 class="text-4xl md:text-5xl font-black text-white mb-8 leading-tight font-heading drop-shadow-lg">
-              មរតកបីជំនាន់ រសជាតិដើមឥតខ្ចោះ
-            </h3>
-            <div class="w-24 h-1 bg-kh-red mb-12 shadow-[0_0_10px_rgba(227,29,43,0.5)]"></div>
-            <p class="text-xl text-gray-200 font-light leading-loose tracking-wide mb-10 drop-shadow-md">
-              អនុវត្តយ៉ាងតឹងរ៉ឹងនូវបច្គេចទេសផ្អាប់មេដំបែធម្មជាតិ。រក្សាសំណើមនិងសីតុណ្ហភាពតាមស្តង់ដាររូបមន្តដើម。យើងធានាភាពបរិសុទ្ធ ១០០% ដោយគ្មានសារធាតុគីមី និងសារធាតុរក្សាទុក ផ្តល់នូវសុវត្ថិភាពខ្ពស់បំផុតសម្រាប់សុខភាព。
-            </p>
-          </div>
+    <section class="bg-slate-950 border-t border-white/5">
+      <div class="grid grid-cols-1 lg:grid-cols-2">
+        <div class="relative h-[40vh] sm:h-[50vh] lg:h-auto overflow-hidden">
+          <img src="/images/tanghout/nom-lok-khae-slice-image_2.webp" alt="ផ្ទៃកាត់នៃនំលោកខែ" class="absolute inset-0 w-full h-full object-cover object-center transform hover:scale-105 transition duration-1000" loading="lazy" decoding="async" />
         </div>
-      </div>
-    </section>
-
-    <section class="py-32 bg-white border-t border-slate-200 selection:bg-slate-100 selection:text-slate-900">
-      <div class="max-w-7xl mx-auto px-8">
-        <div class="text-center mb-24">
-          <h3 class="text-4xl md:text-5xl font-black text-slate-900 font-heading leading-tight">
-            សក្ការៈបូជាដ៏បរិសុទ្ធ តំណាងសិរីសួស្តី និងសេចក្តីគោរព
+        <div class="flex flex-col justify-center p-12 md:p-20 lg:p-24 space-y-8 bg-slate-900/50">
+          <h3 class="text-4xl md:text-5xl font-black text-white leading-tight font-heading drop-shadow-lg">
+            មរតកបីជំនាន់<br/>រសជាតិដើមឥតខ្ចោះ
           </h3>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
-          <div class="order-1 relative transform hover:-translate-y-2 transition duration-500">
-            <div class="absolute -inset-4 bg-kh-red/5 blur-2xl rounded-full z-0"></div>
-            <img src="/images/tanghout/nom-chol-chnam-image_20_generated.webp" alt="នំហ្វាកាវ" class="w-full shadow-2xl rounded-sm object-cover aspect-[4/3] relative z-10" />
-          </div>
-          <div class="order-2 space-y-8">
-            <p class="text-slate-600 font-light leading-loose text-xl">
-              នំហ្វាកាវរបស់យើងត្រូវបានផលិតឡើងដោយឆ្លងកាត់ដំណើរការផ្អាប់តាមបែបធម្មជាតិ ១០០% ដែលធ្វើឱ្យសាច់នំរីកល្អស្រស់ស្អាត。
-            </p>
-            <p class="text-slate-600 font-light leading-loose text-xl">
-              នេះគឺជាតំណាងនៃភាពរុងរឿង និងការលូតលាស់ ជាជម្រើសដ៏ស័ក្តិសមបំផុតសម្រាប់ពិធីសែនព្រះ និងដូនតា ដើម្បីនាំមកនូវសិរីសួស្តី និងហុងស៊ុយល្អដល់ក្រុមគ្រួសារ។
-            </p>
-          </div>
+          <div class="w-20 h-1 bg-kh-red shadow-[0_0_10px_rgba(227,29,43,0.5)]"></div>
+          <p class="text-xl md:text-2xl text-gray-300 font-light leading-loose tracking-wide drop-shadow-sm">
+            អនុវត្តយ៉ាងតឹងរ៉ឹងនូវបច្គេចទេសផ្អាប់មេដំបែធម្មជាតិ。រក្សាសំណើមនិងសីតុណ្ហភាពតាមស្តង់ដាររូបមន្តដើម。យើងធានាភាពបរិសុទ្ធ ១០០% ដោយគ្មានសារធាតុគីមី និងសារធាតុរក្សាទុក ផ្តល់នូវសុវត្ថិភាពខ្ពស់បំផុតសម្រាប់សុខភាព。
+          </p>
         </div>
       </div>
     </section>
 
-    <section id="contact" class="relative py-24 bg-slate-950 border-t border-slate-800 flex items-center justify-center overflow-hidden">
-      <div class="absolute inset-0 bg-cover bg-center bg-fixed opacity-75" style="background-image: url('/images/tanghout/hero-abstract-angkor-stone.webp');" role="img" aria-label="ចម្លាក់ថ្មអង្គរ"></div>
-      <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-slate-950/95"></div>
-      
-      <div class="relative z-10 w-full max-w-4xl mx-auto px-8 text-center space-y-12">
-        <h2 class="text-5xl md:text-6xl font-black text-white font-heading leading-tight drop-shadow-2xl">
-          ទំនាក់ទំនងជាវផ្ទាល់
-        </h2>
+    <section class="bg-white border-t border-slate-200 selection:bg-slate-200 selection:text-slate-900">
+      <div class="grid grid-cols-1 lg:grid-cols-2">
+        <div class="order-2 lg:order-1 flex flex-col justify-center p-12 md:p-20 lg:p-24 space-y-8 bg-slate-50">
+          <h3 class="text-4xl md:text-5xl font-black text-slate-900 leading-tight font-heading">
+            សក្ការៈបូជាដ៏បរិសុទ្ធ<br/>តំណាងសិរីសួស្តី
+          </h3>
+          <div class="w-20 h-1 bg-kh-red shadow-[0_0_10px_rgba(227,29,43,0.3)]"></div>
+          <p class="text-xl md:text-2xl text-slate-700 font-light leading-loose tracking-wide">
+            នំហ្វាកាវរបស់យើងត្រូវបានផលិតឡើងដោយឆ្លងកាត់ដំណើរការផ្អាប់តាមបែបធម្មជាតិ ១០០% ដែលធ្វើឱ្យសាច់នំរីកល្អស្រស់ស្អាត。
+          </p>
+          <p class="text-xl md:text-2xl text-slate-700 font-light leading-loose tracking-wide">
+            នេះគឺជាតំណាងនៃភាពរុងរឿង និងការលូតលាស់ ជាជម្រើសដ៏ស័ក្តិសមបំផុតសម្រាប់ពិធីសែនព្រះ និងដូនតា ដើម្បីនាំមកនូវសិរីសួស្តី និងហុងស៊ុយល្អ។
+          </p>
+        </div>
+        <div class="order-1 lg:order-2 relative h-[40vh] sm:h-[50vh] lg:h-auto overflow-hidden">
+          <img src="/images/tanghout/nom-chol-chnam-image_20_generated.webp" alt="នំហ្វាកាវ" class="absolute inset-0 w-full h-full object-cover object-center transform hover:scale-105 transition duration-1000" loading="lazy" decoding="async" />
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="bg-slate-950 border-t border-slate-800">
+      <div class="grid grid-cols-1 lg:grid-cols-2">
+        <div class="relative h-[30vh] sm:h-[40vh] lg:h-auto overflow-hidden bg-slate-900">
+          <img src="/images/tanghout/hero-abstract-angkor-stone.webp" alt="ចម្លាក់ថ្មអង្គរ" class="absolute inset-0 w-full h-full object-cover opacity-80 mix-blend-luminosity" loading="lazy" decoding="async" />
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
+        </div>
         
-        <div class="bg-slate-900/60 backdrop-blur-md border border-white/10 p-10 md:p-16 rounded-sm shadow-2xl max-w-4xl mx-auto text-left space-y-10">
+        <div class="flex flex-col justify-center p-12 md:p-20 lg:p-24 space-y-12">
+          <h2 class="text-5xl md:text-6xl font-black text-white font-heading leading-tight drop-shadow-2xl">
+            ទំនាក់ទំនងជាវផ្ទាល់
+          </h2>
           
-          <div class="flex flex-col md:flex-row gap-8 md:gap-12 justify-between">
-            <div class="group">
-              <p class="text-kh-red font-bold mb-3 text-lg tracking-widest uppercase drop-shadow-md">Cellcard</p>
-              <a href="tel:+85512677710" class="text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-wider group-hover:text-kh-red transition duration-300 block drop-shadow-lg whitespace-nowrap">012 677 710</a>
+          <div class="bg-slate-900/80 border border-white/10 p-8 md:p-12 rounded-sm shadow-2xl space-y-10">
+            <div class="flex flex-col gap-8">
+              <div class="group">
+                <p class="text-kh-red font-bold mb-2 text-sm tracking-widest uppercase">Cellcard</p>
+                <a href="tel:+85512677710" class="text-3xl md:text-4xl font-bold text-white tracking-wider group-hover:text-kh-red transition duration-300 block">012 677 710</a>
+              </div>
+              
+              <div class="group">
+                <p class="text-kh-red font-bold mb-2 text-sm tracking-widest uppercase">Smart</p>
+                <a href="tel:+85570677710" class="text-3xl md:text-4xl font-bold text-white tracking-wider group-hover:text-kh-red transition duration-300 block">070 677 710</a>
+              </div>
             </div>
             
-            <div class="group">
-              <p class="text-kh-red font-bold mb-3 text-lg tracking-widest uppercase drop-shadow-md">Smart</p>
-              <a href="tel:+85570677710" class="text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-wider group-hover:text-kh-red transition duration-300 block drop-shadow-lg whitespace-nowrap">070 677 710</a>
+            <div class="pt-8 border-t border-slate-800">
+              <p class="text-gray-300 text-lg leading-relaxed font-light">
+                សាខាទី១: ផ្ទះលេខ៤៥៤ ផ្លូវលំភូមិត្រពាំងថ្លឹង១ សង្កាត់ចោមចៅ ខណ្ឌពោធិ៍សែនជ័យ រាជធានីភ្នំពេញ
+              </p>
             </div>
-          </div>
-          
-          <div class="pt-10 border-t border-slate-800/50">
-            <p class="text-gray-200 text-lg md:text-xl leading-relaxed font-light drop-shadow-md">
-              សាខាទី១: ផ្ទះលេខ៤៥៤ ផ្លូវលំភូមិត្រពាំងថ្លឹង១ សង្កាត់ចោមចៅ ខណ្ឌពោធិ៍សែនជ័យ រាជធានីភ្នំពេញ
-            </p>
           </div>
         </div>
       </div>
