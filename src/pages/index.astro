@@ -1,6 +1,6 @@
 ---
 // src/pages/index.astro
-// 狀態: 根節點高棉語實體 (Root Node Khmer Entity) & 轉換摩擦力歸零
+// 狀態: 根節點高棉語實體 (Root Node Khmer Entity) & 全域物理學同步
 import Layout from '../layouts/Layout.astro'; 
 
 const siteDomain = "https://www.ckmkh.com";
@@ -8,9 +8,9 @@ const telegramLink = "https://t.me/CKMSam06";
 const facebookLink = "https://www.facebook.com/CKMFOODS";
 
 const heroImageRelative = "/images/home/hero-luxury-banquet-setup.webp";
-const heroImageAbsolute = `${siteDomain}${heroImageRelative}`;
 const logo = "/images/home/brand-ckm-logo-gold.webp";
 
+// 提取主號碼供按鈕使用
 const mainPhone = "011 827 782";
 const phoneNumbers = [
   { num: "011 827 782", icon: "fa-mobile-alt", type: "Cellcard" },
@@ -45,7 +45,7 @@ const blogPosts = [
   { title: "ស្តង់ដារប្រតិបត្តិការ (SOP) និងការកាត់បន្ថយហានិភ័យ", subTitle: "ការរៀបចំប្រព័ន្ធការពារជាមុនដើម្បីអត្រាកំហុសស្មើសូន្យ", link: "/km/blog/06-service-process-sop/", image: "/images/home/blog-service-process-sop.webp" }
 ];
 ---
-<Layout title="ចុងភៅ ចេង គួងម៉េង - CKM Premium Catering" description="CKM Catering ផ្តល់ជូននូវសេវាកម្មម្ហូបការ និងជប់លៀងលំដាប់ខ្ពស់ ដោយផ្តោតលើគុណភាព សុវត្ថិភាព និងភាពល្អឥតខ្ចោះ។" image={heroImageAbsolute} lang="km">
+<Layout title="ចុងភៅ ចេង គួងម៉េង - CKM Premium Catering" description="CKM Catering ផ្តល់ជូននូវសេវាកម្មម្ហូបការ និងជប់លៀងលំដាប់ខ្ពស់ ដោយផ្តោតលើគុណភាព សុវត្ថិភាព និងភាពល្អឥតខ្ចោះ។" lang="km">
   <Fragment slot="head">
     <link rel="preload" as="image" href={heroImageRelative} />
     <link href="https://fonts.googleapis.com/css2?family=Hanuman:wght@400;700&family=Kantumruy+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -54,6 +54,7 @@ const blogPosts = [
   <style>
     .font-km-serif { font-family: 'Hanuman', serif; }
     .font-km-sans { font-family: 'Kantumruy Pro', sans-serif; }
+    /* 橫向滑動隱藏捲軸 */
     .scrollbar-hide::-webkit-scrollbar { display: none; }
     .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
@@ -61,7 +62,9 @@ const blogPosts = [
   <div class="w-full">
       <header class="relative h-screen flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0 bg-cover bg-center bg-no-repeat bg-fixed transform scale-105" style={`background-image: url('${heroImageRelative}');`}></div>
-        <div class="absolute inset-0 bg-black/60 bg-gradient-to-b from-black/80 via-black/50 to-slate-900"></div>
+        
+        <div class="absolute inset-0 bg-black/40 bg-gradient-to-b from-black/70 via-black/30 to-slate-900/90"></div>
+        
         <div class="relative z-10 text-center px-4 max-w-4xl mx-auto pt-10">
             <img src={logo} alt="CKM Logo" width="128" height="128" class="w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-amber-500 mx-auto mb-8 shadow-[0_0_40px_rgba(245,158,11,0.5)]">
             <h1 class="text-4xl md:text-6xl font-km-serif font-bold text-white mb-6 leading-tight">ចុងភៅ <span class="text-amber-500">ចេង គួងម៉េង</span></h1>

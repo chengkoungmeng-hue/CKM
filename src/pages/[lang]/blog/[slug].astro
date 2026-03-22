@@ -1,5 +1,6 @@
 ---
 // src/pages/[lang]/blog/[slug].astro
+// 狀態: 終極白皮書實體 (Ultimate Whitepaper Entity) & 社群拓撲校準
 import { getCollection } from 'astro:content';
 import Layout from '../../../layouts/Layout.astro'; 
 
@@ -23,14 +24,17 @@ const { title, seoTitle, description, coverImage, targetGeo, authoritySignals } 
 const baseUrl = "https://www.ckmkh.com";
 const currentUrl = `${baseUrl}/${lang}/blog/${slug}`;
 
+// 絕對路徑校準：防禦社群爬蟲抓取失敗 (OG Image Locked)
+const absoluteCoverImage = coverImage?.startsWith('http') ? coverImage : `${baseUrl}${coverImage}`;
+
 // 動態根節點演算：對齊首頁路由降維邏輯
 const homeUrl = lang === 'km' ? '/' : `/${lang}/`;
 
-// 全域終極轉換參數 (供給桌面端底部 CTA 使用)
+// 全域終極轉換參數
 const mainPhone = "011 827 782";
 const telegramLink = "https://t.me/CKMSam06";
 
-// 智慧多語系字典擴充
+// 智慧多語系字典
 const translations = {
   km: { tag: "ទស្សនៈចុងភៅកម្រិតកំពូល", author: "រៀបរៀងដោយ៖ ចុងភៅ ជុង ក្វាងមីង", back: "ត្រឡប់ទៅទំព័រដើម", call: "ទូរស័ព្ទ", telegram: "Telegram" },
   zh: { tag: "顶级宴会统筹智库", author: "撰文：主厨 钟光明", back: "返回首页", call: "立即致电", telegram: "私密咨询" },
@@ -46,7 +50,7 @@ const formattedDate = entry.data.date
   : null;
 ---
 
-<Layout title={seoTitle || title} description={description} lang={lang}>
+<Layout title={seoTitle || title} description={description} image={absoluteCoverImage} lang={lang}>
   <Fragment slot="head">
     <link rel="canonical" href={currentUrl} />
     <link rel="alternate" hreflang="km-KH" href={`${baseUrl}/km/blog/${slug}`} />
@@ -88,7 +92,7 @@ const formattedDate = entry.data.date
         </div>
         
         <div class="flex flex-wrap justify-center gap-3 mb-12 border-b border-slate-200 pb-12">
-            {authoritySignals.map((signal: string) => (
+            {authoritySignals && authoritySignals.map((signal: string) => (
               <span class="bg-white text-slate-700 px-4 py-2 text-sm font-bold border border-slate-200 shadow-sm rounded-sm">
                 <i class="fas fa-check-circle text-amber-500 mr-2"></i>{signal}
               </span>

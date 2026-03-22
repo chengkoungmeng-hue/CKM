@@ -1,6 +1,6 @@
 ---
 // src/pages/zh/index.astro
-// 状态: 架构物理学同步 (Structural Physics Synced) & 实体地址精准校准
+// 状态: 架构物理学同步 (Structural Physics Synced) & 中文实体精准校准
 import Layout from '../../layouts/Layout.astro'; 
 
 const siteDomain = "https://www.ckmkh.com";
@@ -8,7 +8,6 @@ const telegramLink = "https://t.me/CKMSam06";
 const facebookLink = "https://www.facebook.com/CKMFOODS";
 
 const heroImageRelative = "/images/home/hero-luxury-banquet-setup.webp";
-const heroImageAbsolute = `${siteDomain}${heroImageRelative}`;
 const logo = "/images/home/brand-ckm-logo-gold.webp";
 
 // 提取主号码供按钮使用
@@ -46,7 +45,7 @@ const blogPosts = [
   { title: "服务标准流程与危机容错", subTitle: "T-Minus 倒数部署与现场压制", link: "/zh/blog/06-service-process-sop/", image: "/images/home/blog-service-process-sop.webp" }
 ];
 ---
-<Layout title="主厨钟光明 - CKM 金边顶级宴会外烩" description="CKM 专为金边高规格企业年会与世纪婚宴打造零容错的外烩执行方案。严守冷链物流、物理隔离食安标准与千人级宴会精准温控。" image={heroImageAbsolute} lang="zh">
+<Layout title="主厨钟光明 - CKM 金边顶级宴会外烩" description="CKM 专为金边高规格企业年会与世纪婚宴打造零容错的外烩执行方案。严守冷链物流、物理隔离食安标准与千人级宴会精准温控。" lang="zh">
   <Fragment slot="head">
     <link rel="preload" as="image" href={heroImageRelative} />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
@@ -62,7 +61,9 @@ const blogPosts = [
   <div class="w-full">
       <header class="relative h-screen flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0 bg-cover bg-center bg-no-repeat bg-fixed transform scale-105" style={`background-image: url('${heroImageRelative}');`}></div>
-        <div class="absolute inset-0 bg-black/60 bg-gradient-to-b from-black/80 via-black/50 to-slate-900"></div>
+        
+        <div class="absolute inset-0 bg-black/40 bg-gradient-to-b from-black/70 via-black/30 to-slate-900/90"></div>
+        
         <div class="relative z-10 text-center px-4 max-w-4xl mx-auto pt-10">
             <img src={logo} alt="CKM Logo" width="128" height="128" class="w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-amber-500 mx-auto mb-8 shadow-[0_0_40px_rgba(245,158,11,0.5)]">
             <h1 class="text-4xl md:text-6xl font-zh-serif font-bold text-white mb-6 tracking-widest">主厨 <span class="text-amber-500">钟光明</span></h1>

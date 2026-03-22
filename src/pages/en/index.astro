@@ -8,7 +8,7 @@ const telegramLink = "https://t.me/CKMSam06";
 const facebookLink = "https://www.facebook.com/CKMFOODS";
 
 const heroImageRelative = "/images/home/hero-luxury-banquet-setup.webp";
-const heroImageAbsolute = `${siteDomain}${heroImageRelative}`;
+// const heroImageAbsolute = `${siteDomain}${heroImageRelative}`; // 已廢棄，交由 Layout 處理 OG
 const logo = "/images/home/brand-ckm-logo-gold.webp";
 
 // 提取主號碼供按鈕使用
@@ -46,7 +46,7 @@ const blogPosts = [
   { title: "T-Minus Deployment SOP", subTitle: "Crisis Management & Tolerance", link: "/en/blog/06-service-process-sop/", image: "/images/home/blog-service-process-sop.webp" }
 ];
 ---
-<Layout title="Chef Cheng Kuongmeng - CKM Premium Catering" description="CKM provides zero-error, high-end catering in Phnom Penh. Strict adherence to food safety protocols, unbroken cold chains, and logistical precision." image={heroImageAbsolute} lang="en">
+<Layout title="Chef Cheng Kuongmeng - CKM Premium Catering" description="CKM provides zero-error, high-end catering in Phnom Penh. Strict adherence to food safety protocols, unbroken cold chains, and logistical precision." lang="en">
   <Fragment slot="head">
     <link rel="preload" as="image" href={heroImageRelative} />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
@@ -54,7 +54,6 @@ const blogPosts = [
 
   <style>
     .font-luxury-serif { font-family: 'Playfair Display', serif; }
-    /* 橫向滑動隱藏捲軸 */
     .scrollbar-hide::-webkit-scrollbar { display: none; }
     .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
@@ -62,7 +61,9 @@ const blogPosts = [
   <div class="w-full">
       <header class="relative h-screen flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0 bg-cover bg-center bg-no-repeat bg-fixed transform scale-105" style={`background-image: url('${heroImageRelative}');`}></div>
-        <div class="absolute inset-0 bg-black/60 bg-gradient-to-b from-black/80 via-black/50 to-slate-900"></div>
+        
+        <div class="absolute inset-0 bg-black/40 bg-gradient-to-b from-black/70 via-black/30 to-slate-900/90"></div>
+        
         <div class="relative z-10 text-center px-4 max-w-4xl mx-auto pt-10">
             <img src={logo} alt="CKM Logo" width="128" height="128" class="w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-amber-500 mx-auto mb-8 shadow-[0_0_40px_rgba(245,158,11,0.5)]">
             <h1 class="text-4xl md:text-6xl font-luxury-serif font-bold text-white mb-4 tracking-wide">Chef <span class="text-amber-500">Cheng Kuongmeng</span></h1>
