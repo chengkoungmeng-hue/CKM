@@ -1,12 +1,12 @@
 ---
 // 實體路徑: src/layouts/Layout.astro
-// 狀態: 終極佈局裝甲 & 導航動線壓縮 (語言切換器外顯化)
+// 狀態: 終極佈局裝甲 & 無障礙多語系動線 (外顯膠囊切換器 + EN 對稱校準)
 const { title, description, image = '/open-graph.png', lang = 'km' } = Astro.props;
 
 // 動態根節點演算
 const homeUrl = lang === 'km' ? '/' : `/${lang}/`;
 
-// 絕對路徑校準
+// 絕對路徑校準 (防禦社群 OG 抓取失敗)
 const siteDomain = "https://www.ckmkh.com";
 const canonicalURL = new URL(Astro.url.pathname, Astro.site || siteDomain);
 const ogImageAbsolute = image.startsWith('http') ? image : `${siteDomain}${image}`;
@@ -90,9 +90,9 @@ const t = navTranslations[lang as keyof typeof navTranslations] || navTranslatio
                 </div>
 
                 <div class="flex items-center bg-slate-900/80 rounded-sm p-1 border border-slate-800 relative z-50 shadow-inner">
-                    <a href="/" class={`px-2 py-1 text-[10px] md:text-xs font-sans font-bold rounded-sm transition-all ${lang === 'km' ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}`}>KM</a>
-                    <a href="/zh/" class={`px-2 py-1 text-[10px] md:text-xs font-sans font-bold rounded-sm transition-all ${lang === 'zh' ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}`}>ZH</a>
-                    <a href="/en/" class={`px-2 py-1 text-[10px] md:text-xs font-sans font-bold rounded-sm transition-all ${lang === 'en' ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}`}>EN</a>
+                    <a href="/" class={`px-2 md:px-3 py-1 md:py-1.5 text-[10px] md:text-xs font-sans font-bold rounded-sm transition-all ${lang === 'km' ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}`}>ខ្មែរ</a>
+                    <a href="/zh/" class={`px-2 md:px-3 py-1 md:py-1.5 text-[10px] md:text-xs font-sans font-bold rounded-sm transition-all ${lang === 'zh' ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}`}>中文</a>
+                    <a href="/en/" class={`px-2 md:px-3 py-1 md:py-1.5 text-[10px] md:text-xs font-sans font-bold rounded-sm transition-all ${lang === 'en' ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}`}>EN</a>
                 </div>
 
                 <a href={`${homeUrl}#contact`} class="hidden md:inline-flex relative z-50 items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-5 min-h-[40px] rounded-full font-bold text-sm transition-all shadow-[0_0_15px_rgba(245,158,11,0.3)] hover:shadow-[0_0_25px_rgba(245,158,11,0.5)]">
@@ -105,8 +105,8 @@ const t = navTranslations[lang as keyof typeof navTranslations] || navTranslatio
             </div>
         </div>
 
-        <div id="mobile-menu-overlay" class="fixed inset-0 bg-slate-950 z-40 hidden flex-col items-center justify-center opacity-0 transition-opacity duration-300 pt-16">
-            <div class="flex flex-col items-center gap-10 text-white font-serif text-2xl w-full px-6">
+        <div id="mobile-menu-overlay" class="fixed inset-0 bg-slate-950 z-40 hidden flex-col items-center justify-start opacity-0 transition-opacity duration-300 pt-32 overflow-y-auto pb-24">
+            <div class="flex flex-col items-center gap-8 text-white font-serif text-2xl w-full px-6">
                 <a href={`${homeUrl}#service`} class="mobile-link hover:text-amber-500 transition-colors">{t.service}</a>
                 <a href={`${homeUrl}#portfolio`} class="mobile-link hover:text-amber-500 transition-colors">{t.portfolio}</a>
                 <a href={`${homeUrl}#insights`} class="mobile-link hover:text-amber-500 transition-colors">{t.insights}</a>
