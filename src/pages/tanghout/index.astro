@@ -1,6 +1,6 @@
 ---
 // 實體路徑: src/pages/tanghout/index.astro
-// 狀態: 單頁面架構封裝完畢。已修復 Sticky Footer 的聯絡方式，並套用烘焙營運、精準溫控的實戰語感。
+// 狀態: 終極渲染封裝。SVG 實體提權 + 烘焙營運語感 + 效能極致化 + 蒸籠視覺升維
 // 核心識別: គាំង ហួត (Kiang Huat Bakery)
 ---
 
@@ -8,7 +8,7 @@
 <html lang="km-KH" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <link rel="icon" type="image/x-icon" href="/thicon.ico" />
   
@@ -62,24 +62,38 @@
     .font-body { font-family: "Battambang", sans-serif; }
   </style>
 
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EG6D0H2T5K"></script>
   <script is:inline>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-EG6D0H2T5K');
+    document.addEventListener('DOMContentLoaded', () => {
+      let gtmLoaded = false;
+      const loadGTM = () => {
+        if (gtmLoaded) return;
+        gtmLoaded = true;
+        const script = document.createElement('script');
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-EG6D0H2T5K';
+        script.async = true;
+        document.head.appendChild(script);
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){window.dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EG6D0H2T5K');
+      };
+      ['scroll', 'mousemove', 'touchstart', 'click'].forEach(event => {
+        window.addEventListener(event, loadGTM, { once: true });
+      });
+      setTimeout(loadGTM, 3500);
+    });
   </script>
 </head>
 <body class="bg-slate-950 text-slate-200 font-body antialiased selection:bg-kh-red selection:text-white pb-[env(safe-area-inset-bottom)]">
 
   <main>
     <header class="relative min-h-screen flex items-center justify-center overflow-hidden border-b border-white/5">
-      <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('/images/tanghout/nom-lok-khae-logo-image_29.webp');" role="img" aria-label="នំលោកខែប្រណីត"></div>
+      <img src="/images/tanghout/nom-lok-khae-logo-image_29.webp" alt="នំលោកខែប្រណីត" class="absolute inset-0 w-full h-full object-cover object-center" fetchpriority="high" decoding="sync" />
       <div class="absolute inset-0 bg-gradient-radial from-transparent via-black/40 to-slate-950 opacity-90"></div>
       
       <div class="relative z-10 text-center px-6 max-w-5xl mx-auto pt-24 space-y-8">
         <div class="flex justify-center mb-6">
-          <img src="/images/tanghout/logo-tanghout.webp" alt="Tang Hout Logo" class="h-28 w-auto md:h-36 object-contain drop-shadow-2xl" />
+          <img src="/images/tanghout/logo-tanghout.webp" alt="Tang Hout Logo" width="300" height="300" class="h-28 w-auto md:h-36 object-contain drop-shadow-2xl" />
         </div>
 
         <h1 class="text-6xl md:text-8xl font-black text-white leading-tight tracking-wide font-heading drop-shadow-2xl">
@@ -102,7 +116,7 @@
     <section class="bg-slate-950 border-t border-white/5">
       <div class="grid grid-cols-1 lg:grid-cols-2">
         <div class="relative h-[40vh] sm:h-[50vh] lg:h-auto overflow-hidden">
-          <img src="/images/tanghout/nom-lok-khae-slice-image_2.webp" alt="ផ្ទៃកាត់នៃនំលោកខែ" class="absolute inset-0 w-full h-full object-cover object-center transform hover:scale-105 transition duration-1000" loading="lazy" decoding="async" />
+          <img src="/images/tanghout/nom-lok-khae-slice-image_2.webp" alt="ផ្ទៃកាត់នៃនំលោកខែ" width="1000" height="1000" class="absolute inset-0 w-full h-full object-cover object-center transform hover:scale-105 transition duration-1000" loading="lazy" decoding="async" />
         </div>
         <div class="flex flex-col justify-center p-12 md:p-20 lg:p-24 space-y-8 bg-slate-900/50">
           <h3 class="text-4xl md:text-5xl font-black text-white leading-tight font-heading drop-shadow-lg">
@@ -131,7 +145,7 @@
           </p>
         </div>
         <div class="order-1 lg:order-2 relative h-[40vh] sm:h-[50vh] lg:h-auto overflow-hidden">
-          <img src="/images/tanghout/nom-chol-chnam-image_20_generated.webp" alt="នំហ្វាកាវ" class="absolute inset-0 w-full h-full object-cover object-center transform hover:scale-105 transition duration-1000" loading="lazy" decoding="async" />
+          <img src="/images/tanghout/nom-chol-chnam-image_20_generated.webp" alt="នំហ្វាកាវ" width="1000" height="1000" class="absolute inset-0 w-full h-full object-cover object-center transform hover:scale-105 transition duration-1000" loading="lazy" decoding="async" />
         </div>
       </div>
     </section>
@@ -139,16 +153,16 @@
     <section id="contact" class="bg-slate-950 border-t border-slate-800">
       <div class="grid grid-cols-1 lg:grid-cols-2">
         <div class="relative h-[30vh] sm:h-[40vh] lg:h-auto overflow-hidden bg-slate-900">
-          <img src="/images/tanghout/hero-abstract-angkor-stone.webp" alt="ចម្លាក់ថ្មអង្គរ" class="absolute inset-0 w-full h-full object-cover opacity-80 mix-blend-luminosity" loading="lazy" decoding="async" />
-          <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
+          <img src="/images/tanghout/hero-steamer-tradition.webp" alt="ឡចំហុយនំប្រពៃណី" width="1920" height="1080" class="absolute inset-0 w-full h-full object-cover opacity-70 mix-blend-luminosity" loading="lazy" decoding="async" />
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent"></div>
         </div>
         
-        <div class="flex flex-col justify-center p-12 md:p-20 lg:p-24 space-y-12">
+        <div class="flex flex-col justify-center p-12 md:p-20 lg:p-24 space-y-12 relative z-10">
           <h2 class="text-5xl md:text-6xl font-black text-white font-heading leading-tight drop-shadow-2xl">
             ទំនាក់ទំនងបញ្ជាទិញ
           </h2>
           
-          <div class="bg-slate-900/80 border border-white/10 p-8 md:p-12 rounded-sm shadow-2xl space-y-10">
+          <div class="bg-slate-900/80 backdrop-blur-sm border border-white/10 p-8 md:p-12 rounded-sm shadow-2xl space-y-10">
             <div class="flex flex-col gap-8">
               <div class="group">
                 <p class="text-kh-red font-bold mb-2 text-sm tracking-widest uppercase">Cellcard</p>
@@ -180,10 +194,12 @@
   <div class="fixed bottom-0 left-0 w-full z-50 md:hidden bg-slate-950 border-t border-slate-800 shadow-[0_-10px_30px_rgba(0,0,0,0.8)]">
       <div class="flex h-14 pb-[env(safe-area-inset-bottom)] box-content">
           <a href="tel:+85512677710" class="flex-1 flex items-center justify-center gap-2 bg-kh-red text-white font-body font-bold text-sm transition-colors active:bg-red-800">
-              <i class="fas fa-phone-alt"></i> ទាក់ទងទិញ
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg> 
+              ទាក់ទងទិញ
           </a>
           <a href="https://t.me/+85512677710" target="_blank" rel="noopener noreferrer" class="flex-1 flex items-center justify-center gap-2 bg-[#0088cc] text-white font-body font-bold text-sm transition-colors active:bg-[#007ab8]">
-              <i class="fab fa-telegram-plane text-lg"></i> Telegram
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg> 
+              Telegram
           </a>
       </div>
   </div>
