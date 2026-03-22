@@ -1,6 +1,6 @@
 ---
-// 實體路徑: src/layouts/Layout.astro
-// 狀態: 終極視覺佈局裝甲 (Ultimate Visual Layout Armor) & 社群拓撲同步
+// src/layouts/Layout.astro
+// 狀態: 終極視覺佈局裝甲 (Ultimate Visual Layout Armor) & 導航路由同步
 const { title, description, image = '/open-graph.png', lang = 'km' } = Astro.props;
 
 // 動態根節點演算：對齊首頁路由降維邏輯
@@ -11,7 +11,7 @@ const siteDomain = "https://www.ckmkh.com";
 const canonicalURL = new URL(Astro.url.pathname, Astro.site || siteDomain);
 const ogImageAbsolute = image.startsWith('http') ? image : `${siteDomain}${image}`;
 
-// 智慧多語系導航字典
+// 智慧多語系導航字典 (Expanded)
 const navTranslations = {
   km: { service: "ស្តង់ដារប្រតិបត្តិការ", portfolio: "កំពូលស្នាដៃម្ហូប", insights: "ទស្សនៈកម្រិតកំពូល", contact: "ទាក់ទងយើង" },
   zh: { service: "绝对执行矩阵", portfolio: "传世臻选名菜", insights: "统筹智库", contact: "啟動協議" },
@@ -57,9 +57,7 @@ const t = navTranslations[lang as keyof typeof navTranslations] || navTranslatio
       gtag('config', 'G-EG6D0H2T5K');
     </script>
   </head>
-  <body class="bg-slate-900 selection:bg-amber-200 selection:text-slate-900">
-    <div id="uplink-pipeline-anchor"></div>
-    
+  <body class="bg-slate-900 selection:bg-amber-200 selection:text-slate-900 pb-safe">
     <nav class="fixed top-0 left-0 w-full bg-slate-950/90 backdrop-blur-sm z-50 border-b border-slate-800 shadow-lg">
         <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between h-20">
             <a href={homeUrl} class="flex items-center gap-3">
@@ -92,7 +90,7 @@ const t = navTranslations[lang as keyof typeof navTranslations] || navTranslatio
         </div>
     </nav>
 
-    <main class="pt-20 pb-24 md:pb-0">
+    <main class="pt-20">
         <slot />
     </main>
     
@@ -105,13 +103,15 @@ const t = navTranslations[lang as keyof typeof navTranslations] || navTranslatio
 
 <style is:global>
   /* =========================================
-     全域排版系統與字體繼承族 (Global Typography)
+     全域排版字體繼承系統與 iOS pb-safe 防禦
   ========================================= */
   html {
+    scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
   
+  /* Hanuman (襯線) / Kantumruy Pro (無襯線) 全域繼承定義 */
   .font-serif {
     font-family: 'Hanuman', serif;
   }
@@ -121,7 +121,7 @@ const t = navTranslations[lang as keyof typeof navTranslations] || navTranslatio
 
   /* 行動端與桌面端基礎 Padding 降維校準 */
   main > div {
-    min-height: calc(100vh - 80px); /* 修正：使用原生 CSS 語法 */
+    min-height: calc(100vh - 80px);
     padding-top: 2.5rem; /* pt-10 */
     padding-bottom: 4rem; /* pb-16 */
   }
@@ -132,7 +132,7 @@ const t = navTranslations[lang as keyof typeof navTranslations] || navTranslatio
     }
   }
 
-  /* 視口安全區 (Safe Area) 注入：防止 iOS 底部 Home Indicator 阻斷觸控事件 */
+  /* 視口安全區注入：防禦 iOS Home Indicator 觸控阻斷 */
   .pb-safe {
     padding-bottom: env(safe-area-inset-bottom);
   }
