@@ -1,6 +1,7 @@
 ---
 // src/layouts/Layout.astro
 // Status: Operational. Global layout, multi-language navigation, and mobile sticky CTA.
+// [優化] 移除了 user-scalable=no，並將 FontAwesome 改為非同步載入消除渲染阻塞
 const { title, description, image = '/open-graph.png', lang = 'km' } = Astro.props;
 
 // Dynamic root URL resolution
@@ -37,7 +38,7 @@ const t = navTranslations[lang as keyof typeof navTranslations] || navTranslatio
 <html lang={lang} class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
@@ -57,7 +58,9 @@ const t = navTranslations[lang as keyof typeof navTranslations] || navTranslatio
     <meta name="twitter:image" content={ogImageAbsolute} />
 
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" /></noscript>
     
     <slot name="head" />
 
