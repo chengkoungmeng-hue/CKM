@@ -1,22 +1,22 @@
 ---
-// 實體路徑: src/layouts/Layout.astro
-// 狀態: 終極佈局裝甲 & 無障礙多語系動線 (外顯膠囊切換器 + EN 對稱校準)
+// src/layouts/Layout.astro
+// Status: Operational. Global layout, multi-language navigation, and mobile sticky CTA.
 const { title, description, image = '/open-graph.png', lang = 'km' } = Astro.props;
 
-// 動態根節點演算
+// Dynamic root URL resolution
 const homeUrl = lang === 'km' ? '/' : `/${lang}/`;
 
-// 絕對路徑校準 (防禦社群 OG 抓取失敗)
+// Absolute URL resolution for SEO and OG Image scrapers
 const siteDomain = "https://www.ckmkh.com";
 const canonicalURL = new URL(Astro.url.pathname, Astro.site || siteDomain);
 const ogImageAbsolute = image.startsWith('http') ? image : `${siteDomain}${image}`;
 
-// 全域轉換變數 (供應底部吸頂 CTA 使用)
+// Global contact variables for mobile sticky CTA
 const mainPhone = "011 827 782";
 const telegramLink = "https://t.me/CKMSam06";
 const cleanPhone = `+855${mainPhone.replace(/\s/g, '').substring(1)}`;
 
-// [法規校準] 品牌招牌多語系矩陣 (確保高棉語時顯示最大字體的高棉文)
+// Multi-language brand definitions
 const brandDict = {
   km: { title: "ចេង គួងម៉េង", subtitle: "សេវាកម្មម្ហូបការលំដាប់ខ្ពស់" },
   zh: { title: "CKM CATERING", subtitle: "PREMIUM SERVICE" },
@@ -24,13 +24,13 @@ const brandDict = {
 };
 const brand = brandDict[lang as keyof typeof brandDict] || brandDict.zh;
 
-// 導航與 CTA 字典
+// Grounded navigation and CTA dictionary
 const navTranslations = {
-  km: { service: "ស្តង់ដារប្រតិបត្តិការ", portfolio: "កំពូលស្នាដៃម្ហូប", insights: "ទស្សនៈកម្រិតកំពូល", contact: "ទាក់ទងយើង", call: "ហៅទូរស័ព្ទ", telegram: "Telegram" },
-  zh: { service: "绝对执行矩阵", portfolio: "传世臻选名菜", insights: "统筹智库", contact: "啟動協議", call: "立即致电", telegram: "私密咨询" },
-  en: { service: "Execution Matrix", portfolio: "Masterpieces", insights: "Catering Insights", contact: "Initialize", call: "Call Now", telegram: "Consultation" }
+  km: { service: "ស្តង់ដារប្រតិបត្តិការ", portfolio: "ម៉ឺនុយម្ហូបការ", insights: "កំណត់ហេតុ", contact: "ទាក់ទងយើង", call: "ហៅទូរស័ព្ទ", telegram: "Telegram" },
+  zh: { service: "现场把关", portfolio: "办桌菜单", insights: "实战日志", contact: "联系统筹", call: "电话联系", telegram: "专人咨询" },
+  en: { service: "Operations", portfolio: "Banquet Menus", insights: "Logistics Log", contact: "Consultation", call: "Call Now", telegram: "Telegram" }
 };
-const t = navTranslations[lang as keyof typeof navTranslations] || navTranslations.zh;
+const t = navTranslations[lang as keyof typeof navTranslations] || navTranslations.en;
 ---
 
 <!doctype html>
@@ -56,7 +56,6 @@ const t = navTranslations[lang as keyof typeof navTranslations] || navTranslatio
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageAbsolute} />
 
-    <meta name="system-pipeline-test" content="uplink-verified" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     
@@ -119,7 +118,7 @@ const t = navTranslations[lang as keyof typeof navTranslations] || navTranslatio
     </main>
     
     <footer class="bg-slate-950 py-10 border-t border-slate-900 text-center font-sans hidden md:block">
-        <p class="text-slate-600 text-xs font-light tracking-[0.2em] uppercase">&copy; 2026 CKM Catering Service. រក្សាសិទ្ធិគ្រប់យ៉ាង。</p>
+        <p class="text-slate-600 text-xs font-light tracking-[0.2em] uppercase">&copy; 2026 CKM Catering Service. រក្សាសិទ្ធិគ្រប់យ៉ាង។</p>
     </footer>
     
     <footer class="bg-slate-950 pt-8 pb-[calc(3.5rem+env(safe-area-inset-bottom)+2rem)] border-t border-slate-900 text-center font-sans md:hidden">
@@ -190,7 +189,7 @@ const t = navTranslations[lang as keyof typeof navTranslations] || navTranslatio
 
 <style is:global>
   /* =========================================
-     全域排版字體繼承系統
+     Global Typography Inheritance
   ========================================= */
   html {
     scroll-behavior: smooth;
@@ -201,7 +200,7 @@ const t = navTranslations[lang as keyof typeof navTranslations] || navTranslatio
   .font-serif { font-family: 'Hanuman', serif; }
   .font-sans { font-family: 'Kantumruy Pro', sans-serif; }
 
-  /* 高度校準 */
+  /* Height Adjustment */
   main > div {
     min-height: calc(100vh - 80px);
   }

@@ -1,10 +1,10 @@
 ---
-// 實體路徑: src/pages/404.astro
-// 狀態: 流量迷航捕獲與強制引流 (Traffic Capture & Forced Redirection)
+// src/pages/404.astro
+// ស្ថានភាព៖ ប្រតិបត្តិការ។ ទំព័រ 404 កំណត់ផ្លូវត្រឡប់ទៅទំព័រដើមដោយស្វ័យប្រវត្តិ។
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="404 - ទំព័រមិនត្រូវបានរកឃើញ | CKM Catering" description="Page Not Found" lang="km">
+<Layout title="404 - ទំព័រមិនត្រូវបានរកឃើញ | CKM Premium Catering" description="Page Not Found" lang="km">
   <Fragment slot="head">
     <meta http-equiv="refresh" content="10;url=/" />
   </Fragment>
@@ -19,7 +19,7 @@ import Layout from '../layouts/Layout.astro';
       </h1>
       
       <h2 class="text-xl md:text-3xl font-sans font-medium text-white mb-6 uppercase tracking-wider">
-        ទំព័រមិនត្រូវបានរកឃើញ / Page Not Found
+        ទំព័រមិនត្រូវបានរកឃើញ <span class="hidden md:inline text-slate-600 mx-2">|</span> <br class="md:hidden" /> <span class="text-slate-300">Page Not Found</span>
       </h2>
       
       <p class="text-slate-400 font-sans font-light mb-12 text-lg md:text-xl">
@@ -29,13 +29,13 @@ import Layout from '../layouts/Layout.astro';
       </p>
 
       <a href="/" class="inline-flex items-center justify-center gap-3 bg-amber-500 hover:bg-amber-400 text-slate-950 px-10 py-4 min-h-[56px] rounded-sm font-sans font-bold tracking-widest uppercase transition-all shadow-[0_0_20px_rgba(245,158,11,0.25)] hover:shadow-[0_0_30px_rgba(245,158,11,0.5)] focus:ring-2 focus:ring-amber-300 focus:outline-none">
-        <i class="fas fa-home text-lg"></i> ត្រឡប់ទៅទំព័រដើម (Return Home)
+        <i class="fas fa-home text-lg"></i> ត្រឡប់ទៅទំព័រដើម
       </a>
     </div>
   </div>
 
   <script is:inline>
-    // 客戶端時間降維引擎 (Client-side Time Degradation Engine)
+    // កម្មវិធីកំណត់ម៉ោងបញ្ជូនបន្ត (Client-side countdown timer)
     let timeLeft = 10;
     const countdownEl = document.getElementById('countdown');
     
@@ -45,7 +45,6 @@ import Layout from '../layouts/Layout.astro';
         countdownEl.innerText = timeLeft;
       }
       
-      // 當熵值歸零，觸發強制路由轉換
       if (timeLeft <= 0) {
         clearInterval(timer);
         window.location.href = '/';
@@ -55,7 +54,7 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <style>
-  /* 強制隱藏 Layout 可能帶入的全域 Navbar 或 Footer，確保 404 畫面純淨度 */
+  /* លាក់ Navbar និង Footer សម្រាប់ទំព័រ 404 (Force hide global elements) */
   :global(nav), :global(footer), :global(.fixed.bottom-0) {
     display: none !important;
   }

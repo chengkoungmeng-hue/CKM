@@ -1,6 +1,6 @@
 ---
 // src/pages/[lang]/blog/[slug].astro
-// 狀態: 終極白皮書實體 (Ultimate Whitepaper Entity) & 社群拓撲校準
+// Status: Operational. Global routing, multi-language dictionary, and typography matrices aligned.
 import { getCollection } from 'astro:content';
 import Layout from '../../../layouts/Layout.astro'; 
 
@@ -24,23 +24,41 @@ const { title, seoTitle, description, coverImage, targetGeo, authoritySignals } 
 const baseUrl = "https://www.ckmkh.com";
 const currentUrl = `${baseUrl}/${lang}/blog/${slug}`;
 
-// 絕對路徑校準：防禦社群爬蟲抓取失敗 (OG Image Locked)
+// Absolute path resolution for OG Images (Prevents social scraper failures)
 const absoluteCoverImage = coverImage?.startsWith('http') ? coverImage : `${baseUrl}${coverImage}`;
 
-// 動態根節點演算：對齊首頁路由降維邏輯
+// Dynamic root node resolution for the "Back" button
 const homeUrl = lang === 'km' ? '/' : `/${lang}/`;
 
-// 全域終極轉換參數
+// Global contact parameters
 const mainPhone = "011 827 782";
 const telegramLink = "https://t.me/CKMSam06";
 
-// 智慧多語系字典
+// Intelligent Multi-Language Dictionary
 const translations = {
-  km: { tag: "ទស្សនៈចុងភៅកម្រិតកំពូល", author: "រៀបរៀងដោយ៖ ចុងភៅ ជុង ក្វាងមីង", back: "ត្រឡប់ទៅទំព័រដើម", call: "ទូរស័ព្ទ", telegram: "Telegram" },
-  zh: { tag: "顶级宴会统筹智库", author: "撰文：主厨 钟光明", back: "返回首页", call: "立即致电", telegram: "私密咨询" },
-  en: { tag: "Premium Catering Insights", author: "By Executive Chef Cheng Kuongmeng", back: "Return Home", call: "Call Now", telegram: "Consultation" }
+  km: { 
+    tag: "កំណត់ហេតុប្រតិបត្តិការម្ហូបការ", 
+    author: "រៀបរៀងដោយ៖ ចុងភៅឯក ចេង គួងម៉េង", 
+    back: "ត្រឡប់ទៅទំព័រដើម", 
+    call: "ហៅទូរស័ព្ទឥឡូវនេះ", 
+    telegram: "ពិគ្រោះយោបល់" 
+  },
+  zh: { 
+    tag: "办桌实战日志", 
+    author: "撰文：主厨 钟光明", 
+    back: "返回首页", 
+    call: "电话联系", 
+    telegram: "专人咨询" 
+  },
+  en: { 
+    tag: "Catering Operations Log", 
+    author: "By Executive Chef Cheng Koung Meng", 
+    back: "Return Home", 
+    call: "Call Now", 
+    telegram: "Consultation" 
+  }
 };
-const t = translations[lang as keyof typeof translations] || translations.zh;
+const t = translations[lang as keyof typeof translations] || translations.en;
 
 const formattedDate = entry.data.date 
   ? entry.data.date.toLocaleDateString(
@@ -121,7 +139,7 @@ const formattedDate = entry.data.date
 
 <style is:global>
   /* =========================================
-     智慧語系字體矩陣 (Typography Matrix)
+     Typography Matrix per Language
   ========================================= */
   
   .typo-en h1, .typo-en .ckm-prose h2, .typo-en .ckm-prose h3 { 
@@ -153,7 +171,7 @@ const formattedDate = entry.data.date
   }
 
   /* =========================================
-     白皮書高階排版裝甲 (Prose Styling)
+     Operational Prose Styling (Blog Content)
   ========================================= */
   .ckm-prose {
     color: #334155; 
