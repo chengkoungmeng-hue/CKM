@@ -1,6 +1,6 @@
 ---
 // 實體路徑: src/layouts/Layout.astro
-// 狀態: 終極佈局裝甲 (包含行動端 JS 引擎、吸頂 CTA 與柬埔寨招牌法規適配)
+// 狀態: 終極佈局裝甲 & 行動端視覺對比度校準 (Mobile Contrast Calibration)
 const { title, description, image = '/open-graph.png', lang = 'km' } = Astro.props;
 
 // 動態根節點演算
@@ -103,7 +103,7 @@ const t = navTranslations[lang as keyof typeof navTranslations] || navTranslatio
             </button>
         </div>
 
-        <div id="mobile-menu-overlay" class="fixed inset-0 bg-slate-950/98 z-40 hidden flex-col items-center justify-center opacity-0 transition-opacity duration-300 pt-20">
+        <div id="mobile-menu-overlay" class="fixed inset-0 bg-slate-950 z-40 hidden flex-col items-center justify-center opacity-0 transition-opacity duration-300 pt-20">
             <div class="flex flex-col items-center gap-8 text-white font-serif text-2xl w-full px-6">
                 <a href={`${homeUrl}#service`} class="mobile-link hover:text-amber-500 transition-colors">{t.service}</a>
                 <a href={`${homeUrl}#portfolio`} class="mobile-link hover:text-amber-500 transition-colors">{t.portfolio}</a>
@@ -111,25 +111,26 @@ const t = navTranslations[lang as keyof typeof navTranslations] || navTranslatio
                 
                 <div class="w-16 h-[1px] bg-slate-800 my-4"></div>
                 
-                <div class="flex items-center gap-4">
-                    <a href="/" class={`${lang === 'km' ? 'text-amber-500' : 'text-slate-400'} font-sans font-bold`}>ខ្មែរ</a>
-                    <span class="text-slate-800">|</span>
-                    <a href="/zh/" class={`${lang === 'zh' ? 'text-amber-500' : 'text-slate-400'} font-sans font-bold`}>中文</a>
-                    <span class="text-slate-800">|</span>
-                    <a href="/en/" class={`${lang === 'en' ? 'text-amber-500' : 'text-slate-400'} font-sans font-bold`}>EN</a>
+                <div class="flex items-center gap-6">
+                    <a href="/" class={`${lang === 'km' ? 'text-amber-500' : 'text-slate-300'} hover:text-white font-sans font-bold text-lg transition-colors`}>ខ្មែរ</a>
+                    <span class="text-slate-700">|</span>
+                    <a href="/zh/" class={`${lang === 'zh' ? 'text-amber-500' : 'text-slate-300'} hover:text-white font-sans font-bold text-lg transition-colors`}>中文</a>
+                    <span class="text-slate-700">|</span>
+                    <a href="/en/" class={`${lang === 'en' ? 'text-amber-500' : 'text-slate-300'} hover:text-white font-sans font-bold text-lg transition-colors`}>EN</a>
                 </div>
             </div>
         </div>
     </nav>
 
-    <main class="pt-20 pb-24 md:pb-0">
+    <main class="pt-20 pb-0">
         <slot />
     </main>
     
     <footer class="bg-slate-950 py-10 border-t border-slate-900 text-center font-sans hidden md:block">
         <p class="text-slate-600 text-xs font-light tracking-[0.2em] uppercase">&copy; 2026 CKM Catering Service. រក្សាសិទ្ធិគ្រប់យ៉ាង。</p>
     </footer>
-    <footer class="bg-slate-950 py-8 border-t border-slate-900 text-center font-sans md:hidden pb-24">
+    
+    <footer class="bg-slate-950 pt-8 pb-[calc(3.5rem+env(safe-area-inset-bottom)+2rem)] border-t border-slate-900 text-center font-sans md:hidden">
         <p class="text-slate-600 text-[10px] font-light tracking-widest uppercase">&copy; 2026 CKM Catering.</p>
     </footer>
 
@@ -159,23 +160,19 @@ const t = navTranslations[lang as keyof typeof navTranslations] || navTranslatio
               const isHidden = overlay.classList.contains('hidden');
               
               if (isHidden) {
-                  // 打開選單
                   overlay.classList.remove('hidden');
                   overlay.classList.add('flex');
-                  // 使用 setTimeout 觸發 CSS opacity 漸變
                   setTimeout(() => overlay.classList.remove('opacity-0'), 10);
                   
                   icon.classList.remove('fa-bars');
                   icon.classList.add('fa-times', 'rotate-90');
-                  document.body.style.overflow = 'hidden'; // 防止背景滾動
+                  document.body.style.overflow = 'hidden'; 
               } else {
-                  // 關閉選單
                   overlay.classList.add('opacity-0');
                   icon.classList.remove('fa-times', 'rotate-90');
                   icon.classList.add('fa-bars');
                   document.body.style.overflow = '';
                   
-                  // 等待漸變結束後隱藏 DOM
                   setTimeout(() => {
                       overlay.classList.add('hidden');
                       overlay.classList.remove('flex');
@@ -183,7 +180,6 @@ const t = navTranslations[lang as keyof typeof navTranslations] || navTranslatio
               }
           });
 
-          // 點擊連結後自動關閉選單
           links.forEach(link => {
               link.addEventListener('click', () => {
                   overlay.classList.add('opacity-0');
