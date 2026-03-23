@@ -1,6 +1,6 @@
 ---
 // 實體路徑: src/pages/index.astro (高棉語)
-// 狀態: 終極渲染封裝 4.0 (實體首圖 img 提權 + JSON-LD + Lucide 次世代原生 SVG 注入)
+// 狀態: 終極渲染封裝 4.0 + 實戰量能注入 (帳篷硬體統籌、10k+ 粉絲權威、24H 物流)
 import Layout from '../layouts/Layout.astro'; 
 
 const siteDomain = "https://www.ckmkh.com";
@@ -38,15 +38,15 @@ const menuItems = [
 ];
 
 const blogPosts = [
-  { title: "ការវាយតម្លៃទីតាំង និងរៀបចំផ្លូវចេញម្ហូប", subTitle: "ការត្រួតពិនិត្យប្រព័ន្ធទឹកភ្លើង និងការដោះស្រាយបញ្ហានៅទីតាំងផ្ទាល់", link: "/blog/01-venue-logistics/", image: "/images/home/blog-wedding-service-guide.webp" },
+  { title: "ការវាយតម្លៃទីតាំង និងរៀបចំផ្លូវចេញម្ហូប", subTitle: "ការវាយតម្លៃបន្ទុកអគ្គិសនី និងការរៀបចំរោងការជាមុន", link: "/blog/01-venue-logistics/", image: "/images/home/blog-wedding-service-guide.webp" },
   { title: "ការគ្រប់គ្រងការចេញម្ហូបរយតុ", subTitle: "ការរក្សាកម្តៅម្ហូប និងទប់ទល់នឹងអាកាសធាតុខាងក្រៅ", link: "/blog/02-event-party-planning/", image: "/images/home/blog-event-party-planning.webp" },
-  { title: "ស្តង់ដារគុណភាព និងការរក្សាសាច់ស្រស់", subTitle: "ការក្លាសេសាច់ក្នុងកម្រិត 4°C និងការកំណត់គ្រឿងទេសរយតុ", link: "/blog/03-chef-professional-standard/", image: "/images/home/blog-chef-professional-standard.webp" },
+  { title: "ស្តង់ដារគុណភាព និងការរក្សាសាច់ស្រស់", subTitle: "សង្វាក់ត្រជាក់ ២៤ ម៉ោង និងការកំណត់គ្រឿងទេសរយតុ", link: "/blog/03-chef-professional-standard/", image: "/images/home/blog-chef-professional-standard.webp" },
   { title: "ខ្សែការពារអនាម័យ និងសុវត្ថិភាពម្ហូបការ", subTitle: "ការបែងចែកសាច់ឆៅនិងឆ្អិនដាច់ពីគ្នា រួមទាំងប្រព័ន្ធទឹកស្អាត", link: "/blog/04-food-safety-quality/", image: "/images/home/blog-food-safety-quality.webp" },
   { title: "ការរៀបចំម៉ឺនុយម្ហូបការខ្មែរ-ចិន", subTitle: "បច្ចេកទេសបុកគ្រឿងដោយដៃ និងការរៀបចំរសជាតិមិនឱ្យទ្រាន់", link: "/blog/05-khmer-wedding-menu/", image: "/images/home/blog-khmer-wedding-menu.webp" },
   { title: "ការគ្រប់គ្រងហានិភ័យពេលកម្មវិធីផ្ទាល់", subTitle: "ការត្រៀមម៉ាស៊ីនភ្លើងបម្រុង និងការទប់ទល់នឹងកំណើនភ្ញៀវភ្លាមៗ", link: "/blog/06-service-process-sop/", image: "/images/home/blog-service-process-sop.webp" }
 ];
 ---
-<Layout title="ចុងភៅ ចេង គួងម៉េង - CKM Premium Catering" description="សេវាកម្មម្ហូបការ និងជប់លៀងលំដាប់ខ្ពស់នៅភ្នំពេញ ដឹកនាំដោយចុងភៅ ចេង គួងម៉េង។ យើងធានាគុណភាពម្ហូប អនាម័យ និងការចេញម្ហូបបានលឿនសម្រាប់កម្មវិធីខ្នាតធំ។" lang="km">
+<Layout title="ចុងភៅ ចេង គួងម៉េង - CKM Premium Catering & Event Infrastructure" description="សេវាកម្មម្ហូបការ ជួលរោងការ និងហេដ្ឋារចនាសម្ព័ន្ធកម្មវិធីខ្នាតធំនៅភ្នំពេញ។ ទទួលបានការគាំទ្រពីអតិថិជនជាង ១ម៉ឺននាក់ ជាមួយនឹងប្រតិបត្តិការភស្តុភារ ២៤ម៉ោង។" lang="km">
   <Fragment slot="head">
     <link rel="preload" as="image" href={heroImageRelative} fetchpriority="high" />
     <link href="https://fonts.googleapis.com/css2?family=Hanuman:wght@400;700&family=Kantumruy+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -56,7 +56,7 @@ const blogPosts = [
       "@type": "FoodEstablishment",
       "name": "CKM Premium Catering (ចុងភៅ ចេង គួងម៉េង)",
       "image": "https://www.ckmkh.com/images/home/brand-ckm-logo-gold.webp",
-      "description": "សេវាកម្មម្ហូបការ និងជប់លៀងលំដាប់ខ្ពស់នៅភ្នំពេញ។ ធានាគុណភាព សុវត្ថិភាព និងស្តង់ដារប្រតិបត្តិការឥតខ្ចោះ។",
+      "description": "សេវាកម្មម្ហូបការលំដាប់កំពូល ជួលរោងការ និងហេដ្ឋារចនាសម្ព័ន្ធកម្មវិធីខ្នាតធំនៅភ្នំពេញ។",
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "ផ្ទះលេខ 33 ផ្លូវ 257 សង្កាត់ទឹកល្អក់ទី២ ខណ្ឌទួលគោក",
@@ -67,7 +67,7 @@ const blogPosts = [
       "telephone": "+85511827782",
       "url": "https://www.ckmkh.com/",
       "servesCuisine": ["Khmer Cuisine", "Chinese Banquet"],
-      "priceRange": "$$$",
+      "priceRange": "$$$$",
       "sameAs": [
         "https://www.facebook.com/CKMFOODS",
         "https://t.me/CKMSam06"
@@ -90,8 +90,8 @@ const blogPosts = [
         <div class="relative z-10 text-center px-4 max-w-4xl mx-auto pt-10">
             <img src={logo} alt="CKM Logo" width="128" height="128" class="w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-amber-500 mx-auto mb-8 shadow-[0_0_40px_rgba(245,158,11,0.5)]">
             <h1 class="text-4xl md:text-6xl font-km-serif font-bold text-white mb-6 leading-tight">ចុងភៅ <span class="text-amber-500">ចេង គួងម៉េង</span></h1>
-            <h2 class="text-xl md:text-2xl font-km-sans font-medium text-white/90 mb-6 uppercase">សេវាកម្មម្ហូបការលំដាប់ខ្ពស់នៅភ្នំពេញ</h2>
-            <p class="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto font-km-sans font-light leading-relaxed hidden sm:block">រៀបចំម្ហូបការ និងកម្មវិធីជប់លៀងខ្នាតធំ ដោយផ្តោតលើអនាម័យ គុណភាពសាច់ស្រស់ និងការធានាថាម្ហូបចេញទៅក្តៅៗ។</p>
+            <h2 class="text-xl md:text-2xl font-km-sans font-medium text-white/90 mb-6 uppercase">សេវាកម្មម្ហូបការ និងហេដ្ឋារចនាសម្ព័ន្ធលំដាប់កំពូល</h2>
+            <p class="text-lg md:text-xl text-gray-300 mb-8 max-w-3xl mx-auto font-km-sans font-light leading-relaxed hidden sm:block">ជាង ៦ ទសវត្សរ៍នៃកិត្តិនាម ទទួលបានការគាំទ្រពីអតិថិជនជាង ១ម៉ឺននាក់។ យើងជាក្រុមការងារអាជីព ផ្តល់សេវាកម្មជួលរោងការ និងរៀបចំម្ហូបការខ្នាតធំដោយគ្មានហានិភ័យ។</p>
             
             <div class="flex flex-row gap-3 justify-center animate-fade-in-up w-full max-w-sm mx-auto sm:max-w-none" style="animation-delay: 0.1s;">
                 <a href={`tel:+855${mainPhone.replace(/\s/g, '').substring(1)}`} class="flex-1 sm:flex-none bg-amber-500 hover:bg-amber-600 text-slate-900 px-2 sm:px-8 py-3 sm:py-4 min-h-[48px] rounded-sm font-km-sans font-bold text-sm sm:text-base uppercase tracking-wider transition-colors flex items-center justify-center gap-2 shadow-lg">
@@ -114,20 +114,16 @@ const blogPosts = [
               <span class="text-slate-800 text-xs md:text-sm font-sans font-medium uppercase tracking-wider">ឆ្នាំនៃបទពិសោធន៍</span>
             </div>
             <div class="flex flex-col items-center justify-center">
-              <div class="h-[28px] md:h-[48px] flex items-center mb-1 md:mb-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 md:w-10 md:h-10 text-slate-950 opacity-90" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
-              </div>
-              <span class="text-slate-800 text-xs md:text-sm font-sans font-medium uppercase tracking-wider">គុណភាពលំដាប់កំពូល</span>
+              <span class="text-3xl md:text-5xl font-serif font-bold text-slate-950 mb-1 md:mb-2">១ម៉ឺន+</span>
+              <span class="text-slate-800 text-xs md:text-sm font-sans font-medium uppercase tracking-wider">អតិថិជនគាំទ្រ</span>
             </div>
             <div class="flex flex-col items-center justify-center">
-              <div class="h-[28px] md:h-[48px] flex items-center mb-1 md:mb-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 md:w-10 md:h-10 text-slate-950 opacity-90" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 13.87A4 4 0 0 1 7.41 6a5.11 5.11 0 0 1 1.05-1.54 5 5 0 0 1 7.08 0A5.11 5.11 0 0 1 16.59 6 4 4 0 0 1 18 13.87V21H6Z"/><line x1="6" y1="17" x2="18" y2="17"/></svg>
-              </div>
-              <span class="text-slate-800 text-xs md:text-sm font-sans font-medium uppercase tracking-wider">សិល្បៈធ្វើម្ហូបឯកទេស</span>
+              <span class="text-3xl md:text-5xl font-serif font-bold text-slate-950 mb-1 md:mb-2">២៤ម៉</span>
+              <span class="text-slate-800 text-xs md:text-sm font-sans font-medium uppercase tracking-wider">ភស្តុភារ & ដំឡើងរោងការ</span>
             </div>
             <div class="flex flex-col items-center justify-center">
               <span class="text-3xl md:text-5xl font-serif font-bold text-slate-950 mb-1 md:mb-2">១០០%</span>
-              <span class="text-slate-800 text-xs md:text-sm font-sans font-medium uppercase tracking-wider">ទំនុកចិត្តនិងអនាម័យ</span>
+              <span class="text-slate-800 text-xs md:text-sm font-sans font-medium uppercase tracking-wider">សុវត្ថិភាពនិងអនាម័យ</span>
             </div>
           </div>
         </div>
@@ -135,28 +131,28 @@ const blogPosts = [
 
       <section id="service" class="py-16 md:py-24 bg-slate-900 relative overflow-hidden">
          <div class="max-w-7xl mx-auto px-6 relative z-10">
-            <div class="text-center mb-12 md:mb-16"><h2 class="text-3xl md:text-4xl font-km-serif font-bold text-white">ស្តង់ដាររៀបចំម្ហូបការប្រកបដោយវិជ្ជាជីវៈ</h2></div>
+            <div class="text-center mb-12 md:mb-16"><h2 class="text-3xl md:text-4xl font-km-serif font-bold text-white">ស្តង់ដាររៀបចំម្ហូបការ និងហេដ្ឋារចនាសម្ព័ន្ធ</h2></div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
                  <div class="bg-slate-800/50 p-8 md:p-10 rounded-lg border border-slate-700/50 hover:border-amber-500/30 transition-colors duration-500">
                     <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-6 md:mb-8">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:w-8 md:h-8 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"/><line x1="17" y1="5" x2="12" y2="10"/><line x1="7" y1="5" x2="12" y2="10"/><line x1="22" y1="12" x2="2" y2="12"/><line x1="19" y1="17" x2="14" y2="12"/><line x1="19" y1="7" x2="14" y2="12"/><line x1="5" y1="17" x2="10" y2="12"/><line x1="5" y1="7" x2="10" y2="12"/><line x1="17" y1="19" x2="12" y2="14"/><line x1="7" y1="19" x2="12" y2="14"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:w-8 md:h-8 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                     </div>
-                    <h3 class="text-xl md:text-2xl font-km-serif font-bold text-white mb-3 md:mb-4">ការជ្រើសរើសវត្ថុធាតុដើម</h3>
-                    <p class="text-gray-400 text-sm md:text-base font-km-sans font-light leading-relaxed">ថែរក្សាគុណភាពសាច់និងគ្រឿងសមុទ្រដោយប្រព័ន្ធក្លាសេសីតុណ្ហភាពត្រឹមត្រូវ ដើម្បីធានាថារសជាតិម្ហូបស្រស់ឆ្ងាញ់ធម្មជាតិពិតៗ មិនខូចគុណភាពនៅពេលដល់រោងបាយ។</p>
+                    <h3 class="text-xl md:text-2xl font-km-serif font-bold text-white mb-3 md:mb-4">សេវាជួលរោងការ & ហេដ្ឋារចនាសម្ព័ន្ធ</h3>
+                    <p class="text-gray-400 text-sm md:text-base font-km-sans font-light leading-relaxed">យើងមិនត្រឹមតែចម្អិនម្ហូបទេ តែយើងមានផ្តល់សេវាកម្មជួលរោងការ និងតំឡើងប្រព័ន្ធភ្លើងខ្នាតធំ ដោយត្រៀមខ្លួនរួចជាស្រេចក្នុងការទប់ទល់នឹងគ្រប់ស្ថានភាពអាកាសធាតុ។</p>
                  </div>
                  <div class="bg-slate-800/50 p-8 md:p-10 rounded-lg border border-slate-700/50 hover:border-amber-500/30 transition-colors duration-500">
                     <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-6 md:mb-8">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:w-8 md:h-8 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:w-8 md:h-8 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
                     </div>
-                    <h3 class="text-xl md:text-2xl font-km-serif font-bold text-white mb-3 md:mb-4">គ្រប់គ្រងកម្មវិធីរយតុបានយ៉ាងរលូន</h3>
-                    <p class="text-gray-400 text-sm md:text-base font-km-sans font-light leading-relaxed">បែងចែកផ្លូវដើរ និងគ្រប់គ្រងពេលវេលាចេញម្ហូបបានយ៉ាងល្អ ដើម្បីធានាថាភ្ញៀវរាប់ពាន់នាក់ ទទួលបានម្ហូបក្តៅៗ និងមានរសជាតិឆ្ងាញ់ដូចគ្នាពីតុទី១ ដល់តូចុងក្រោយ។</p>
+                    <h3 class="text-xl md:text-2xl font-km-serif font-bold text-white mb-3 md:mb-4">ភស្តុភារខ្សែសង្វាក់ត្រជាក់ ២៤ម៉ោង</h3>
+                    <p class="text-gray-400 text-sm md:text-base font-km-sans font-light leading-relaxed">រក្សាវត្ថុធាតុដើមក្នុងសីតុណ្ហភាពក្រោម 4°C។ យើងមានក្រុមការងារគាំទ្រការរៀបចំទីតាំងទាំងយប់អាធ្រាត្រ ដើម្បីធានាភាពរលូនមុនពេលកម្មវិធីចាប់ផ្តើម។</p>
                  </div>
                  <div class="bg-slate-800/50 p-8 md:p-10 rounded-lg border border-slate-700/50 hover:border-amber-500/30 transition-colors duration-500">
                     <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-6 md:mb-8">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:w-8 md:h-8 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
                     </div>
-                    <h3 class="text-xl md:text-2xl font-km-serif font-bold text-white mb-3 md:mb-4">វិន័យអនាម័យដ៏តឹងរ៉ឹងបំផុត</h3>
-                    <p class="text-gray-400 text-sm md:text-base font-km-sans font-light leading-relaxed">អនុវត្តយ៉ាងតឹងរ៉ឹងនូវការបំបែកកន្លែងធ្វើសាច់ឆៅនិងម្ហូបឆ្អិន ព្រមទាំងពិនិត្យកម្តៅសាច់ឱ្យឆ្អិនល្អ១០០% ដើម្បីសុវត្ថិភាពក្រពះពោះវៀនភ្ញៀវជាដាច់ខាត។</p>
+                    <h3 class="text-xl md:text-2xl font-km-serif font-bold text-white mb-3 md:mb-4">សុវត្ថិភាពចំណីអាហារ & ការចេញម្ហូប</h3>
+                    <p class="text-gray-400 text-sm md:text-base font-km-sans font-light leading-relaxed">បំបែកកន្លែងធ្វើសាច់ឆៅនិងម្ហូបឆ្អិនដាច់ពីគ្នា។ ធានាការចេញម្ហូបក្តៅៗស្របគ្នា និងលឿនរហ័ស ទោះបីជាកម្មវិធីមានរាប់រយតុក៏ដោយ។</p>
                  </div>
             </div>
          </div>
@@ -214,12 +210,12 @@ const blogPosts = [
                   <div class="lg:col-span-5 text-left text-center lg:text-left">
                       <div class="inline-flex items-center gap-4 mb-6 md:mb-8">
                           <span class="w-8 md:w-12 h-[1px] bg-amber-500"></span>
-                          <span class="text-amber-500 text-[10px] md:text-xs font-km-sans font-medium uppercase">ទំនាក់ទំនងផ្ទាល់</span>
+                          <span class="text-amber-500 text-[10px] md:text-xs font-km-sans font-medium uppercase">ទំនាក់ទំនងផ្នែកភស្តុភារ</span>
                           <span class="w-8 h-[1px] bg-amber-500 lg:hidden"></span>
                       </div>
-                      <h2 class="text-3xl md:text-4xl lg:text-5xl font-km-serif font-bold text-white mb-6 md:mb-8 leading-tight">ទំនាក់ទំនងរៀបចំកម្មវិធីជប់លៀង</h2>
+                      <h2 class="text-3xl md:text-4xl lg:text-5xl font-km-serif font-bold text-white mb-6 md:mb-8 leading-tight">ទំនាក់ទំនងរៀបចំម្ហូបការ & រោងការ</h2>
                       <p class="text-slate-400 text-sm md:text-lg font-km-sans font-light leading-relaxed mb-8 md:mb-10 max-w-md mx-auto lg:mx-0">
-                          កម្មវិធីដែលរលូន ចាប់ផ្តើមពីការពិភាក្សាលម្អិតអំពីទីតាំង ចំនួនតុ និងការវាយតម្លៃបញ្ហាប្រឈមទុកជាមុន។ សូមទាក់ទងមកកាន់យើងខ្ញុំ។
+                          កម្មវិធីដែលរលូន ចាប់ផ្តើមពីការពិភាក្សាលម្អិតអំពីទីតាំង ទំហំរោងការ និងការវាយតម្លៃបញ្ហាប្រឈមទុកជាមុន។ សូមទាក់ទងមកកាន់យើងខ្ញុំ។
                       </p>
                   </div>
 

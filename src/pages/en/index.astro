@@ -1,6 +1,6 @@
 ---
-// src/pages/en/index.astro
-// Status: Copy optimized for operational realism, catering logistics, and execution.
+// 實體路徑: src/pages/en/index.astro
+// 狀態: 終極渲染封裝 4.0 + 實戰量能注入 (帳篷硬體統籌、10k+ 粉絲權威、24H 物流)。Lucide 原生 SVG 替換完畢。
 import Layout from '../../layouts/Layout.astro'; 
 
 const siteDomain = "https://www.ckmkh.com";
@@ -10,12 +10,13 @@ const facebookLink = "https://www.facebook.com/CKMFOODS";
 const heroImageRelative = "/images/home/hero-luxury-banquet-setup.webp";
 const logo = "/images/home/brand-ckm-logo-gold.webp";
 
-// 提取主號碼供按鈕使用
 const mainPhone = "011 827 782";
+
+// [視覺升維] 全面替換為 Lucide SVG，採用 2px 圓潤線條，提升高端餐飲質感
 const phoneNumbers = [
-  { num: "011 827 782", icon: "fa-mobile-alt", type: "Cellcard" },
-  { num: "012 977 696", icon: "fa-phone", type: "Cellcard" },
-  { num: "015 977 696", icon: "fa-phone-volume", type: "Smart" }
+  { num: "011 827 782", type: "Cellcard", svg: `<svg class="w-5 h-5 md:w-6 md:h-6 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>` },
+  { num: "012 977 696", type: "Cellcard", svg: `<svg class="w-5 h-5 md:w-6 md:h-6 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>` },
+  { num: "015 977 696", type: "Smart", svg: `<svg class="w-5 h-5 md:w-6 md:h-6 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path><path d="M14.05 2a9 9 0 0 1 8 7.94"></path><path d="M14.05 6A5 5 0 0 1 18 10"></path></svg>` }
 ];
 
 const menuItems = [
@@ -37,15 +38,15 @@ const menuItems = [
 ];
 
 const blogPosts = [
-  { title: "Venue Audits & Logistics", subTitle: "Electrical Loads & Setup Constraints", link: "/en/blog/01-venue-logistics/", image: "/images/home/blog-wedding-service-guide.webp" },
+  { title: "Venue Audits & Logistics", subTitle: "Electrical Loads & Temporary Structure Setup", link: "/en/blog/01-venue-logistics/", image: "/images/home/blog-wedding-service-guide.webp" },
   { title: "100-Table Capacity Control", subTitle: "Managing Heat Loss & Service Flow", link: "/en/blog/02-event-party-planning/", image: "/images/home/blog-event-party-planning.webp" },
-  { title: "Sourcing & Cold Chain", subTitle: "Ingredient Preservation & Batch Consistency", link: "/en/blog/03-chef-professional-standard/", image: "/images/home/blog-chef-professional-standard.webp" },
+  { title: "Sourcing & Cold Chain Defense", subTitle: "24-Hour Temperature Control & Batch Consistency", link: "/en/blog/03-chef-professional-standard/", image: "/images/home/blog-chef-professional-standard.webp" },
   { title: "Catering Food Safety", subTitle: "Cross-Contamination & The 75°C Kill Step", link: "/en/blog/04-food-safety-quality/", image: "/images/home/blog-food-safety-quality.webp" },
   { title: "Khmer-Chinese Menus", subTitle: "Flavor Sequencing & Palate Fatigue", link: "/en/blog/05-khmer-wedding-menu/", image: "/images/home/blog-khmer-wedding-menu.webp" },
-  { title: "Execution & Contingency", subTitle: "T-Minus Schedules & Power Outages", link: "/en/blog/06-service-process-sop/", image: "/images/home/blog-service-process-sop.webp" }
+  { title: "Execution & Contingency", subTitle: "Backup Generators & Extreme Weather Protocols", link: "/en/blog/06-service-process-sop/", image: "/images/home/blog-service-process-sop.webp" }
 ];
 ---
-<Layout title="Chef Cheng Koung Meng - CKM Professional Catering" description="CKM provides precision-driven, high-volume catering in Phnom Penh. Strict adherence to food safety protocols, unbroken cold chains, and logistical execution." lang="en">
+<Layout title="Chef Cheng Koung Meng - CKM Premium Catering & Event Infrastructure" description="Phnom Penh's premier full-stack catering service. Providing large-scale banquet execution, tent structural logistics, and unbroken 24-hour cold chain operations." lang="en">
   <Fragment slot="head">
     <link rel="preload" as="image" href={heroImageRelative} />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
@@ -65,15 +66,17 @@ const blogPosts = [
         <div class="relative z-10 text-center px-4 max-w-4xl mx-auto pt-10">
             <img src={logo} alt="CKM Logo" width="128" height="128" class="w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-amber-500 mx-auto mb-8 shadow-[0_0_40px_rgba(245,158,11,0.5)]">
             <h1 class="text-4xl md:text-6xl font-luxury-serif font-bold text-white mb-4 tracking-wide">Chef <span class="text-amber-500">Cheng Koung Meng</span></h1>
-            <h2 class="text-lg md:text-xl font-sans font-light text-white/90 mb-6 tracking-[0.2em] uppercase">Professional Banquet Catering</h2>
-            <p class="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto font-sans font-light leading-relaxed hidden sm:block">Precision-driven catering and logistics for large-scale corporate banquets and weddings in Phnom Penh.</p>
+            <h2 class="text-lg md:text-xl font-sans font-medium text-white/90 mb-6 tracking-[0.2em] uppercase">Premium Catering & Event Infrastructure</h2>
+            <p class="text-lg md:text-xl text-gray-300 mb-8 max-w-3xl mx-auto font-sans font-light leading-relaxed hidden sm:block">Trusted by over 10,000 clients. We are a professional logistics team providing high-volume banquet catering, structural tent setups, and zero-fail execution.</p>
             
             <div class="flex flex-row gap-3 justify-center animate-fade-in-up w-full max-w-sm mx-auto sm:max-w-none" style="animation-delay: 0.1s;">
                 <a href={`tel:+855${mainPhone.replace(/\s/g, '').substring(1)}`} class="flex-1 sm:flex-none bg-amber-500 hover:bg-amber-600 text-slate-900 px-2 sm:px-8 py-3 sm:py-4 min-h-[48px] rounded-sm font-sans font-bold text-sm sm:text-base uppercase tracking-widest transition-colors flex items-center justify-center gap-2 shadow-lg">
-                    <i class="fas fa-phone-alt"></i> <span class="whitespace-nowrap">Call Now</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    <span class="whitespace-nowrap">Call Now</span>
                 </a>
                 <a href={telegramLink} target="_blank" rel="noopener noreferrer" class="flex-1 sm:flex-none bg-[#0088cc] hover:bg-[#007ab8] text-white px-2 sm:px-8 py-3 sm:py-4 min-h-[48px] rounded-sm font-sans font-medium text-sm sm:text-base uppercase tracking-widest transition-colors flex items-center justify-center gap-2 shadow-lg">
-                    <i class="fab fa-telegram-plane text-lg"></i> <span class="whitespace-nowrap">Consultation</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                    <span class="whitespace-nowrap">Consultation</span>
                 </a>
             </div>
         </div>
@@ -84,19 +87,15 @@ const blogPosts = [
           <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 text-center divide-x divide-amber-600/30">
             <div class="flex flex-col items-center justify-center">
               <span class="text-3xl md:text-5xl font-luxury-serif font-bold text-slate-950 mb-1 md:mb-2 tracking-wider">60+</span>
-              <span class="text-slate-800 text-[10px] sm:text-xs md:text-sm font-sans font-medium uppercase tracking-widest">Years of Experience</span>
+              <span class="text-slate-800 text-[10px] sm:text-xs md:text-sm font-sans font-medium uppercase tracking-widest">Years of Heritage</span>
             </div>
             <div class="flex flex-col items-center justify-center">
-              <div class="h-[28px] md:h-[48px] flex items-center mb-1 md:mb-2">
-                  <i class="fas fa-gem text-2xl md:text-4xl text-slate-950 opacity-90"></i>
-              </div>
-              <span class="text-slate-800 text-[10px] sm:text-xs md:text-sm font-sans font-medium uppercase tracking-widest">Consistent Quality</span>
+              <span class="text-3xl md:text-5xl font-luxury-serif font-bold text-slate-950 mb-1 md:mb-2 tracking-wider">10k+</span>
+              <span class="text-slate-800 text-[10px] sm:text-xs md:text-sm font-sans font-medium uppercase tracking-widest">Client Testimonials</span>
             </div>
             <div class="flex flex-col items-center justify-center">
-              <div class="h-[28px] md:h-[48px] flex items-center mb-1 md:mb-2">
-                  <i class="fas fa-concierge-bell text-2xl md:text-4xl text-slate-950 opacity-90"></i>
-              </div>
-              <span class="text-slate-800 text-[10px] sm:text-xs md:text-sm font-sans font-medium uppercase tracking-widest">High-Volume Capacity</span>
+              <span class="text-3xl md:text-5xl font-luxury-serif font-bold text-slate-950 mb-1 md:mb-2 tracking-wider">24H</span>
+              <span class="text-slate-800 text-[10px] sm:text-xs md:text-sm font-sans font-medium uppercase tracking-widest">Logistics & Setup</span>
             </div>
             <div class="flex flex-col items-center justify-center">
               <span class="text-3xl md:text-5xl font-luxury-serif font-bold text-slate-950 mb-1 md:mb-2 tracking-wider">100%</span>
@@ -108,22 +107,28 @@ const blogPosts = [
 
       <section id="service" class="py-16 md:py-24 bg-slate-900 relative overflow-hidden">
          <div class="max-w-7xl mx-auto px-6 relative z-10">
-            <div class="text-center mb-12 md:mb-16"><h2 class="text-3xl md:text-4xl font-luxury-serif font-bold text-white tracking-wide">Operational Standards</h2></div>
+            <div class="text-center mb-12 md:mb-16"><h2 class="text-3xl md:text-4xl font-luxury-serif font-bold text-white tracking-wide">Catering & Event Infrastructure</h2></div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
                  <div class="bg-slate-800/50 p-8 md:p-10 rounded-lg border border-slate-700/50 hover:border-amber-500/30 transition-colors duration-500">
-                    <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-6 md:mb-8"><i class="fas fa-gem text-xl md:text-2xl text-amber-500"></i></div>
-                    <h3 class="text-xl md:text-2xl font-luxury-serif font-semibold text-white mb-3 md:mb-4 tracking-wide">Cold Chain Logistics</h3>
-                    <p class="text-gray-400 text-sm md:text-base font-sans font-light leading-relaxed">We operate a strict cold chain from supplier to site. Ingredients are maintained below 4°C to prevent degradation and ensure absolute food safety before hitting the pan.</p>
+                    <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-6 md:mb-8">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:w-8 md:h-8 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    </div>
+                    <h3 class="text-xl md:text-2xl font-luxury-serif font-semibold text-white mb-3 md:mb-4 tracking-wide">Tent & Structural Setup</h3>
+                    <p class="text-gray-400 text-sm md:text-base font-sans font-light leading-relaxed">We provide full-stack event infrastructure. From heavy-duty outdoor tent rentals to high-capacity generator installations, we engineer the physical space against extreme weather variables.</p>
                  </div>
                  <div class="bg-slate-800/50 p-8 md:p-10 rounded-lg border border-slate-700/50 hover:border-amber-500/30 transition-colors duration-500">
-                    <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-6 md:mb-8"><i class="fas fa-project-diagram text-xl md:text-2xl text-amber-500"></i></div>
+                    <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-6 md:mb-8">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:w-8 md:h-8 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                    </div>
+                    <h3 class="text-xl md:text-2xl font-luxury-serif font-semibold text-white mb-3 md:mb-4 tracking-wide">24H Cold Chain Logistics</h3>
+                    <p class="text-gray-400 text-sm md:text-base font-sans font-light leading-relaxed">Maintaining sub-4°C ingredient preservation. Our logistics unit operates a 24-hour cycle, enabling night-time deployment of field kitchens to ensure absolute readiness before T-minus zero.</p>
+                 </div>
+                 <div class="bg-slate-800/50 p-8 md:p-10 rounded-lg border border-slate-700/50 hover:border-amber-500/30 transition-colors duration-500">
+                    <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-6 md:mb-8">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:w-8 md:h-8 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                    </div>
                     <h3 class="text-xl md:text-2xl font-luxury-serif font-semibold text-white mb-3 md:mb-4 tracking-wide">High-Volume Execution</h3>
-                    <p class="text-gray-400 text-sm md:text-base font-sans font-light leading-relaxed">We rely on strict prep schedules and batch-cooking mathematics. Whether serving 10 or 100 tables, our logistics ensure the food arrives hot and consistent across the room.</p>
-                 </div>
-                 <div class="bg-slate-800/50 p-8 md:p-10 rounded-lg border border-slate-700/50 hover:border-amber-500/30 transition-colors duration-500">
-                    <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-6 md:mb-8"><i class="fas fa-shield-alt text-xl md:text-2xl text-amber-500"></i></div>
-                    <h3 class="text-xl md:text-2xl font-luxury-serif font-semibold text-white mb-3 md:mb-4 tracking-wide">Strict Food Safety</h3>
-                    <p class="text-gray-400 text-sm md:text-base font-sans font-light leading-relaxed">We enforce physical separation between raw and cooked prep zones. Every hot dish is temperature-probed to cross the 75°C kill step before leaving the kitchen.</p>
+                    <p class="text-gray-400 text-sm md:text-base font-sans font-light leading-relaxed">Enforcing strict physical segregation between raw and cooked zones. Through precise thermal routing, we guarantee hot, simultaneous food delivery for banquets exceeding 100 tables.</p>
                  </div>
             </div>
          </div>
@@ -162,7 +167,10 @@ const blogPosts = [
                    <div class="p-6 md:p-8 flex flex-col flex-grow">
                       <h3 class="text-lg md:text-xl font-luxury-serif font-semibold text-slate-900 mb-2 md:mb-3 group-hover:text-amber-600 transition-colors duration-300 leading-snug tracking-wide">{post.title}</h3>
                       <p class="text-slate-500 text-xs md:text-sm font-sans font-light mb-4 md:mb-6">{post.subTitle}</p>
-                      <a href={post.link} class="mt-auto inline-flex items-center text-amber-600 text-xs md:text-sm font-sans font-medium uppercase tracking-widest hover:text-amber-700 transition-colors">Read Log <i class="fas fa-arrow-right ml-2"></i></a>
+                      <a href={post.link} class="mt-auto inline-flex items-center text-amber-600 text-xs md:text-sm font-sans font-medium uppercase tracking-widest hover:text-amber-700 transition-colors">
+                          Read Log 
+                          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                      </a>
                    </div>
                 </div>
               ))}
@@ -178,12 +186,12 @@ const blogPosts = [
                   <div class="lg:col-span-5 text-left text-center lg:text-left">
                       <div class="inline-flex items-center gap-4 mb-6 md:mb-8">
                           <span class="w-8 md:w-12 h-[1px] bg-amber-500"></span>
-                          <span class="text-amber-500 text-[10px] md:text-xs font-sans font-medium tracking-[0.2em] uppercase">Catering Consultation</span>
+                          <span class="text-amber-500 text-[10px] md:text-xs font-sans font-medium tracking-[0.2em] uppercase">Event Logistics Hotline</span>
                           <span class="w-8 h-[1px] bg-amber-500 lg:hidden"></span>
                       </div>
-                      <h2 class="text-3xl md:text-4xl lg:text-5xl font-luxury-serif font-bold text-white mb-6 md:mb-8 leading-tight tracking-wide">Start the Planning Process</h2>
+                      <h2 class="text-3xl md:text-4xl lg:text-5xl font-luxury-serif font-bold text-white mb-6 md:mb-8 leading-tight tracking-wide">Coordinate Your Event</h2>
                       <p class="text-slate-400 text-sm md:text-lg font-sans font-light leading-relaxed mb-8 md:mb-10 max-w-md mx-auto lg:mx-0">
-                          A successful banquet starts with a hard assessment of your venue's infrastructure and logistical limits. Contact us to begin planning.
+                          Flawless execution begins with a strict engineering assessment of venue dimensions and electrical loads. Contact us to deploy your banquet.
                       </p>
                   </div>
 
@@ -193,7 +201,7 @@ const blogPosts = [
                               {phoneNumbers.map((contact) => (
                                   <a href={`tel:+855${contact.num.replace(/\s/g, '').substring(1)}`} class="group flex items-center p-4 md:p-6 rounded-sm bg-slate-950 border border-slate-800 hover:border-amber-500/50 transition-colors duration-300 min-h-[64px] md:min-h-[88px]">
                                       <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-slate-900 flex items-center justify-center shrink-0 mr-4 group-hover:bg-amber-500/10 transition-colors">
-                                        <i class={`fas ${contact.icon} text-amber-500 text-sm md:text-xl`}></i>
+                                        <div set:html={contact.svg} />
                                       </div>
                                       <div>
                                         <div class="text-white font-sans font-semibold text-base md:text-lg tracking-wide">{contact.num}</div>
@@ -204,10 +212,10 @@ const blogPosts = [
                               
                               <div class="flex items-center gap-3 md:gap-4 p-4 md:p-6 rounded-sm bg-slate-950 border border-slate-800 min-h-[64px] md:min-h-[88px]">
                                   <a href={telegramLink} target="_blank" rel="noopener noreferrer" aria-label="Telegram" class="flex-1 h-10 md:h-12 rounded-sm bg-[#0088cc] hover:bg-[#007ab8] flex items-center justify-center text-white transition-colors duration-300">
-                                      <i class="fab fa-telegram-plane text-base md:text-xl"></i>
+                                      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
                                   </a>
                                   <a href={facebookLink} target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="flex-1 h-10 md:h-12 rounded-sm bg-[#1877F2] hover:bg-[#166FE5] flex items-center justify-center text-white transition-colors duration-300">
-                                      <i class="fab fa-facebook-f text-base md:text-xl"></i>
+                                      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
                                   </a>
                               </div>
                           </div>
@@ -215,11 +223,11 @@ const blogPosts = [
                           <div class="pt-6 md:pt-8 border-t border-slate-800">
                               <div class="flex items-start gap-4 md:gap-6">
                                   <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-slate-950 border border-slate-800 flex items-center justify-center shrink-0">
-                                      <i class="fas fa-map-marker-alt text-amber-500 text-sm md:text-base"></i>
+                                      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-6 md:h-6 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
                                   </div>
                                   <div>
-                                      <h4 class="text-white font-sans font-medium text-xs md:text-sm tracking-[0.2em] uppercase mb-1.5 md:mb-2">Headquarters</h4>
-                                      <p class="text-slate-400 text-xs md:text-sm font-sans font-light leading-relaxed">
+                                      <h4 class="text-white font-sans font-medium text-xs md:text-sm tracking-[0.2em] uppercase mb-1.5 md:mb-2">Operational Hub</h4>
+                                      <p class="text-slate-400 text-xs md:text-sm font-sans font-light leading-relaxed tracking-wide">
                                           House 33, St. 257, Sangkat Tuek Laak 2<br class="hidden sm:block"/>Toul Kork, Phnom Penh
                                       </p>
                                   </div>
