@@ -1,6 +1,6 @@
 ---
 // 實體路徑: src/pages/index.astro (高棉語)
-// 狀態: 終極渲染封裝 (實體首圖 img 提權 + JSON-LD + H3 無障礙 + 全域原生 SVG)
+// 狀態: 終極渲染封裝 4.0 (實體首圖 img 提權 + JSON-LD + Lucide 次世代原生 SVG 注入)
 import Layout from '../layouts/Layout.astro'; 
 
 const siteDomain = "https://www.ckmkh.com";
@@ -12,7 +12,7 @@ const logo = "/images/home/brand-ckm-logo-gold.webp";
 
 const mainPhone = "011 827 782";
 
-// [效能解鎖] 將原本的 FontAwesome 參數，替換為 Tailwind 定製的原生 SVG
+// [視覺升維] 全面替換為 Lucide SVG，採用 2px 圓潤線條，提升高端餐飲質感
 const phoneNumbers = [
   { num: "011 827 782", type: "Cellcard", svg: `<svg class="w-5 h-5 md:w-6 md:h-6 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>` },
   { num: "012 977 696", type: "Cellcard", svg: `<svg class="w-5 h-5 md:w-6 md:h-6 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>` },
@@ -38,12 +38,12 @@ const menuItems = [
 ];
 
 const blogPosts = [
-  { title: "ការវាយតម្លៃទីតាំង និងរៀបចំផ្លូវចេញម្ហូប", subTitle: "ការត្រួតពិនិត្យប្រព័ន្ធទឹកភ្លើង និងការដោះស្រាយបញ្ហានៅទីតាំងផ្ទាល់", link: "/km/blog/01-venue-logistics/", image: "/images/home/blog-wedding-service-guide.webp" },
-  { title: "ការគ្រប់គ្រងការចេញម្ហូបរយតុ", subTitle: "ការរក្សាកម្តៅម្ហូប និងទប់ទល់នឹងអាកាសធាតុខាងក្រៅ", link: "/km/blog/02-event-party-planning/", image: "/images/home/blog-event-party-planning.webp" },
-  { title: "ស្តង់ដារគុណភាព និងការរក្សាសាច់ស្រស់", subTitle: "ការក្លាសេសាច់ក្នុងកម្រិត 4°C និងការកំណត់គ្រឿងទេសរយតុ", link: "/km/blog/03-chef-professional-standard/", image: "/images/home/blog-chef-professional-standard.webp" },
-  { title: "ខ្សែការពារអនាម័យ និងសុវត្ថិភាពម្ហូបការ", subTitle: "ការបែងចែកសាច់ឆៅនិងឆ្អិនដាច់ពីគ្នា រួមទាំងប្រព័ន្ធទឹកស្អាត", link: "/km/blog/04-food-safety-quality/", image: "/images/home/blog-food-safety-quality.webp" },
-  { title: "ការរៀបចំម៉ឺនុយម្ហូបការខ្មែរ-ចិន", subTitle: "បច្ចេកទេសបុកគ្រឿងដោយដៃ និងការរៀបចំរសជាតិមិនឱ្យទ្រាន់", link: "/km/blog/05-khmer-wedding-menu/", image: "/images/home/blog-khmer-wedding-menu.webp" },
-  { title: "ការគ្រប់គ្រងហានិភ័យពេលកម្មវិធីផ្ទាល់", subTitle: "ការត្រៀមម៉ាស៊ីនភ្លើងបម្រុង និងការទប់ទល់នឹងកំណើនភ្ញៀវភ្លាមៗ", link: "/km/blog/06-service-process-sop/", image: "/images/home/blog-service-process-sop.webp" }
+  { title: "ការវាយតម្លៃទីតាំង និងរៀបចំផ្លូវចេញម្ហូប", subTitle: "ការត្រួតពិនិត្យប្រព័ន្ធទឹកភ្លើង និងការដោះស្រាយបញ្ហានៅទីតាំងផ្ទាល់", link: "/blog/01-venue-logistics/", image: "/images/home/blog-wedding-service-guide.webp" },
+  { title: "ការគ្រប់គ្រងការចេញម្ហូបរយតុ", subTitle: "ការរក្សាកម្តៅម្ហូប និងទប់ទល់នឹងអាកាសធាតុខាងក្រៅ", link: "/blog/02-event-party-planning/", image: "/images/home/blog-event-party-planning.webp" },
+  { title: "ស្តង់ដារគុណភាព និងការរក្សាសាច់ស្រស់", subTitle: "ការក្លាសេសាច់ក្នុងកម្រិត 4°C និងការកំណត់គ្រឿងទេសរយតុ", link: "/blog/03-chef-professional-standard/", image: "/images/home/blog-chef-professional-standard.webp" },
+  { title: "ខ្សែការពារអនាម័យ និងសុវត្ថិភាពម្ហូបការ", subTitle: "ការបែងចែកសាច់ឆៅនិងឆ្អិនដាច់ពីគ្នា រួមទាំងប្រព័ន្ធទឹកស្អាត", link: "/blog/04-food-safety-quality/", image: "/images/home/blog-food-safety-quality.webp" },
+  { title: "ការរៀបចំម៉ឺនុយម្ហូបការខ្មែរ-ចិន", subTitle: "បច្ចេកទេសបុកគ្រឿងដោយដៃ និងការរៀបចំរសជាតិមិនឱ្យទ្រាន់", link: "/blog/05-khmer-wedding-menu/", image: "/images/home/blog-khmer-wedding-menu.webp" },
+  { title: "ការគ្រប់គ្រងហានិភ័យពេលកម្មវិធីផ្ទាល់", subTitle: "ការត្រៀមម៉ាស៊ីនភ្លើងបម្រុង និងការទប់ទល់នឹងកំណើនភ្ញៀវភ្លាមៗ", link: "/blog/06-service-process-sop/", image: "/images/home/blog-service-process-sop.webp" }
 ];
 ---
 <Layout title="ចុងភៅ ចេង គួងម៉េង - CKM Premium Catering" description="សេវាកម្មម្ហូបការ និងជប់លៀងលំដាប់ខ្ពស់នៅភ្នំពេញ ដឹកនាំដោយចុងភៅ ចេង គួងម៉េង។ យើងធានាគុណភាពម្ហូប អនាម័យ និងការចេញម្ហូបបានលឿនសម្រាប់កម្មវិធីខ្នាតធំ។" lang="km">
@@ -95,11 +95,11 @@ const blogPosts = [
             
             <div class="flex flex-row gap-3 justify-center animate-fade-in-up w-full max-w-sm mx-auto sm:max-w-none" style="animation-delay: 0.1s;">
                 <a href={`tel:+855${mainPhone.replace(/\s/g, '').substring(1)}`} class="flex-1 sm:flex-none bg-amber-500 hover:bg-amber-600 text-slate-900 px-2 sm:px-8 py-3 sm:py-4 min-h-[48px] rounded-sm font-km-sans font-bold text-sm sm:text-base uppercase tracking-wider transition-colors flex items-center justify-center gap-2 shadow-lg">
-                    <svg class="w-4 h-4 md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                     <span class="whitespace-nowrap">ហៅទូរស័ព្ទឥឡូវនេះ</span>
                 </a>
                 <a href={telegramLink} target="_blank" rel="noopener noreferrer" class="flex-1 sm:flex-none bg-[#0088cc] hover:bg-[#007ab8] text-white px-2 sm:px-8 py-3 sm:py-4 min-h-[48px] rounded-sm font-km-sans font-medium text-sm sm:text-base transition-colors flex items-center justify-center gap-2 shadow-lg">
-                    <svg class="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
                     <span class="whitespace-nowrap">ពិគ្រោះយោបល់</span>
                 </a>
             </div>
@@ -115,13 +115,13 @@ const blogPosts = [
             </div>
             <div class="flex flex-col items-center justify-center">
               <div class="h-[28px] md:h-[48px] flex items-center mb-1 md:mb-2">
-                  <svg class="w-8 h-8 md:w-10 md:h-10 text-slate-950 opacity-90" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 13L2 9Z"></path><path d="M11 3 8 9l4 13"></path><path d="M13 3l3 6-4 13"></path></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 md:w-10 md:h-10 text-slate-950 opacity-90" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
               </div>
               <span class="text-slate-800 text-xs md:text-sm font-sans font-medium uppercase tracking-wider">គុណភាពលំដាប់កំពូល</span>
             </div>
             <div class="flex flex-col items-center justify-center">
               <div class="h-[28px] md:h-[48px] flex items-center mb-1 md:mb-2">
-                  <svg class="w-8 h-8 md:w-10 md:h-10 text-slate-950 opacity-90" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21h20"></path><path d="M12 4a8 8 0 0 0-8 8v5h16v-5a8 8 0 0 0-8-8z"></path><path d="M12 2v2"></path></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 md:w-10 md:h-10 text-slate-950 opacity-90" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 13.87A4 4 0 0 1 7.41 6a5.11 5.11 0 0 1 1.05-1.54 5 5 0 0 1 7.08 0A5.11 5.11 0 0 1 16.59 6 4 4 0 0 1 18 13.87V21H6Z"/><line x1="6" y1="17" x2="18" y2="17"/></svg>
               </div>
               <span class="text-slate-800 text-xs md:text-sm font-sans font-medium uppercase tracking-wider">សិល្បៈធ្វើម្ហូបឯកទេស</span>
             </div>
@@ -139,21 +139,21 @@ const blogPosts = [
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
                  <div class="bg-slate-800/50 p-8 md:p-10 rounded-lg border border-slate-700/50 hover:border-amber-500/30 transition-colors duration-500">
                     <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-6 md:mb-8">
-                        <svg class="w-6 h-6 md:w-8 md:h-8 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 13L2 9Z"></path><path d="M11 3 8 9l4 13"></path><path d="M13 3l3 6-4 13"></path></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:w-8 md:h-8 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"/><line x1="17" y1="5" x2="12" y2="10"/><line x1="7" y1="5" x2="12" y2="10"/><line x1="22" y1="12" x2="2" y2="12"/><line x1="19" y1="17" x2="14" y2="12"/><line x1="19" y1="7" x2="14" y2="12"/><line x1="5" y1="17" x2="10" y2="12"/><line x1="5" y1="7" x2="10" y2="12"/><line x1="17" y1="19" x2="12" y2="14"/><line x1="7" y1="19" x2="12" y2="14"/></svg>
                     </div>
                     <h3 class="text-xl md:text-2xl font-km-serif font-bold text-white mb-3 md:mb-4">ការជ្រើសរើសវត្ថុធាតុដើម</h3>
                     <p class="text-gray-400 text-sm md:text-base font-km-sans font-light leading-relaxed">ថែរក្សាគុណភាពសាច់និងគ្រឿងសមុទ្រដោយប្រព័ន្ធក្លាសេសីតុណ្ហភាពត្រឹមត្រូវ ដើម្បីធានាថារសជាតិម្ហូបស្រស់ឆ្ងាញ់ធម្មជាតិពិតៗ មិនខូចគុណភាពនៅពេលដល់រោងបាយ។</p>
                  </div>
                  <div class="bg-slate-800/50 p-8 md:p-10 rounded-lg border border-slate-700/50 hover:border-amber-500/30 transition-colors duration-500">
                     <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-6 md:mb-8">
-                        <svg class="w-6 h-6 md:w-8 md:h-8 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="6" height="6" rx="1"></rect><rect x="15" y="3" width="6" height="6" rx="1"></rect><rect x="9" y="15" width="6" height="6" rx="1"></rect><path d="M6 9v2a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V9"></path><path d="M12 13v2"></path></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:w-8 md:h-8 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                     </div>
                     <h3 class="text-xl md:text-2xl font-km-serif font-bold text-white mb-3 md:mb-4">គ្រប់គ្រងកម្មវិធីរយតុបានយ៉ាងរលូន</h3>
                     <p class="text-gray-400 text-sm md:text-base font-km-sans font-light leading-relaxed">បែងចែកផ្លូវដើរ និងគ្រប់គ្រងពេលវេលាចេញម្ហូបបានយ៉ាងល្អ ដើម្បីធានាថាភ្ញៀវរាប់ពាន់នាក់ ទទួលបានម្ហូបក្តៅៗ និងមានរសជាតិឆ្ងាញ់ដូចគ្នាពីតុទី១ ដល់តូចុងក្រោយ។</p>
                  </div>
                  <div class="bg-slate-800/50 p-8 md:p-10 rounded-lg border border-slate-700/50 hover:border-amber-500/30 transition-colors duration-500">
                     <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-6 md:mb-8">
-                        <svg class="w-6 h-6 md:w-8 md:h-8 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:w-8 md:h-8 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
                     </div>
                     <h3 class="text-xl md:text-2xl font-km-serif font-bold text-white mb-3 md:mb-4">វិន័យអនាម័យដ៏តឹងរ៉ឹងបំផុត</h3>
                     <p class="text-gray-400 text-sm md:text-base font-km-sans font-light leading-relaxed">អនុវត្តយ៉ាងតឹងរ៉ឹងនូវការបំបែកកន្លែងធ្វើសាច់ឆៅនិងម្ហូបឆ្អិន ព្រមទាំងពិនិត្យកម្តៅសាច់ឱ្យឆ្អិនល្អ១០០% ដើម្បីសុវត្ថិភាពក្រពះពោះវៀនភ្ញៀវជាដាច់ខាត។</p>
@@ -197,7 +197,7 @@ const blogPosts = [
                       <p class="text-slate-500 text-xs md:text-sm font-km-sans font-light mb-4 md:mb-6 leading-relaxed">{post.subTitle}</p>
                       <a href={post.link} class="mt-auto inline-flex items-center text-amber-600 text-xs md:text-sm font-km-sans font-medium hover:text-amber-700 transition-colors">
                           ស្វែងយល់បន្ថែម 
-                          <svg class="w-3 h-3 md:w-4 md:h-4 ml-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                          <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 md:w-4 md:h-4 ml-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
                       </a>
                    </div>
                 </div>
@@ -240,10 +240,10 @@ const blogPosts = [
                               
                               <div class="flex items-center gap-3 md:gap-4 p-4 md:p-6 rounded-sm bg-slate-950 border border-slate-800 min-h-[64px] md:min-h-[88px]">
                                   <a href={telegramLink} target="_blank" rel="noopener noreferrer" aria-label="Telegram" class="flex-1 h-10 md:h-12 rounded-sm bg-[#0088cc] hover:bg-[#007ab8] flex items-center justify-center text-white transition-colors duration-300">
-                                      <svg class="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                                      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
                                   </a>
                                   <a href={facebookLink} target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="flex-1 h-10 md:h-12 rounded-sm bg-[#1877F2] hover:bg-[#166FE5] flex items-center justify-center text-white transition-colors duration-300">
-                                      <svg class="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                                      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
                                   </a>
                               </div>
                           </div>
@@ -251,7 +251,7 @@ const blogPosts = [
                           <div class="pt-6 md:pt-8 border-t border-slate-800">
                               <div class="flex items-start gap-4 md:gap-6">
                                   <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-slate-950 border border-slate-800 flex items-center justify-center shrink-0">
-                                      <svg class="w-5 h-5 md:w-6 md:h-6 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-6 md:h-6 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
                                   </div>
                                   <div>
                                       <h3 class="text-white font-km-sans font-medium text-sm md:text-sm mb-1.5 md:mb-2">ទីស្នាក់ការកណ្តាល</h3>
