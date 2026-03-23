@@ -1,6 +1,6 @@
 ---
 // 實體路徑: src/pages/tanghuot/index.astro
-// 狀態: 終極渲染封裝 3.0。全 7 張資產完美矩陣佈署 + Lucide 原生 SVG 幾何注入 + 全小寫嚴格路由
+// 狀態: 終極渲染封裝 4.0。高透光度背景校準 + 雙引擎社群拓撲 (Facebook & Telegram) + Lucide 原生 SVG
 // 核心識別: គាំង ហួត (Kiang Huat / Tang Huot Bakery)
 ---
 
@@ -40,8 +40,11 @@
       "addressCountry": "KH"
     },
     "telephone": "+85512677710",
+    "url": "https://www.ckmkh.com/tanghuot/",
     "priceRange": "$$",
-    "url": "https://www.ckmkh.com/tanghuot/"
+    "sameAs": [
+      "https://www.facebook.com/people/%E1%9E%A0%E1%9E%B6%E1%9E%84%E1%9E%93%E1%9F%86-%E1%9E%8F%E1%9E%B6%E1%9F%86%E1%9E%84-%E1%9E%A0%E1%9E%BD%E1%9E%8F/100063625998376/"
+    ]
   })} />
 
   <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@300;400;700&family=Hanuman:wght@300;400;700;900&display=swap" rel="stylesheet">
@@ -190,13 +193,13 @@
           <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent"></div>
         </div>
         
-        <div class="flex flex-col justify-center p-12 md:p-20 lg:p-24 space-y-12 relative z-10">
+        <div class="flex flex-col justify-center p-12 md:p-20 lg:p-24 space-y-10 relative z-10">
           <h2 class="text-5xl md:text-6xl font-black text-white font-heading leading-tight drop-shadow-2xl text-center md:text-left">
             ទំនាក់ទំនងបញ្ជាទិញ
           </h2>
           
-          <div class="bg-slate-900/80 backdrop-blur-sm border border-white/10 p-8 md:p-12 rounded-sm shadow-2xl space-y-10">
-            <div class="flex flex-col gap-8">
+          <div class="bg-slate-900/80 backdrop-blur-sm border border-white/10 p-8 md:p-12 rounded-sm shadow-2xl space-y-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div class="group">
                 <p class="text-amber-500 font-bold mb-2 text-sm tracking-widest uppercase">Cellcard</p>
                 <a href="tel:+85512677710" class="text-3xl md:text-4xl font-bold text-white tracking-wider group-hover:text-kh-red transition duration-300 block">012 677 710</a>
@@ -207,8 +210,19 @@
                 <a href="tel:+85570677710" class="text-3xl md:text-4xl font-bold text-white tracking-wider group-hover:text-kh-red transition duration-300 block">070 677 710</a>
               </div>
             </div>
+
+            <div class="flex flex-col sm:flex-row items-center gap-4 pt-4 border-t border-white/10">
+                <a href="https://t.me/+85512677710" target="_blank" rel="noopener noreferrer" class="flex-1 w-full h-14 rounded-sm bg-[#0088cc] hover:bg-[#007ab8] flex items-center justify-center text-white font-bold transition-colors duration-300 gap-2 shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                    Telegram
+                </a>
+                <a href="https://www.facebook.com/people/%E1%9E%A0%E1%9E%B6%E1%9E%84%E1%9E%93%E1%9F%86-%E1%9E%8F%E1%9E%B6%E1%9F%86%E1%9E%84-%E1%9E%A0%E1%9E%BD%E1%9E%8F/100063625998376/" target="_blank" rel="noopener noreferrer" class="flex-1 w-full h-14 rounded-sm bg-[#1877F2] hover:bg-[#166FE5] flex items-center justify-center text-white font-bold transition-colors duration-300 gap-2 shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                    Facebook
+                </a>
+            </div>
             
-            <address class="pt-8 border-t border-slate-800 not-italic flex items-start gap-4">
+            <address class="pt-6 border-t border-slate-800 not-italic flex items-start gap-4">
               <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-amber-500 shrink-0 mt-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
               <p class="text-gray-300 text-lg leading-relaxed font-light">
                 ទីតាំងផលិតកម្ម: ផ្ទះលេខ៤៥៤ ផ្លូវលំភូមិត្រពាំងថ្លឹង១ សង្កាត់ចោមចៅ ខណ្ឌពោធិ៍សែនជ័យ រាជធានីភ្នំពេញ
@@ -231,9 +245,9 @@
               <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> 
               ទាក់ទងទិញ
           </a>
-          <a href="https://t.me/+85512677710" target="_blank" rel="noopener noreferrer" class="flex-1 flex items-center justify-center gap-2 bg-[#0088cc] text-white font-body font-bold text-sm transition-colors active:bg-[#007ab8]">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
-              Telegram
+          <a href="https://www.facebook.com/people/%E1%9E%A0%E1%9E%B6%E1%9E%84%E1%9E%93%E1%9F%86-%E1%9E%8F%E1%9E%B6%E1%9F%86%E1%9E%84-%E1%9E%A0%E1%9E%BD%E1%9E%8F/100063625998376/" target="_blank" rel="noopener noreferrer" class="flex-1 flex items-center justify-center gap-2 bg-[#1877F2] text-white font-body font-bold text-sm transition-colors active:bg-[#166FE5]">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+              Facebook
           </a>
       </div>
   </div>
