@@ -1,5 +1,6 @@
 ---
-// src/pages/zh/index.astro
+// 實體路徑: src/pages/zh/index.astro
+// 狀態: 終極渲染封裝 4.0。Lucide 次世代原生 SVG 注入，零外部依賴。
 import Layout from '../../layouts/Layout.astro'; 
 
 const siteDomain = "https://www.ckmkh.com";
@@ -10,10 +11,12 @@ const heroImageRelative = "/images/home/hero-luxury-banquet-setup.webp";
 const logo = "/images/home/brand-ckm-logo-gold.webp";
 
 const mainPhone = "011 827 782";
+
+// [視覺升維] 全面替換為 Lucide SVG，採用 2px 圓潤線條，提升高端餐飲質感
 const phoneNumbers = [
-  { num: "011 827 782", icon: "fa-mobile-alt", type: "Cellcard" },
-  { num: "012 977 696", icon: "fa-phone", type: "Cellcard" },
-  { num: "015 977 696", icon: "fa-phone-volume", type: "Smart" }
+  { num: "011 827 782", type: "Cellcard", svg: `<svg class="w-5 h-5 md:w-6 md:h-6 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>` },
+  { num: "012 977 696", type: "Cellcard", svg: `<svg class="w-5 h-5 md:w-6 md:h-6 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>` },
+  { num: "015 977 696", type: "Smart", svg: `<svg class="w-5 h-5 md:w-6 md:h-6 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path><path d="M14.05 2a9 9 0 0 1 8 7.94"></path><path d="M14.05 6A5 5 0 0 1 18 10"></path></svg>` }
 ];
 
 const menuItems = [
@@ -45,7 +48,7 @@ const blogPosts = [
 ---
 <Layout title="主厨钟光明 - CKM 金边专业外烩与办桌团队" description="专为金边大型公司活动与婚宴打造的外烩方案。扎实的场地评估、严格的生熟隔离卫生防线，以及对抗环境温度的确实把关。" lang="zh">
   <Fragment slot="head">
-    <link rel="preload" as="image" href={heroImageRelative} />
+    <link rel="preload" as="image" href={heroImageRelative} fetchpriority="high" />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
   </Fragment>
 
@@ -57,7 +60,7 @@ const blogPosts = [
 
   <div class="w-full">
       <header class="relative h-screen flex items-center justify-center overflow-hidden">
-        <div class="absolute inset-0 bg-cover bg-center bg-no-repeat bg-fixed transform scale-105" style={`background-image: url('${heroImageRelative}');`}></div>
+        <img src={heroImageRelative} alt="CKM Luxury Banquet Setup" class="absolute inset-0 w-full h-full object-cover object-center transform scale-105" fetchpriority="high" decoding="sync" />
         <div class="absolute inset-0 bg-black/70 bg-gradient-to-b from-black/80 via-black/50 to-slate-900/90"></div>
         
         <div class="relative z-10 text-center px-4 max-w-4xl mx-auto pt-10">
@@ -68,10 +71,12 @@ const blogPosts = [
             
             <div class="flex flex-row gap-3 justify-center animate-fade-in-up w-full max-w-sm mx-auto sm:max-w-none" style="animation-delay: 0.1s;">
                 <a href={`tel:+855${mainPhone.replace(/\s/g, '').substring(1)}`} class="flex-1 sm:flex-none bg-amber-500 hover:bg-amber-600 text-slate-900 px-2 sm:px-8 py-3 sm:py-4 min-h-[48px] rounded-sm font-sans font-bold text-sm sm:text-base uppercase tracking-widest transition-colors flex items-center justify-center gap-2 shadow-lg">
-                    <i class="fas fa-phone-alt"></i> <span class="whitespace-nowrap">电话联系</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    <span class="whitespace-nowrap">电话联系</span>
                 </a>
                 <a href={telegramLink} target="_blank" rel="noopener noreferrer" class="flex-1 sm:flex-none bg-[#0088cc] hover:bg-[#007ab8] text-white px-2 sm:px-8 py-3 sm:py-4 min-h-[48px] rounded-sm font-sans font-medium text-sm sm:text-base uppercase tracking-widest transition-colors flex items-center justify-center gap-2 shadow-lg">
-                    <i class="fab fa-telegram-plane text-lg"></i> <span class="whitespace-nowrap">专人咨询</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                    <span class="whitespace-nowrap">专人咨询</span>
                 </a>
             </div>
         </div>
@@ -86,13 +91,13 @@ const blogPosts = [
             </div>
             <div class="flex flex-col items-center justify-center">
               <div class="h-[28px] md:h-[48px] flex items-center mb-1 md:mb-2">
-                  <i class="fas fa-gem text-2xl md:text-4xl text-slate-950 opacity-90"></i>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 md:w-10 md:h-10 text-slate-950 opacity-90" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
               </div>
               <span class="text-slate-800 text-xs md:text-sm font-sans font-medium uppercase tracking-widest">扎实出餐品质</span>
             </div>
             <div class="flex flex-col items-center justify-center">
               <div class="h-[28px] md:h-[48px] flex items-center mb-1 md:mb-2">
-                  <i class="fas fa-concierge-bell text-2xl md:text-4xl text-slate-950 opacity-90"></i>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 md:w-10 md:h-10 text-slate-950 opacity-90" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 13.87A4 4 0 0 1 7.41 6a5.11 5.11 0 0 1 1.05-1.54 5 5 0 0 1 7.08 0A5.11 5.11 0 0 1 16.59 6 4 4 0 0 1 18 13.87V21H6Z"/><line x1="6" y1="17" x2="18" y2="17"/></svg>
               </div>
               <span class="text-slate-800 text-xs md:text-sm font-sans font-medium uppercase tracking-widest">总铺师手路菜</span>
             </div>
@@ -109,17 +114,23 @@ const blogPosts = [
             <div class="text-center mb-12 md:mb-16"><h2 class="text-3xl md:text-4xl font-zh-serif font-bold text-white tracking-widest">办桌现场硬实力把关</h2></div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
                  <div class="bg-slate-800/50 p-8 md:p-10 rounded-lg border border-slate-700/50 hover:border-amber-500/30 transition-colors duration-500">
-                    <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-6 md:mb-8"><i class="fas fa-gem text-xl md:text-2xl text-amber-500"></i></div>
+                    <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-6 md:mb-8">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:w-8 md:h-8 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"/><line x1="17" y1="5" x2="12" y2="10"/><line x1="7" y1="5" x2="12" y2="10"/><line x1="22" y1="12" x2="2" y2="12"/><line x1="19" y1="17" x2="14" y2="12"/><line x1="19" y1="7" x2="14" y2="12"/><line x1="5" y1="17" x2="10" y2="12"/><line x1="5" y1="7" x2="10" y2="12"/><line x1="17" y1="19" x2="12" y2="14"/><line x1="7" y1="19" x2="12" y2="14"/></svg>
+                    </div>
                     <h3 class="text-xl md:text-2xl font-zh-serif font-bold text-white mb-3 md:mb-4 tracking-wider">食材低温保鲜防线</h3>
                     <p class="text-gray-400 text-sm md:text-base font-sans font-light leading-relaxed">不管户外场地条件多严苛，坚持以低温冷藏设备运送与保存海鲜肉类。绝不在食材的新鲜度上妥协，守住办桌的最基本底线。</p>
                  </div>
                  <div class="bg-slate-800/50 p-8 md:p-10 rounded-lg border border-slate-700/50 hover:border-amber-500/30 transition-colors duration-500">
-                    <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-6 md:mb-8"><i class="fas fa-project-diagram text-xl md:text-2xl text-amber-500"></i></div>
+                    <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-6 md:mb-8">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:w-8 md:h-8 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
                     <h3 class="text-xl md:text-2xl font-zh-serif font-bold text-white mb-3 md:mb-4 tracking-wider">百桌出菜温度掌控</h3>
                     <p class="text-gray-400 text-sm md:text-base font-sans font-light leading-relaxed">靠精确的排程与动线管理，不管是一桌还是上百桌，都能对抗户外的环境变数，确保热汤热菜端上桌时，依然保持刚出炉的烫口与风味。</p>
                  </div>
                  <div class="bg-slate-800/50 p-8 md:p-10 rounded-lg border border-slate-700/50 hover:border-amber-500/30 transition-colors duration-500">
-                    <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-6 md:mb-8"><i class="fas fa-shield-alt text-xl md:text-2xl text-amber-500"></i></div>
+                    <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-6 md:mb-8">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:w-8 md:h-8 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                    </div>
                     <h3 class="text-xl md:text-2xl font-zh-serif font-bold text-white mb-3 md:mb-4 tracking-wider">严格的生熟食隔离</h3>
                     <p class="text-gray-400 text-sm md:text-base font-sans font-light leading-relaxed">不喊空泛的口号。在现场临时厨房严格执行生食与熟食物理分开处理，起锅前必定确认中心温度达到杀菌标准，让主家与宾客都吃得安心。</p>
                  </div>
@@ -160,7 +171,10 @@ const blogPosts = [
                    <div class="p-6 md:p-8 flex flex-col flex-grow">
                       <h3 class="text-lg md:text-xl font-zh-serif font-bold text-slate-900 mb-2 md:mb-3 group-hover:text-amber-600 transition-colors duration-300 leading-snug tracking-wider">{post.title}</h3>
                       <p class="text-slate-500 text-xs md:text-sm font-sans font-light mb-4 md:mb-6 tracking-wide">{post.subTitle}</p>
-                      <a href={post.link} class="mt-auto inline-flex items-center text-amber-600 text-xs md:text-sm font-sans font-medium uppercase tracking-widest hover:text-amber-700 transition-colors">探索专栏 <i class="fas fa-arrow-right ml-2"></i></a>
+                      <a href={post.link} class="mt-auto inline-flex items-center text-amber-600 text-xs md:text-sm font-sans font-medium uppercase tracking-widest hover:text-amber-700 transition-colors">
+                          探索专栏 
+                          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                      </a>
                    </div>
                 </div>
               ))}
@@ -191,7 +205,7 @@ const blogPosts = [
                               {phoneNumbers.map((contact) => (
                                   <a href={`tel:+855${contact.num.replace(/\s/g, '').substring(1)}`} class="group flex items-center p-4 md:p-6 rounded-sm bg-slate-950 border border-slate-800 hover:border-amber-500/50 transition-colors duration-300 min-h-[64px] md:min-h-[88px]">
                                       <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-slate-900 flex items-center justify-center shrink-0 mr-4 group-hover:bg-amber-500/10 transition-colors">
-                                        <i class={`fas ${contact.icon} text-amber-500 text-sm md:text-xl`}></i>
+                                        <div set:html={contact.svg} />
                                       </div>
                                       <div>
                                         <div class="text-white font-sans font-semibold text-base md:text-lg tracking-wide">{contact.num}</div>
@@ -202,10 +216,10 @@ const blogPosts = [
                               
                               <div class="flex items-center gap-3 md:gap-4 p-4 md:p-6 rounded-sm bg-slate-950 border border-slate-800 min-h-[64px] md:min-h-[88px]">
                                   <a href={telegramLink} target="_blank" rel="noopener noreferrer" aria-label="Telegram" class="flex-1 h-10 md:h-12 rounded-sm bg-[#0088cc] hover:bg-[#007ab8] flex items-center justify-center text-white transition-colors duration-300">
-                                      <i class="fab fa-telegram-plane text-base md:text-xl"></i>
+                                      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
                                   </a>
                                   <a href={facebookLink} target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="flex-1 h-10 md:h-12 rounded-sm bg-[#1877F2] hover:bg-[#166FE5] flex items-center justify-center text-white transition-colors duration-300">
-                                      <i class="fab fa-facebook-f text-base md:text-xl"></i>
+                                      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
                                   </a>
                               </div>
                           </div>
@@ -213,7 +227,7 @@ const blogPosts = [
                           <div class="pt-6 md:pt-8 border-t border-slate-800">
                               <div class="flex items-start gap-4 md:gap-6">
                                   <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-slate-950 border border-slate-800 flex items-center justify-center shrink-0">
-                                      <i class="fas fa-map-marker-alt text-amber-500 text-sm md:text-base"></i>
+                                      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-6 md:h-6 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
                                   </div>
                                   <div>
                                       <h4 class="text-white font-sans font-medium text-xs md:text-sm tracking-[0.2em] uppercase mb-1.5 md:mb-2">金边服务据点</h4>
