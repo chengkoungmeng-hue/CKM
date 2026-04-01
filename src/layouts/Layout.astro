@@ -1,6 +1,6 @@
 ---
 // src/layouts/Layout.astro
-// Status: Ultimate Optimization 4.0. Zero 3rd-party CSS, pure Lucide SVG icons injected.
+// 狀態: 終極渲染封裝 4.1。徹底拔除 GA4 幽靈進程、修復全域字體污染、完善多語系 SEO 錨點。
 const { title, description, image = '/open-graph.png', lang = 'km' } = Astro.props;
 
 // Dynamic root URL resolution
@@ -59,35 +59,13 @@ const t = navTranslations[lang as keyof typeof navTranslations] || navTranslatio
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     
     <slot name="head" />
-
-    <script is:inline>
-      document.addEventListener('DOMContentLoaded', () => {
-        let gtmLoaded = false;
-        const loadGTM = () => {
-          if (gtmLoaded) return;
-          gtmLoaded = true;
-          const script = document.createElement('script');
-          script.src = 'https://www.googletagmanager.com/gtag/js?id=G-EG6D0H2T5K';
-          script.async = true;
-          document.head.appendChild(script);
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){window.dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-EG6D0H2T5K');
-        };
-        ['scroll', 'mousemove', 'touchstart', 'click'].forEach(event => {
-          window.addEventListener(event, loadGTM, { once: true });
-        });
-        setTimeout(loadGTM, 3500);
-      });
-    </script>
-  </head>
+    </head>
   <body class="bg-slate-900 selection:bg-amber-200 selection:text-slate-900">
     
     <nav class="fixed top-0 left-0 w-full bg-slate-950/95 backdrop-blur-sm z-50 border-b border-slate-800 shadow-lg">
         <div class="max-w-7xl mx-auto px-4 md:px-6 py-2 md:py-4 flex items-center justify-between h-16 md:h-20">
-            <a href={homeUrl} class="flex items-center gap-2 md:gap-3 relative z-50 shrink-0">
-                <img src="/images/home/brand-ckm-logo-gold.webp" alt="CKM Logo" width="48" height="48" class="w-10 h-10 md:w-12 md:h-12 rounded-full border border-amber-500 shadow-md">
+            <a href={homeUrl} aria-label="Home" class="flex items-center gap-2 md:gap-3 relative z-50 shrink-0">
+                <img src="/images/home/brand-ckm-logo-gold.webp" alt="CKM Logo" width="48" height="48" decoding="async" fetchpriority="high" class="w-10 h-10 md:w-12 md:h-12 rounded-full border border-amber-500 shadow-md">
                 <div class="flex flex-col">
                     <span class={`text-white font-serif font-semibold tracking-wide ${lang === 'km' ? 'text-lg md:text-xl' : 'text-base md:text-lg'}`}>{brand.title}</span>
                     <span class="text-slate-400 text-[9px] md:text-xs font-sans tracking-widest uppercase mt-[1px]">{brand.subtitle}</span>
@@ -102,17 +80,17 @@ const t = navTranslations[lang as keyof typeof navTranslations] || navTranslatio
                 </div>
 
                 <div class="flex items-center bg-slate-900/80 rounded-sm p-1 border border-slate-800 relative z-50 shadow-inner">
-                    <a href="/" class={`px-2 md:px-3 py-1 md:py-1.5 text-[10px] md:text-xs font-sans font-bold rounded-sm transition-all ${lang === 'km' ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}`}>ខ្មែរ</a>
-                    <a href="/zh/" class={`px-2 md:px-3 py-1 md:py-1.5 text-[10px] md:text-xs font-sans font-bold rounded-sm transition-all ${lang === 'zh' ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}`}>中文</a>
-                    <a href="/en/" class={`px-2 md:px-3 py-1 md:py-1.5 text-[10px] md:text-xs font-sans font-bold rounded-sm transition-all ${lang === 'en' ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}`}>EN</a>
+                    <a href="/" hreflang="km-KH" aria-label="Khmer Language" class={`px-2 md:px-3 py-1 md:py-1.5 text-[10px] md:text-xs font-sans font-bold rounded-sm transition-all ${lang === 'km' ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}`}>ខ្មែរ</a>
+                    <a href="/zh/" hreflang="zh" aria-label="Chinese Language" class={`px-2 md:px-3 py-1 md:py-1.5 text-[10px] md:text-xs font-sans font-bold rounded-sm transition-all ${lang === 'zh' ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}`}>中文</a>
+                    <a href="/en/" hreflang="en" aria-label="English Language" class={`px-2 md:px-3 py-1 md:py-1.5 text-[10px] md:text-xs font-sans font-bold rounded-sm transition-all ${lang === 'en' ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}`}>EN</a>
                 </div>
 
-                <a href={`${homeUrl}#contact`} class="hidden md:inline-flex relative z-50 items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-5 min-h-[40px] rounded-full font-bold text-sm transition-all shadow-[0_0_15px_rgba(245,158,11,0.3)] hover:shadow-[0_0_25px_rgba(245,158,11,0.5)]">
+                <a href={`${homeUrl}#contact`} aria-label={t.contact} class="hidden md:inline-flex relative z-50 items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-5 min-h-[40px] rounded-full font-bold text-sm transition-all shadow-[0_0_15px_rgba(245,158,11,0.3)] hover:shadow-[0_0_25px_rgba(245,158,11,0.5)]">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                     {t.contact}
                 </a>
                 
-                <button id="mobile-menu-btn" class="md:hidden text-amber-500 text-xl relative z-50 p-2 focus:outline-none" aria-label="Toggle Menu">
+                <button id="mobile-menu-btn" class="md:hidden text-amber-500 text-xl relative z-50 p-2 focus:outline-none" aria-label="Toggle Navigation Menu">
                     <svg id="icon-bars" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
                     <svg id="icon-close" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
                 </button>
@@ -133,7 +111,7 @@ const t = navTranslations[lang as keyof typeof navTranslations] || navTranslatio
     </main>
     
     <footer class="bg-slate-950 py-10 border-t border-slate-900 text-center font-sans hidden md:block">
-        <p class="text-slate-600 text-xs font-light tracking-[0.2em] uppercase">&copy; 2026 CKM Catering Service. រក្សាសិទ្ធិគ្រប់យ៉ាង។</p>
+        <p class="text-slate-600 text-xs font-light tracking-[0.2em] uppercase">&copy; 2026 CKM Catering Service. All Rights Reserved.</p>
     </footer>
     
     <footer class="bg-slate-950 pt-8 pb-[calc(3.5rem+env(safe-area-inset-bottom)+2rem)] border-t border-slate-900 text-center font-sans md:hidden">
@@ -142,11 +120,11 @@ const t = navTranslations[lang as keyof typeof navTranslations] || navTranslatio
 
     <div class="fixed bottom-0 left-0 w-full z-50 md:hidden bg-slate-950 border-t border-slate-800 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
         <div class="flex h-14 pb-[env(safe-area-inset-bottom)] box-content">
-            <a href={`tel:${cleanPhone}`} class="flex-1 flex items-center justify-center gap-2 bg-amber-500 text-slate-950 font-sans font-bold text-sm transition-colors active:bg-amber-600">
+            <a href={`tel:${cleanPhone}`} aria-label={t.call} class="flex-1 flex items-center justify-center gap-2 bg-amber-500 text-slate-950 font-sans font-bold text-sm transition-colors active:bg-amber-600">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> 
                 {t.call}
             </a>
-            <a href={telegramLink} target="_blank" rel="noopener noreferrer" class="flex-1 flex items-center justify-center gap-2 bg-[#0088cc] text-white font-sans font-bold text-sm transition-colors active:bg-[#007ab8]">
+            <a href={telegramLink} target="_blank" rel="noopener noreferrer" aria-label={t.telegram} class="flex-1 flex items-center justify-center gap-2 bg-[#0088cc] text-white font-sans font-bold text-sm transition-colors active:bg-[#007ab8]">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg> 
                 {t.telegram}
             </a>
@@ -212,8 +190,10 @@ const t = navTranslations[lang as keyof typeof navTranslations] || navTranslatio
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-  .font-serif { font-family: 'Hanuman', serif; }
-  .font-sans { font-family: 'Kantumruy Pro', sans-serif; }
+  
+  /* [戰略攔截] 物理性消除全域高棉語字體綁定，避免污染中英文字體解析。
+     字體定義已退回各頁面 (index.astro) 本地管理。 */
+  
   main > div {
     min-height: calc(100vh - 80px);
   }

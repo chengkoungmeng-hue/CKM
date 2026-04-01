@@ -1,7 +1,8 @@
 ---
 // 實體路徑: src/pages/zh/index.astro
-// 狀態: 終極渲染封裝 4.0。Lucide 次世代原生 SVG 注入，零外部依賴。
+// 狀態: 終極渲染封裝 4.1 + 零摩擦力 SEO 滿載 + 邊緣快取準備就緒
 import Layout from '../../layouts/Layout.astro'; 
+import { Image } from 'astro:assets'; // [系統注入] 啟用 Astro 原生靜態圖片編譯引擎
 
 const siteDomain = "https://www.ckmkh.com";
 const telegramLink = "https://t.me/CKMSam06";
@@ -49,7 +50,33 @@ const blogPosts = [
 <Layout title="主厨钟光明 - CKM 金边专业外烩与办桌团队" description="专为金边大型公司活动与婚宴打造的外烩方案。扎实的场地评估、严格的生熟隔离卫生防线，以及对抗环境温度的确实把关。" lang="zh">
   <Fragment slot="head">
     <link rel="preload" as="image" href={heroImageRelative} fetchpriority="high" />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FoodEstablishment",
+      "name": "CKM Premium Catering (主厨钟光明)",
+      "image": "https://www.ckmkh.com/images/home/brand-ckm-logo-gold.webp",
+      "description": "专为金边大型公司活动与婚宴打造的外烩方案。扎实的场地评估与严格的生熟隔离卫生防线。",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "257街 33号, 德洛呵2分区, 堆谷区",
+        "addressLocality": "Phnom Penh",
+        "addressRegion": "Phnom Penh",
+        "addressCountry": "KH"
+      },
+      "telephone": "+85511827782",
+      "url": "https://www.ckmkh.com/zh/",
+      "servesCuisine": ["Khmer Cuisine", "Chinese Banquet"],
+      "priceRange": "$$$$",
+      "sameAs": [
+        "https://www.facebook.com/CKMFOODS",
+        "https://t.me/CKMSam06"
+      ]
+    })} />
   </Fragment>
 
   <style>
@@ -60,11 +87,11 @@ const blogPosts = [
 
   <div class="w-full">
       <header class="relative h-screen flex items-center justify-center overflow-hidden">
-        <img src={heroImageRelative} alt="CKM Luxury Banquet Setup" class="absolute inset-0 w-full h-full object-cover object-center transform scale-105" fetchpriority="high" decoding="sync" />
+        <Image src={heroImageRelative} alt="CKM Luxury Banquet Setup" width={1920} height={1080} class="absolute inset-0 w-full h-full object-cover object-center transform scale-105" fetchpriority="high" decoding="sync" />
         <div class="absolute inset-0 bg-black/70 bg-gradient-to-b from-black/80 via-black/50 to-slate-900/90"></div>
         
         <div class="relative z-10 text-center px-4 max-w-4xl mx-auto pt-10">
-            <img src={logo} alt="CKM Logo" width="128" height="128" class="w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-amber-500 mx-auto mb-8 shadow-[0_0_40px_rgba(245,158,11,0.5)]">
+            <Image src={logo} alt="CKM Logo" width={176} height={176} class="w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-amber-500 mx-auto mb-8 shadow-[0_0_40px_rgba(245,158,11,0.5)]" />
             <h1 class="text-4xl md:text-6xl font-zh-serif font-bold text-white mb-6 tracking-widest">主厨 <span class="text-amber-500">钟光明</span></h1>
             <h2 class="text-xl md:text-2xl font-sans font-medium text-white/90 mb-6 tracking-[0.2em] uppercase">金边专业外烩与办桌团队</h2>
             <p class="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto font-sans font-light leading-relaxed tracking-wide hidden sm:block">专为大型公司活动与企业婚宴打造，靠扎实硬体与经验把关出餐品质。</p>
@@ -146,7 +173,7 @@ const blogPosts = [
             {menuItems.map((item) => (
                 <div class="group relative overflow-hidden rounded-sm shadow-md bg-slate-50 flex-none w-[80%] sm:w-[50%] md:w-auto snap-center snap-always">
                     <div class="aspect-square overflow-hidden relative bg-slate-200">
-                      <img src={item.image} alt={item.title} width="600" height="600" decoding="async" loading="lazy" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700"/>
+                      <Image src={item.image} alt={item.title} width={600} height={600} decoding="async" loading="lazy" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700"/>
                       <div class="absolute inset-0 bg-gradient-to-t from-slate-900/95 via-slate-900/30 to-transparent opacity-85 group-hover:opacity-100 transition-opacity duration-500"></div>
                     </div>
                     <div class="absolute inset-0 flex flex-col justify-end p-5 md:p-8 pointer-events-none">
@@ -166,12 +193,13 @@ const blogPosts = [
               {blogPosts.map(post => (
                 <div class="group bg-white rounded-sm overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-500 border border-slate-100 flex flex-col">
                    <a href={post.link} class="block aspect-[16/9] overflow-hidden relative bg-slate-200">
-                      <img src={post.image} alt={post.title} width="600" height="337" decoding="async" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-700"/>
+                      <Image src={post.image} alt={post.title} width={600} height={337} decoding="async" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-700"/>
                    </a>
                    <div class="p-6 md:p-8 flex flex-col flex-grow">
                       <h3 class="text-lg md:text-xl font-zh-serif font-bold text-slate-900 mb-2 md:mb-3 group-hover:text-amber-600 transition-colors duration-300 leading-snug tracking-wider">{post.title}</h3>
                       <p class="text-slate-500 text-xs md:text-sm font-sans font-light mb-4 md:mb-6 tracking-wide">{post.subTitle}</p>
-                      <a href={post.link} class="mt-auto inline-flex items-center text-amber-600 text-xs md:text-sm font-sans font-medium uppercase tracking-widest hover:text-amber-700 transition-colors">
+                      
+                      <a href={post.link} aria-label={`探索专栏: ${post.title}`} class="mt-auto inline-flex items-center text-amber-600 text-xs md:text-sm font-sans font-medium uppercase tracking-widest hover:text-amber-700 transition-colors">
                           探索专栏 
                           <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                       </a>

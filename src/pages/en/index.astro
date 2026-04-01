@@ -1,7 +1,8 @@
 ---
 // 實體路徑: src/pages/en/index.astro
-// 狀態: 終極渲染封裝 4.0 + 實戰量能注入 (帳篷硬體統籌、10k+ 粉絲權威、24H 物流)。Lucide 原生 SVG 替換完畢。
+// 狀態: 終極渲染封裝 4.1 + 零摩擦力 SEO 滿載 + 邊緣快取準備就緒
 import Layout from '../../layouts/Layout.astro'; 
+import { Image } from 'astro:assets'; // [系統注入] 啟用 Astro 原生靜態圖片編譯引擎
 
 const siteDomain = "https://www.ckmkh.com";
 const telegramLink = "https://t.me/CKMSam06";
@@ -49,7 +50,33 @@ const blogPosts = [
 <Layout title="Chef Cheng Koung Meng - CKM Premium Catering & Event Infrastructure" description="Phnom Penh's premier full-stack catering service. Providing large-scale banquet execution, tent structural logistics, and unbroken 24-hour cold chain operations." lang="en">
   <Fragment slot="head">
     <link rel="preload" as="image" href={heroImageRelative} />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FoodEstablishment",
+      "name": "CKM Premium Catering (Chef Cheng Koung Meng)",
+      "image": "https://www.ckmkh.com/images/home/brand-ckm-logo-gold.webp",
+      "description": "Phnom Penh's premier full-stack catering service. Providing large-scale banquet execution and tent structural logistics.",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "House 33, St. 257, Sangkat Tuek Laak 2, Toul Kork",
+        "addressLocality": "Phnom Penh",
+        "addressRegion": "Phnom Penh",
+        "addressCountry": "KH"
+      },
+      "telephone": "+85511827782",
+      "url": "https://www.ckmkh.com/en/",
+      "servesCuisine": ["Khmer Cuisine", "Chinese Banquet"],
+      "priceRange": "$$$$",
+      "sameAs": [
+        "https://www.facebook.com/CKMFOODS",
+        "https://t.me/CKMSam06"
+      ]
+    })} />
   </Fragment>
 
   <style>
@@ -60,11 +87,11 @@ const blogPosts = [
 
   <div class="w-full">
       <header class="relative h-screen flex items-center justify-center overflow-hidden">
-        <div class="absolute inset-0 bg-cover bg-center bg-no-repeat bg-fixed transform scale-105" style={`background-image: url('${heroImageRelative}');`}></div>
+        <Image src={heroImageRelative} alt="CKM Luxury Banquet Setup" width={1920} height={1080} class="absolute inset-0 w-full h-full object-cover object-center transform scale-105" fetchpriority="high" decoding="sync" />
         <div class="absolute inset-0 bg-black/70 bg-gradient-to-b from-black/80 via-black/50 to-slate-900/90"></div>
         
         <div class="relative z-10 text-center px-4 max-w-4xl mx-auto pt-10">
-            <img src={logo} alt="CKM Logo" width="128" height="128" class="w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-amber-500 mx-auto mb-8 shadow-[0_0_40px_rgba(245,158,11,0.5)]">
+            <Image src={logo} alt="CKM Logo" width={176} height={176} class="w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-amber-500 mx-auto mb-8 shadow-[0_0_40px_rgba(245,158,11,0.5)]" />
             <h1 class="text-4xl md:text-6xl font-luxury-serif font-bold text-white mb-4 tracking-wide">Chef <span class="text-amber-500">Cheng Koung Meng</span></h1>
             <h2 class="text-lg md:text-xl font-sans font-medium text-white/90 mb-6 tracking-[0.2em] uppercase">Premium Catering & Event Infrastructure</h2>
             <p class="text-lg md:text-xl text-gray-300 mb-8 max-w-3xl mx-auto font-sans font-light leading-relaxed hidden sm:block">Trusted by over 10,000 clients. We are a professional logistics team providing high-volume banquet catering, structural tent setups, and zero-fail execution.</p>
@@ -142,7 +169,7 @@ const blogPosts = [
             {menuItems.map((item) => (
                 <div class="group relative overflow-hidden rounded-sm shadow-md bg-slate-50 flex-none w-[80%] sm:w-[50%] md:w-auto snap-center snap-always">
                     <div class="aspect-square overflow-hidden relative bg-slate-200">
-                      <img src={item.image} alt={item.title} width="600" height="600" decoding="async" loading="lazy" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700"/>
+                      <Image src={item.image} alt={item.title} width={600} height={600} decoding="async" loading="lazy" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700"/>
                       <div class="absolute inset-0 bg-gradient-to-t from-slate-900/95 via-slate-900/30 to-transparent opacity-85 group-hover:opacity-100 transition-opacity duration-500"></div>
                     </div>
                     <div class="absolute inset-0 flex flex-col justify-end p-5 md:p-8 pointer-events-none">
@@ -162,12 +189,13 @@ const blogPosts = [
               {blogPosts.map(post => (
                 <div class="group bg-white rounded-sm overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-500 border border-slate-100 flex flex-col">
                    <a href={post.link} class="block aspect-[16/9] overflow-hidden relative bg-slate-200">
-                      <img src={post.image} alt={post.title} width="600" height="337" decoding="async" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-700"/>
+                      <Image src={post.image} alt={post.title} width={600} height={337} decoding="async" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-700"/>
                    </a>
                    <div class="p-6 md:p-8 flex flex-col flex-grow">
                       <h3 class="text-lg md:text-xl font-luxury-serif font-semibold text-slate-900 mb-2 md:mb-3 group-hover:text-amber-600 transition-colors duration-300 leading-snug tracking-wide">{post.title}</h3>
                       <p class="text-slate-500 text-xs md:text-sm font-sans font-light mb-4 md:mb-6">{post.subTitle}</p>
-                      <a href={post.link} class="mt-auto inline-flex items-center text-amber-600 text-xs md:text-sm font-sans font-medium uppercase tracking-widest hover:text-amber-700 transition-colors">
+                      
+                      <a href={post.link} aria-label={`Read Log: ${post.title}`} class="mt-auto inline-flex items-center text-amber-600 text-xs md:text-sm font-sans font-medium uppercase tracking-widest hover:text-amber-700 transition-colors">
                           Read Log 
                           <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                       </a>
