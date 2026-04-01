@@ -1,5 +1,5 @@
 // 實體路徑: astro.config.mjs
-// 狀態: 終極編譯封裝 4.2。消滅編譯期重定向，強制 CSS 內嵌以阻斷渲染延遲。
+// 狀態: 終極編譯封裝 4.3。消滅編譯期重定向，強制 CSS 內嵌以阻斷渲染延遲，突破 Vite 閾值。
 import { defineConfig } from 'astro/config';
 import tailwind from "@astrojs/tailwind";
 
@@ -16,4 +16,11 @@ export default defineConfig({
   build: {
     inlineStylesheets: 'always',
   },
+
+  // [系統注入] 突破 Vite 預設 4KB 限制，強制內嵌 10KB 以下的所有樣式與資源
+  vite: {
+    build: {
+      assetsInlineLimit: 10240, 
+    }
+  }
 });

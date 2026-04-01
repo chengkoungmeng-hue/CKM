@@ -1,6 +1,6 @@
 ---
 // 實體路徑: src/pages/tanghuot/index.astro
-// 狀態: 終極渲染封裝 4.1。徹底拔除 GA4 幽靈進程、導入 Astro Image 靜態編譯、補齊字體預先連線。
+// 狀態: 終極渲染封裝 4.3。LCP 悖論修復、幾何矩陣全面啟動、對比度合規。
 // 核心識別: តាំង ហួត (Tang Huot Bakery)
 
 import { Image } from 'astro:assets'; // [系統注入] 啟用 Astro 原生靜態圖片編譯引擎
@@ -49,8 +49,6 @@ import { Image } from 'astro:assets'; // [系統注入] 啟用 Astro 原生靜�
     ]
   })} />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@300;400;700&family=Hanuman:wght@300;400;700;900&display=swap" rel="stylesheet">
   
   <style is:global>
@@ -64,17 +62,17 @@ import { Image } from 'astro:assets'; // [系統注入] 啟用 Astro 原生靜�
     .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 
-  </head>
+</head>
 <body class="bg-slate-950 text-slate-200 font-body antialiased selection:bg-kh-red selection:text-white pb-[env(safe-area-inset-bottom)]">
 
   <main>
     <header class="relative min-h-screen flex items-center justify-center overflow-hidden border-b border-white/5">
-      <Image src="/images/tanghuot/nom-lok-khae-logo-image_29.webp" alt="នំលោកខែប្រណីត" width={1920} height={1080} class="absolute inset-0 w-full h-full object-cover object-center" fetchpriority="high" decoding="sync" />
+      <Image src="/images/tanghuot/nom-lok-khae-logo-image_29.webp" alt="នំលោកខែប្រណីត" width={1920} height={1080} widths={[800, 1200, 1920]} sizes="100vw" class="absolute inset-0 w-full h-full object-cover object-center" fetchpriority="high" loading="eager" decoding="sync" />
       <div class="absolute inset-0 bg-gradient-radial from-transparent via-black/50 to-slate-950 opacity-95"></div>
       
       <div class="relative z-10 text-center px-6 max-w-5xl mx-auto pt-24 space-y-8">
         <div class="flex justify-center mb-6">
-          <Image src="/images/tanghuot/logo-tanghout.webp" alt="Tang Huot Logo" width={250} height={250} class="h-28 w-auto md:h-40 object-contain drop-shadow-[0_0_15px_rgba(0,0,0,0.8)]" />
+          <Image src="/images/tanghuot/logo-tanghout.webp" alt="Tang Huot Logo" width={250} height={250} widths={[128, 250, 400]} sizes="(max-width: 768px) 128px, 250px" loading="eager" class="h-28 w-auto md:h-40 object-contain drop-shadow-[0_0_15px_rgba(0,0,0,0.8)]" />
         </div>
 
         <h1 class="text-6xl md:text-8xl font-black text-white leading-tight tracking-wide font-heading drop-shadow-2xl">
@@ -97,7 +95,7 @@ import { Image } from 'astro:assets'; // [系統注入] 啟用 Astro 原生靜�
 
     <section id="abundance" class="py-16 md:py-24 border-b border-white/5 relative overflow-hidden bg-slate-950">
       <div class="absolute inset-0 z-0">
-         <Image src="/images/tanghuot/hero-abstract-angkor-stone.webp" alt="Texture" width={1920} height={1080} class="w-full h-full object-cover opacity-70 mix-blend-luminosity" loading="lazy" decoding="async" />
+         <Image src="/images/tanghuot/hero-abstract-angkor-stone.webp" alt="Texture" width={1920} height={1080} widths={[800, 1200, 1920]} sizes="100vw" class="w-full h-full object-cover opacity-70 mix-blend-luminosity" loading="lazy" decoding="async" />
          <div class="absolute inset-0 bg-gradient-to-b from-slate-950 via-transparent to-slate-950 opacity-40"></div>
       </div>
 
@@ -118,7 +116,7 @@ import { Image } from 'astro:assets'; // [系統注入] 啟用 Astro 原生靜�
             </div>
             <div class="md:col-span-7">
                 <div class="relative rounded-sm overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10 group">
-                   <Image src="/images/tanghuot/nom-products-tang-huot.webp" alt="ម្ហូបនំជាច្រើនមុខរបស់ តាំង ហួត" width={1200} height={800} class="w-full h-auto object-cover transform group-hover:scale-105 transition duration-1000" loading="lazy" decoding="async"/>
+                   <Image src="/images/tanghuot/nom-products-tang-huot.webp" alt="ម្ហូបនំជាច្រើនមុខរបស់ តាំង ហួត" width={1200} height={800} widths={[400, 800, 1200]} sizes="(max-width: 768px) 100vw, 50vw" class="w-full h-auto object-cover transform group-hover:scale-105 transition duration-1000" loading="lazy" decoding="async"/>
                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                 </div>
             </div>
@@ -129,7 +127,7 @@ import { Image } from 'astro:assets'; // [系統注入] 啟用 Astro 原生靜�
     <section id="mooncakes" class="bg-slate-900 border-b border-white/5">
       <div class="grid grid-cols-1 lg:grid-cols-2">
         <div class="relative h-[40vh] sm:h-[50vh] lg:h-auto overflow-hidden">
-          <Image src="/images/tanghuot/nom-lok-khae-slice-image_2.webp" alt="ផ្ទៃកាត់នៃនំពងទា" width={1000} height={1000} class="absolute inset-0 w-full h-full object-cover object-center transform hover:scale-105 transition duration-1000" loading="lazy" decoding="async" />
+          <Image src="/images/tanghuot/nom-lok-khae-slice-image_2.webp" alt="ផ្ទៃកាត់នៃនំពងទា" width={1000} height={1000} widths={[400, 800, 1000]} sizes="(max-width: 1024px) 100vw, 50vw" class="absolute inset-0 w-full h-full object-cover object-center transform hover:scale-105 transition duration-1000" loading="lazy" decoding="async" />
         </div>
         <div class="flex flex-col justify-center p-12 md:p-20 lg:p-24 space-y-8">
           <div class="w-14 h-14 bg-slate-950 border border-white/10 rounded-full flex items-center justify-center text-amber-500 shadow-lg">
@@ -164,7 +162,7 @@ import { Image } from 'astro:assets'; // [系統注入] 啟用 Astro 原生靜�
           </p>
         </div>
         <div class="order-1 lg:order-2 relative h-[40vh] sm:h-[50vh] lg:h-auto overflow-hidden">
-          <Image src="/images/tanghuot/nom-chol-chnam-image_20_generated.webp" alt="នំហ្វាកាវ" width={1000} height={1000} class="absolute inset-0 w-full h-full object-cover object-center transform hover:scale-105 transition duration-1000" loading="lazy" decoding="async" />
+          <Image src="/images/tanghuot/nom-chol-chnam-image_20_generated.webp" alt="នំហ្វាកាវ" width={1000} height={1000} widths={[400, 800, 1000]} sizes="(max-width: 1024px) 100vw, 50vw" class="absolute inset-0 w-full h-full object-cover object-center transform hover:scale-105 transition duration-1000" loading="lazy" decoding="async" />
         </div>
       </div>
     </section>
@@ -172,7 +170,7 @@ import { Image } from 'astro:assets'; // [系統注入] 啟用 Astro 原生靜�
     <section id="contact" class="bg-slate-950 border-t border-slate-800 relative">
       <div class="grid grid-cols-1 lg:grid-cols-2">
         <div class="relative h-[30vh] sm:h-[40vh] lg:h-auto overflow-hidden bg-slate-900">
-          <Image src="/images/tanghuot/hero-steamer-tradition.webp" alt="រោងចក្រផលិតនំ" width={1920} height={1080} class="absolute inset-0 w-full h-full object-cover opacity-70 mix-blend-luminosity" loading="lazy" decoding="async" />
+          <Image src="/images/tanghuot/hero-steamer-tradition.webp" alt="រោងចក្រផលិតនំ" width={1920} height={1080} widths={[800, 1200, 1920]} sizes="100vw" class="absolute inset-0 w-full h-full object-cover opacity-70 mix-blend-luminosity" loading="lazy" decoding="async" />
           <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent"></div>
         </div>
         
@@ -195,7 +193,7 @@ import { Image } from 'astro:assets'; // [系統注入] 啟用 Astro 原生靜�
             </div>
 
             <div class="flex flex-col sm:flex-row items-center gap-4 pt-4 border-t border-white/10">
-                <a href="https://t.me/+85512677710" target="_blank" rel="noopener noreferrer" aria-label="Telegram Contact" class="flex-1 w-full h-14 rounded-sm bg-[#0088cc] hover:bg-[#007ab8] flex items-center justify-center text-white font-bold transition-colors duration-300 gap-2 shadow-lg">
+                <a href="https://t.me/+85512677710" target="_blank" rel="noopener noreferrer" aria-label="Telegram Contact" class="flex-1 w-full h-14 rounded-sm bg-[#005f8f] hover:bg-[#004b73] flex items-center justify-center text-white font-bold transition-colors duration-300 gap-2 shadow-lg">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
                     Telegram
                 </a>
@@ -233,7 +231,7 @@ import { Image } from 'astro:assets'; // [系統注入] 啟用 Astro 原生靜�
               <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> 
               ទាក់ទងបោះដុំ
           </a>
-          <a href="https://t.me/+85512677710" target="_blank" rel="noopener noreferrer" aria-label="Telegram Contact" class="flex-1 flex items-center justify-center gap-2 bg-[#0088cc] text-white font-body font-bold text-sm transition-colors active:bg-[#007ab8]">
+          <a href="https://t.me/+85512677710" target="_blank" rel="noopener noreferrer" aria-label="Telegram Contact" class="flex-1 flex items-center justify-center gap-2 bg-[#005f8f] text-white font-body font-bold text-sm transition-colors active:bg-[#004b73]">
               <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
               Telegram
           </a>
