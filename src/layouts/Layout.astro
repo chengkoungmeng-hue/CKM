@@ -62,6 +62,14 @@ const t = navTranslations[baseLang];
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     
     <slot name="head" />
+
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-EG6D0H2T5K"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-EG6D0H2T5K');
+    </script>
   </head>
   <body class="bg-slate-900 selection:bg-amber-200 selection:text-slate-900">
     
