@@ -1,7 +1,8 @@
 ---
 // 實體路徑: src/pages/index.astro (高棉語)
-// 狀態: 終極渲染封裝 4.0 + 實戰量能注入 (帳篷硬體統籌、10k+ 粉絲權威、24H 物流)
+// 狀態: 終極渲染封裝 4.1 + 零摩擦力 SEO 滿載 + 邊緣快取準備就緒
 import Layout from '../layouts/Layout.astro'; 
+import { Image } from 'astro:assets'; // [系統注入] 啟用 Astro 原生靜態圖片編譯引擎
 
 const siteDomain = "https://www.ckmkh.com";
 const telegramLink = "https://t.me/CKMSam06";
@@ -12,7 +13,7 @@ const logo = "/images/home/brand-ckm-logo-gold.webp";
 
 const mainPhone = "011 827 782";
 
-// [視覺升維] 全面替換為 Lucide SVG，採用 2px 圓潤線條，提升高端餐飲質感
+// 全面替換為 Lucide SVG，採用 2px 圓潤線條
 const phoneNumbers = [
   { num: "011 827 782", type: "Cellcard", svg: `<svg class="w-5 h-5 md:w-6 md:h-6 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>` },
   { num: "012 977 696", type: "Cellcard", svg: `<svg class="w-5 h-5 md:w-6 md:h-6 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>` },
@@ -46,9 +47,12 @@ const blogPosts = [
   { title: "ការគ្រប់គ្រងហានិភ័យពេលកម្មវិធីផ្ទាល់", subTitle: "ការត្រៀមម៉ាស៊ីនភ្លើងបម្រុង និងការទប់ទល់នឹងកំណើនភ្ញៀវភ្លាមៗ", link: "/km/blog/06-service-process-sop/", image: "/images/home/blog-service-process-sop.webp" }
 ];
 ---
-<Layout title="ចុងភៅ ចេង គួងម៉េង - CKM Premium Catering & Event Infrastructure" description="សេវាកម្មម្ហូបការ ជួលរោងការ និងហេដ្ឋារចនាសម្ព័ន្ធកម្មវិធីខ្នាតធំនៅភ្នំពេញ។ ទទួលបានការគាំទ្រពីអតិថិជនជាង ១ម៉ឺននាក់ ជាមួយនឹងប្រតិបត្តិការភស្តុភារ ២៤ម៉ោង។" lang="km">
+<Layout title="ចុងភៅ ចេង គួងម៉េង - CKM Premium Catering & Event Infrastructure" description="សេវាកម្មម្ហូបការ ជួលរោងការ និងហេដ្ឋារចនាសម្ព័ន្ធកម្មវិធីខ្នាតធំនៅភ្នំពេញ។ ទទួលបានការគាំទ្រពីអតិថិជនជាង ១ម៉ឺននាក់ ជាមួយនឹងប្រតិបត្តិការភស្តុភារ ២៤ម៉ោង។" lang="km-KH">
   <Fragment slot="head">
     <link rel="preload" as="image" href={heroImageRelative} fetchpriority="high" />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Hanuman:wght@400;700&family=Kantumruy+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
     
     <script type="application/ld+json" set:html={JSON.stringify({
@@ -84,11 +88,11 @@ const blogPosts = [
 
   <div class="w-full">
       <header class="relative h-screen flex items-center justify-center overflow-hidden">
-        <img src={heroImageRelative} alt="CKM Luxury Banquet Setup" class="absolute inset-0 w-full h-full object-cover object-center transform scale-105" fetchpriority="high" decoding="sync" />
+        <Image src={heroImageRelative} alt="CKM Luxury Banquet Setup" width={1920} height={1080} class="absolute inset-0 w-full h-full object-cover object-center transform scale-105" fetchpriority="high" decoding="sync" />
         <div class="absolute inset-0 bg-black/70 bg-gradient-to-b from-black/80 via-black/50 to-slate-900/90"></div>
         
         <div class="relative z-10 text-center px-4 max-w-4xl mx-auto pt-10">
-            <img src={logo} alt="CKM Logo" width="128" height="128" class="w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-amber-500 mx-auto mb-8 shadow-[0_0_40px_rgba(245,158,11,0.5)]">
+            <Image src={logo} alt="CKM Logo" width={176} height={176} class="w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-amber-500 mx-auto mb-8 shadow-[0_0_40px_rgba(245,158,11,0.5)]" />
             <h1 class="text-4xl md:text-6xl font-km-serif font-bold text-white mb-6 leading-tight">ចុងភៅ <span class="text-amber-500">ចេង គួងម៉េង</span></h1>
             <h2 class="text-xl md:text-2xl font-km-sans font-medium text-white/90 mb-6 uppercase">សេវាកម្មម្ហូបការ និងហេដ្ឋារចនាសម្ព័ន្ធលំដាប់កំពូល</h2>
             <p class="text-lg md:text-xl text-gray-300 mb-8 max-w-3xl mx-auto font-km-sans font-light leading-relaxed hidden sm:block">ជាង ៦ ទសវត្សរ៍នៃកិត្តិនាម ទទួលបានការគាំទ្រពីអតិថិជនជាង ១ម៉ឺននាក់។ យើងជាក្រុមការងារអាជីព ផ្តល់សេវាកម្មជួលរោងការ និងរៀបចំម្ហូបការខ្នាតធំដោយគ្មានហានិភ័យ។</p>
@@ -166,7 +170,7 @@ const blogPosts = [
             {menuItems.map((item) => (
                 <div class="group relative overflow-hidden rounded-sm shadow-md bg-slate-50 flex-none w-[80%] sm:w-[50%] md:w-auto snap-center snap-always">
                     <div class="aspect-square overflow-hidden relative bg-slate-200">
-                      <img src={item.image} alt={item.title} width="600" height="600" decoding="async" loading="lazy" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700"/>
+                      <Image src={item.image} alt={item.title} width={600} height={600} decoding="async" loading="lazy" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700"/>
                       <div class="absolute inset-0 bg-gradient-to-t from-slate-900/95 via-slate-900/30 to-transparent opacity-85 group-hover:opacity-100 transition-opacity duration-500"></div>
                     </div>
                     <div class="absolute inset-0 flex flex-col justify-end p-5 md:p-8 pointer-events-none">
@@ -186,12 +190,13 @@ const blogPosts = [
               {blogPosts.map(post => (
                 <div class="group bg-white rounded-sm overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-500 border border-slate-100 flex flex-col">
                    <a href={post.link} class="block aspect-[16/9] overflow-hidden relative bg-slate-200">
-                      <img src={post.image} alt={post.title} width="600" height="337" decoding="async" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-700"/>
+                      <Image src={post.image} alt={post.title} width={600} height={337} decoding="async" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-700"/>
                    </a>
                    <div class="p-6 md:p-8 flex flex-col flex-grow">
                       <h3 class="text-lg md:text-xl font-km-serif font-bold text-slate-900 mb-2 md:mb-3 group-hover:text-amber-600 transition-colors duration-300 leading-snug">{post.title}</h3>
                       <p class="text-slate-500 text-xs md:text-sm font-km-sans font-light mb-4 md:mb-6 leading-relaxed">{post.subTitle}</p>
-                      <a href={post.link} class="mt-auto inline-flex items-center text-amber-600 text-xs md:text-sm font-km-sans font-medium hover:text-amber-700 transition-colors">
+                      
+                      <a href={post.link} aria-label={`ស្វែងយល់បន្ថែម: ${post.title}`} class="mt-auto inline-flex items-center text-amber-600 text-xs md:text-sm font-km-sans font-medium hover:text-amber-700 transition-colors">
                           ស្វែងយល់បន្ថែម 
                           <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 md:w-4 md:h-4 ml-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
                       </a>
