@@ -1,10 +1,13 @@
 ---
 // src/layouts/Layout.astro
-// 狀態: 終極渲染封裝 4.1。徹底拔除 GA4 幽靈進程、修復全域字體污染、完善多語系 SEO 錨點。
+// 狀態: 終極渲染封裝 4.3。實裝 baseLang 語系降維攔截器，修復 km-KH 路由與字典錯位問題。
 const { title, description, image = '/open-graph.png', lang = 'km' } = Astro.props;
 
-// Dynamic root URL resolution
-const homeUrl = lang === 'km' ? '/' : `/${lang}/`;
+// [戰略攔截] 語系正規化：將 'km-KH' 降維判定為 'km'，確保字典與路由不會 Fallback 到英文
+const baseLang = lang.startsWith('km') ? 'km' : lang.startsWith('zh') ? 'zh' : 'en';
+
+// Dynamic root URL resolution (使用 baseLang)
+const homeUrl = baseLang === 'km' ? '/' : `/${baseLang}/`;
 
 // Absolute URL resolution for SEO and OG Image scrapers
 const siteDomain = "https://www.ckmkh.com";
@@ -22,7 +25,7 @@ const brandDict = {
   zh: { title: "CKM CATERING", subtitle: "PREMIUM SERVICE" },
   en: { title: "CKM CATERING", subtitle: "PREMIUM SERVICE" }
 };
-const brand = brandDict[lang as keyof typeof brandDict] || brandDict.zh;
+const brand = brandDict[baseLang];
 
 // Grounded navigation and CTA dictionary
 const navTranslations = {
@@ -30,7 +33,7 @@ const navTranslations = {
   zh: { service: "现场把关", portfolio: "办桌菜单", insights: "实战日志", contact: "联系统筹", call: "电话联系", telegram: "专人咨询" },
   en: { service: "Operations", portfolio: "Banquet Menus", insights: "Logistics Log", contact: "Consultation", call: "Call Now", telegram: "Telegram" }
 };
-const t = navTranslations[lang as keyof typeof navTranslations] || navTranslations.en;
+const t = navTranslations[baseLang];
 ---
 
 <!doctype html>
@@ -59,7 +62,7 @@ const t = navTranslations[lang as keyof typeof navTranslations] || navTranslatio
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     
     <slot name="head" />
-    </head>
+  </head>
   <body class="bg-slate-900 selection:bg-amber-200 selection:text-slate-900">
     
     <nav class="fixed top-0 left-0 w-full bg-slate-950/95 backdrop-blur-sm z-50 border-b border-slate-800 shadow-lg">
@@ -67,7 +70,7 @@ const t = navTranslations[lang as keyof typeof navTranslations] || navTranslatio
             <a href={homeUrl} aria-label="Home" class="flex items-center gap-2 md:gap-3 relative z-50 shrink-0">
                 <img src="/images/home/brand-ckm-logo-gold.webp" alt="CKM Logo" width="48" height="48" decoding="async" fetchpriority="high" class="w-10 h-10 md:w-12 md:h-12 rounded-full border border-amber-500 shadow-md">
                 <div class="flex flex-col">
-                    <span class={`text-white font-serif font-semibold tracking-wide ${lang === 'km' ? 'text-lg md:text-xl' : 'text-base md:text-lg'}`}>{brand.title}</span>
+                    <span class={`text-white font-serif font-semibold tracking-wide ${baseLang === 'km' ? 'text-lg md:text-xl' : 'text-base md:text-lg'}`}>{brand.title}</span>
                     <span class="text-slate-400 text-[9px] md:text-xs font-sans tracking-widest uppercase mt-[1px]">{brand.subtitle}</span>
                 </div>
             </a>
@@ -80,9 +83,9 @@ const t = navTranslations[lang as keyof typeof navTranslations] || navTranslatio
                 </div>
 
                 <div class="flex items-center bg-slate-900/80 rounded-sm p-1 border border-slate-800 relative z-50 shadow-inner">
-                    <a href="/" hreflang="km-KH" aria-label="Khmer Language" class={`px-2 md:px-3 py-1 md:py-1.5 text-[10px] md:text-xs font-sans font-bold rounded-sm transition-all ${lang === 'km' ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}`}>ខ្មែរ</a>
-                    <a href="/zh/" hreflang="zh" aria-label="Chinese Language" class={`px-2 md:px-3 py-1 md:py-1.5 text-[10px] md:text-xs font-sans font-bold rounded-sm transition-all ${lang === 'zh' ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}`}>中文</a>
-                    <a href="/en/" hreflang="en" aria-label="English Language" class={`px-2 md:px-3 py-1 md:py-1.5 text-[10px] md:text-xs font-sans font-bold rounded-sm transition-all ${lang === 'en' ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}`}>EN</a>
+                    <a href="/" hreflang="km-KH" aria-label="Khmer Language" class={`px-2 md:px-3 py-1 md:py-1.5 text-[10px] md:text-xs font-sans font-bold rounded-sm transition-all ${baseLang === 'km' ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}`}>ខ្មែរ</a>
+                    <a href="/zh/" hreflang="zh" aria-label="Chinese Language" class={`px-2 md:px-3 py-1 md:py-1.5 text-[10px] md:text-xs font-sans font-bold rounded-sm transition-all ${baseLang === 'zh' ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}`}>中文</a>
+                    <a href="/en/" hreflang="en" aria-label="English Language" class={`px-2 md:px-3 py-1 md:py-1.5 text-[10px] md:text-xs font-sans font-bold rounded-sm transition-all ${baseLang === 'en' ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}`}>EN</a>
                 </div>
 
                 <a href={`${homeUrl}#contact`} aria-label={t.contact} class="hidden md:inline-flex relative z-50 items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-5 min-h-[40px] rounded-full font-bold text-sm transition-all shadow-[0_0_15px_rgba(245,158,11,0.3)] hover:shadow-[0_0_25px_rgba(245,158,11,0.5)]">
@@ -190,10 +193,6 @@ const t = navTranslations[lang as keyof typeof navTranslations] || navTranslatio
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-  
-  /* [戰略攔截] 物理性消除全域高棉語字體綁定，避免污染中英文字體解析。
-     字體定義已退回各頁面 (index.astro) 本地管理。 */
-  
   main > div {
     min-height: calc(100vh - 80px);
   }
