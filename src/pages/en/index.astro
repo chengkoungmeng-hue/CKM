@@ -4,47 +4,20 @@
 import Layout from '../../layouts/Layout.astro'; 
 import { Image } from 'astro:assets';
 
-const siteDomain = "https://www.ckmkh.com";
-const telegramLink = "https://t.me/CKMSam06";
-const facebookLink = "https://www.facebook.com/CKMFOODS";
+import { 
+  siteDomain, 
+  telegramLink, 
+  facebookLink, 
+  heroImageRelative, 
+  logo, 
+  mainPhone, 
+  phoneNumbers, 
+  menuItems as allMenuItems, 
+  blogPosts as allBlogPosts 
+} from '../../data/homeData';
 
-const heroImageRelative = "/images/home/hero-luxury-banquet-setup.webp";
-const logo = "/images/home/brand-ckm-logo-gold.webp";
-
-const mainPhone = "011 827 782";
-
-const phoneNumbers = [
-  { num: "011 827 782", type: "Cellcard", svg: `<svg class="w-5 h-5 md:w-6 md:h-6 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>` },
-  { num: "012 977 696", type: "Cellcard", svg: `<svg class="w-5 h-5 md:w-6 md:h-6 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>` },
-  { num: "015 977 696", type: "Smart", svg: `<svg class="w-5 h-5 md:w-6 md:h-6 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path><path d="M14.05 2a9 9 0 0 1 8 7.94"></path><path d="M14.05 6A5 5 0 0 1 18 10"></path></svg>` }
-];
-
-const menuItems = [
-  { title: "Assorted Appetizer Platter", image: "/images/home/menu-01.webp", desc: "Six classic cold starters, portioned and temperature-controlled to begin the service efficiently without overwhelming the palate." },
-  { title: "Deep-Fried Fish Fillet", image: "/images/home/menu-02.webp", desc: "Batch-fried at exact temperatures to maintain a crispy exterior and preserve internal moisture during high-volume service." },
-  { title: "Khmer Style Beef Salad", image: "/images/home/menu-03.webp", desc: "Freshly prepared with authentic Khmer spices, providing a high-acid, refreshing contrast to heavy banquet proteins." },
-  { title: "Cereal Butter Prawns", image: "/images/home/menu-04.webp", desc: "Wild-caught prawns wok-tossed in butter and cereal flakes, utilizing high heat for rapid execution and flavor." },
-  { title: "Roasted Suckling Pig with Bread", image: "/images/home/menu-05.webp", desc: "Traditional suckling pig roasted with strict temperature control to ensure a consistent crispy skin, served with soft bread." },
-  { title: "Sweet & Sour Fish", image: "/images/home/menu-06.webp", desc: "Crispy fried whole fish coated in a standardized sweet and sour glaze, engineered to hold its texture during transit." },
-  { title: "Spicy Stir-Fried Fish Fillet", image: "/images/home/menu-07.webp", desc: "High-heat wok execution to seal the fish quickly and infuse consistent, fiery aromatics across every batch." },
-  { title: "Abalone Herb Broth", image: "/images/home/menu-08.webp", desc: "Slow-simmered in large batches using precise ratios of abalone and herbs to ensure a consistent, temperature-stable hot soup." },
-  { title: "Spicy Duck Feet Salad", image: "/images/home/menu-09.webp", desc: "Hand-deboned duck feet prepared under strict hygiene controls, tossed in a sharp vinaigrette for a clean palate reset." },
-  { title: "Steamed Fish with Premium Soy", image: "/images/home/menu-10.webp", desc: "Steamed on a strict timer to prevent overcooking, served with a standardized soy sauce base." },
-  { title: "Lotus Leaf Fragrant Rice", image: "/images/home/menu-11.webp", desc: "Wok-fried rice steamed in lotus leaves, a reliable carbohydrate staple that holds heat exceptionally well during service." },
-  { title: "Hong Kong Style Roast Duck", image: "/images/home/menu-12.webp", desc: "Batch-roasted using traditional techniques to render fat evenly, ensuring the meat stays moist until plated." },
-  { title: "Traditional Khmer Desserts", image: "/images/home/menu-13.webp", desc: "Fresh coconut milk and pandan prepared with strict sanitation protocols to securely close the meal." },
-  { title: "Tom Yum River Prawn Soup", image: "/images/home/menu-14.webp", desc: "A robust, high-acid soup base that retains its heat and flavor profile perfectly from the kitchen to the table." },
-  { title: "Signature Whole Roasted Pig", image: "/images/home/menu-15.webp", desc: "The centerpiece of large banquets, requiring exact timing and heat management to deliver a crispy, uniform finish." },
-];
-
-const blogPosts = [
-  { title: "Venue Audits & Logistics", subTitle: "Electrical Loads & Temporary Structure Setup", link: "/en/blog/01-venue-logistics/", image: "/images/home/blog-wedding-service-guide.webp" },
-  { title: "100-Table Capacity Control", subTitle: "Managing Heat Loss & Service Flow", link: "/en/blog/02-event-party-planning/", image: "/images/home/blog-event-party-planning.webp" },
-  { title: "Sourcing & Cold Chain Defense", subTitle: "24-Hour Temperature Control & Batch Consistency", link: "/en/blog/03-chef-professional-standard/", image: "/images/home/blog-chef-professional-standard.webp" },
-  { title: "Catering Food Safety", subTitle: "Cross-Contamination & The 75°C Kill Step", link: "/en/blog/04-food-safety-quality/", image: "/images/home/blog-food-safety-quality.webp" },
-  { title: "Khmer-Chinese Menus", subTitle: "Flavor Sequencing & Palate Fatigue", link: "/en/blog/05-khmer-wedding-menu/", image: "/images/home/blog-khmer-wedding-menu.webp" },
-  { title: "Execution & Contingency", subTitle: "Backup Generators & Extreme Weather Protocols", link: "/en/blog/06-service-process-sop/", image: "/images/home/blog-service-process-sop.webp" }
-];
+const menuItems = allMenuItems.en;
+const blogPosts = allBlogPosts.en;
 ---
 <Layout title="Chef Cheng Koung Meng - CKM Premium Catering & Event Infrastructure" description="Phnom Penh's premier full-stack catering service. Providing large-scale banquet execution, tent structural logistics, and unbroken 24-hour cold chain operations." lang="en">
   <Fragment slot="head">
