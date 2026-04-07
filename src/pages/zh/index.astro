@@ -2,7 +2,10 @@
 // 實體路徑: src/pages/zh/index.astro
 // 狀態: 終極渲染封裝 4.3 (LCP 悖論修復 + 幾何矩陣啟動 + 絕對對比度合規)
 import Layout from '../../layouts/Layout.astro'; 
-import { Image } from 'astro:assets'; 
+import { Image } from 'astro:assets';
+import MenuCard from '../../components/MenuCard.astro';
+import InsightCard from '../../components/InsightCard.astro';
+import ContactCard from '../../components/ContactCard.astro'; 
 
 import { 
   siteDomain, 
@@ -141,16 +144,11 @@ const blogPosts = allBlogPosts.zh;
           
           <div class="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 pb-6 -mx-6 px-6 md:mx-0 md:px-0 snap-x snap-mandatory scrollbar-hide">
             {menuItems.map((item) => (
-                <div class="group relative overflow-hidden rounded-sm shadow-md bg-slate-50 flex-none w-[80%] sm:w-[50%] md:w-auto snap-center snap-always">
-                    <div class="aspect-square overflow-hidden relative bg-slate-200">
-                      <Image src={item.image} alt={item.title} width={640} height={640} widths={[400, 640, 800]} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" decoding="async" loading="lazy" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700"/>
-                      <div class="absolute inset-0 bg-gradient-to-t from-slate-900/95 via-slate-900/30 to-transparent opacity-85 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    </div>
-                    <div class="absolute inset-0 flex flex-col justify-end p-5 md:p-8 pointer-events-none">
-                      <h3 class="text-lg md:text-xl font-zh-serif font-bold text-amber-400 mb-2 md:mb-3 md:translate-y-4 md:group-hover:translate-y-0 transition duration-500 tracking-wider">{item.title}</h3>
-                      <p class="text-gray-200 text-xs md:text-sm font-sans font-light leading-relaxed md:opacity-0 md:group-hover:opacity-100 transform md:translate-y-4 md:group-hover:translate-y-0 transition-all duration-500 delay-100 line-clamp-3 md:line-clamp-none">{item.desc}</p>
-                    </div>
-                </div>
+                <MenuCard 
+                    {...item} 
+                    titleClass="text-lg md:text-xl font-zh-serif font-bold text-amber-400 mb-2 md:mb-3 md:translate-y-4 md:group-hover:translate-y-0 transition duration-500 tracking-wider" 
+                    descClass="text-gray-200 text-xs md:text-sm font-sans font-light leading-relaxed md:opacity-0 md:group-hover:opacity-100 transform md:translate-y-4 md:group-hover:translate-y-0 transition-all duration-500 delay-100 line-clamp-3 md:line-clamp-none" 
+                />
             ))}
           </div>
         </div>
@@ -161,20 +159,15 @@ const blogPosts = allBlogPosts.zh;
            <div class="text-center mb-10 md:mb-16"><h2 class="text-3xl md:text-4xl font-zh-serif font-bold text-slate-900 tracking-widest">外烩办桌实战经验</h2></div>
            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {blogPosts.map(post => (
-                <div class="group bg-white rounded-sm overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-500 border border-slate-100 flex flex-col">
-                   <a href={post.link} class="block aspect-[16/9] overflow-hidden relative bg-slate-200">
-                      <Image src={post.image} alt={post.title} width={640} height={360} widths={[400, 640, 800]} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" decoding="async" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-700"/>
-                   </a>
-                   <div class="p-6 md:p-8 flex flex-col flex-grow">
-                      <h3 class="text-lg md:text-xl font-zh-serif font-bold text-slate-900 mb-2 md:mb-3 group-hover:text-amber-600 transition-colors duration-300 leading-snug tracking-wider">{post.title}</h3>
-                      <p class="text-slate-500 text-xs md:text-sm font-sans font-light mb-4 md:mb-6 tracking-wide">{post.subTitle}</p>
-                      
-                      <a href={post.link} aria-label={`探索专栏: ${post.title}`} class="mt-auto inline-flex items-center text-amber-600 text-xs md:text-sm font-sans font-medium uppercase tracking-widest hover:text-amber-700 transition-colors">
-                          探索专栏 
-                          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                      </a>
-                   </div>
-                </div>
+                <InsightCard 
+                    {...post} 
+                    titleClass="text-lg md:text-xl font-zh-serif font-bold text-slate-900 mb-2 md:mb-3 group-hover:text-amber-600 transition-colors duration-300 leading-snug tracking-wider" 
+                    subTitleClass="text-slate-500 text-xs md:text-sm font-sans font-light mb-4 md:mb-6 tracking-wide" 
+                    linkClass="mt-auto inline-flex items-center text-amber-600 text-xs md:text-sm font-sans font-medium uppercase tracking-widest hover:text-amber-700 transition-colors" 
+                    linkLabel="探索专栏"
+                >
+                    <svg slot="link-icon" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                </InsightCard>
               ))}
            </div>
         </div>
@@ -201,15 +194,13 @@ const blogPosts = allBlogPosts.zh;
                       <div class="bg-slate-900 border border-slate-800 p-6 md:p-12 rounded-sm shadow-2xl">
                           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 mb-6 md:mb-10">
                               {phoneNumbers.map((contact) => (
-                                  <a href={`tel:+855${contact.num.replace(/\s/g, '').substring(1)}`} class="group flex items-center p-4 md:p-6 rounded-sm bg-slate-950 border border-slate-800 hover:border-amber-500/50 transition-colors duration-300 min-h-[64px] md:min-h-[88px]">
-                                      <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-slate-900 flex items-center justify-center shrink-0 mr-4 group-hover:bg-amber-500/10 transition-colors">
-                                        <div set:html={contact.svg} />
-                                      </div>
-                                      <div>
-                                        <div class="text-white font-sans font-semibold text-base md:text-lg tracking-wide">{contact.num}</div>
-                                        <div class="text-slate-500 text-[10px] md:text-xs font-sans uppercase tracking-[0.2em] mt-0.5 md:mt-1">{contact.type}</div>
-                                      </div>
-                                  </a>
+                                  <ContactCard 
+                                      num={contact.num} 
+                                      type={contact.type} 
+                                      svg={contact.svg} 
+                                      numClass="text-white font-sans font-semibold text-base md:text-lg tracking-wide" 
+                                      typeClass="text-slate-500 text-[10px] md:text-xs font-sans uppercase tracking-[0.2em] mt-0.5 md:mt-1" 
+                                  />
                               ))}
                               
                               <div class="flex items-center gap-3 md:gap-4 p-4 md:p-6 rounded-sm bg-slate-950 border border-slate-800 min-h-[64px] md:min-h-[88px]">
