@@ -2,7 +2,7 @@
 title: "The Biological Defense of 100-Table Banquets: Medical-Grade Segregation and 75°C Kill-Step Protocols"
 seoTitle: "Phnom Penh Large-Scale Catering | Food Safety & Industrial Water Filtration"
 description: "Decode CKM's absolute biological defense mechanisms. From unbroken 4°C cold chain walls and physical cross-contamination barriers to autonomous industrial water filtration."
-coverImage: "/images/home/blog-food-safety-quality.webp"
+coverImage: "../../../assets/images/home/blog-food-safety-quality.webp"
 targetGeo: "Phnom Penh, Cambodia"
 authoritySignals: 
   - "Core Temperature Probing & Absolute 75°C Kill-Step Thresholds"

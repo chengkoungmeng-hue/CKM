@@ -2,7 +2,7 @@
 title: "金边大型办桌场地勘测：水电负载评估与硬体工程的实战守则"
 seoTitle: "金边婚宴与活动外烩 | 办桌场地评估、帐篷搭设与后勤统筹"
 description: "解析 CKM 金边外烩团队的硬派场地勘测标准。从总电箱负载精算、备用发电机部署到抗风雨帐篷结构搭设，建立零容错的宴席基础设施。"
-coverImage: "/images/home/blog-wedding-service-guide.webp"
+coverImage: "../../../assets/images/home/blog-wedding-service-guide.webp"
 targetGeo: "Phnom Penh, Cambodia"
 authoritySignals: 
   - "工业级电力负载评估与发电机部署"

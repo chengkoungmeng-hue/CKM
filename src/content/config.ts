@@ -2,7 +2,7 @@ import { z, defineCollection } from 'astro:content';
 
 const blogCollection = defineCollection({
   type: 'content',
-  schema: z.object({
+  schema: ({ image }) => z.object({
     // 視覺渲染層標題 (邊界放寬至 200，以容納高棉文的幾何膨脹)
     title: z.string().max(200, "主標題過長將破壞 UI 渲染結構"),
     
@@ -14,7 +14,7 @@ const blogCollection = defineCollection({
     date: z.coerce.date().optional(),
     
     // 視覺證據 (強制綁定 VISION_ENGINE 產出的高畫質影像路徑)
-    coverImage: z.string(),
+    coverImage: image(),
     
     // 地理座標錨定：強制鎖定市場邊界
     targetGeo: z.string().default("Phnom Penh, Cambodia"),

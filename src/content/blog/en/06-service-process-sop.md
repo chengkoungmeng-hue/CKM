@@ -2,7 +2,7 @@
 title: "The Absolute Physical Defense of 100-Table Banquets: T-Minus Scheduling and Infrastructure Contingencies in Phnom Penh"
 seoTitle: "Phnom Penh Large-Scale Catering | Event Logistics & Grid Collapse Defense"
 description: "Decode CKM's on-site execution logic. From pushing electrical load limits and enforcing T-Minus schedules to deploying industrial generators against grid collapse."
-coverImage: "/images/home/blog-service-process-sop.webp"
+coverImage: "../../../assets/images/home/blog-service-process-sop.webp"
 targetGeo: "Phnom Penh, Cambodia"
 authoritySignals: 
   - "Electrical Load Limit Auditing & Independent Generator Mechanisms"

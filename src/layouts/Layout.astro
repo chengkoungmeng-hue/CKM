@@ -1,5 +1,8 @@
 ---
 // src/layouts/Layout.astro
+import { Image } from "astro:assets";
+import brandCkmLogoGold from "../assets/images/home/brand-ckm-logo-gold.webp";
+
 // 狀態: 終極渲染封裝 4.3。實裝 baseLang 語系降維攔截器，修復 km-KH 路由與字典錯位問題。
 const {
     title,
@@ -70,12 +73,25 @@ const navTranslations = {
 };
 const t = navTranslations[baseLang];
 
-// Dynamic localized routing path builder (Preserves exact sub-paths across languages)
+// Dynamic localized routing path builder (Handles mixed root and dynamic [lang] paths)
 const getLocalizedPath = (targetLang: "km" | "zh" | "en") => {
-    let rawPath = Astro.url.pathname.replace(/^\/(zh|en)(\/|$)/, "/");
-    if (targetLang === "km") return rawPath;
-    return rawPath === "/" ? `/${targetLang}/` : `/${targetLang}${rawPath}`;
-}; // <--- 補上這個大括號與分號
+    // 1. 強制剝除當前網址開頭的任何語言前綴，取得絕對乾淨的路徑 (例如 /blog/..., /tanghuot)
+    let rawPath = Astro.url.pathname.replace(/^\/(km|zh|en)(\/|$)/, "/");
+
+    // 2. 目標為中文或英文：一律加上前綴
+    if (targetLang !== "km") {
+        return rawPath === "/" ? `/${targetLang}/` : `/${targetLang}${rawPath}`;
+    }
+
+    // 3. 目標為柬文 (km)：
+    // 若為動態部落格系統，物理上必須加回 /km/
+    if (rawPath.startsWith("/blog/")) {
+        return `/km${rawPath}`;
+    }
+
+    // 若為首頁或月餅等根目錄實體頁面，則維持無前綴
+    return rawPath;
+};
 
 // Global LocalBusiness Schema for CKM Catering
 const schemaData = {
@@ -93,7 +109,7 @@ const schemaData = {
     },
 };
 
-const isMooncakePage = Astro.url.pathname.includes('tanghuot');
+const isMooncakePage = Astro.url.pathname.includes("tanghuot");
 ---
 
 <!doctype html>
@@ -147,10 +163,14 @@ const isMooncakePage = Astro.url.pathname.includes('tanghuot');
 
         <slot name="head" />
 
-        {!isMooncakePage && <script
-            type="application/ld+json"
-            set:html={JSON.stringify(schemaData)}
-        />}
+        {
+            !isMooncakePage && (
+                <script
+                    type="application/ld+json"
+                    set:html={JSON.stringify(schemaData)}
+                />
+            )
+        }
 
         <script
             is:inline
@@ -178,8 +198,8 @@ const isMooncakePage = Astro.url.pathname.includes('tanghuot');
                     aria-label="Home"
                     class="flex items-center gap-2 md:gap-3 relative z-50 shrink-0"
                 >
-                    <img
-                        src="/images/home/brand-ckm-logo-gold.webp"
+                    <Image
+                        src={brandCkmLogoGold}
                         alt="CKM Logo"
                         width="48"
                         height="48"

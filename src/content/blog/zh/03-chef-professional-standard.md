@@ -2,7 +2,7 @@
 title: "金边大型办桌冷链与食安防线：总铺师的食材管控与杀菌法则"
 seoTitle: "金边外烩办桌总铺师 | 24小时食材冷链与百桌口味控制"
 description: "揭开 CKM 办桌团队如何透过无间断的冷链物流、75°C 中心杀菌阈值与零随机性的调味比例，确保金边百桌宴席的绝对食安与口味恒定。"
-coverImage: "/images/home/blog-chef-professional-standard.webp"
+coverImage: "../../../assets/images/home/blog-chef-professional-standard.webp"
 targetGeo: "Phnom Penh, Cambodia"
 authoritySignals: 
   - "无间断的 4°C 户外冷链物流部署"

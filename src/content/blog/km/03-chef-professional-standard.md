@@ -2,7 +2,7 @@
 title: "ការគ្រប់គ្រងការរក្សាភាពត្រជាក់ និងអនាម័យចំណីអាហារនៅភ្នំពេញ៖ ការរៀបចំសាច់ និងការធានាសុវត្ថិភាពម្ហូបរបស់ចុងភៅឯក"
 seoTitle: "សេវាកម្មម្ហូបការភ្នំពេញ | ការរក្សាភាពត្រជាក់ ២៤ម៉ោង និងសុវត្ថិភាពចំណីអាហារ"
 description: "ស្វែងយល់ពីរបៀបដែល CKM រក្សាគុណភាពសាច់ ការចម្អិនឱ្យបានឆ្អិនល្អ និងការកំណត់រសជាតិឱ្យឆ្ងាញ់ដូចៗគ្នាសម្រាប់កម្មវិធីរយតុ។"
-coverImage: "/images/home/blog-chef-professional-standard.webp"
+coverImage: "../../../assets/images/home/blog-chef-professional-standard.webp"
 targetGeo: "Phnom Penh, Cambodia"
 authoritySignals: 
   - "ការរក្សាទុកសាច់ក្នុងទូត្រជាក់ 4°C ជាប់លាប់ពេញ ២៤ ម៉ោង"

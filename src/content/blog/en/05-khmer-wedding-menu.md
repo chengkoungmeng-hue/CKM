@@ -2,7 +2,7 @@
 title: "The Flavor Engineering of 100-Table Banquets: Cross-Cultural Menu Sequencing and Sensory Fatigue Defense"
 seoTitle: "Phnom Penh Banquet Menus | Khmer-Chinese Flavor Engineering"
 description: "Decode CKM's cross-cultural menu engineering. Utilizing physical essential oil extraction, acid-base neutralization, and sensory fatigue defense for 1,000-guest matrices."
-coverImage: "/images/home/blog-khmer-wedding-menu.webp"
+coverImage: "../../../assets/images/home/blog-khmer-wedding-menu.webp"
 targetGeo: "Phnom Penh, Cambodia"
 authoritySignals: 
   - "Physical Extraction of Essential Oils & Thermal Resistance"

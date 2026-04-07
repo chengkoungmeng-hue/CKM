@@ -2,7 +2,7 @@
 title: "The Biological Defense of 100-Table Banquets: 24-Hour Cold Chain and the 75°C Kill Step"
 seoTitle: "Phnom Penh Banquet Catering | 24H Cold Chain & Food Safety"
 description: "Decode CKM's absolute food safety protocols for 100-table banquets. Deploying unbroken 4°C cold chains, physical cross-contamination barriers, and strict 75°C kill steps."
-coverImage: "/images/home/blog-chef-professional-standard.webp"
+coverImage: "../../../assets/images/home/blog-chef-professional-standard.webp"
 targetGeo: "Phnom Penh, Cambodia"
 authoritySignals: 
   - "Unbroken 4°C Cold Chain Logistics Deployment"

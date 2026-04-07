@@ -2,7 +2,7 @@
 title: "Venue Audits for Large-Scale Banquets in Phnom Penh: Electrical Loads and Infrastructure Engineering"
 seoTitle: "Phnom Penh Banquet Catering | Event Infrastructure & Venue Audits"
 description: "Discover CKM's hardcore venue auditing standards. From calculating maximum electrical loads and deploying backup generators to erecting weather-resistant temporary structures."
-coverImage: "/images/home/blog-wedding-service-guide.webp"
+coverImage: "../../../assets/images/home/blog-wedding-service-guide.webp"
 targetGeo: "Phnom Penh, Cambodia"
 authoritySignals: 
   - "Industrial-grade electrical load assessment and generator deployment"

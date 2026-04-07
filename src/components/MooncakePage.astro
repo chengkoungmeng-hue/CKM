@@ -1,5 +1,12 @@
 ---
 import { Image } from "astro:assets";
+import imgLogo29 from '../assets/images/tanghuot/nom-lok-khae-logo-image_29.webp';
+import imgLogoTanghout from '../assets/images/tanghuot/logo-tanghout.webp';
+import imgHeroStone from '../assets/images/tanghuot/hero-abstract-angkor-stone.webp';
+import imgProducts from '../assets/images/tanghuot/nom-products-tang-huot.webp';
+import imgSlice from '../assets/images/tanghuot/nom-lok-khae-slice-image_2.webp';
+import imgCholChnam from '../assets/images/tanghuot/nom-chol-chnam-image_20_generated.webp';
+import imgSteamer from '../assets/images/tanghuot/hero-steamer-tradition.webp';
 import Layout from "../layouts/Layout.astro";
 
 interface Props {
@@ -106,7 +113,7 @@ const t = (() => {
     <link
       rel="preload"
       as="image"
-      href="/images/tanghuot/nom-lok-khae-logo-image_29.webp"
+      href={imgLogo29.src}
       fetchpriority="high"
     />
 
@@ -116,7 +123,7 @@ const t = (() => {
         "@context": "https://schema.org",
         "@type": ["WholesaleStore", "Bakery"],
         "name": t.h1,
-        "image": "https://www.ckmkh.com/images/tanghuot/nom-lok-khae-logo-image_29.webp",
+        "image": `https://www.ckmkh.com${imgLogo29.src}`,
         "description": t.seoDesc,
         "address": {
           "@type": "PostalAddress",
@@ -175,7 +182,7 @@ const t = (() => {
       class="relative min-h-[calc(100vh-80px)] flex items-center justify-center overflow-hidden border-b border-white/5"
     >
       <Image
-        src="/images/tanghuot/nom-lok-khae-logo-image_29.webp"
+        src={imgLogo29}
         alt="នំលោកខែប្រណីត"
         width={1920}
         height={1080}
@@ -196,7 +203,7 @@ const t = (() => {
       >
         <div class="flex justify-center mb-6">
           <Image
-            src="/images/tanghuot/logo-tanghout.webp"
+            src={imgLogoTanghout}
             alt="Tang Huot Logo"
             width={250}
             height={250}
@@ -255,7 +262,7 @@ const t = (() => {
     >
       <div class="absolute inset-0 z-0">
         <Image
-          src="/images/tanghuot/hero-abstract-angkor-stone.webp"
+          src={imgHeroStone}
           alt="Texture"
           width={1920}
           height={1080}
@@ -315,7 +322,7 @@ const t = (() => {
               class="relative rounded-sm overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10 group"
             >
               <Image
-                src="/images/tanghuot/nom-products-tang-huot.webp"
+                src={imgProducts}
                 alt="Products"
                 width={1200}
                 height={800}
@@ -339,7 +346,7 @@ const t = (() => {
       <div class="grid grid-cols-1 lg:grid-cols-2">
         <div class="relative h-[40vh] sm:h-[50vh] lg:h-auto overflow-hidden">
           <Image
-            src="/images/tanghuot/nom-lok-khae-slice-image_2.webp"
+            src={imgSlice}
             alt="Mooncake Slice"
             width={1000}
             height={1000}
@@ -432,7 +439,7 @@ const t = (() => {
           class="order-1 lg:order-2 relative h-[40vh] sm:h-[50vh] lg:h-auto overflow-hidden"
         >
           <Image
-            src="/images/tanghuot/nom-chol-chnam-image_20_generated.webp"
+            src={imgCholChnam}
             alt="Fa Gao"
             width={1000}
             height={1000}
@@ -452,7 +459,7 @@ const t = (() => {
           class="relative h-[30vh] sm:h-[40vh] lg:h-auto overflow-hidden bg-slate-900"
         >
           <Image
-            src="/images/tanghuot/hero-steamer-tradition.webp"
+            src={imgSteamer}
             alt="Facility"
             width={1920}
             height={1080}

@@ -2,7 +2,7 @@
 title: "金边百桌宴席的极限物理防线：T-Minus 倒数排程与硬体抗候统筹"
 seoTitle: "金边大型外烩服务流程 | 办桌现场统筹与突发状况硬体防范"
 description: "破解 CKM 金边外烩团队的现场统筹底层逻辑。从电力负载极限勘测、T-Minus 倒数进场排程到电网崩溃的防范机制，确保千人宴席的零容错出餐。"
-coverImage: "/images/home/blog-service-process-sop.webp"
+coverImage: "../../../assets/images/home/blog-service-process-sop.webp"
 targetGeo: "Phnom Penh, Cambodia"
 authoritySignals: 
   - "电力负载极限测算与备用发电机机制"

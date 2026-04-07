@@ -2,7 +2,7 @@
 title: "金边百桌宴席的吞吐量工程：大型外烩的热散失防御与出餐调度"
 seoTitle: "金边大型企业外烩 | 百桌办桌出餐统筹与温控指南"
 description: "解析 CKM 金边外烩团队应对百桌宴席的统筹方法。透过 T-Minus 倒数排程、热力学菜单设计与矩阵式出餐动线，确保上千人同步享用极致热食。"
-coverImage: "/images/home/blog-event-party-planning.webp"
+coverImage: "../../../assets/images/home/blog-event-party-planning.webp"
 targetGeo: "Phnom Penh, Cambodia"
 authoritySignals: 
   - "百桌矩阵式同步出餐与几何动线规划"

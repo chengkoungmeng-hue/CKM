@@ -2,6 +2,7 @@
 // src/pages/[lang]/blog/[slug].astro
 // Status: Operational. Global routing, multi-language dictionary, and typography matrices aligned.
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import Layout from '../../../layouts/Layout.astro'; 
 
 export async function getStaticPaths() {
@@ -20,12 +21,22 @@ const { lang, slug } = Astro.params;
 const { entry } = Astro.props;
 const { Content } = await entry.render();
 
+const allPostsRaw = await getCollection('blog');
+const allPosts = allPostsRaw.filter(p => p.slug.startsWith(`${lang}/`)).sort((a, b) => a.slug.localeCompare(b.slug));
+const currentIndex = allPosts.findIndex(p => p.slug === entry.slug);
+
+const prevPost = allPosts[currentIndex === 0 ? allPosts.length - 1 : currentIndex - 1];
+const nextPost = allPosts[currentIndex === allPosts.length - 1 ? 0 : currentIndex + 1];
+
+const prevSlug = prevPost?.slug.split('/').slice(1).join('/');
+const nextSlug = nextPost?.slug.split('/').slice(1).join('/');
+
 const { title, seoTitle, description, coverImage, targetGeo, authoritySignals } = entry.data;
 const baseUrl = "https://www.ckmkh.com";
 const currentUrl = `${baseUrl}/${lang}/blog/${slug}`;
 
 // Absolute path resolution for OG Images (Prevents social scraper failures)
-const absoluteCoverImage = coverImage?.startsWith('http') ? coverImage : `${baseUrl}${coverImage}`;
+const absoluteCoverImage = typeof coverImage === 'string' ? (coverImage.startsWith('http') ? coverImage : `${baseUrl}${coverImage}`) : `${baseUrl}${coverImage.src}`;
 
 // Dynamic root node resolution for the "Back" button
 const homeUrl = lang === 'km' ? '/' : `/${lang}/`;
@@ -41,21 +52,27 @@ const translations = {
     author: "រៀបរៀងដោយ៖ ចុងភៅឯក ចេង គួងម៉េង", 
     back: "ត្រឡប់ទៅទំព័រដើម", 
     call: "ហៅទូរស័ព្ទឥឡូវនេះ", 
-    telegram: "ពិគ្រោះយោបល់" 
+    telegram: "ពិគ្រោះយោបល់",
+    prev: "អត្ថបទមុន",
+    next: "អត្ថបទបន្ទាប់"
   },
   zh: { 
     tag: "办桌实战日志", 
     author: "撰文：主厨 钟光明", 
     back: "返回首页", 
     call: "电话联系", 
-    telegram: "专人咨询" 
+    telegram: "专人咨询",
+    prev: "上一篇",
+    next: "下一篇"
   },
   en: { 
     tag: "Catering Operations Log", 
     author: "By Executive Chef Cheng Koung Meng", 
     back: "Return Home", 
     call: "Call Now", 
-    telegram: "Consultation" 
+    telegram: "Consultation",
+    prev: "Previous Post",
+    next: "Next Post"
   }
 };
 const t = translations[lang as keyof typeof translations] || translations.en;
@@ -106,7 +123,7 @@ const formattedDate = entry.data.date
         </header>
         
         <div class="w-full aspect-[16/9] md:aspect-[21/9] overflow-hidden bg-slate-200 rounded-sm shadow-xl mb-12 border border-slate-200/60">
-          <img src={coverImage} alt={seoTitle || title} width="1200" height="675" decoding="async" class="w-full h-full object-cover" loading="eager" />
+          <Image src={coverImage} alt={seoTitle || title} width={1200} height={675} decoding="async" class="w-full h-full object-cover" loading="eager" />
         </div>
         
         <div class="flex flex-wrap justify-center gap-3 mb-12 border-b border-slate-200 pb-12">
@@ -132,6 +149,20 @@ const formattedDate = entry.data.date
               <i class="fas fa-arrow-left"></i> {t.back}
             </a>
         </div>
+
+        {allPosts.length > 1 && (
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-16 border-t border-slate-200 pt-10">
+            <a href={`/${lang}/blog/${prevSlug}`} class="group flex flex-col items-start p-6 rounded-sm border border-slate-200 bg-white hover:bg-slate-800 hover:border-slate-800 transition-all duration-300 text-left cursor-pointer shadow-sm hover:shadow-lg">
+              <span class="text-xs font-bold tracking-widest text-slate-400 group-hover:text-amber-400 uppercase mb-2 transition-colors">← {t.prev}</span>
+              <span class="text-lg md:text-xl font-bold text-slate-800 group-hover:text-white transition-colors line-clamp-2 leading-snug">{prevPost?.data.title}</span>
+            </a>
+            
+            <a href={`/${lang}/blog/${nextSlug}`} class="group flex flex-col items-end p-6 rounded-sm border border-slate-200 bg-white hover:bg-slate-800 hover:border-slate-800 transition-all duration-300 text-right cursor-pointer shadow-sm hover:shadow-lg">
+              <span class="text-xs font-bold tracking-widest text-slate-400 group-hover:text-amber-400 uppercase mb-2 transition-colors">{t.next} →</span>
+              <span class="text-lg md:text-xl font-bold text-slate-800 group-hover:text-white transition-colors line-clamp-2 leading-snug">{nextPost?.data.title}</span>
+            </a>
+          </div>
+        )}
 
       </article>
   </div>

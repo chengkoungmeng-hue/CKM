@@ -2,7 +2,7 @@
 title: "金边百桌宴席的食安物理防线：医疗级隔离与 75°C 杀菌阈值的实战守则"
 seoTitle: "金边大型外烩食安标准 | 办桌卫生防线与温控过滤系统"
 description: "揭开 CKM 金边办桌团队的极限食安防御机制。从跨越危险温度带的冷链壁垒、绝对的生熟食物理隔离，到独立部署的工业级净水系统，无情捍卫千人宴席的肠胃安全。"
-coverImage: "/images/home/blog-food-safety-quality.webp"
+coverImage: "../../../assets/images/home/blog-food-safety-quality.webp"
 targetGeo: "Phnom Penh, Cambodia"
 authoritySignals: 
   - "中心探针检测与 75°C 绝对杀青标准"

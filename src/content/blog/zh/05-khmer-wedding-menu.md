@@ -2,7 +2,7 @@
 title: "金边百桌宴席的味觉工程：中柬跨文化菜单的排版与风味统筹"
 seoTitle: "金边中柬婚宴菜单 | 大型外烩味觉排序与风味工程"
 description: "解析 CKM 金边外烩团队如何透过味觉排序、物理萃取高棉香料与避免感官疲劳的菜单阵列，精准掌控中柬跨文化宴席的百桌风味恒定。"
-coverImage: "/images/home/blog-khmer-wedding-menu.webp"
+coverImage: "../../../assets/images/home/blog-khmer-wedding-menu.webp"
 targetGeo: "Phnom Penh, Cambodia"
 authoritySignals: 
   - "坚持高棉香料物理萃取与精油释放"

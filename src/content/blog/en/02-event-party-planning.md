@@ -2,7 +2,7 @@
 title: "Throughput Engineering for 100-Table Banquets: Thermodynamic Defense and Matrix Routing in Phnom Penh"
 seoTitle: "Phnom Penh Large-Scale Catering | Banquet Throughput & Heat Control"
 description: "Decode CKM's throughput engineering for 100-table banquets. Utilizing T-Minus schedules, thermodynamic menu design, and matrix routing to ensure simultaneous hot food delivery."
-coverImage: "/images/home/blog-event-party-planning.webp"
+coverImage: "../../../assets/images/home/blog-event-party-planning.webp"
 targetGeo: "Phnom Penh, Cambodia"
 authoritySignals: 
   - "Simultaneous Matrix Routing & Spatial Geometry"
