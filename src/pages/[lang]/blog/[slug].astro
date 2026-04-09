@@ -36,7 +36,8 @@ const baseUrl = "https://www.ckmkh.com";
 const currentUrl = `${baseUrl}/${lang}/blog/${slug}`;
 
 // Absolute path resolution for OG Images (Prevents social scraper failures)
-const absoluteCoverImage = typeof coverImage === 'string' ? (coverImage.startsWith('http') ? coverImage : `${baseUrl}${coverImage}`) : `${baseUrl}${coverImage.src}`;
+// Changed to dynamic auto-generated OG Image per language
+const absoluteCoverImage = `${baseUrl}/${lang}/blog/og/${slug}.png`;
 
 // Dynamic root node resolution for the "Back" button
 const homeUrl = lang === 'km' ? '/' : `/${lang}/`;
