@@ -11,7 +11,7 @@ const { title, image, desc, titleClass, descClass } = Astro.props;
 ---
 <div class="group relative overflow-hidden rounded-sm shadow-md bg-slate-50 flex-none w-[80%] sm:w-[50%] md:w-auto snap-center snap-always">
     <div class="aspect-square overflow-hidden relative bg-slate-200">
-      <Image src={image} alt={title} width={640} height={640} widths={[400, 640, 800]} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" decoding="async" loading="lazy" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700"/>
+      <Image src={image} alt={title} width={640} height={640} widths={[300, 510, 640]} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" format="avif" decoding="async" loading="lazy" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700"/>
       <div class="absolute inset-0 bg-gradient-to-t from-slate-900/95 via-slate-900/30 to-transparent opacity-85 group-hover:opacity-100 transition-opacity duration-500"></div>
     </div>
     <div class="absolute inset-0 flex flex-col justify-end p-5 md:p-8 pointer-events-none">
