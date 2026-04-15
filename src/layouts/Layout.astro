@@ -93,7 +93,7 @@ const getLocalizedPath = (targetLang: "km" | "zh" | "en") => {
     return rawPath;
 };
 
-// Global LocalBusiness Schema for CKM Catering
+// Global LocalBusiness Schema for CKM Catering (Optimized for GEO & AIO)
 const schemaData = {
     "@context": "https://schema.org",
     "@type": ["LocalBusiness", "CateringService", "FoodEstablishment"],
@@ -104,9 +104,34 @@ const schemaData = {
     description: description,
     address: {
         "@type": "PostalAddress",
+        streetAddress: "House 33, Street 257, Sangkat Teuk Laak II, Khan Toul Kork",
         addressLocality: "Phnom Penh",
+        addressRegion: "Phnom Penh",
+        postalCode: "120404",
         addressCountry: "KH",
     },
+    geo: {
+        "@type": "GeoCoordinates",
+        latitude: 11.5599,
+        longitude: 104.8967,
+    },
+    openingHoursSpecification: [
+        {
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+            opens: "00:00",
+            closes: "23:59"
+        }
+    ],
+    priceRange: "$$$$",
+    areaServed: {
+        "@type": "Country",
+        name: "Cambodia"
+    },
+    sameAs: [
+        "https://www.facebook.com/CKMFOODS",
+        "https://t.me/CKMSam06"
+    ]
 };
 
 const isMooncakePage = Astro.url.pathname.includes("tanghuot");

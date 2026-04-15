@@ -1,3 +1,42 @@
-Sitemap: https://www.ckmkh.com/sitemap.xml
 User-agent: *
 Allow: /
+# Crawl-delay for standard bots to prevent heavy load on server rendering
+Crawl-delay: 1
+
+# Explicit Allowances for major AI and search crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# AIO Allowances (AI Optimization bots)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+# Disallow scrapers or heavy SEO tools that might overload
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+Sitemap: https://www.ckmkh.com/sitemap-index.xml
