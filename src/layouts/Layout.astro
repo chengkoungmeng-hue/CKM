@@ -197,18 +197,18 @@ const isMooncakePage = Astro.url.pathname.includes("tanghuot");
             )
         }
 
-        <script
-            is:inline
-            async
-            src="https://www.googletagmanager.com/gtag/js?id=G-EG6D0H2T5K"
-        ></script>
+        <!-- Deferred Analytics to prevent Main Thread Blocking (Lighthouse fix) -->
         <script is:inline>
-            window.dataLayer = window.dataLayer || [];
-            function gtag() {
-                dataLayer.push(arguments);
-            }
-            gtag("js", new Date());
-            gtag("config", "G-EG6D0H2T5K");
+            setTimeout(() => {
+                const script = document.createElement("script");
+                script.src = "https://www.googletagmanager.com/gtag/js?id=G-EG6D0H2T5K";
+                script.defer = true;
+                document.head.appendChild(script);
+                window.dataLayer = window.dataLayer || [];
+                function gtag() { dataLayer.push(arguments); }
+                gtag("js", new Date());
+                gtag("config", "G-EG6D0H2T5K");
+            }, 3500);
         </script>
     </head>
     <body class="bg-slate-900 selection:bg-amber-200 selection:text-slate-900">
@@ -405,7 +405,7 @@ const isMooncakePage = Astro.url.pathname.includes("tanghuot");
                 >
             </div>
             <p
-                class="text-slate-600 text-xs font-light tracking-[0.2em] uppercase"
+                class="text-slate-400 text-xs font-light tracking-[0.2em] uppercase"
             >
                 &copy; 2026 CKM Catering Service. All Rights Reserved.
             </p>
@@ -422,7 +422,7 @@ const isMooncakePage = Astro.url.pathname.includes("tanghuot");
                 >
             </div>
             <p
-                class="text-slate-600 text-[10px] font-light tracking-widest uppercase"
+                class="text-slate-400 text-[10px] font-light tracking-widest uppercase"
             >
                 &copy; 2026 CKM Catering.
             </p>
