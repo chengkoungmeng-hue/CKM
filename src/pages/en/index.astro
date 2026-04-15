@@ -24,7 +24,6 @@ const blogPosts = allBlogPosts.en;
 ---
 <Layout title="Chef Cheng Koung Meng - CKM Premium Catering & Event Infrastructure" description="Phnom Penh's premier full-stack catering service. Providing large-scale banquet execution, tent structural logistics, and unbroken 24-hour cold chain operations." lang="en">
   <Fragment slot="head">
-    <link rel="preload" as="image" href={heroImageRelative.src} fetchpriority="high" />
     
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
     
@@ -60,7 +59,7 @@ const blogPosts = allBlogPosts.en;
 
   <div class="w-full">
       <header class="relative h-screen flex items-center justify-center overflow-hidden">
-        <Image src={heroImageRelative} alt="CKM Luxury Banquet Setup" width={1920} height={1080} class="absolute inset-0 w-full h-full object-cover object-center transform scale-105" fetchpriority="high" loading="eager" decoding="sync" />
+        <Image src={heroImageRelative} format="avif" alt="CKM Luxury Banquet Setup" width={1920} height={1080} widths={[400, 768, 1200, 1920]} sizes="100vw" class="absolute inset-0 w-full h-full object-cover object-center transform scale-105" fetchpriority="high" loading="eager" decoding="async" />
         <div class="absolute inset-0 bg-black/70 bg-gradient-to-b from-black/80 via-black/50 to-slate-900/90"></div>
         
         <div class="relative z-10 text-center px-4 max-w-4xl mx-auto pt-10">
@@ -195,7 +194,7 @@ const blogPosts = allBlogPosts.en;
                                       type={contact.type} 
                                       svg={contact.svg} 
                                       numClass="text-white font-sans font-semibold text-base md:text-lg tracking-wide" 
-                                      typeClass="text-slate-500 text-[10px] md:text-xs font-sans uppercase tracking-[0.2em] mt-0.5 md:mt-1" 
+                                      typeClass="text-slate-400 text-[10px] md:text-xs font-sans uppercase tracking-[0.2em] mt-0.5 md:mt-1" 
                                   />
                               ))}
                               
