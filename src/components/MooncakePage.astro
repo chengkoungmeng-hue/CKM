@@ -110,12 +110,7 @@ const t = (() => {
 <Layout title={t.seoTitle} description={t.seoDesc} lang={lang}>
   <Fragment slot="head">
     <link rel="icon" type="image/x-icon" href="/thicon.ico" />
-    <link
-      rel="preload"
-      as="image"
-      href={imgLogo29.src}
-      fetchpriority="high"
-    />
+    <!-- LCP preload removed in favor of Astro Image handling -->
 
     <script
       type="application/ld+json"
@@ -184,14 +179,15 @@ const t = (() => {
       <Image
         src={imgLogo29}
         alt="នំលោកខែប្រណីត"
+        format="avif"
         width={1920}
         height={1080}
-        widths={[800, 1200, 1920]}
+        widths={[400, 800, 1200, 1920]}
         sizes="100vw"
         class="absolute inset-0 w-full h-full object-cover object-center"
         fetchpriority="high"
         loading="eager"
-        decoding="sync"
+        decoding="async"
       />
       <div
         class="absolute inset-0 bg-gradient-radial from-transparent via-black/50 to-slate-950 opacity-95"
@@ -205,11 +201,13 @@ const t = (() => {
           <Image
             src={imgLogoTanghout}
             alt="Tang Huot Logo"
+            format="avif"
             width={250}
             height={250}
             widths={[128, 250, 400]}
             sizes="(max-width: 768px) 128px, 250px"
             loading="eager"
+            decoding="async"
             class="h-28 w-auto md:h-40 object-contain drop-shadow-[0_0_15px_rgba(0,0,0,0.8)]"
           />
         </div>
@@ -264,9 +262,10 @@ const t = (() => {
         <Image
           src={imgHeroStone}
           alt="Texture"
+          format="avif"
           width={1920}
           height={1080}
-          widths={[800, 1200, 1920]}
+          widths={[400, 800, 1200, 1920]}
           sizes="100vw"
           class="w-full h-full object-cover opacity-70 mix-blend-luminosity"
           loading="lazy"
@@ -324,6 +323,7 @@ const t = (() => {
               <Image
                 src={imgProducts}
                 alt="Products"
+                format="avif"
                 width={1200}
                 height={800}
                 widths={[400, 800, 1200]}
@@ -348,6 +348,7 @@ const t = (() => {
           <Image
             src={imgSlice}
             alt="Mooncake Slice"
+            format="avif"
             width={1000}
             height={1000}
             widths={[400, 800, 1000]}
@@ -441,6 +442,7 @@ const t = (() => {
           <Image
             src={imgCholChnam}
             alt="Fa Gao"
+            format="avif"
             width={1000}
             height={1000}
             widths={[400, 800, 1000]}
@@ -461,9 +463,10 @@ const t = (() => {
           <Image
             src={imgSteamer}
             alt="Facility"
+            format="avif"
             width={1920}
             height={1080}
-            widths={[800, 1200, 1920]}
+            widths={[400, 800, 1200, 1920]}
             sizes="100vw"
             class="absolute inset-0 w-full h-full object-cover opacity-70 mix-blend-luminosity"
             loading="lazy"
