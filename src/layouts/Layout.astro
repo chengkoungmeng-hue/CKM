@@ -2,6 +2,7 @@
 // src/layouts/Layout.astro
 import { Image } from "astro:assets";
 import brandCkmLogoGold from "../assets/images/home/brand-ckm-logo-gold.webp";
+import CookieConsent from "../components/CookieConsent.astro";
 
 // 狀態: 終極渲染封裝 4.3。實裝 baseLang 語系降維攔截器，修復 km-KH 路由與字典錯位問題。
 const {
@@ -462,6 +463,8 @@ const isMooncakePage = Astro.url.pathname.includes("tanghuot");
                 </a>
             </div>
         </div>
+
+        <CookieConsent lang={lang} />
     </body>
 </html>
 
