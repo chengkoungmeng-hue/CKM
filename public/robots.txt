@@ -40,3 +40,4 @@ User-agent: MJ12bot
 Disallow: /
 
 Sitemap: https://www.ckmkh.com/sitemap-index.xml
+Sitemap: https://www.ckmkh.com/sitemap.xml
