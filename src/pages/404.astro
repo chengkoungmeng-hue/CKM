@@ -3,16 +3,18 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout title="404: 找不到頁面 | CKM Catering">
-  <main class="min-h-[70vh] flex flex-col items-center justify-center bg-slate-950 text-slate-200 px-6 font-sans text-center">
-    <div class="mb-4">
-      <svg class="w-12 h-12 mx-auto text-amber-500/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+  <div class="h-[60vh] flex flex-col items-center justify-center text-slate-200 px-6 font-sans text-center gap-6">
+    <svg class="w-16 h-16 text-amber-500/50 block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+    
+    <div>
+        <h1 class="text-5xl md:text-7xl font-serif text-amber-500 mb-2 tracking-normal">404</h1>
+        <p class="text-sm md:text-base text-slate-400 max-w-md mx-auto font-light tracking-widest uppercase">
+            Not Found
+        </p>
     </div>
-    <h1 class="text-5xl md:text-7xl font-serif text-amber-500 mb-4 tracking-normal">404</h1>
-    <p class="text-sm md:text-base text-slate-400 max-w-md mx-auto mb-8 font-light tracking-wide">
-      您訪問的內容似乎不在服務範圍內。
-    </p>
-    <a href="/" class="inline-flex items-center justify-center px-8 py-2.5 bg-amber-500 hover:bg-amber-400 text-amber-950 transition-colors text-xs font-medium tracking-widest">
+
+    <a href="/" class="inline-flex items-center justify-center px-8 py-2.5 bg-amber-500 hover:bg-amber-400 text-amber-950 transition-colors text-xs font-bold tracking-widest uppercase rounded-sm mt-4">
       返回首頁
     </a>
-  </main>
+  </div>
 </Layout>
