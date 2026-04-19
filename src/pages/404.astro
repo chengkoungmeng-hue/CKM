@@ -1,62 +1,18 @@
 ---
-// src/pages/404.astro
-// ស្ថានភាព៖ ប្រតិបត្តិការ។ ទំព័រ 404 កំណត់ផ្លូវត្រឡប់ទៅទំព័រដើមដោយស្វ័យប្រវត្តិ។ (បានធ្វើបច្ចុប្បន្នភាពឈ្មោះប្រេន និង Lucide SVG)
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="404 - ទំព័រមិនត្រូវបានរកឃើញ | ចុងភៅ ចេង គួងម៉េង - CKM Catering Services" description="Page Not Found" lang="km">
-  <Fragment slot="head">
-    <meta http-equiv="refresh" content="10;url=/" />
-  </Fragment>
-
-  <div class="min-h-screen bg-slate-950 flex flex-col items-center justify-center px-6 relative overflow-hidden">
-    
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.08)_0%,transparent_60%)]"></div>
-
-    <div class="relative z-10 text-center max-w-2xl mx-auto mt-[-10vh]">
-      <h1 class="text-8xl md:text-[150px] font-serif font-bold text-amber-500 mb-2 leading-none drop-shadow-[0_0_40px_rgba(245,158,11,0.3)]">
-        404
-      </h1>
-      
-      <h2 class="text-xl md:text-3xl font-sans font-medium text-white mb-6 uppercase tracking-wider">
-        ទំព័រមិនត្រូវបានរកឃើញ <span class="hidden md:inline text-slate-600 mx-2">|</span> <br class="md:hidden" /> <span class="text-slate-300">Page Not Found</span>
-      </h2>
-      
-      <p class="text-slate-400 font-sans font-light mb-12 text-lg md:text-xl">
-        ប្រព័ន្ធកំពុងបញ្ជូនអ្នកត្រឡប់ទៅទំព័រដើមវិញក្នុងរយៈពេល 
-        <span id="countdown" class="text-amber-500 font-bold text-2xl inline-block w-8 text-center">10</span> 
-        វិនាទី...
-      </p>
-
-      <a href="/" class="inline-flex items-center justify-center gap-3 bg-amber-500 hover:bg-amber-400 text-slate-950 px-10 py-4 min-h-[56px] rounded-sm font-sans font-bold tracking-widest uppercase transition-all shadow-[0_0_20px_rgba(245,158,11,0.25)] hover:shadow-[0_0_30px_rgba(245,158,11,0.5)] focus:ring-2 focus:ring-amber-300 focus:outline-none">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        ត្រឡប់ទៅទំព័រដើម
-      </a>
+<Layout title="404: 找不到頁面 | CKM Catering">
+  <main class="min-h-[70vh] flex flex-col items-center justify-center bg-slate-950 text-slate-200 px-6 font-sans text-center">
+    <div class="mb-4">
+      <svg class="w-12 h-12 mx-auto text-amber-500/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
     </div>
-  </div>
-
-  <script is:inline>
-    // កម្មវិធីកំណត់ម៉ោងបញ្ជូនបន្ត (Client-side countdown timer)
-    let timeLeft = 10;
-    const countdownEl = document.getElementById('countdown');
-    
-    const timer = setInterval(() => {
-      timeLeft--;
-      if (countdownEl) {
-        countdownEl.innerText = timeLeft;
-      }
-      
-      if (timeLeft <= 0) {
-        clearInterval(timer);
-        window.location.href = '/';
-      }
-    }, 1000);
-  </script>
+    <h1 class="text-5xl md:text-7xl font-serif text-amber-500 mb-4 tracking-normal">404</h1>
+    <p class="text-sm md:text-base text-slate-400 max-w-md mx-auto mb-8 font-light tracking-wide">
+      您訪問的內容似乎不在服務範圍內。
+    </p>
+    <a href="/" class="inline-flex items-center justify-center px-8 py-2.5 bg-amber-500 hover:bg-amber-400 text-amber-950 transition-colors text-xs font-medium tracking-widest">
+      返回首頁
+    </a>
+  </main>
 </Layout>
-
-<style>
-  /* លាក់ Navbar និង Footer សម្រាប់ទំព័រ 404 (Force hide global elements) */
-  :global(nav), :global(footer), :global(.fixed.bottom-0) {
-    display: none !important;
-  }
-</style>
