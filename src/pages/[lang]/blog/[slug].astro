@@ -18,7 +18,7 @@ export async function getStaticPaths() {
 }
 
 const { lang, slug } = Astro.params;
-const { entry } = Astro.props;
+const { entry } = Astro.props as { entry: any };
 const { Content } = await entry.render();
 
 const allPostsRaw = await getCollection('blog');
@@ -84,6 +84,19 @@ const formattedDate = entry.data.date
       { year: 'numeric', month: 'long', day: 'numeric' }
     )
   : null;
+
+const articleSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: title,
+  description: description,
+  image: [absoluteCoverImage],
+  author: {
+    "@type": "Person",
+    name: "Cheng Koung Meng"
+  },
+  datePublished: entry.data.date ? entry.data.date.toISOString().split('T')[0] : new Date().toISOString().split('T')[0]
+});
 ---
 
 <Layout title={seoTitle || title} description={description} image={absoluteCoverImage} lang={lang}>
@@ -98,6 +111,7 @@ const formattedDate = entry.data.date
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Noto+Serif+SC:wght@600;700&family=Hanuman:wght@400;700&family=Kantumruy+Pro:wght@300;400;500&display=swap" rel="stylesheet">
+    <script type="application/ld+json" set:html={articleSchema}></script>
   </Fragment>
 
   <div class={`bg-slate-50 min-h-[calc(100vh-80px)] py-10 md:py-16 selection:bg-amber-200 selection:text-slate-900 typo-${lang}`}>
