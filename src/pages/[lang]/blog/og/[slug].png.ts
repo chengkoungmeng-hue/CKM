@@ -44,8 +44,9 @@ async function fetchFont(lang: string, text: string) {
 
 export async function getStaticPaths() {
     const blogEntries = await getCollection('blog');
-    return blogEntries.map(entry => {
-        const [lang, ...slugParts] = entry.slug.split('/');
+    return blogEntries.map((entry: any) => {
+        const entryId = entry.id.replace(/\.mdx?$/, '');
+        const [lang, ...slugParts] = entryId.split('/');
         const slug = slugParts.join('/');
         return {
             params: { lang, slug },
@@ -60,10 +61,10 @@ const translations = {
   en: { tag: "Catering Operations Log", author: "Executive Chef Cheng Koung Meng" }
 };
 
-export async function GET({ props }) {
+export async function GET({ props }: any) {
     const { entry, lang } = props;
     const title = entry.data.seoTitle || entry.data.title;
-    const t = translations[lang] || translations.en;
+    const t = translations[lang as keyof typeof translations] || translations.en;
     
     // 取得渲染字體
     const { fontData, fontName } = await fetchFont(lang, title + t.tag + t.author);
@@ -197,7 +198,7 @@ export async function GET({ props }) {
     const pngData = resvg.render();
     const pngBuffer = pngData.asPng();
 
-    return new Response(pngBuffer, {
+    return new Response(pngBuffer.buffer, {
         headers: {
             'Content-Type': 'image/png',
             'Cache-Control': 'public, max-age=31536000, immutable',

@@ -1,14 +1,15 @@
 ---
 // src/pages/[lang]/blog/[slug].astro
 // Status: Operational. Global routing, multi-language dictionary, and typography matrices aligned.
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import { Image } from 'astro:assets';
 import Layout from '../../../layouts/Layout.astro'; 
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection('blog');
   return blogEntries.map(entry => {
-    const [lang, ...slugParts] = entry.slug.split('/');
+    const entryId = entry.id.replace(/\.mdx?$/, '');
+    const [lang, ...slugParts] = entryId.split('/');
     const slug = slugParts.join('/');
     return {
       params: { lang, slug },
@@ -19,17 +20,20 @@ export async function getStaticPaths() {
 
 const { lang, slug } = Astro.params;
 const { entry } = Astro.props as { entry: any };
-const { Content } = await entry.render();
+const { Content } = await render(entry);
 
 const allPostsRaw = await getCollection('blog');
-const allPosts = allPostsRaw.filter(p => p.slug.startsWith(`${lang}/`)).sort((a, b) => a.slug.localeCompare(b.slug));
-const currentIndex = allPosts.findIndex(p => p.slug === entry.slug);
+const allPosts = allPostsRaw.map(p => ({ ...p, _slug: p.id.replace(/\.mdx?$/, '') }))
+                            .filter(p => p._slug.startsWith(`${lang}/`))
+                            .sort((a, b) => a._slug.localeCompare(b._slug));
+const entryIdClean = entry.id.replace(/\.mdx?$/, '');
+const currentIndex = allPosts.findIndex(p => p._slug === entryIdClean);
 
 const prevPost = allPosts[currentIndex === 0 ? allPosts.length - 1 : currentIndex - 1];
 const nextPost = allPosts[currentIndex === allPosts.length - 1 ? 0 : currentIndex + 1];
 
-const prevSlug = prevPost?.slug.split('/').slice(1).join('/');
-const nextSlug = nextPost?.slug.split('/').slice(1).join('/');
+const prevSlug = prevPost?._slug.split('/').slice(1).join('/');
+const nextSlug = nextPost?._slug.split('/').slice(1).join('/');
 
 const { title, seoTitle, description, coverImage, targetGeo, authoritySignals } = entry.data;
 const baseUrl = "https://www.ckmkh.com";
