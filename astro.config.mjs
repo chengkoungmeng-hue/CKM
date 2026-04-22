@@ -5,7 +5,6 @@ import { defineConfig } from 'astro/config';
 import tailwind from "@astrojs/tailwind";
 
 import sitemap from '@astrojs/sitemap';
-import astroPwa from '@vite-pwa/astro';
 
 export default defineConfig({
   // 絕對網域錨點：強制綁定 www，從源頭消滅編譯期的重定向鏈
@@ -14,38 +13,7 @@ export default defineConfig({
   // 整合矩陣：維持最高純淨度，僅保留 Tailwind 渲染引擎
   integrations: [
     tailwind(), 
-    sitemap(),
-    astroPwa({
-      registerType: 'autoUpdate',
-      injectRegister: 'auto',
-      manifest: {
-        name: 'CKM Catering',
-        short_name: 'CKM',
-        start_url: '/',
-        description: 'CKM Catering Premium Service',
-        theme_color: '#0f172a',
-        background_color: '#0f172a',
-        display: 'standalone',
-        icons: [
-          {
-            src: '/icon-192x192.png',
-            sizes: '192x192',
-            type: 'image/png',
-            purpose: 'any maskable'
-          },
-          {
-            src: '/icon-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'any maskable'
-          }
-        ]
-      },
-      workbox: {
-        cleanupOutdatedCaches: true,
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,json,webp,jpg,jpeg,woff,woff2,ttf,eot,txt}']
-      }
-    })
+    sitemap()
   ],
 
   // 開啟 Prefetch 以達成零延遲換頁
