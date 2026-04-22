@@ -17,7 +17,7 @@ export default defineConfig({
     sitemap(),
     astroPwa({
       registerType: 'autoUpdate',
-      injectRegister: 'script',
+      injectRegister: 'auto',
       manifest: {
         name: 'CKM Catering',
         short_name: 'CKM',
@@ -42,7 +42,8 @@ export default defineConfig({
         ]
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,json,webp,jpg,jpeg}']
+        cleanupOutdatedCaches: true,
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,json,webp,jpg,jpeg,woff,woff2,ttf,eot,txt}']
       }
     })
   ],
