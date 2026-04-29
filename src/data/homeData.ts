@@ -115,19 +115,19 @@ export const blogPosts: Record<string, BlogPost[]> = {
     { title: "ការគ្រប់គ្រងហានិភ័យពេលកម្មវិធីផ្ទាល់", subTitle: "ការត្រៀមម៉ាស៊ីនភ្លើងបម្រុង និងការទប់ទល់នឹងកំណើនភ្ញៀវភ្លាមៗ", link: "/km/blog/06-service-process-sop/", image: blogServiceProcessSop }
   ],
   en: [
-    { title: "Venue Audits & Logistics", subTitle: "Electrical Loads & Temporary Structure Setup", link: "/en/blog/01-venue-logistics/", image: blogWeddingServiceGuide },
-    { title: "100-Table Capacity Control", subTitle: "Managing Heat Loss & Service Flow", link: "/en/blog/02-event-party-planning/", image: blogEventPartyPlanning },
-    { title: "Sourcing & Cold Chain Defense", subTitle: "24-Hour Temperature Control & Batch Consistency", link: "/en/blog/03-chef-professional-standard/", image: blogChefProfessionalStandard },
-    { title: "Catering Food Safety", subTitle: "Cross-Contamination & The 75°C Kill Step", link: "/en/blog/04-food-safety-quality/", image: blogFoodSafetyQuality },
-    { title: "Khmer-Chinese Menus", subTitle: "Flavor Sequencing & Palate Fatigue", link: "/en/blog/05-khmer-wedding-menu/", image: blogKhmerWeddingMenu },
-    { title: "Execution & Contingency", subTitle: "Backup Generators & Extreme Weather Protocols", link: "/en/blog/06-service-process-sop/", image: blogServiceProcessSop }
+    { title: "Venue Planning & Logistics", subTitle: "Custom Infrastructure for Any Environment", link: "/en/blog/01-venue-logistics/", image: blogWeddingServiceGuide },
+    { title: "100-Table Banquet Execution", subTitle: "Precise Temperature Control & Service Flow", link: "/en/blog/02-event-party-planning/", image: blogEventPartyPlanning },
+    { title: "Ingredient Sourcing & Consistency", subTitle: "Strict Cold Chain & Uncompromising Flavor", link: "/en/blog/03-chef-professional-standard/", image: blogChefProfessionalStandard },
+    { title: "Catering Food Safety Standards", subTitle: "Rigorous Segregation & Temperature Checks", link: "/en/blog/04-food-safety-quality/", image: blogFoodSafetyQuality },
+    { title: "Khmer-Chinese Fusion Menus", subTitle: "Flavor Pairing & Menu Design Strategies", link: "/en/blog/05-khmer-wedding-menu/", image: blogKhmerWeddingMenu },
+    { title: "Event Management & Contingency", subTitle: "Meticulous Scheduling & Backup Protocols", link: "/en/blog/06-service-process-sop/", image: blogServiceProcessSop }
   ],
   zh: [
-    { title: "办桌场地勘测与水电调度", subTitle: "应对户外空地与临时建筑的硬体条件", link: "/zh/blog/01-venue-logistics/", image: blogWeddingServiceGuide },
-    { title: "百桌大型办桌的出菜调度", subTitle: "对抗现场环境变数与保温暖热把控", link: "/zh/blog/02-event-party-planning/", image: blogEventPartyPlanning },
-    { title: "外烩总铺师的食材与口味把关", subTitle: "低温保鲜机制与百桌大锅菜的口味稳定度", link: "/zh/blog/03-chef-professional-standard/", image: blogChefProfessionalStandard },
-    { title: "办桌现场的卫生与食安防线", subTitle: "生熟食物理隔离与 75°C 杀菌阈值", link: "/zh/blog/04-food-safety-quality/", image: blogFoodSafetyQuality },
-    { title: "中柬混搭办桌菜单排版逻辑", subTitle: "手工高棉香料与口味轻重缓急的拿捏", link: "/zh/blog/05-khmer-wedding-menu/", image: blogKhmerWeddingMenu },
-    { title: "现场统筹与突发状况对策", subTitle: "时间排程、动线清空与水电跳电准备", link: "/zh/blog/06-service-process-sop/", image: blogServiceProcessSop }
+    { title: "外烩场地评估与动线规划", subTitle: "因地制宜打造完美的宴会硬体设施", link: "/zh/blog/01-venue-logistics/", image: blogWeddingServiceGuide },
+    { title: "百桌大型宴会的出餐统筹", subTitle: "精准控温机制与流畅的服务动线", link: "/zh/blog/02-event-party-planning/", image: blogEventPartyPlanning },
+    { title: "总铺师的食材严选与风味坚持", subTitle: "严密的低温保鲜与始终如一的美味", link: "/zh/blog/03-chef-professional-standard/", image: blogChefProfessionalStandard },
+    { title: "五星级的卫生与食安标准", subTitle: "落实生熟食分离与严格的中心温度检测", link: "/zh/blog/04-food-safety-quality/", image: blogFoodSafetyQuality },
+    { title: "中柬融合菜单设计与搭配逻辑", subTitle: "手工高棉香料与风味层次的完美拿捏", link: "/zh/blog/05-khmer-wedding-menu/", image: blogKhmerWeddingMenu },
+    { title: "现场活动统筹与危机处理", subTitle: "周密的时间排程与备用设施规划", link: "/zh/blog/06-service-process-sop/", image: blogServiceProcessSop }
   ]
 };
