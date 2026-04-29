@@ -107,12 +107,12 @@ export interface BlogPost {
 
 export const blogPosts: Record<string, BlogPost[]> = {
   km: [
-    { title: "ការវាយតម្លៃទីតាំង និងរៀបចំផ្លូវចេញម្ហូប", subTitle: "ការពិនិត្យកម្លាំងភ្លើង និងការរៀបចំរោងការជាមុន", link: "/km/blog/01-venue-logistics/", image: blogWeddingServiceGuide },
-    { title: "ការគ្រប់គ្រងការចេញម្ហូបរយតុ", subTitle: "ការរក្សាកម្តៅម្ហូប និងទប់ទល់នឹងអាកាសធាតុខាងក្រៅ", link: "/km/blog/02-event-party-planning/", image: blogEventPartyPlanning },
-    { title: "ស្តង់ដារគុណភាព និងការរក្សាសាច់ស្រស់", subTitle: "ការរក្សាភាពត្រជាក់ ២៤ម៉ោង និងការកំណត់ស្តង់ដារគ្រឿងទេស", link: "/km/blog/03-chef-professional-standard/", image: blogChefProfessionalStandard },
-    { title: "ការធានាអនាម័យ និងសុវត្ថិភាពម្ហូបការ", subTitle: "ការបែងចែកសាច់ឆៅនិងឆ្អិនដាច់ពីគ្នា រួមទាំងប្រព័ន្ធទឹកស្អាត", link: "/km/blog/04-food-safety-quality/", image: blogFoodSafetyQuality },
+    { title: "ការវាយតម្លៃទីតាំង និងរៀបចំផ្លូវចេញម្ហូប", subTitle: "ការរៀបចំទីតាំងកម្មវិធី និងការបែងចែកទំហំរោងការ", link: "/km/blog/01-venue-logistics/", image: blogWeddingServiceGuide },
+    { title: "ការគ្រប់គ្រងការចេញម្ហូបរយតុ", subTitle: "ការរក្សាកម្តៅម្ហូប និងធានាគុណភាពទោះនៅទីតាំងខាងក្រៅ", link: "/km/blog/02-event-party-planning/", image: blogEventPartyPlanning },
+    { title: "ការជ្រើសរើសវត្ថុធាតុដើម និងរក្សាភាពស្រស់", subTitle: "ការរក្សាភាពត្រជាក់ដើម្បីធានាបាននូវរសជាតិដើម", link: "/km/blog/03-chef-professional-standard/", image: blogChefProfessionalStandard },
+    { title: "ការធានាអនាម័យ និងសុវត្ថិភាពម្ហូបការ", subTitle: "ការបែងចែកសាច់ឆៅនិងឆ្អិនដាច់ពីគ្នា និងអនាម័យខ្ពស់បំផុត", link: "/km/blog/04-food-safety-quality/", image: blogFoodSafetyQuality },
     { title: "ការរៀបចំម៉ឺនុយម្ហូបការខ្មែរ-ចិន", subTitle: "បច្ចេកទេសបុកគ្រឿងដោយដៃ និងការរៀបចំរសជាតិមិនឱ្យទ្រាន់", link: "/km/blog/05-khmer-wedding-menu/", image: blogKhmerWeddingMenu },
-    { title: "ការគ្រប់គ្រងហានិភ័យពេលកម្មវិធីផ្ទាល់", subTitle: "ការត្រៀមម៉ាស៊ីនភ្លើងបម្រុង និងការទប់ទល់នឹងកំណើនភ្ញៀវភ្លាមៗ", link: "/km/blog/06-service-process-sop/", image: blogServiceProcessSop }
+    { title: "ការរៀបចំកម្មវិធីដោយរលូន និងការដោះស្រាយបញ្ហា", subTitle: "ការត្រៀមខ្លួនរួចជាស្រេច និងការទទួលភ្ញៀវប្រកបដោយភាពកក់ក្តៅ", link: "/km/blog/06-service-process-sop/", image: blogServiceProcessSop }
   ],
   en: [
     { title: "Venue Planning & Logistics", subTitle: "Custom Infrastructure for Any Environment", link: "/en/blog/01-venue-logistics/", image: blogWeddingServiceGuide },
