@@ -8,6 +8,7 @@ authoritySignals:
   - "ការចេញម្ហូបព្រមគ្នា និងការរៀបចំផ្លូវដើរច្បាស់លាស់"
   - "ការរៀបចំម៉ឺនុយរក្សាកម្តៅ និងការចាត់ចែងពេលវេលា"
 schemaType: "Article"
+category: "pillar"
 draft: false
 ---
 

@@ -7,6 +7,8 @@ import MenuCard from '../components/MenuCard.astro';
 import InsightCard from '../components/InsightCard.astro';
 import ContactCard from '../components/ContactCard.astro';
 
+import { getCollection } from 'astro:content';
+
 import { 
   siteDomain, 
   telegramLink, 
@@ -15,12 +17,31 @@ import {
   logo, 
   mainPhone, 
   phoneNumbers, 
-  menuItems as allMenuItems, 
-  blogPosts as allBlogPosts 
+  menuItems as allMenuItems
 } from '../data/homeData';
 
 const menuItems = allMenuItems.km;
-const blogPosts = allBlogPosts.km;
+
+// Fetch and sort dynamic blog posts
+const rawPosts = await getCollection('blog', ({ id, data }) => {
+  return id.startsWith('km/') && data.draft !== true;
+});
+
+rawPosts.sort((a, b) => b.id.localeCompare(a.id));
+
+const formatPost = (post: any) => {
+  const slugParts = post.id.replace(/\.mdx?$/, '').split('/');
+  const slug = slugParts.slice(1).join('/');
+  return {
+    title: post.data.title,
+    subTitle: post.data.description,
+    link: `/km/blog/${slug}`,
+    image: post.data.coverImage
+  };
+};
+
+const pillarPosts = rawPosts.filter(p => p.data.category === 'pillar').slice(0, 6).map(formatPost);
+const trendPosts = rawPosts.filter(p => p.data.category === 'trend').slice(0, 3).map(formatPost);
 ---
 <Layout title="ចុងភៅ ចេង គួងម៉េង - CKM Premium Catering & Event Planning" description="សេវាកម្មម្ហូបការ ជួលរោងការ និងការរៀបចំទីតាំងកម្មវិធីខ្នាតធំនៅភ្នំពេញ។ ទទួលបានការគាំទ្រពីអតិថិជនជាង ១ម៉ឺននាក់ ជាមួយនឹងការរៀបចំចាត់ចែងពេញ ២៤ម៉ោង។" lang="km-KH">
   <Fragment slot="head">
@@ -154,7 +175,7 @@ const blogPosts = allBlogPosts.km;
         <div class="max-w-7xl mx-auto px-6">
            <div class="text-center mb-10 md:mb-16"><h2 class="text-3xl md:text-4xl font-km-serif font-bold text-slate-900">បទពិសោធន៍ និងក្បួនខ្នាតរៀបចំម្ហូបការ</h2></div>
            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-              {blogPosts.map(post => (
+              {pillarPosts.map(post => (
                 <InsightCard 
                     {...post} 
                     titleClass="text-lg md:text-xl font-km-serif font-bold text-slate-900 mb-2 md:mb-3 group-hover:text-amber-600 transition-colors duration-300 leading-snug" 
@@ -168,6 +189,31 @@ const blogPosts = allBlogPosts.km;
            </div>
         </div>
       </section>
+
+      {trendPosts.length > 0 && (
+      <section id="trends" class="py-12 md:py-16 bg-white border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-6">
+           <div class="flex flex-col md:flex-row items-center justify-between mb-8 md:mb-12">
+               <h2 class="text-2xl md:text-3xl font-km-serif font-bold text-slate-900 mb-4 md:mb-0">ព័ត៌មាន និងនិន្នាការថ្មីៗ (Trends)</h2>
+               <a href="/km/blog" class="text-slate-500 hover:text-amber-600 font-km-sans text-sm font-medium transition-colors flex items-center gap-2">
+                   អានអត្ថបទទាំងអស់ (View All)
+                   <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+               </a>
+           </div>
+           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+              {trendPosts.map(post => (
+                <InsightCard 
+                    {...post} 
+                    titleClass="text-base md:text-lg font-km-serif font-bold text-slate-900 mb-2 group-hover:text-amber-600 transition-colors duration-300 leading-snug" 
+                    subTitleClass="text-slate-500 text-xs font-km-sans font-light mb-4 line-clamp-2" 
+                    linkClass="mt-auto inline-flex items-center text-amber-600 text-xs font-km-sans font-medium hover:text-amber-700 transition-colors" 
+                    linkLabel="អានបន្ថែម"
+                />
+              ))}
+           </div>
+        </div>
+      </section>
+      )}
 
       <section id="contact" class="relative py-20 md:py-32 bg-slate-950 border-t border-slate-800 overflow-hidden">
           <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-[1px] bg-gradient-to-r from-transparent via-amber-500/30 to-transparent"></div>

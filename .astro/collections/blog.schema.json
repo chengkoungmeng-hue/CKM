@@ -42,6 +42,14 @@
         "HowTo"
       ]
     },
+    "category": {
+      "default": "trend",
+      "type": "string",
+      "enum": [
+        "pillar",
+        "trend"
+      ]
+    },
     "draft": {
       "default": false,
       "type": "boolean"
