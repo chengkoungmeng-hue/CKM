@@ -50,6 +50,7 @@ const navTranslations = {
         call: "ហៅទូរស័ព្ទ",
         telegram: "Telegram",
         mooncake: "នំលោកខែ",
+        copyright: "រក្សាសិទ្ធិគ្រប់យ៉ាង",
     },
     zh: {
         service: "现场把关",
@@ -59,6 +60,7 @@ const navTranslations = {
         call: "电话联系",
         telegram: "专人咨询",
         mooncake: "中秋月饼",
+        copyright: "All Rights Reserved.",
     },
     en: {
         service: "Operations",
@@ -68,6 +70,7 @@ const navTranslations = {
         call: "Call Now",
         telegram: "Telegram",
         mooncake: "Mooncake",
+        copyright: "All Rights Reserved.",
     },
 };
 const t = navTranslations[baseLang];
@@ -100,7 +103,7 @@ const schemaData = {
     url: canonicalURL.toString(),
     telephone: cleanPhone,
     image: ogImageAbsolute,
-    description: description,
+    description: baseLang === "km" ? `ចេង គួងម៉េង (CKM) ផ្តល់ជូនសេវាកម្មម្ហូបការ សេវាកម្មទទួលរៀបចំកម្មវិធី និងចុងភៅរៀបចំម្ហូបការលំដាប់ខ្ពស់នៅភ្នំពេញ។ ${description}` : description,
     address: {
         "@type": "PostalAddress",
         streetAddress: "House 33, Street 257, Sangkat Teuk Laak II, Khan Toul Kork",
@@ -123,10 +126,16 @@ const schemaData = {
         }
     ],
     priceRange: "$$$$",
-    areaServed: {
-        "@type": "Country",
-        name: "Cambodia"
-    },
+    areaServed: [
+        {
+            "@type": "City",
+            "name": "Phnom Penh"
+        },
+        {
+            "@type": "Country",
+            "name": "Cambodia"
+        }
+    ],
     sameAs: [
         "https://www.facebook.com/CKMFOODS",
         "https://t.me/CKMSam06"
@@ -189,6 +198,9 @@ const isMooncakePage = Astro.url.pathname.includes("tanghuot");
             name="robots"
             content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
         />
+        {baseLang === "km" && (
+            <meta name="keywords" content="សេវាកម្មម្ហូបការ, សេវាកម្មទទួលរៀបចំកម្មវិធី, ចុងភៅរៀបចំម្ហូបការ, សេវាកម្មម្ហូបការ ភ្នំពេញ, ម៉ឺនុយម្ហូបការខ្មែរ-ចិន, កញ្ចប់សេវាកម្មរៀបចំពិធីមង្គលការ, សេវាកម្មម្ហូបការតម្លៃសមរម្យ, wedding catering cambodia, catering service phnom penh" />
+        )}
 
         <slot name="head" />
 
@@ -399,7 +411,7 @@ const isMooncakePage = Astro.url.pathname.includes("tanghuot");
             <p
                 class="text-slate-300 text-xs tracking-[0.2em] uppercase"
             >
-                &copy; 2026 CKM Catering Service. All Rights Reserved.
+                &copy; 2026 CKM Catering Service. {t.copyright}
             </p>
         </footer>
 

@@ -34,31 +34,22 @@ const formatPost = (post: any) => {
   };
 };
 
-const pillarPosts = rawPosts.filter(p => p.data.category === 'pillar').map(formatPost);
-const trendPosts = rawPosts.filter(p => p.data.category === 'trend').map(formatPost);
-
 const translations = {
   km: {
     title: "អត្ថបទ និងចំណេះដឹង",
-    desc: "ព័ត៌មាន បទពិសោធន៍ និងនិន្នាការថ្មីៗនៃការរៀបចំម្ហូបការ",
-    pillarTitle: "បទពិសោធន៍ និងក្បួនខ្នាតរៀបចំម្ហូបការ",
-    trendTitle: "ព័ត៌មាន និងនិន្នាការថ្មីៗ",
+    desc: "បទពិសោធន៍ និងក្បួនខ្នាតរៀបចំម្ហូបការប្រចាំហាង",
     readMore: "អានបន្ថែម",
     homeUrl: "/"
   },
   zh: {
-    title: "外燴指南與產業動態",
-    desc: "深入了解 CKM 專業辦桌標準與最新婚宴趨勢",
-    pillarTitle: "辦桌實戰指南",
-    trendTitle: "產業最新動態",
+    title: "外燴實戰指南",
+    desc: "深入了解 CKM 專業辦桌標準與現場統籌細節",
     readMore: "閱讀更多",
     homeUrl: "/zh/"
   },
   en: {
-    title: "Insights & Trends",
-    desc: "Discover CKM's professional catering standards and the latest event trends",
-    pillarTitle: "Professional Catering Guides",
-    trendTitle: "Latest Trends & News",
+    title: "Catering Operations Insights",
+    desc: "Discover CKM's professional catering standards and logistics expertise",
     readMore: "Read More",
     homeUrl: "/en/"
   }
@@ -93,7 +84,7 @@ const t = translations[lang as keyof typeof translations] || translations.en;
 
         <section>
            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-              {rawPosts.map(post => (
+              {rawPosts.map(formatPost).map(post => (
                 <InsightCard 
                     {...post} 
                     titleClass="text-lg md:text-xl font-km-serif font-bold text-slate-900 mb-2 md:mb-3 group-hover:text-amber-600 transition-colors duration-300 leading-snug" 

@@ -27,7 +27,7 @@ const blogCollection = defineCollection({
     schemaType: z.enum(['Article', 'FAQPage', 'HowTo']).default('Article'),
     
     // 分流機制：區分核心內容與趨勢誘餌
-    category: z.enum(['pillar', 'trend']).default('trend'),
+    category: z.enum(['pillar']).default('pillar'),
     
     // 開發狀態切換
     draft: z.boolean().default(false),
