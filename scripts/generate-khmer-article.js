@@ -42,36 +42,39 @@ Title of the trend: ${latestItem.title}
 Link: ${latestItem.link}
 Summary: ${latestItem.contentSnippet || latestItem.content}
 
-CRITICAL INSTRUCTIONS (Role Boundary & Viewpoint Shift):
-1. Acknowledge the trend, but DO NOT claim CKM provides venue decoration, cliff platform building, or wedding planning services. 
-2. Shift the viewpoint: Position CKM strictly as the "Catering & Banquet Partner" (餐飲外燴後盾). 
-3. Emphasize how this trend brings physical/logistical challenges (e.g. outdoor heat, lack of infrastructure, food safety risks).
-4. Present CKM's 3 absolute advantages as the solution:
+CRITICAL INSTRUCTIONS (Safety & Role Boundary):
+1. CLEAR SEPARATION: Do NOT pretend CKM invented this trend or is the subject of the news. Clearly structure the article into two parts: "The International Trend" (summarizing the news) and "CKM's Expert Perspective" (how we handle the catering aspect of it).
+2. DO NOT OVERPROMISE: Strictly limit CKM's role to "Catering & Banquet Partner" (餐飲外燴). Never claim we do venue decoration, wedding planning, or anything outside of food and banquet logistics.
+3. COMMENTARY FOCUS: In the CKM perspective section, present CKM's 3 absolute advantages as our standard operating procedure, not as a sales pitch for a new product.
    - Strict Cold Chain (嚴密的低溫保鮮機制)
    - 100-Table Temp Control & Routing (百桌出菜的溫度掌控與動線規劃)
-   - 5-Star Hygiene / Raw & Cooked Separation (五星級的衛生標準：生熟食分離與中心溫度檢測)
-5. Tone: Professional yet colloquial and accessible Khmer.
-6. The output MUST be a valid Astro Markdown file containing frontmatter.
+   - 5-Star Hygiene / Raw & Cooked Separation (五星級的衛生標準)
+4. Tone: Professional, objective reporting mixed with authoritative chef commentary in colloquial Khmer.
+5. The output MUST be a valid Astro Markdown file containing frontmatter.
 
 Format the output EXACTLY like this:
 \`\`\`markdown
 ---
-title: "[Catchy Khmer SEO Title addressing the trend and catering]"
+title: "[Catchy Khmer SEO Title addressing the trend]"
 seoTitle: "[Slightly longer SEO title including Phnom Penh Catering]"
 description: "[1-2 sentence meta description]"
 coverImage: "../../../assets/images/home/blog-wedding-service-guide.webp"
 targetGeo: "Phnom Penh, Cambodia"
 authoritySignals: 
-  - "ប្រព័ន្ធរក្សាភាពត្រជាក់កម្រិតស្តង់ដារ"
-  - "ការគ្រប់គ្រងកម្ដៅម្ហូប និងអនាម័យ"
+  - "ការវិភាគនិន្នាការអន្តរជាតិ (International Trend Analysis)"
+  - "ទស្សនៈអ្នកជំនាញម្ហូបអាហារ (Culinary Expert Perspective)"
 schemaType: "Article"
 category: "trend"
 draft: false
 ---
 
-**រៀបរៀងដោយ៖ ចុងភៅឯក ចេង គួងម៉េង**
+**ប្រភពនិន្នាការអន្តរជាតិ (International Trend Source):** [${latestItem.title}]
 
-[Body of the article in Markdown format. Use H2 (##) and H3 (###) for structure. Remember to conclude by pointing out that while the customer's wedding planner handles the visuals, CKM ensures the culinary execution is flawless.]
+## និន្នាការថ្មីៗក្នុងវិស័យរៀបចំកម្មវិធី (Latest Industry Trend)
+[Summarize the news/trend here objectively based on the provided summary. Do not mention CKM here.]
+
+## ទស្សនៈរបស់ចុងភៅឯក CKMKH (CKMKH Expert Perspective)
+[Explain how CKM's 3 advantages (Cold Chain, Routing, Hygiene) address the logistical challenges of this trend. Strictly maintain the boundary of being a catering partner.]
 \`\`\`
 `;
 
