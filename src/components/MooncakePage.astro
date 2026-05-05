@@ -9,6 +9,15 @@ import imgCholChnam from '../assets/images/tanghuot/nom-chol-chnam-image_20_gene
 import imgSteamer from '../assets/images/tanghuot/hero-steamer-tradition.webp';
 import Layout from "../layouts/Layout.astro";
 
+import '@fontsource/battambang/300.css';
+import '@fontsource/battambang/400.css';
+import '@fontsource/battambang/700.css';
+import '@fontsource/hanuman/300.css';
+import '@fontsource/hanuman/400.css';
+import '@fontsource/hanuman/700.css';
+import '@fontsource/hanuman/900.css';
+
+
 interface Props {
   lang?: "km" | "en" | "zh";
 }
@@ -20,88 +29,67 @@ const t = (() => {
   switch (lang) {
     case "en":
       return {
-        seoTitle:
-          "Tang Huot Bakery | Wholesale Mooncakes & Traditional Pastries",
-        seoDesc:
-          "Tang Huot Bakery specializes in the premium wholesale production of signature egg yolk pies, festive mooncakes, and Fa Gao.",
+        seoTitle: "Tang Huot Bakery | Traditional Pastries & Mooncakes Wholesale",
+        seoDesc: "Tang Huot Bakery supplies egg yolk pies, mooncakes, and Fa Gao. We focus on reliable production, hygiene, and consistent quality.",
         h1: "Tang Huot Bakery",
-        heroSub: "Premium Traditional Pastries",
-        heroHighlight: "Fulfilling High-Volume Orders",
-        heroDesc:
-          "We specialize in the wholesale distribution of our signature egg yolk pies, festive mooncakes, and fortune cakes. Crafted in our newly upgraded facility, we ensure impeccable hygiene and a consistently exceptional taste to perfectly complement your festive seasons.",
-        preorderTitle: "Wholesale & Retail Inquiries",
-        sigTag: "Signature Product",
-        sigTitle: "The Tang Huot Egg Yolk Pie: A Taste of Tradition",
-        sigDesc:
-          "The egg yolk pie is our proudest signature. Alongside our diverse range of traditional pastries, each piece is meticulously baked to achieve a flawless golden crust while preserving a perfectly soft, flavorful center—even in our largest production runs.",
-        mcTitle: "Festive Mooncakes: Masterful Baking, Perfect Texture",
-        mcDesc:
-          "Crafting mooncakes on a massive scale demands extraordinary precision. We utilize industrial-grade ovens with strictly controlled temperatures, ensuring every mooncake boasts an even, golden-brown crust. The fillings remain rich, moist, and tender, delivering a premium tasting experience.",
-        fagaoTitle: "Fortune Fa Gao: Blossoming with Prosperity",
-        fagaoDesc1:
-          "During the Lunar New Year, we are fully equipped to supply our wholesale partners with premium Fa Gao in abundant quantities.",
-        fagaoDesc2:
-          "The secret to a beautifully blooming Fa Gao lies in the precise batter formulation and masterful control of steam. Our high-heat steaming technique guarantees that every cake blossoms perfectly, symbolizing luck, prosperity, and a beautiful offering for the new year.",
+        heroSub: "Traditional Pastries Wholesale",
+        heroHighlight: "Reliable High-Volume Supply",
+        heroDesc: "Tang Huot Bakery supplies egg yolk pies, mooncakes, and Fa Gao for wholesale and festive seasons. Operating from our new facility, we focus on maintaining hygiene and a consistent, pleasant taste for all our partners.",
+        preorderTitle: "Wholesale & Orders",
+        sigTag: "Classic Pastry",
+        sigTitle: "Tang Huot Egg Yolk Pie: A Traditional Taste",
+        sigDesc: "The egg yolk pie is a pastry we make with care. Even during large production runs, we carefully monitor the baking process to ensure the crust remains flaky and the center stays soft and flavorful.",
+        mcTitle: "Festive Mooncakes: Baked with Care",
+        mcDesc: "Making mooncakes in large quantities requires careful attention. We use large ovens and monitor temperatures closely to ensure an even bake. We strive to keep the fillings moist and tender for the festive season.",
+        fagaoTitle: "Fa Gao: Prepared for the Lunar New Year",
+        fagaoDesc1: "During the Lunar New Year, we are fully prepared to supply our wholesale partners with a steady quantity of Fa Gao.",
+        fagaoDesc2: "A good Fa Gao requires the right batter and careful steaming. We watch the heat closely to ensure each cake blooms properly, making them a suitable offering for the new year.",
         contactTitle: "Contact Us",
-        facilityTag: "New Production Facility",
-        address:
-          "House 454, Trapeang Thleung 1 Village, Sangkat Chom Chao, Khan Pou Senchey, Phnom Penh",
+        facilityTag: "Modern Production Facility",
+        address: "House 454, Trapeang Thleung 1 Village, Sangkat Chom Chao, Khan Pou Senchey, Phnom Penh",
       };
     case "zh":
       return {
-        seoTitle: "陈发饼家 | 顶级中秋月饼与传统糕点批发",
-        seoDesc:
-          "陈发饼家专营招牌蛋黄酥、节庆月饼与发糕的大宗批发，传承岁月经典，品质始终如一。",
+        seoTitle: "陈发饼家 | 传统糕饼与节庆月饼批发",
+        seoDesc: "陈发饼家专营蛋黄酥、月饼与发糕批发。我们在新厂房中稳定生产，注重卫生与品质，为您提供可靠的糕饼供应。",
         h1: "陈发饼家",
-        heroSub: "专注传统糕饼与月饼批发",
-        heroHighlight: "承接大宗订单，品质始终如一",
-        heroDesc:
-          "陈发饼家专营招牌蛋黄酥、节庆月饼与发糕的大宗批发与经销。我们于全新升级的现代化工厂中生产，严格把关卫生标准，确保每一口都传递着不变的经典美味，为您献上完美的节日祝福。",
-        preorderTitle: "洽询批发与零售",
-        sigTag: "镇店招牌",
-        sigTitle: "陈发蛋黄酥：传承岁月的经典滋味",
-        sigDesc:
-          "蛋黄酥是陈发饼家最具代表性的骄傲。不仅如此，我们更提供多样化的传统糕饼。凭借精湛的烘焙火候，每一颗糕点皆呈现诱人的金黄色泽，外皮酥香、内馅绵密，即便大批量生产，依然维持着毫不妥协的手工口感。",
-        mcTitle: "节庆月饼：精准火候，成就完美口感",
-        mcDesc:
-          "大宗月饼的制作，考验着对细节的极致追求。我们引进恒温控制的大型烘焙设备，确保每一颗月饼受热均匀，烤出完美的琥珀色泽。同时锁住内馅的温润与湿度，入口绵密化口，绝不干柴，为中秋佳节献上顶级的味蕾享受。",
-        fagaoTitle: "招牌发糕：花开富贵，迎春纳福",
-        fagaoDesc1:
-          "每逢农历新年，我们具备充沛的产能，能稳定供应大量的高品质发糕，满足批发伙伴的需求。",
-        fagaoDesc2:
-          "发糕要“发”得漂亮、裂痕完美，仰赖于面糊的精准比例与火候的掌控。我们熟稔大火蒸煮的奥秘，确保出炉的每一颗发糕都呈现完美的开花绽放，象征着新的一年好运连连、财源广进，是祭祖祈福的最佳选择。",
+        heroSub: "传统糕饼与节庆月饼",
+        heroHighlight: "稳定的大宗批发供应",
+        heroDesc: "陈发饼家主要供应蛋黄酥、中秋月饼与发糕。我们在新的厂房中生产，注重环境卫生与制程稳定，希望能为您的节庆或生意提供可靠、实在的传统糕点。",
+        preorderTitle: "批发与订购咨询",
+        sigTag: "经典糕点",
+        sigTitle: "陈发蛋黄酥：实在的传统味道",
+        sigDesc: "蛋黄酥是我们常年制作的糕点。每一颗的烘焙我们都按部就班，努力让外皮保持酥脆，内馅保持顺口。即使是面对大宗订单，我们也会尽力维持一贯的品质标准。",
+        mcTitle: "节庆月饼：注重火候，用心烘焙",
+        mcDesc: "制作大量月饼需要耐心照顾。我们使用大型烤炉并谨慎控制温度，努力让月饼受热均匀、色泽实在。内馅方面也力求温润顺口，希望在佳节期间为大家提供安心、实在的月饼。",
+        fagaoTitle: "传统发糕：年节祈福的心意",
+        fagaoDesc1: "在农历新年期间，我们有足够的设备与人力，能为批发伙伴提供数量稳定的发糕。",
+        fagaoDesc2: "发糕的制作需要注意面糊比例与蒸煮的火候。我们小心看顾蒸汽的强度，希望能让每一颗发糕都顺利绽放，为您增添新年的福气与好兆头。",
         contactTitle: "联系我们",
-        facilityTag: "全新现代化厂房",
+        facilityTag: "现代厂房生产",
         address: "金边市 菩森芷区 宗周分区 德邦特楞1村 454号",
       };
     case "km":
     default:
       return {
-        seoTitle: "ហាងនំ តាំង ហួត | ឯកទេសបោះដុំនំពងទា និងនំព្រះខែខ្នាតធំ",
-        seoDesc:
-          "ហាងនំ តាំង ហួត ឯកទេសផលិត និងបោះដុំនំពងទា នំព្រះខែ និងនំហ្វាកាវ។ យើងធានាគុណភាពផលិតកម្មខ្នាតធំ សម្រាប់ការចែកចាយទីផ្សារ និងបុណ្យទាន។",
+        seoTitle: "ហាងនំ តាំង ហួត | បោះដុំនំប្រពៃណី និងនំព្រះខែ",
+        seoDesc: "ហាងនំ តាំង ហួត ទទួលបោះដុំនំពងទា នំព្រះខែ និងនំហ្វាកាវ។ យើងផលិតដោយយកចិត្តទុកដាក់លើអនាម័យ និងរក្សាគុណភាពជូនអតិថិជន។",
         h1: "ហាងនំ តាំង ហួត",
-        heroSub: "ឯកទេសបោះដុំនំពងទា និងនំប្រពៃណី",
-        heroHighlight: "ទទួលការកុម្ម៉ង់ក្នុងបរិមាណច្រើន",
-        heroDesc:
-          "រោងនំ តាំង ហួត ទទួលបោះដុំ និងចែកចាយនំពងទា នំព្រះខែ និងនំហ្វាកាវ សម្រាប់លក់បន្ត និងរដូវកាលបុណ្យទាននានា។ យើងធានាគុណភាពនំដែលផលិតចេញពីរោងនំទីតាំងថ្មី ដែលមានអនាម័យខ្ពស់ និងរសជាតិឆ្ងាញ់ប្រចាំការ។",
-        preorderTitle: "ទាក់ទងបោះដុំ និងលក់រាយ",
-        sigTag: "ផលិតផលល្បីប្រចាំហាង (Signature Product)",
-        sigTitle: "នំពងទា តាំង ហួត រសជាតិប្រពៃណី",
-        sigDesc:
-          "នំពងទា គឺជាអត្តសញ្ញាណរបស់ តាំង ហួត។ ក្រៅពីនេះ យើងក៏មានផ្តល់ជូននំប្រពៃណីជាច្រើនមុខទៀត ផលិតឡើងដោយការយកចិត្តទុកដាក់លើការដុត ដើម្បីឱ្យសំបកនំមានពណ៌មាសស្អាត និងសាច់ខាងក្នុងនៅតែទន់ឆ្ងាញ់ ទោះបីជាផលិតក្នុងបរិមាណច្រើនក៏ដោយ។",
-        mcTitle: "នំព្រះខែ៖ ការដុតនំឱ្យឆ្អិនល្អនិងរក្សាភាពទន់",
-        mcDesc:
-          "ការធ្វើនំព្រះខែក្នុងបរិមាណច្រើន ទាមទារការយកចិត្តទុកដាក់ខ្ពស់ដើម្បីកុំឱ្យនំខ្លះឆ្អិន ខ្លះមិនឆ្អិន។ យើងប្រើប្រាស់ឡដុតខ្នាតធំដែលមានកម្តៅថេរ ដើម្បីឱ្យសំបកនំមានពណ៌មាសស្អាតស្មើគ្នា រីឯសាច់និងស្នូលខាងក្នុងនៅតែទន់ឆ្ងាញ់ មិនស្ងួត ឬរឹងឡើយ។",
-        fagaoTitle: "នំហ្វាកាវ ចូលឆ្នាំចិន",
-        fagaoDesc1:
-          "សម្រាប់រដូវកាលចូលឆ្នាំចិន យើងមានសមត្ថភាពផ្គត់ផ្គង់នំហ្វាកាវចំនួនច្រើនជូនអតិថិជនបោះដុំ។",
-        fagaoDesc2:
-          "ការធ្វើឱ្យនំហ្វាកាវរីកបែកមាត់ស្អាត គឺអាស្រ័យលើការលាយម្សៅនំនិងការស្មានភ្លើងចំហុយ។ យើងដឹងពីបច្ចេកទេសប្រើភ្លើងកម្រិតខ្លាំងនិងថេរ ដែលធានាថានំគ្រប់ដុំនឹងរីកបែកមាត់បានល្អ និងស្រស់ស្អាតសម្រាប់យកទៅសែនព្រេន។",
-        contactTitle: "ទំនាក់ទំនងបោះដុំ & លក់រាយ",
-        facilityTag: "ទីតាំងរោងចក្រថ្មី (New Facility)",
-        address:
-          "ផ្ទះលេខ៤៥៤ ផ្លូវលំភូមិត្រពាំងថ្លឹង១ សង្កាត់ចោមចៅ ខណ្ឌពោធិ៍សែនជ័យ រាជធានីភ្នំពេញ",
+        heroSub: "បោះដុំនំពងទា និងនំប្រពៃណី",
+        heroHighlight: "ផ្គត់ផ្គង់នំក្នុងបរិមាណច្រើន",
+        heroDesc: "ហាងនំ តាំង ហួត ផ្គត់ផ្គង់នំពងទា នំព្រះខែ និងនំហ្វាកាវ សម្រាប់លក់បន្ត និងរដូវកាលបុណ្យទាន។ យើងខិតខំផលិតនំនៅក្នុងរោងនំថ្មី ដោយរក្សាអនាម័យ និងរសជាតិឱ្យបានល្អ ដើម្បីបំពេញតម្រូវការអតិថិជន។",
+        preorderTitle: "ទំនាក់ទំនងបោះដុំ និងលក់រាយ",
+        sigTag: "នំប្រចាំហាង",
+        sigTitle: "នំពងទា តាំង ហួត៖ រសជាតិដើម",
+        sigDesc: "នំពងទា ជានំដែលយើងតែងតែធ្វើជាប្រចាំ។ ទោះបីជាត្រូវផលិតច្រើន យើងនៅតែយកចិត្តទុកដាក់លើការដុតនំ ដើម្បីឱ្យសំបកនំស្អាត ហើយសាច់ខាងក្នុងនៅតែទន់ និងងាយស្រួលញ៉ាំ។",
+        mcTitle: "នំព្រះខែ៖ យកចិត្តទុកដាក់លើការដុត",
+        mcDesc: "ការធ្វើនំព្រះខែក្នុងបរិមាណច្រើន ទាមទារការពិនិត្យមើលឱ្យបានដិតដល់។ យើងប្រើប្រាស់ឡដុតធំៗ និងគ្រប់គ្រងកម្តៅដោយប្រុងប្រយ័ត្ន ដើម្បីឱ្យនំឆ្អិនល្អ មានពណ៌ស្អាត និងសាច់ខាងក្នុងទន់ល្មម មិនស្ងួត។",
+        fagaoTitle: "នំហ្វាកាវ សម្រាប់ចូលឆ្នាំចិន",
+        fagaoDesc1: "នៅពេលចូលឆ្នាំចិន យើងរៀបចំខ្លួនរួចរាល់ ដើម្បីផ្គត់ផ្គង់នំហ្វាកាវជូនអតិថិជនបោះដុំឱ្យបានគ្រប់គ្រាន់។",
+        fagaoDesc2: "ការធ្វើនំហ្វាកាវទាមទារការលាយម្សៅ និងការមើលភ្លើងចំហុយឱ្យបានត្រឹមត្រូវ។ យើងតែងតែប្រុងប្រយ័ត្ន ដើម្បីឱ្យនំរាល់ដុំរីកបានស្អាត សម្រាប់ជាការជូនពរ និងសែនព្រេនក្នុងឆ្នាំថ្មី។",
+        contactTitle: "ទំនាក់ទំនង",
+        facilityTag: "ផលិតក្នុងរោងនំថ្មី",
+        address: "ផ្ទះលេខ៤៥៤ ផ្លូវលំភូមិត្រពាំងថ្លឹង១ សង្កាត់ចោមចៅ ខណ្ឌពោធិ៍សែនជ័យ រាជធានីភ្នំពេញ",
       };
   }
 })();
@@ -136,10 +124,7 @@ const t = (() => {
       })}
     />
 
-    <link
-      href="https://fonts.googleapis.com/css2?family=Battambang:wght@300;400;700&family=Hanuman:wght@300;400;700;900&display=swap"
-      rel="stylesheet"
-    />
+
 
     <style is:global>
       :root {

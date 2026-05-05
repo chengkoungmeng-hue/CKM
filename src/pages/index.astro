@@ -1,73 +1,55 @@
 ---
 // 實體路徑: src/pages/index.astro (高棉語主站)
-// 狀態: 終極渲染封裝 4.3 (LCP 悖論修復 + 幾何矩陣啟動 + 絕對對比度合規)
+// 狀態: CKM Landing Page Refactor V1.3 (純粹白話文與信賴錨點)
 import Layout from '../layouts/Layout.astro'; 
 import { Image } from 'astro:assets';
-import MenuCard from '../components/MenuCard.astro';
-import InsightCard from '../components/InsightCard.astro';
-import ContactCard from '../components/ContactCard.astro';
 
 import { getCollection } from 'astro:content';
 
+import '@fontsource/hanuman/400.css';
+import '@fontsource/hanuman/700.css';
+import '@fontsource/kantumruy-pro/300.css';
+import '@fontsource/kantumruy-pro/400.css';
+import '@fontsource/kantumruy-pro/500.css';
+import '@fontsource/kantumruy-pro/600.css';
+
 import { 
-  siteDomain, 
   telegramLink, 
   facebookLink, 
   heroImageRelative, 
   logo, 
-  mainPhone, 
-  phoneNumbers, 
-  menuItems as allMenuItems
+  mainPhone,
+  phoneNumbers
 } from '../data/homeData';
 
-const menuItems = allMenuItems.km;
+const menuImagesGlob = import.meta.glob<{ default: ImageMetadata }>('../assets/processed_images_ai/menu-*.png', { eager: true });
+const menuImages = Object.values(menuImagesGlob).map(m => m.default);
 
-// Fetch and sort dynamic blog posts
-const rawPosts = await getCollection('blog', ({ id, data }) => {
-  return id.startsWith('km/') && data.draft !== true;
-});
+const altTexts = [
+  "ទិដ្ឋភាពរៀបចំសាច់ជ្រូកខ្វៃក្នុងពិធីមង្គលការនៅទីវាល",
+  "បង្កងទន្លេបំពងខ្ទឹមសក្នុងពិធីជប់លៀងដ៏ធំ",
+  "ស៊ុបប៉ាវហ៊ឺក្នុងថាសប្រាក់ដ៏ប្រណិត",
+  "អាម៉ុកត្រីវេចខ្ចប់ដោយស្លឹកចេកបែបប្រពៃណី",
+  "ក្តាមឆាម្រេចកំពតស្រស់ៗក្នុងកម្មវិធីជប់លៀង",
+  "ត្រីចំហុយទឹកស៊ីអ៊ីវជាមួយខ្ញីលើចង្ក្រានក្តៅៗ",
+  "សាច់គោឡុកឡាក់ជាមួយប៉េងប៉ោះនិងសាឡាត់",
+  "ការីសាច់មាន់បែបខ្មែរញ៉ាំជាមួយនំប៉័ង",
+  "សាច់ជ្រូកខទំពាំងក្នុងកម្មវិធីជប់លៀង",
+  "ណែមបំពងស្រួយៗរៀបចំយ៉ាងស្រស់ស្អាត",
+  "អយស្ទ័រស្រស់ៗនៅលើទឹកកក",
+  "បាយឆាគ្រឿងសមុទ្រខ្ទះធំ",
+  "ថាសផ្លែឈើចម្រុះស្រស់ៗ",
+  "ក្រុមអ្នករត់តុរៀបចំម្ហូបអាហារយ៉ាងមមាញឹក",
+  "តុអាហារដ៏丰盛ក្រោមពន្លឺភ្លើងពិធីជប់លៀង"
+];
 
-rawPosts.sort((a, b) => b.id.localeCompare(a.id));
+const allPostsRaw = await getCollection('blog');
+const allPosts = [...allPostsRaw].sort((a, b) => b.id.localeCompare(a.id));
+const recentPosts = allPosts.slice(0, 3);
 
-const blogPosts = rawPosts.slice(0, 6).map(post => {
-  const slugParts = post.id.replace(/\.mdx?$/, '').split('/');
-  const slug = slugParts.slice(1).join('/');
-  return {
-    title: post.data.title,
-    subTitle: post.data.description,
-    link: `/km/blog/${slug}`,
-    image: post.data.coverImage
-  };
-});
 ---
-<Layout title="ចេង គួងម៉េង (CKM) | សេវាកម្មម្ហូបការ និងរៀបចំកម្មវិធីនៅភ្នំពេញ" description="សេវាកម្មម្ហូបការ ជួលរោងការ និងការរៀបចំទីតាំងកម្មវិធីខ្នាតធំនៅភ្នំពេញ។ ទទួលបានការគាំទ្រពីអតិថិជនជាង ១ម៉ឺននាក់ ជាមួយនឹងការរៀបចំចាត់ចែងពេញ ២៤ម៉ោង។" lang="km-KH">
-  <Fragment slot="head">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Hanuman:wght@400;700&family=Kantumruy+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
-    
-    <script type="application/ld+json" set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "FoodEstablishment",
-      "name": "CKM Premium Catering (ចុងភៅ ចេង គួងម៉េង)",
-      "image": "https://www.ckmkh.com/images/home/brand-ckm-logo-gold.webp",
-      "description": "សេវាកម្មម្ហូបការលំដាប់កំពូល ជួលរោងការ និងការរៀបចំទីតាំងកម្មវិធីខ្នាតធំនៅភ្នំពេញ។ ចុងភៅរៀបចំម្ហូបការ",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "ផ្ទះលេខ 33 ផ្លូវ 257 សង្កាត់ទឹកល្អក់ទី២ ខណ្ឌទួលគោក",
-        "addressLocality": "Phnom Penh",
-        "addressRegion": "Phnom Penh",
-        "addressCountry": "KH"
-      },
-      "telephone": "+85511827782",
-      "url": "https://www.ckmkh.com/",
-      "servesCuisine": ["Khmer Cuisine", "Chinese Banquet"],
-      "priceRange": "$$$$",
-      "sameAs": [
-        "https://www.facebook.com/CKMFOODS",
-        "https://t.me/CKMSam06"
-      ]
-    })} />
-  </Fragment>
+<Layout title="ចេង គួងម៉េង (CKM) | ក្រុមចុងភៅរៀបចំម្ហូបការនៅភ្នំពេញ" description="ក្រុមចុងភៅ CKM គឺជាក្រុមចុងភៅនៅរាជធានីភ្នំពេញដែលមានបទពិសោធន៍ ៦០ ឆ្នាំ ឯកទេសខាងរៀបចំម្ហូបការប្រពៃណីខ្មែរ និងការជួបជុំផ្សេងៗ។" lang="km-KH">
+
 
   <style>
     .font-km-serif { font-family: 'Hanuman', serif; }
@@ -76,175 +58,242 @@ const blogPosts = rawPosts.slice(0, 6).map(post => {
     .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 
-  <div class="w-full">
-      <header class="relative h-screen flex items-center justify-center overflow-hidden">
-        <Image src={heroImageRelative} format="avif" quality={50} alt="CKM Luxury Banquet Setup" width={1920} height={1080} widths={[400, 768, 1200, 1920]} sizes="100vw" class="absolute inset-0 w-full h-full object-cover object-center transform scale-105" fetchpriority="high" loading="eager" decoding="async" />
+  <article class="w-full">
+      <header class="relative min-h-screen flex items-center justify-center overflow-hidden py-20">
+        <Image src={heroImageRelative} format="avif" quality={50} alt="ទិដ្ឋភាពរៀបចំម្ហូបការដោយក្រុមចុងភៅ CKM" width={1920} height={1080} widths={[400, 768, 1200, 1920]} sizes="100vw" class="absolute inset-0 w-full h-full object-cover object-center transform scale-105" fetchpriority="high" loading="eager" decoding="async" />
         <div class="absolute inset-0 bg-black/70 bg-gradient-to-b from-black/80 via-black/50 to-slate-900/90"></div>
         
         <div class="relative z-10 text-center px-4 max-w-4xl mx-auto pt-10">
-            <Image src={logo} format="avif" alt="CKM Logo" width={176} height={176} widths={[128, 176, 256]} sizes="(max-width: 768px) 128px, 176px" class="w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-amber-500 mx-auto mb-8 shadow-[0_0_40px_rgba(245,158,11,0.5)]" />
-            <h1 class="text-4xl md:text-6xl font-km-serif font-bold text-white mb-6 leading-tight">ចុងភៅ <span class="text-amber-500">ចេង គួងម៉េង</span></h1>
-            <h2 class="text-xl md:text-2xl font-km-sans font-medium text-white/90 mb-6 uppercase">សេវាកម្មម្ហូបការ និងការរៀបចំទីតាំងលំដាប់កំពូល</h2>
-            <p class="text-lg md:text-xl text-gray-300 mb-8 max-w-3xl mx-auto font-km-sans font-light leading-relaxed hidden sm:block">ជាង ៦ ទសវត្សរ៍នៃកិត្តិនាម ទទួលបានការគាំទ្រពីអតិថិជនជាង ១ម៉ឺននាក់។ យើងជាក្រុមការងារអាជីព ផ្តល់សេវាកម្មជួលរោងការ និងរៀបចំម្ហូបការខ្នាតធំប្រកបដោយភាពរលូន និងទំនុកចិត្ត។</p>
+            <Image src={logo} format="avif" alt="និមិត្តសញ្ញាក្រុមចុងភៅ ចេង គួងម៉េង" width={176} height={176} widths={[128, 176, 256]} sizes="(max-width: 768px) 128px, 176px" class="w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-amber-500 mx-auto mb-8 shadow-[0_0_40px_rgba(245,158,11,0.5)]" />
             
-            <div class="flex flex-row gap-3 justify-center animate-fade-in-up w-full max-w-sm mx-auto sm:max-w-none" style="animation-delay: 0.1s;">
-                <a href={`tel:+855${mainPhone.replace(/\s/g, '').substring(1)}`} class="flex-1 sm:flex-none bg-amber-500 hover:bg-amber-600 text-slate-900 px-2 sm:px-8 py-3 sm:py-4 min-h-[48px] rounded-sm font-km-sans font-bold text-sm sm:text-base uppercase tracking-wider transition-colors flex items-center justify-center gap-2 shadow-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                    <span class="whitespace-nowrap">ហៅទូរស័ព្ទឥឡូវនេះ</span>
+            <h1 class="text-3xl md:text-5xl lg:text-6xl font-km-serif font-bold text-white mb-6 leading-tight">
+              ក្រុមចុងភៅ <span class="text-amber-500">ចេង គួងម៉េង</span>
+            </h1>
+            
+            <h2 class="text-lg md:text-xl font-km-sans font-medium text-amber-400 mb-6 max-w-2xl mx-auto leading-relaxed">
+              ក្រុមចុងភៅ CKM គឺជាក្រុមចុងភៅនៅរាជធានីភ្នំពេញដែលមានបទពិសោធន៍ ៦០ ឆ្នាំ ឯកទេសខាងរៀបចំម្ហូបការប្រពៃណីខ្មែរ និងការជួបជុំផ្សេងៗ។
+            </h2>
+            
+            <p class="text-base md:text-lg text-gray-200 mb-10 max-w-3xl mx-auto font-km-sans font-light leading-relaxed">
+              យើងខ្ញុំរៀបចំម្ហូបការ និងចាត់ចែងកម្មវិធីជប់លៀងជូនលោកអ្នកដោយក្តីយកចិត្តទុកដាក់។ ជាមួយនឹងបទពិសោធន៍ដ៏យូរអង្វែង យើងនឹងជួយសម្រួលរាល់កិច្ចការងាររៀបចំកម្មវិធី ដើម្បីឱ្យលោកអ្នកអាចទទួលភ្ញៀវដោយក្តីរីករាយ និងមិនមានក្តីបារម្ភអ្វីទាំងអស់។
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center w-full max-w-md mx-auto sm:max-w-none">
+                <a href={`tel:+855${mainPhone.replace(/\s/g, '').substring(1)}`} class="bg-amber-500 hover:bg-amber-600 text-slate-900 px-6 py-4 rounded-sm font-km-sans font-bold text-base transition-colors flex items-center justify-center gap-2 shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    <span>ទូរស័ព្ទសាកសួរព័ត៌មាន</span>
                 </a>
-                <a href={telegramLink} target="_blank" rel="noopener noreferrer" class="flex-1 sm:flex-none bg-[#005f8f] hover:bg-[#004b73] text-white px-2 sm:px-8 py-3 sm:py-4 min-h-[48px] rounded-sm font-km-sans font-medium text-sm sm:text-base transition-colors flex items-center justify-center gap-2 shadow-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
-                    <span class="whitespace-nowrap">ពិគ្រោះយោបល់</span>
+                <a href={telegramLink} target="_blank" rel="noopener noreferrer" class="bg-[#005f8f] hover:bg-[#004b73] text-white px-6 py-4 rounded-sm font-km-sans font-medium text-base transition-colors flex items-center justify-center gap-2 shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                    <span>ផ្ញើសារតាមតេឡេក្រាម</span>
                 </a>
             </div>
         </div>
       </header>
 
       <section class="py-12 bg-amber-500 relative z-20 shadow-xl">
-        <div class="max-w-7xl mx-auto px-6">
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 text-center divide-x divide-amber-600/30">
+        <div class="max-w-5xl mx-auto px-6">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-x divide-amber-600/30">
             <div class="flex flex-col items-center justify-center">
-              <span class="text-3xl md:text-5xl font-serif font-bold text-slate-950 mb-1 md:mb-2">៦០+</span>
-              <span class="text-slate-800 text-xs md:text-sm font-sans font-medium uppercase tracking-wider">ឆ្នាំនៃបទពិសោធន៍</span>
+              <span class="text-3xl md:text-4xl font-km-serif font-bold text-slate-950 mb-2">៦០+</span>
+              <span class="text-slate-800 text-sm font-km-sans font-medium">ឆ្នាំនៃបទពិសោធន៍</span>
             </div>
             <div class="flex flex-col items-center justify-center">
-              <span class="text-3xl md:text-5xl font-serif font-bold text-slate-950 mb-1 md:mb-2">១ម៉ឺន+</span>
-              <span class="text-slate-800 text-xs md:text-sm font-sans font-medium uppercase tracking-wider">អតិថិជនគាំទ្រ</span>
+              <span class="text-3xl md:text-4xl font-km-serif font-bold text-slate-950 mb-2">១ម៉ឺន+</span>
+              <span class="text-slate-800 text-sm font-km-sans font-medium">អតិថិជនដែលធ្លាប់បានបម្រើ</span>
             </div>
             <div class="flex flex-col items-center justify-center">
-              <span class="text-3xl md:text-5xl font-serif font-bold text-slate-950 mb-1 md:mb-2">២៤ម៉</span>
-              <span class="text-slate-800 text-xs md:text-sm font-sans font-medium uppercase tracking-wider">ការចាត់ចែង & តម្លើងរោងការ</span>
+              <span class="text-3xl md:text-4xl font-km-serif font-bold text-slate-950 mb-2">ឆ្ងាញ់</span>
+              <span class="text-slate-800 text-sm font-km-sans font-medium">ធានារសជាតិថេរ</span>
             </div>
             <div class="flex flex-col items-center justify-center">
-              <span class="text-3xl md:text-5xl font-serif font-bold text-slate-950 mb-1 md:mb-2">១០០%</span>
-              <span class="text-slate-800 text-xs md:text-sm font-sans font-medium uppercase tracking-wider">សុវត្ថិភាពនិងអនាម័យ</span>
+              <span class="text-3xl md:text-4xl font-km-serif font-bold text-slate-950 mb-2">ស្អាត</span>
+              <span class="text-slate-800 text-sm font-km-sans font-medium">អនាម័យជាចម្បង</span>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="service" class="py-16 md:py-24 bg-slate-900 relative overflow-hidden">
-         <div class="max-w-7xl mx-auto px-6 relative z-10">
-            <div class="text-center mb-12 md:mb-16"><h2 class="text-3xl md:text-4xl font-km-serif font-bold text-white">ស្តង់ដាររៀបចំម្ហូបការ និងការរៀបចំទីតាំង</h2></div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-                 <div class="bg-slate-800/50 p-8 md:p-10 rounded-lg border border-slate-700/50 hover:border-amber-500/30 transition-colors duration-500">
-                    <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-6 md:mb-8">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:w-8 md:h-8 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <section id="services" class="py-20 bg-slate-50 relative">
+         <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+              <h2 class="text-3xl md:text-4xl font-km-serif font-bold text-slate-900 mb-4">សេវាកម្មចម្បងរបស់យើង</h2>
+              <p class="text-slate-600 font-km-sans max-w-2xl mx-auto">យើងខ្ញុំត្រៀមខ្លួនជាស្រេចក្នុងការជួយសម្រួលរាល់ការងារហត់នឿយរបស់លោកអ្នក។</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                 <article class="bg-white p-8 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="w-14 h-14 bg-amber-50 rounded-full flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                     </div>
-                    <h3 class="text-xl md:text-2xl font-km-serif font-bold text-white mb-3 md:mb-4">សេវាជួលរោងការ និងការរៀបចំទីតាំង</h3>
-                    <p class="text-gray-400 text-sm md:text-base font-km-sans font-light leading-relaxed">យើងមិនត្រឹមតែចម្អិនម្ហូបទេ តែយើងមានផ្តល់សេវាកម្មជួលរោងការ និងតំឡើងរោងការប្រណីត ដោយធានាបាននូវភាពរលូនទោះស្ថិតក្នុងស្ថានភាពអាកាសធាតុបែបណាក៏ដោយ។</p>
-                 </div>
-                 <div class="bg-slate-800/50 p-8 md:p-10 rounded-lg border border-slate-700/50 hover:border-amber-500/30 transition-colors duration-500">
-                    <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-6 md:mb-8">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:w-8 md:h-8 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                    <h3 class="text-xl font-km-serif font-bold text-slate-900 mb-4">រៀបចំម្ហូបការប្រពៃណីខ្មែរ និងតុបតែងទីតាំង</h3>
+                    <p class="text-slate-600 font-km-sans leading-relaxed">
+                      យើងជួយរៀបចំម្ហូបអាហារសម្រាប់ពិធីសារពាង្គការប្រពៃណីខ្មែរ ព្រមទាំងមានសេវាជួលរោង និងតុបតែងទីតាំងកម្មវិធីឱ្យបានស្អាត និងរៀបរយ។ លោកអ្នកមិនចាំបាច់ហត់នឿយក្នុងការរៀបចំដោយខ្លួនឯងឡើយ។
+                    </p>
+                 </article>
+                 
+                 <article class="bg-white p-8 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="w-14 h-14 bg-amber-50 rounded-full flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg>
                     </div>
-                    <h3 class="text-xl md:text-2xl font-km-serif font-bold text-white mb-3 md:mb-4">ការរក្សាភាពត្រជាក់ ២៤ម៉ោង</h3>
-                    <p class="text-gray-400 text-sm md:text-base font-km-sans font-light leading-relaxed">រក្សាសាច់និងបន្លែក្នុងទូត្រជាក់។ យើងមានក្រុមការងាររៀបចំទីតាំងទាំងយប់អាធ្រាត្រ ដើម្បីធានាភាពរលូនមុនពេលកម្មវិធីចាប់ផ្តើម។</p>
-                 </div>
-                 <div class="bg-slate-800/50 p-8 md:p-10 rounded-lg border border-slate-700/50 hover:border-amber-500/30 transition-colors duration-500">
-                    <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-900 rounded-full flex items-center justify-center border border-amber-500/30 mb-6 md:mb-8">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:w-8 md:h-8 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                    <h3 class="text-xl font-km-serif font-bold text-slate-900 mb-4">ពិធីជប់លៀងបែបចិន និងកម្មវិធីអាជីវកម្ម</h3>
+                    <p class="text-slate-600 font-km-sans leading-relaxed">
+                      សម្រាប់កម្មវិធីជួបជុំគ្រួសារ ពិធីបុណ្យប្រពៃណីចិន ឬការជួបជុំអាជីវកម្ម យើងមានមុខម្ហូបពិសេសៗដែលស័ក្តិសមបំផុតសម្រាប់ទទួលភ្ញៀវកិត្តិយសរបស់លោកអ្នកដោយក្តីមោទនភាព។
+                    </p>
+                 </article>
+                 
+                 <article class="bg-white p-8 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="w-14 h-14 bg-amber-50 rounded-full flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
                     </div>
-                    <h3 class="text-xl md:text-2xl font-km-serif font-bold text-white mb-3 md:mb-4">សុវត្ថិភាពចំណីអាហារ & ការចេញម្ហូប</h3>
-                    <p class="text-gray-400 text-sm md:text-base font-km-sans font-light leading-relaxed">បំបែកកន្លែងធ្វើសាច់ឆៅនិងម្ហូបឆ្អិនដាច់ពីគ្នា។ ធានាការចេញម្ហូបក្តៅៗស្របគ្នា និងលឿនរហ័ស ទោះបីជាកម្មវិធីមានរាប់រយតុក៏ដោយ។</p>
-                 </div>
+                    <h3 class="text-xl font-km-serif font-bold text-slate-900 mb-4">ផ្នែកភេសជ្ជៈ និងការដោះស្រាយបញ្ហាភ្លាមៗ</h3>
+                    <p class="text-slate-600 font-km-sans leading-relaxed">
+                      យើងមានក្រុមការងារចាំជួយរៀបចំផ្នែកភេសជ្ជៈ និងប្រព័ន្ធភ្លើង។ ទោះបីជាមានបញ្ហាអាកាសធាតុ ភ្លៀងធ្លាក់ ឬដាច់ភ្លើងក៏ដោយ ក៏យើងមានដំណោះស្រាយរួចជាស្រេច ដើម្បីឱ្យកម្មវិធីដើរទៅមុខដោយរលូន។
+                    </p>
+                 </article>
             </div>
          </div>
       </section>
 
-      <section id="portfolio" class="py-16 md:py-24 bg-white overflow-hidden">
-        <div class="max-w-7xl mx-auto px-6">
-          <div class="text-center mb-10 md:mb-16"><h2 class="text-3xl md:text-4xl font-km-serif font-bold text-slate-900">ម៉ឺនុយម្ហូបការប្រចាំហាង</h2></div>
+      <section id="guarantee" class="py-20 bg-white">
+        <div class="max-w-5xl mx-auto px-6">
+          <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-km-serif font-bold text-slate-900 mb-4">ការធានាគុណភាពពី CKM</h2>
+            <p class="text-slate-600 font-km-sans">ពួកយើងធ្វើការដោយក្តីស្មោះត្រង់ និងយកចិត្តទុកដាក់បំផុតចំពោះភ្ញៀវរបស់អ្នក។</p>
+          </div>
           
-          <div class="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 pb-6 -mx-6 px-6 md:mx-0 md:px-0 snap-x snap-mandatory scrollbar-hide">
-            {menuItems.map((item) => (
-                <MenuCard 
-                    {...item} 
-                    titleClass="text-lg md:text-xl font-km-serif font-bold text-amber-400 mb-2 md:mb-3 md:translate-y-4 md:group-hover:translate-y-0 transition duration-500" 
-                    descClass="text-gray-200 text-xs md:text-sm font-km-sans font-light leading-relaxed md:opacity-0 md:group-hover:opacity-100 transform md:translate-y-4 md:group-hover:translate-y-0 transition-all duration-500 delay-100 line-clamp-3 md:line-clamp-none" 
-                />
+          <div class="space-y-8">
+            <div class="flex flex-col md:flex-row gap-6 items-start p-6 rounded-xl bg-slate-50 border border-slate-100">
+              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              </div>
+              <div>
+                <h3 class="text-xl font-km-serif font-bold text-slate-900 mb-2">រសជាតិម្ហូបឆ្ងាញ់ថេរ</h3>
+                <p class="text-slate-600 font-km-sans leading-relaxed">
+                  យើងចម្អិនដោយយកចិត្តទុកដាក់ ធានាថារសជាតិម្ហូបគឺឆ្ងាញ់ដូចគ្នាគ្រប់កម្មវិធី មិនថាកម្មវិធីរបស់លោកអ្នកតូច ឬធំនោះទេ។ ភ្ញៀវនឹងសរសើរពីរសជាតិម្ហូប។
+                </p>
+              </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-6 items-start p-6 rounded-xl bg-slate-50 border border-slate-100">
+              <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <div>
+                <h3 class="text-xl font-km-serif font-bold text-slate-900 mb-2">ពេលវេលាចេញម្ហូបទៀងទាត់</h3>
+                <p class="text-slate-600 font-km-sans leading-relaxed">
+                  ភ្ញៀវរបស់លោកអ្នកមិនចាំបាច់រង់ចាំយូរឡើយ។ យើងមានទម្លាប់ចេញម្ហូបបានលឿន និងក្តៅៗជានិច្ច ស្របតាមពេលវេលាដែលបានកំណត់យ៉ាងច្បាស់លាស់។
+                </p>
+              </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-6 items-start p-6 rounded-xl bg-slate-50 border border-slate-100">
+              <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <div>
+                <h3 class="text-xl font-km-serif font-bold text-slate-900 mb-2">អនាម័យ និងភាពស្អាតជានិច្ច</h3>
+                <p class="text-slate-600 font-km-sans leading-relaxed">
+                  ចាប់តាំងពីការរៀបចំវត្ថុធាតុដើម រហូតដល់ការចម្អិន និងការលាងសម្អាតចាន យើងអនុវត្តតាមស្តង់ដារអនាម័យខ្ពស់ ដើម្បីសុវត្ថិភាពនិងសុខភាពភ្ញៀវគ្រប់រូប។
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="gallery" class="py-20 bg-slate-50 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-6">
+          <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-km-serif font-bold text-slate-900 mb-4">រូបភាពមុខម្ហូបពិសេសៗ</h2>
+            <p class="text-slate-600 font-km-sans">រូបភាពពិតៗពីកម្មវិធីដែលរៀបចំដោយក្រុមចុងភៅ CKM</p>
+          </div>
+          
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {menuImages.map((img, index) => (
+              <div class="rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                  <Image src={img} alt={`មុខម្ហូបការប្រពៃណីខ្មែរទី${index + 1}`} width={400} height={400} class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async" />
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section id="insights" class="py-16 md:py-24 bg-slate-50 border-t border-slate-200">
+      <section id="blog" class="py-20 bg-white border-t border-slate-200">
         <div class="max-w-7xl mx-auto px-6">
-           <div class="text-center mb-10 md:mb-16"><h2 class="text-3xl md:text-4xl font-km-serif font-bold text-slate-900">បទពិសោធន៍ និងក្បួនខ្នាតរៀបចំម្ហូបការ</h2></div>
-           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-              {blogPosts.map(post => (
-                <InsightCard 
-                    {...post} 
-                    titleClass="text-lg md:text-xl font-km-serif font-bold text-slate-900 mb-2 md:mb-3 group-hover:text-amber-600 transition-colors duration-300 leading-snug" 
-                    subTitleClass="text-slate-500 text-xs md:text-sm font-km-sans font-light mb-4 md:mb-6 leading-relaxed" 
-                    linkClass="mt-auto inline-flex items-center text-amber-600 text-xs md:text-sm font-km-sans font-medium hover:text-amber-700 transition-colors" 
-                    linkLabel="ស្វែងយល់បន្ថែម"
-                >
-                    <svg slot="link-icon" xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 md:w-4 md:h-4 ml-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-                </InsightCard>
-              ))}
-           </div>
+          <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-km-serif font-bold text-slate-900 mb-4">អត្ថបទ និងចំណេះដឹង</h2>
+            <p class="text-slate-600 font-km-sans">ស្វែងយល់បន្ថែមអំពីការរៀបចំកម្មវិធី និងបទពិសោធន៍របស់ CKM</p>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {recentPosts.map(post => {
+              const slug = post.id.replace(/\.mdx?$/, '');
+              return (
+                <a href={`/blog/${slug}`} class="group block h-full">
+                  <article class="bg-white rounded-lg border border-slate-200 shadow-sm group-hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col h-full">
+                    {post.data.coverImage && (
+                      <div class="w-full aspect-[16/9] overflow-hidden bg-slate-100">
+                        <Image src={post.data.coverImage} alt={post.data.title} width={600} height={337} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      </div>
+                    )}
+                    <div class="p-6 flex flex-col flex-grow">
+                      <h3 class="text-xl font-km-serif font-bold text-slate-900 group-hover:text-amber-600 transition-colors duration-300 mb-3 line-clamp-2">{post.data.title}</h3>
+                      <p class="text-slate-600 font-km-sans text-sm mb-6 line-clamp-3">{post.data.description}</p>
+                      <div class="mt-auto text-amber-600 font-bold font-km-sans group-hover:text-amber-700 transition-colors flex items-center gap-2">
+                        អានបន្ថែម <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                      </div>
+                    </div>
+                  </article>
+                </a>
+              );
+            })}
+          </div>
+          
+          <div class="text-center mt-12">
+             <a href="/blog" class="inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-8 py-4 rounded-sm font-km-sans font-bold transition-colors shadow-md">
+               អត្ថបទទាំងអស់
+             </a>
+          </div>
         </div>
       </section>
 
-      <section id="contact" class="relative py-20 md:py-32 bg-slate-950 border-t border-slate-800 overflow-hidden">
-          <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-[1px] bg-gradient-to-r from-transparent via-amber-500/30 to-transparent"></div>
-          
-          <div class="max-w-7xl mx-auto px-6 relative z-10">
-              <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16 lg:gap-8 items-center">
-                  <div class="lg:col-span-5 text-left text-center lg:text-left">
-                      <div class="inline-flex items-center gap-4 mb-6 md:mb-8">
-                          <span class="w-8 md:w-12 h-[1px] bg-amber-500"></span>
-                          <span class="text-amber-500 text-[10px] md:text-xs font-km-sans font-medium uppercase">ទំនាក់ទំនងផ្នែករៀបចំកម្មវិធី</span>
-                          <span class="w-8 h-[1px] bg-amber-500 lg:hidden"></span>
-                      </div>
-                      <h2 class="text-3xl md:text-4xl lg:text-5xl font-km-serif font-bold text-white mb-6 md:mb-8 leading-tight">ទំនាក់ទំនងរៀបចំម្ហូបការ & រោងការ</h2>
-                      <p class="text-slate-400 text-sm md:text-lg font-km-sans font-light leading-relaxed mb-8 md:mb-10 max-w-md mx-auto lg:mx-0">
-                          កម្មវិធីដែលរលូន ចាប់ផ្តើមពីការពិភាក្សាលម្អិតអំពីទីតាំង ទំហំរោងការ និងការវាយតម្លៃបញ្ហាប្រឈមទុកជាមុន។ សូមទាក់ទងមកកាន់យើងខ្ញុំ។
-                      </p>
-                  </div>
-
-                  <div class="lg:col-span-7 lg:col-start-6">
-                      <div class="bg-slate-900 border border-slate-800 p-6 md:p-12 rounded-sm shadow-2xl">
-                          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 mb-6 md:mb-10">
+      <section id="contact" class="py-20 bg-slate-900 relative">
+          <div class="max-w-4xl mx-auto px-6 relative z-10 text-center">
+              <h2 class="text-3xl md:text-4xl font-km-serif font-bold text-white mb-6">ត្រូវការពិភាក្សាអំពីកម្មវិធីរបស់លោកអ្នក?</h2>
+              <p class="text-slate-300 font-km-sans mb-10">
+                  សូមទំនាក់ទំនងមកកាន់យើងខ្ញុំឥឡូវនេះ ដើម្បីទទួលបានការប្រឹក្សាយោបល់ដោយឥតគិតថ្លៃ។
+              </p>
+              
+              <div class="bg-slate-800 p-8 rounded-lg inline-block w-full max-w-2xl text-left border border-slate-700">
+                  <div class="flex flex-col md:flex-row gap-8 items-center justify-between">
+                      <div>
+                          <p class="text-slate-400 font-km-sans text-sm mb-4">លេខទូរស័ព្ទទំនាក់ទំនង៖</p>
+                          <div class="flex flex-col gap-3 mb-6">
                               {phoneNumbers.map((contact) => (
-                                  <ContactCard 
-                                      num={contact.num} 
-                                      type={contact.type} 
-                                      svg={contact.svg} 
-                                      numClass="text-white font-serif font-semibold text-base md:text-lg tracking-wide" 
-                                      typeClass="text-slate-400 text-[10px] md:text-xs font-sans uppercase mt-0.5 md:mt-1" 
-                                  />
+                                  <a href={`tel:+855${contact.num.replace(/\s/g, '').substring(1)}`} class="flex items-center gap-3 group">
+                                      <div class="w-10 h-10 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center group-hover:border-amber-500 transition-colors" set:html={contact.svg} />
+                                      <div>
+                                          <span class="text-lg font-bold text-amber-500 font-sans tracking-wider block leading-none group-hover:text-amber-400 transition-colors">{contact.num}</span>
+                                          <span class="text-xs text-slate-500 font-sans uppercase tracking-widest">{contact.type}</span>
+                                      </div>
+                                  </a>
                               ))}
-                              
-                              <div class="flex items-center gap-3 md:gap-4 p-4 md:p-6 rounded-sm bg-slate-950 border border-slate-800 min-h-[64px] md:min-h-[88px]">
-                                  <a href={telegramLink} target="_blank" rel="noopener noreferrer" aria-label="Telegram" class="flex-1 h-10 md:h-12 rounded-sm bg-[#005f8f] hover:bg-[#004b73] flex items-center justify-center text-white transition-colors duration-300">
-                                      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
-                                  </a>
-                                  <a href={facebookLink} target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="flex-1 h-10 md:h-12 rounded-sm bg-[#1877F2] hover:bg-[#166FE5] flex items-center justify-center text-white transition-colors duration-300">
-                                      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-                                  </a>
-                              </div>
                           </div>
-                          
-                          <div class="pt-6 md:pt-8 border-t border-slate-800">
-                              <div class="flex items-start gap-4 md:gap-6">
-                                  <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-slate-950 border border-slate-800 flex items-center justify-center shrink-0">
-                                      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-6 md:h-6 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                                  </div>
-                                  <div>
-                                      <h3 class="text-white font-km-sans font-medium text-sm md:text-sm mb-1.5 md:mb-2">ទីស្នាក់ការកណ្តាល</h3>
-                                      <p class="text-slate-400 text-xs md:text-sm font-km-sans font-light leading-relaxed">
-                                          ផ្ទះលេខ 33 ផ្លូវ 257 សង្កាត់ទឹកល្អក់ទី២<br class="hidden sm:block"/>ខណ្ឌទួលគោក រាជធានីភ្នំពេញ
-                                      </p>
-                                  </div>
-                              </div>
-                          </div>
+                          <p class="text-slate-400 font-km-sans text-sm">ទីតាំង៖ ផ្ទះលេខ 33 ផ្លូវ 257 សង្កាត់ទឹកល្អក់ទី២ ខណ្ឌទួលគោក រាជធានីភ្នំពេញ</p>
+                      </div>
+                      
+                      <div class="flex gap-4">
+                          <a href={telegramLink} target="_blank" rel="noopener noreferrer" aria-label="ផ្ញើសារតាម Telegram" class="w-14 h-14 rounded-full bg-[#005f8f] hover:bg-[#004b73] flex items-center justify-center text-white transition-colors">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                          </a>
+                          <a href={facebookLink} target="_blank" rel="noopener noreferrer" aria-label="ទំព័រ Facebook" class="w-14 h-14 rounded-full bg-[#1877F2] hover:bg-[#166FE5] flex items-center justify-center text-white transition-colors">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                          </a>
                       </div>
                   </div>
               </div>
           </div>
       </section>
-
-      </div>
+  </article>
 </Layout>

@@ -19,6 +19,11 @@
   "dependencies": {
     "@astrojs/check": "^0.9.8",
     "@astrojs/sitemap": "^3.7.2",
+    "@fontsource/battambang": "^5.2.8",
+    "@fontsource/hanuman": "^5.2.8",
+    "@fontsource/kantumruy-pro": "^5.2.8",
+    "@fontsource/noto-serif-sc": "^5.2.9",
+    "@fontsource/playfair-display": "^5.2.8",
     "@resvg/resvg-js": "^2.6.2",
     "satori": "^0.26.0",
     "typescript": "^6.0.3",

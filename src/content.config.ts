@@ -2,6 +2,7 @@ import { z, defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 
 const blogCollection = defineCollection({
+  // Hot-reload trigger: forced refresh of content layer
   loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/blog" }),
   schema: ({ image }) => z.object({
     // 視覺渲染層標題 (邊界放寬至 200，以容納高棉文的幾何膨脹)
