@@ -43,9 +43,14 @@ const altTexts = [
   "តុអាហារដ៏丰盛ក្រោមពន្លឺភ្លើងពិធីជប់លៀង"
 ];
 
-const allPostsRaw = await getCollection('blog');
+// 過濾：只抓取根目錄 (沒有含 '/' 的 id)，代表高棉文原始文章
+const allPostsRaw = await getCollection('blog', ({ id }) => !id.includes('/'));
 const allPosts = [...allPostsRaw].sort((a, b) => b.id.localeCompare(a.id));
-const recentPosts = allPosts.slice(0, 3);
+
+// 優先挑選標記為 featured 的文章
+const featuredPosts = allPosts.filter(post => post.data.featured);
+const otherPosts = allPosts.filter(post => !post.data.featured);
+const recentPosts = [...featuredPosts, ...otherPosts].slice(0, 3);
 
 ---
 <Layout title="ចេង គួងម៉េង (CKM) | ក្រុមចុងភៅរៀបចំម្ហូបការនៅភ្នំពេញ" description="ក្រុមចុងភៅ CKM គឺជាក្រុមចុងភៅនៅរាជធានីភ្នំពេញដែលមានបទពិសោធន៍ ៦០ ឆ្នាំ ឯកទេសខាងរៀបចំម្ហូបការប្រពៃណីខ្មែរ និងការជួបជុំផ្សេងៗ។" lang="km-KH">

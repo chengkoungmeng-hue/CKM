@@ -49,6 +49,10 @@
         "pillar"
       ]
     },
+    "featured": {
+      "default": false,
+      "type": "boolean"
+    },
     "draft": {
       "default": false,
       "type": "boolean"

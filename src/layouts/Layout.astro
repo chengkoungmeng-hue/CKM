@@ -35,8 +35,8 @@ const cleanPhone = `+855${mainPhone.replace(/\s/g, "").substring(1)}`;
 // Multi-language brand definitions
 const brandDict = {
     km: { title: "ចេង គួងម៉េង", subtitle: "សេវាកម្មម្ហូបការលំដាប់ខ្ពស់" },
-    zh: { title: "CKM CATERING", subtitle: "PREMIUM SERVICE" },
-    en: { title: "CKM CATERING", subtitle: "PREMIUM SERVICE" },
+    zh: { title: "CKM 鍾光明", subtitle: "頂級宴席與現場統籌" },
+    en: { title: "CKM CATERING", subtitle: "PRECISION EVENT LOGISTICS" },
 };
 const brand = brandDict[baseLang];
 
@@ -75,7 +75,6 @@ const navTranslations = {
 };
 const t = navTranslations[baseLang];
 
-// Dynamic localized routing path builder (Handles mixed root and dynamic [lang] paths)
 const getLocalizedPath = (targetLang: "km" | "zh" | "en") => {
     // 1. 強制剝除當前網址開頭的任何語言前綴，取得絕對乾淨的路徑 (例如 /blog/..., /tanghuot)
     let rawPath = Astro.url.pathname.replace(/^\/(km|zh|en)(\/|$)/, "/");
@@ -85,13 +84,7 @@ const getLocalizedPath = (targetLang: "km" | "zh" | "en") => {
         return rawPath === "/" ? `/${targetLang}/` : `/${targetLang}${rawPath}`;
     }
 
-    // 3. 目標為柬文 (km)：
-    // 若為動態部落格系統，物理上必須加回 /km/
-    if (rawPath.startsWith("/blog/")) {
-        return `/km${rawPath}`;
-    }
-
-    // 若為首頁或月餅等根目錄實體頁面，則維持無前綴
+    // 3. 目標為柬文 (km)：維持無前綴
     return rawPath;
 };
 
@@ -254,17 +247,17 @@ const isMooncakePage = Astro.url.pathname.includes("tanghuot");
                         class="hidden md:flex items-center gap-8 text-slate-300 font-sans text-sm font-medium tracking-wide"
                     >
                         <a
-                            href={`${homeUrl}#service`}
+                            href={`${homeUrl}#services`}
                             class="hover:text-amber-400 transition-colors"
                             >{t.service}</a
                         >
                         <a
-                            href={`${homeUrl}#portfolio`}
+                            href={`${homeUrl}#gallery`}
                             class="hover:text-amber-400 transition-colors"
                             >{t.portfolio}</a
                         >
                         <a
-                            href={`${homeUrl}#insights`}
+                            href={`${homeUrl}#blog`}
                             class="hover:text-amber-400 transition-colors"
                             >{t.insights}</a
                         >
@@ -372,17 +365,17 @@ const isMooncakePage = Astro.url.pathname.includes("tanghuot");
                     class="flex flex-col items-center gap-8 text-white font-serif text-2xl w-full px-6"
                 >
                     <a
-                        href={`${homeUrl}#service`}
+                        href={`${homeUrl}#services`}
                         class="mobile-link hover:text-amber-500 transition-colors"
                         >{t.service}</a
                     >
                     <a
-                        href={`${homeUrl}#portfolio`}
+                        href={`${homeUrl}#gallery`}
                         class="mobile-link hover:text-amber-500 transition-colors"
                         >{t.portfolio}</a
                     >
                     <a
-                        href={`${homeUrl}#insights`}
+                        href={`${homeUrl}#blog`}
                         class="mobile-link hover:text-amber-500 transition-colors"
                         >{t.insights}</a
                     >

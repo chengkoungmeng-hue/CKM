@@ -4,6 +4,7 @@ title: "រៀបចំមុខម្ហូបឱ្យត្រូវមាត
 description: "យើងដឹងថាចាស់ទុំចូលចិត្តពិសាអ្វី ហើយក៏យល់ពីចំណូលចិត្តរបស់យុវវ័យដែរ។"
 seoTitle: "រៀបចំមុខម្ហូបឱ្យត្រូវមាត់ភ្ញៀវគ្រប់វ័យ"
 coverImage: "../../assets/grounded_images/ckm_blog_02.png"
+featured: true
 authoritySignals:
   - "បទពិសោធន៍ជាង ៦០ ឆ្នាំ"
   - "ធានាគុណភាពនិងអនាម័យ"

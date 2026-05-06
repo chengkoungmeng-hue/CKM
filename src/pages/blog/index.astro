@@ -14,7 +14,8 @@ import '@fontsource/playfair-display/700.css';
 import '@fontsource/playfair-display/600-italic.css';
 
 // Fetch and sort dynamic blog posts
-const rawPosts = await getCollection('blog', ({ data }) => {
+const rawPosts = await getCollection('blog', ({ id, data }) => {
+  if(id.includes('/')) return false;
   return data.draft !== true;
 });
 

@@ -30,6 +30,9 @@ const blogCollection = defineCollection({
     // 分流機制：區分核心內容與趨勢誘餌
     category: z.enum(['pillar']).default('pillar'),
     
+    // 首頁精選文章標記 (前鋒文章)
+    featured: z.boolean().default(false),
+    
     // 開發狀態切換
     draft: z.boolean().default(false),
   }),

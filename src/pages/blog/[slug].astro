@@ -14,7 +14,7 @@ import '@fontsource/playfair-display/700.css';
 import '@fontsource/playfair-display/600-italic.css';
 
 export async function getStaticPaths() {
-  const blogEntries = await getCollection('blog');
+  const blogEntries = await getCollection('blog', ({id}) => !id.includes('/'));
   return blogEntries.map(entry => {
     const slug = entry.id.replace(/\.mdx?$/, '');
     return {
@@ -28,7 +28,7 @@ const { slug } = Astro.params;
 const { entry } = Astro.props as { entry: any };
 const { Content } = await render(entry);
 
-const allPostsRaw = await getCollection('blog');
+const allPostsRaw = await getCollection('blog', ({id}) => !id.includes('/'));
 const allPosts = allPostsRaw.map(p => ({ ...p, _slug: p.id.replace(/\.mdx?$/, '') }))
                             .sort((a, b) => a._slug.localeCompare(b._slug));
 

@@ -40,9 +40,14 @@ const altTexts = [
   "Lavish banquet table under lights"
 ];
 
-const allPostsRaw = await getCollection('blog');
+// 過濾：只抓取 en/ 目錄下的英文文章
+const allPostsRaw = await getCollection('blog', ({ id }) => id.startsWith('en/'));
 const allPosts = [...allPostsRaw].sort((a, b) => b.id.localeCompare(a.id));
-const recentPosts = allPosts.slice(0, 3);
+
+// 優先挑選標記為 featured 的文章
+const featuredPosts = allPosts.filter(post => post.data.featured);
+const otherPosts = allPosts.filter(post => !post.data.featured);
+const recentPosts = [...featuredPosts, ...otherPosts].slice(0, 3);
 ---
 <Layout title="Chef Cheng Koung Meng - CKM Catering & Event Services" description="Reliable catering service in Phnom Penh. Providing banquet execution, venue setup, and proper temperature control." lang="en">
 
@@ -224,9 +229,9 @@ const recentPosts = allPosts.slice(0, 3);
           
           <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             {recentPosts.map(post => {
-              const slug = post.id.replace(/\\.mdx?$/, '');
+              const slug = post.id.replace(/^en\//, '').replace(/\.mdx?$/, '');
               return (
-                <a href={`/blog/${slug}`} class="group block h-full">
+                <a href={`/en/blog/${slug}`} class="group block h-full">
                   <article class="bg-white rounded-lg border border-slate-200 shadow-sm group-hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col h-full">
                     {post.data.coverImage && (
                       <div class="w-full aspect-[16/9] overflow-hidden bg-slate-100">
