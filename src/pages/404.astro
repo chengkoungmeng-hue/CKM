@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 
 const pathname = Astro.url.pathname;
-let lang = "km";
+let lang: "km" | "zh" | "en" = "km";
 if (pathname.startsWith("/zh/")) lang = "zh";
 if (pathname.startsWith("/en/")) lang = "en";
 
