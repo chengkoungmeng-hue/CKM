@@ -92,14 +92,17 @@ const getLocalizedPath = (targetLang: "km" | "zh" | "en") => {
 const schemaData = {
     "@context": "https://schema.org",
     "@type": ["LocalBusiness", "CateringService", "FoodEstablishment"],
-    name: brand.title,
+    // 強制統一實體名稱，與外部目錄 (Khmer24) 保持完全一致，不隨語系切換
+    name: "ចេង គួងម៉េង សេវាកម្មម្ហូបការលំដាប់ខ្ពស់",
+    alternateName: brand.title,
     url: canonicalURL.toString(),
     telephone: cleanPhone,
     image: ogImageAbsolute,
     description: baseLang === "km" ? `ចេង គួងម៉េង (CKM) ផ្តល់ជូនសេវាកម្មម្ហូបការ សេវាកម្មទទួលរៀបចំកម្មវិធី និងចុងភៅរៀបចំម្ហូបការលំដាប់ខ្ពស់នៅភ្នំពេញ។ ${description}` : description,
     address: {
         "@type": "PostalAddress",
-        streetAddress: "House 33, Street 257, Sangkat Teuk Laak II, Khan Toul Kork",
+        // 強制：這裡的地址必須與您在外部目錄註冊的字眼「一字不差」
+        streetAddress: "ផ្ទះលេខ 33 ផ្លូវ 257 សង្កាត់ទឹកល្អក់ទី២ ខណ្ឌទួលគោក",
         addressLocality: "Phnom Penh",
         addressRegion: "Phnom Penh",
         postalCode: "120404",
@@ -110,6 +113,8 @@ const schemaData = {
         latitude: 11.5599,
         longitude: 104.8967,
     },
+    // 地圖連結：對應 Google Maps 的分享短網址
+    hasMap: "https://maps.app.goo.gl/u3SpWrkbTgH9u1J7A", 
     openingHoursSpecification: [
         {
             "@type": "OpeningHoursSpecification",
@@ -129,11 +134,24 @@ const schemaData = {
             "name": "Cambodia"
         }
     ],
+    // 強化實體關聯 (Entity Association)
     sameAs: [
         "https://www.facebook.com/CKMFOODS",
-        "https://t.me/CKMSam06"
+        "https://t.me/CKMSam06",
+        "https://www.khmer24.com/koungcheng",
+        "https://www.openstreetmap.org/user/%E1%9E%85%E1%9F%81%E1%9E%84%20%E1%9E%82%E1%9E%BD%E1%9E%84%E1%9E%98%E1%9F%89%E1%9F%81%E1%9E%84%20%E1%9E%9F%E1%9F%81%E1%9E%9C%E1%9E%B6%E1%9E%80%E1%9E%98%E1%9F%92%E1%9E%98%E1%9E%98%E1%9F%92%E1%9E%A0%E1%9E%BC%E1%9E%94%E1%9E%80%E1%9E%B6%E1%9E%9A%E1%9E%9B%E1%9F%86%E1%9E%8A%E1%9E%B6%E1%9E%94%E1%9F%8B%E1%9E%81%E1%9F%92%E1%9E%96%E1%9E%9F%E1%9F%8B"
     ],
-    servesCuisine: ["Khmer Cuisine", "Chinese Banquet"]
+    servesCuisine: ["Khmer Cuisine", "Chinese Banquet"],
+    // 建立「主理人」實體綁定 (Founder Entity)，強化品牌血肉感與真實性
+    founder: {
+        "@type": "Person",
+        "name": "KoungMeng Cheng",
+        "alternateName": "鍾光明",
+        "url": "https://www.khmer24.com/koungcheng"
+    },
+    // 連結菜單，強化 FoodEstablishment 屬性
+    menu: `${siteDomain}${homeUrl}#gallery`,
+    // email: "contact@ckmkh.com" // 若有官方信箱可取消註解補上 (NAP+E)
 };
 
 const isMooncakePage = Astro.url.pathname.includes("tanghuot");
