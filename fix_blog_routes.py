@@ -38,6 +38,10 @@ def main():
         "p.id.replace(/^zh\\//, '').replace(/\.mdx?$/, '')"
     ).replace(
         "lang=\"km-KH\"", "lang=\"zh\""
+    ).replace(
+        "../../layouts/Layout.astro", "../../../layouts/Layout.astro"
+    ).replace(
+        "../data/homeData", "../../data/homeData"
     )
     
     zh_slug = re.sub(
@@ -69,6 +73,12 @@ def main():
         "href={`/zh/blog/${slug}`}"
     ).replace(
         "lang=\"km-KH\"", "lang=\"zh\""
+    ).replace(
+        "../../layouts/Layout.astro", "../../../layouts/Layout.astro"
+    ).replace(
+        "../../components/InsightCard.astro", "../../../components/InsightCard.astro"
+    ).replace(
+        "../data/homeData", "../../data/homeData"
     ).replace(
         "link: `/blog/${slug}`", 
         "link: `/zh/blog/${slug}`"
@@ -103,6 +113,10 @@ def main():
         "p.id.replace(/^en\\//, '').replace(/\.mdx?$/, '')"
     ).replace(
         "lang=\"km-KH\"", "lang=\"en\""
+    ).replace(
+        "../../layouts/Layout.astro", "../../../layouts/Layout.astro"
+    ).replace(
+        "../data/homeData", "../../data/homeData"
     )
     
     en_slug = re.sub(
@@ -134,6 +148,12 @@ def main():
         "href={`/en/blog/${slug}`}"
     ).replace(
         "lang=\"km-KH\"", "lang=\"en\""
+    ).replace(
+        "../../layouts/Layout.astro", "../../../layouts/Layout.astro"
+    ).replace(
+        "../../components/InsightCard.astro", "../../../components/InsightCard.astro"
+    ).replace(
+        "../data/homeData", "../../data/homeData"
     ).replace(
         "link: `/blog/${slug}`", 
         "link: `/en/blog/${slug}`"

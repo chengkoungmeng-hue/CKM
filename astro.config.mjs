@@ -16,6 +16,9 @@ export default defineConfig({
     sitemap()
   ],
 
+  // 強制統一目錄斜線結尾，避免 Cloudflare 301 重定向迴圈 (GSC Redirect error)
+  trailingSlash: 'always',
+
   // 開啟 Prefetch 以達成零延遲換頁
   prefetch: true,
 

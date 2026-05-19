@@ -85,7 +85,6 @@ const articleSchema = JSON.stringify({
 
 <Layout title={seoTitle || title} description={description} image={absoluteCoverImage} lang="km-KH">
   <Fragment slot="head">
-    <link rel="canonical" href={currentUrl} />
     <meta name="geo.placename" content={targetGeo} />
     <script type="application/ld+json" set:html={articleSchema}></script>
   </Fragment>
@@ -143,12 +142,12 @@ const articleSchema = JSON.stringify({
 
         {allPosts.length > 1 && (
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-16 border-t border-slate-200 pt-10">
-            <a href={`/blog/${prevSlug}`} class="group flex flex-col items-start p-6 rounded-sm border border-slate-200 bg-white hover:bg-slate-800 hover:border-slate-800 transition-all duration-300 text-left cursor-pointer shadow-sm hover:shadow-lg">
+            <a href={`/blog/${prevSlug}/`} class="group flex flex-col items-start p-6 rounded-sm border border-slate-200 bg-white hover:bg-slate-800 hover:border-slate-800 transition-all duration-300 text-left cursor-pointer shadow-sm hover:shadow-lg">
               <span class="text-xs font-bold tracking-widest text-slate-400 group-hover:text-amber-400 uppercase mb-2 transition-colors">← {t.prev}</span>
               <span class="text-lg md:text-xl font-bold text-slate-800 group-hover:text-white transition-colors line-clamp-2 leading-snug">{prevPost?.data.title}</span>
             </a>
             
-            <a href={`/blog/${nextSlug}`} class="group flex flex-col items-end p-6 rounded-sm border border-slate-200 bg-white hover:bg-slate-800 hover:border-slate-800 transition-all duration-300 text-right cursor-pointer shadow-sm hover:shadow-lg">
+            <a href={`/blog/${nextSlug}/`} class="group flex flex-col items-end p-6 rounded-sm border border-slate-200 bg-white hover:bg-slate-800 hover:border-slate-800 transition-all duration-300 text-right cursor-pointer shadow-sm hover:shadow-lg">
               <span class="text-xs font-bold tracking-widest text-slate-400 group-hover:text-amber-400 uppercase mb-2 transition-colors">{t.next} →</span>
               <span class="text-lg md:text-xl font-bold text-slate-800 group-hover:text-white transition-colors line-clamp-2 leading-snug">{nextPost?.data.title}</span>
             </a>

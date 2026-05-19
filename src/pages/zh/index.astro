@@ -231,7 +231,7 @@ const recentPosts = [...featuredPosts, ...otherPosts].slice(0, 3);
             {recentPosts.map(post => {
               const slug = post.id.replace(/^zh\//, '').replace(/\.mdx?$/, '');
               return (
-                <a href={`/zh/blog/${slug}`} class="group block h-full">
+                <a href={`/zh/blog/${slug}/`} class="group block h-full">
                   <article class="bg-white rounded-lg border border-slate-200 shadow-sm group-hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col h-full">
                     {post.data.coverImage && (
                       <div class="w-full aspect-[16/9] overflow-hidden bg-slate-100">
