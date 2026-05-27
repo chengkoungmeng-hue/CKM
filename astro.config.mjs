@@ -7,8 +7,8 @@ import tailwind from "@astrojs/tailwind";
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  // 絕對網域錨點：強制綁定 www，從源頭消滅編譯期的重定向鏈
-  site: 'https://www.ckmkh.com',
+  // 這裡必須填寫沒有 www 的版本，以確保 Sitemap 和 Canonical 標籤正確無誤
+  site: 'https://ckmkh.com',
   
   // 整合矩陣：維持最高純淨度，僅保留 Tailwind 渲染引擎
   integrations: [

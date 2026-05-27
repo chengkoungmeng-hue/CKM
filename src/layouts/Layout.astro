@@ -21,7 +21,17 @@ const baseLang = lang.startsWith("km")
 const homeUrl = baseLang === "km" ? "/" : `/${baseLang}/`;
 
 // Absolute URL resolution for SEO and OG Image scrapers
-const siteDomain = "https://www.ckmkh.com";
+const siteDomain = "https://ckmkh.com";
+let finalDescription = description || "";
+if (finalDescription.trim().length === 0) {
+    if (baseLang === 'en') {
+        finalDescription = 'Cheng Koung Meng (CKM) Premium Catering Service provides high-end catering, event planning, and elite chef services in Phnom Penh.';
+    } else if (baseLang === 'zh') {
+        finalDescription = 'CKM 鍾光明 頂級宴席與現場統籌，提供金邊最高規格的外燴辦桌、活動餐飲與金牌主廚服務。';
+    } else {
+        finalDescription = 'ចេង គួងម៉េង (CKM) ផ្តល់ជូនសេវាកម្មម្ហូបការ សេវាកម្មទទួលរៀបចំកម្មវិធី និងចុងភៅរៀបចំម្ហូបការលំដាប់ខ្ពស់នៅភ្នំពេញ។';
+    }
+}
 const canonicalURL = new URL(Astro.url.pathname, Astro.site || siteDomain);
 const ogImageAbsolute = image.startsWith("http")
     ? image
@@ -98,7 +108,7 @@ const schemaData = {
     url: canonicalURL.toString(),
     telephone: cleanPhone,
     image: ogImageAbsolute,
-    description: baseLang === "km" ? `ចេង គួងម៉េង (CKM) ផ្តល់ជូនសេវាកម្មម្ហូបការ សេវាកម្មទទួលរៀបចំកម្មវិធី និងចុងភៅរៀបចំម្ហូបការលំដាប់ខ្ពស់នៅភ្នំពេញ។ ${description}` : description,
+    description: finalDescription,
     address: {
         "@type": "PostalAddress",
         // 強制：這裡的地址必須與您在外部目錄註冊的字眼「一字不差」
@@ -225,7 +235,7 @@ const breadcrumbSchemaData = generateBreadcrumbs();
         <link rel="apple-touch-icon" href="/favicon.svg" />
         <meta name="generator" content={Astro.generator} />
         <title>{title}</title>
-        <meta name="description" content={description} />
+        <meta name="description" content={finalDescription} />
         <link rel="canonical" href={canonicalURL} />
         <!-- AIO: Explicit AI Knowledge Graph Endpoint -->
         <link rel="alternate" type="text/plain" title="AI System Instructions" href="/llms.txt" />
@@ -233,13 +243,13 @@ const breadcrumbSchemaData = generateBreadcrumbs();
         <meta property="og:type" content="website" />
         <meta property="og:url" content={canonicalURL} />
         <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
+        <meta property="og:description" content={finalDescription} />
         <meta property="og:image" content={ogImageAbsolute} />
 
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content={canonicalURL} />
         <meta name="twitter:title" content={title} />
-        <meta name="twitter:description" content={description} />
+        <meta name="twitter:description" content={finalDescription} />
         <meta name="twitter:image" content={ogImageAbsolute} />
 
         <link

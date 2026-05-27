@@ -79,6 +79,14 @@ const articleSchema = JSON.stringify({
     "@type": "Person",
     name: "Cheng Koung Meng"
   },
+  publisher: {
+    "@type": "Organization",
+    name: "CKM Catering",
+    logo: {
+      "@type": "ImageObject",
+      url: "https://ckmkh.com/favicon.svg"
+    }
+  },
   datePublished: entry.data.date ? entry.data.date.toISOString().split('T')[0] : new Date().toISOString().split('T')[0]
 });
 ---
