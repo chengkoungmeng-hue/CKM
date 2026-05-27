@@ -24,6 +24,7 @@ export default defineConfig({
 
   // [極限參數] 強制將輕量 CSS 內嵌至 HTML，物理性消滅 300ms 網路握手與渲染阻塞
   build: {
+    format: 'directory',
     inlineStylesheets: 'always',
   },
 

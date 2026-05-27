@@ -166,7 +166,10 @@ const generateBreadcrumbs = () => {
             "@type": "ListItem",
             position: 1,
             name: homeName,
-            item: `${siteDomain}${homeUrl}`
+            item: {
+                "@id": `${siteDomain}${homeUrl}`,
+                "name": homeName
+            }
         }
     ];
 
@@ -186,21 +189,27 @@ const generateBreadcrumbs = () => {
             "@type": "ListItem",
             position: index + 2,
             name: name,
-            item: `${siteDomain}${pathAcc}`
+            item: {
+                "@id": `${siteDomain}${pathAcc}`,
+                "name": name
+            }
         });
     });
 
     // If we are deeper than the home page, make the current page match the exact title
     if (items.length > 1) {
         items[items.length - 1].name = title;
-        items[items.length - 1].item = canonicalURL.toString();
+        items[items.length - 1].item = {
+            "@id": canonicalURL.toString(),
+            "name": title
+        };
     }
 
-    return {
+    return items.length > 1 ? {
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
         "itemListElement": items
-    };
+    } : null;
 };
 const breadcrumbSchemaData = generateBreadcrumbs();
 ---
@@ -273,10 +282,14 @@ const breadcrumbSchemaData = generateBreadcrumbs();
             )
         }
         
-        <script
-            type="application/ld+json"
-            set:html={JSON.stringify(breadcrumbSchemaData)}
-        />
+        {
+            breadcrumbSchemaData && (
+                <script
+                    type="application/ld+json"
+                    set:html={JSON.stringify(breadcrumbSchemaData)}
+                />
+            )
+        }
 
     
 </head>
