@@ -32,7 +32,16 @@ if (finalDescription.trim().length === 0) {
         finalDescription = 'ចេង គួងម៉េង (CKM) ផ្តល់ជូនសេវាកម្មម្ហូបការ សេវាកម្មទទួលរៀបចំកម្មវិធី និងចុងភៅរៀបចំម្ហូបការលំដាប់ខ្ពស់នៅភ្នំពេញ។';
     }
 }
-const canonicalURL = new URL(Astro.url.pathname, Astro.site || siteDomain);
+// Ensure canonical path always ends with a slash (except for physical files)
+const ensureSlash = (path: string) => {
+    if (path === '/') return path;
+    const hasExtension = /\.[^/.]+$/.test(path);
+    if (hasExtension) return path;
+    return path.endsWith('/') ? path : `${path}/`;
+};
+
+const safePathname = ensureSlash(Astro.url.pathname);
+const canonicalURL = new URL(safePathname, Astro.site || siteDomain);
 const ogImageAbsolute = image.startsWith("http")
     ? image
     : `${siteDomain}${image}`;
@@ -87,15 +96,19 @@ const t = navTranslations[baseLang];
 
 const getLocalizedPath = (targetLang: "km" | "zh" | "en") => {
     // 1. 強制剝除當前網址開頭的任何語言前綴，取得絕對乾淨的路徑 (例如 /blog/..., /tanghuot)
-    let rawPath = Astro.url.pathname.replace(/^\/(km|zh|en)(\/|$)/, "/");
+    let rawPath = safePathname.replace(/^\/(km|zh|en)(\/|$)/, "/");
 
+    let resultPath = "";
     // 2. 目標為中文或英文：一律加上前綴
     if (targetLang !== "km") {
-        return rawPath === "/" ? `/${targetLang}/` : `/${targetLang}${rawPath}`;
+        resultPath = rawPath === "/" ? `/${targetLang}/` : `/${targetLang}${rawPath}`;
+    } else {
+        // 3. 目標為柬文 (km)：維持無前綴
+        resultPath = rawPath;
     }
-
-    // 3. 目標為柬文 (km)：維持無前綴
-    return rawPath;
+    
+    // 強制補上斜線，徹底消滅 301 重定向
+    return ensureSlash(resultPath);
 };
 
 // Global LocalBusiness Schema for CKM Catering (Optimized for GEO & AIO)
