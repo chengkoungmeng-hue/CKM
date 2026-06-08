@@ -61,11 +61,11 @@ const recentPosts = [...featuredPosts, ...otherPosts].slice(0, 3);
 
   <article class="w-full">
       <header class="relative min-h-screen flex items-center justify-center overflow-hidden py-20">
-        <Image src={heroImageRelative} format="avif" quality={50} alt="CKM团队办桌准备现场" width={1920} height={1080} widths={[400, 768, 1200, 1920]} sizes="100vw" class="absolute inset-0 w-full h-full object-cover object-center transform scale-105" fetchpriority="high" loading="eager" decoding="async" />
+        <Image src={heroImageRelative} format="avif" quality={50} alt="CKM團隊辦桌準備現場" width={1920} height={1080} widths={[400, 768, 1200, 1920]} sizes="100vw" class="absolute inset-0 w-full h-full object-cover object-center transform scale-105" fetchpriority="high" loading="eager" decoding="sync" />
         <div class="absolute inset-0 bg-black/70 bg-gradient-to-b from-black/80 via-black/50 to-slate-900/90"></div>
         
         <div class="relative z-10 text-center px-4 max-w-4xl mx-auto pt-10">
-            <Image src={logo} format="avif" alt="CKM 标志" width={176} height={176} widths={[128, 176, 256]} sizes="(max-width: 768px) 128px, 176px" class="w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-amber-500 mx-auto mb-8 shadow-[0_0_40px_rgba(245,158,11,0.5)]" />
+            <Image src={logo} format="avif" alt="CKM 标志" width={176} height={176} widths={[128, 176, 256]} sizes="(max-width: 768px) 128px, 176px" class="w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-amber-500 mx-auto mb-8 shadow-[0_0_40px_rgba(245,158,11,0.5)]" fetchpriority="high" loading="eager" decoding="sync" />
             
             <h1 class="text-3xl md:text-5xl lg:text-6xl font-zh-serif font-bold text-white mb-6 leading-tight">
               主厨 <span class="text-amber-500">钟光明</span>
