@@ -9,7 +9,6 @@ authoritySignals:
   - "ធានាគុណភាពនិងអនាម័យ"
 target_keyword: "ចេញម្ហូបរហ័ស"
 
-# AI 圖片生成指令 (Midjourney/Stable Diffusion)
 image_generation_prompt: "A quiet luxury photo, realistic, cinematic, a calm waiter gently placing a hot dish on a banquet table, with a neatly arranged large event happening peacefully in the background, 16:9"
 ---
 

@@ -9,7 +9,6 @@ authoritySignals:
   - "ធានាគុណភាពនិងអនាម័យ"
 target_keyword: "គ្រឿងសមុទ្រស្រស់"
 
-# AI 圖片生成指令 (Midjourney/Stable Diffusion)
 image_generation_prompt: "A quiet luxury photo, realistic, cinematic, fresh clean vegetables and plump seafood neatly arranged on a simple wooden table, natural morning light, grounded realism, 16:9"
 ---
 

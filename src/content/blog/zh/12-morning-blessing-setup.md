@@ -10,7 +10,6 @@ authoritySignals:
   - "確保品質與衛生標準"
 target_keyword: "清晨祭拜準備"
 
-# AI 圖片生成指令 (Midjourney/Stable Diffusion)
 image_generation_prompt: "A quiet luxury photo, realistic, cinematic, under soft morning light, quietly and solemnly arranged alms bowls and food, peaceful and harmonious environment, 16:9"
 ---
 

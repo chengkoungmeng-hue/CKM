@@ -9,7 +9,6 @@ authoritySignals:
   - "ធានាគុណភាពនិងអនាម័យ"
 target_keyword: "កម្មវិធីមង្គលការច្រើនថ្ងៃ"
 
-# AI 圖片生成指令 (Midjourney/Stable Diffusion)
 image_generation_prompt: "A quiet luxury photo, realistic, cinematic, in a traditional Cambodian wedding setting, elders looking satisfied at a hearty banquet table, soft lighting, 16:9"
 ---
 

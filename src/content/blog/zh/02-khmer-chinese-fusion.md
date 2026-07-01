@@ -10,7 +10,6 @@ authoritySignals:
   - "確保品質與衛生標準"
 target_keyword: "外燴菜單設計"
 
-# AI 圖片生成指令 (Midjourney/Stable Diffusion)
 image_generation_prompt: "A quiet luxury photo, realistic, cinematic, a simple yet elegant serving of braised pork belly and fresh vegetables on a modest ceramic plate, natural ambient lighting, grounded realism, 16:9"
 ---
 

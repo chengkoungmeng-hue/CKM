@@ -10,7 +10,6 @@ authoritySignals:
   - "Guaranteed Quality & Hygiene"
 target_keyword: "Event Menu Planning"
 
-# AI 圖片生成指令 (Midjourney/Stable Diffusion)
 image_generation_prompt: "A quiet luxury photo, realistic, cinematic, a simple yet elegant serving of braised pork belly and fresh vegetables on a modest ceramic plate, natural ambient lighting, grounded realism, 16:9"
 ---
 

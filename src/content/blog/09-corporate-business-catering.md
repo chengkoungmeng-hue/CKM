@@ -10,7 +10,6 @@ authoritySignals:
   - "ធានាគុណភាពនិងអនាម័យ"
 target_keyword: "អាហារក្រុមហ៊ុន"
 
-# AI 圖片生成指令 (Midjourney/Stable Diffusion)
 image_generation_prompt: "A quiet luxury photo, realistic, cinematic, an elegant high-level business banquet scene, guests dressed properly conversing, exquisite food on the table, staff quietly standing by in the background, 16:9"
 ---
 

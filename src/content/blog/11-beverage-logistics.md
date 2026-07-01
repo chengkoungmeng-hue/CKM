@@ -9,7 +9,6 @@ authoritySignals:
   - "ធានាគុណភាពនិងអនាម័យ"
 target_keyword: "ភេសជ្ជៈត្រជាក់ៗ"
 
-# AI 圖片生成指令 (Midjourney/Stable Diffusion)
 image_generation_prompt: "A quiet luxury photo, realistic, cinematic, an elegant glass filled with ice and a cold beverage, condensation on the glass wall, a joyful banquet atmosphere blurred in the background, 16:9"
 ---
 

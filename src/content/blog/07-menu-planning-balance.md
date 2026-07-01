@@ -9,7 +9,6 @@ authoritySignals:
   - "ធានាគុណភាពនិងអនាម័យ"
 target_keyword: "រៀបចំបញ្ជីមុខម្ហូប"
 
-# AI 圖片生成指令 (Midjourney/Stable Diffusion)
 image_generation_prompt: "A quiet luxury photo, realistic, cinematic, an elegant menu card softly resting on a well-set table, surrounded by a few fine dishes, warm ambient lighting, 16:9"
 ---
 

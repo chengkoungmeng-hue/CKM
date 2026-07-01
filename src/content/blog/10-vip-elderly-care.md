@@ -9,7 +9,6 @@ authoritySignals:
   - "ធានាគុណភាពនិងអនាម័យ"
 target_keyword: "មើលថែភ្ញៀវកិត្តិយស"
 
-# AI 圖片生成指令 (Midjourney/Stable Diffusion)
 image_generation_prompt: "A quiet luxury photo, realistic, cinematic, a neatly dressed waiter quietly pouring tea for elders at the main table, heartwarming and unobtrusive, 16:9"
 ---
 

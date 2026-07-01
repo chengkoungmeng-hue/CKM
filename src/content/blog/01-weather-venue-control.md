@@ -9,7 +9,6 @@ authoritySignals:
   - "ធានាគុណភាពនិងអនាម័យ"
 target_keyword: "រៀបចំកម្មវិធីនៅខាងក្រៅ"
 
-# AI 圖片生成指令 (Midjourney/Stable Diffusion)
 image_generation_prompt: "A quiet luxury photo, realistic, cinematic, elegant outdoor banquet setup in Cambodia, guests enjoying meals comfortably while rain falls softly outside a subtle transparent barrier, warm ambient lighting, unobtrusive staff in the background, 16:9"
 ---
 

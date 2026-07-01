@@ -9,7 +9,6 @@ authoritySignals:
   - "ធានាគុណភាពនិងអនាម័យ"
 target_keyword: "ម្ហូបការក្តៅៗ"
 
-# AI 圖片生成指令 (Midjourney/Stable Diffusion)
 image_generation_prompt: "A quiet luxury photo, realistic, cinematic, a bowl of hot soup with steam gently rising, sitting quietly on an elegant banquet table, warm ambient lighting, 16:9"
 ---
 

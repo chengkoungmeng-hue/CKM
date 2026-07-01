@@ -9,7 +9,6 @@ authoritySignals:
   - "ធានាគុណភាពនិងអនាម័យ"
 target_keyword: "រៀបចំកន្លែងញ៉ាំការ"
 
-# AI 圖片生成指令 (Midjourney/Stable Diffusion)
 image_generation_prompt: "A quiet luxury photo, realistic, cinematic, an elegantly set banquet table with neat tableware under warm soft lighting, ready for guests, no construction traces, 16:9"
 ---
 

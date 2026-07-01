@@ -10,7 +10,6 @@ authoritySignals:
   - "Guaranteed Quality & Hygiene"
 target_keyword: "Monk Alms Setup"
 
-# AI 圖片生成指令 (Midjourney/Stable Diffusion)
 image_generation_prompt: "A quiet luxury photo, realistic, cinematic, under soft morning light, quietly and solemnly arranged alms bowls and food, peaceful and harmonious environment, 16:9"
 ---
 
