@@ -5,14 +5,7 @@ import Layout from '../../layouts/Layout.astro';
 import InsightCard from '../../components/InsightCard.astro';
 import { ChevronRight } from '@lucide/astro';
 
-import '@fontsource/hanuman/400.css';
-import '@fontsource/hanuman/700.css';
-import '@fontsource/kantumruy-pro/300.css';
-import '@fontsource/kantumruy-pro/400.css';
-import '@fontsource/kantumruy-pro/500.css';
-import '@fontsource/playfair-display/600.css';
-import '@fontsource/playfair-display/700.css';
-import '@fontsource/playfair-display/600-italic.css';
+import '@fontsource-variable/playfair-display';
 
 // Fetch and sort dynamic blog posts
 const rawPosts = await getCollection('blog', ({ id, data }) => {
@@ -35,7 +28,7 @@ const formatPost = (post: any) => {
 
 const t = {
   title: "អត្ថបទ និងចំណេះដឹង",
-  desc: "បទពិសោធន៍ និងក្បួនខ្នាតរៀបចំម្ហូបការប្រចាំហាង",
+  desc: "ស្វែងយល់ពីចំណេះដឹង បទពិសោធន៍ និងក្បួនខ្នាតក្នុងការរៀបចំម្ហូបការប្រពៃណីខ្មែរ និងសេវាកម្ម Catering លំដាប់ខ្ពស់ប្រចាំហាងចេង គួងម៉េង។",
   readMore: "អានបន្ថែម",
   homeUrl: "/"
 };
