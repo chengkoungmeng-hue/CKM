@@ -14,4 +14,9 @@
 - **Icon System**: Strictly use `@lucide/astro` for icons. Do NOT inline raw SVGs into Astro components to maintain a clean codebase and unified stroke widths.
 ## Security & Secrets Management
 - **Token Protection**: NEVER write active API tokens, passwords, or credentials into `WORKLOG.md`, `AGENTS.md`, or any code files committed to the repository. All secrets (e.g., Cloudflare API Tokens) must be saved exclusively in `.env`, which is strictly ignored by Git.
+## Font Strategy
+- **System Fonts First**: For Khmer body text, strictly use `system-ui` fallback fonts instead of heavy Web Fonts to achieve 0 CLS and instant LCP. Use custom self-hosted fonts (like Hanuman) ONLY for large headings, and always load them locally via `public/fonts/`.
+
+## Sub-brands SEO
+- **Concentrated Domain Authority**: Sub-brands hosted on the main domain (e.g., `/tanghuot/`) that target the same demographic should remain strictly Khmer-focused. Do NOT create multilingual routes (`/zh/`, `/en/`) for them unless explicitly requested, to consolidate SEO authority.
 </RULE[project_scoped]>
