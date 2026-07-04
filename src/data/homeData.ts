@@ -22,6 +22,7 @@ import brandCkmLogoGold from '../assets/images/home/brand-ckm-logo-gold.webp';
 import menu02 from '../assets/images/home/menu-02.webp';
 import blogWeddingServiceGuide from '../assets/images/home/blog-wedding-service-guide.webp';
 import menu13 from '../assets/images/home/menu-13.webp';
+import menu16 from '../assets/processed_images_ai/menu-16.png';
 
 export const siteDomain = "https://www.ckmkh.com";
 export const telegramLink = "https://t.me/CKMSam06";
@@ -61,7 +62,8 @@ export const menuItems: Record<string, MenuItem[]> = {
     { title: "ទាខ្វៃហុងកុង", image: menu12, desc: "ឆ្លងកាត់ការសម្ងួតស្បែក និងខ្វៃក្នុងឡកម្តៅខ្ពស់ ដើម្បីឱ្យស្បែកទាឡើងស្រួយ និងសាច់នៅរក្សាជាតិទឹកល្អ។", alt: "សេវាកម្មម្ហូបការ ភ្នំពេញ - ទាខ្វៃហុងកុង ចេង គួងម៉េង" },
     { title: "បង្អែមខ្មែរបុរាណ", image: menu13, desc: "បង្អែមខ្មែរឈ្ងុយខ្ទិះដូង និងស្លឹកតើយស្រស់ ជាបង្អែមដ៏ស័ក្តិសមបំផុតសម្រាប់បិទបញ្ចប់កម្មវិធីជប់លៀង។", alt: "កញ្ចប់សេវាកម្មរៀបចំពិធីមង្គលការ - បង្អែមខ្មែរបុរាណ" },
     { title: "តុងយាំបង្កងទន្លេ", image: menu14, desc: "ស៊ុបតុងយាំបង្កងទន្លេដែលមានរសជាតិជូរហឹរដិត ជួយកាត់បន្ថយភាពទ្រាន់ និងធ្វើឱ្យអ្នកញ៉ាំបែកញើសស្រួលខ្លួន។", alt: "ទទួលរៀបចំអាហារប៊ូហ្វេ - តុងយាំបង្កងទន្លេ ជូរហឹរ" },
-    { title: "កូនជ្រូកខ្វៃទាំងមូល", image: menu15, desc: "មុខម្ហូបលើកមុខមាត់ម្ចាស់កម្មវិធី ខ្វៃដោយបច្ចេកទេសបង្វិលស្មើភ្លើង ធ្វើឱ្យស្បែកស្រួយរឹមៗគ្រប់កន្លែង និងសាច់ទន់ឆ្ងាញ់។", alt: "ចុងភៅរៀបចំម្ហូបការ - កូនជ្រូកខ្វៃទាំងមូល ស្រួយឆ្ងាញ់" }
+    { title: "កូនជ្រូកខ្វៃទាំងមូល", image: menu15, desc: "មុខម្ហូបលើកមុខមាត់ម្ចាស់កម្មវិធី ខ្វៃដោយបច្ចេកទេសបង្វិលស្មើភ្លើង ធ្វើឱ្យស្បែកស្រួយរឹមៗគ្រប់កន្លែង និងសាច់ទន់ឆ្ងាញ់។", alt: "ចុងភៅរៀបចំម្ហូបការ - កូនជ្រូកខ្វៃទាំងមូល ស្រួយឆ្ងាញ់" },
+    { title: "សាច់គោឡុកឡាក់", image: menu16, desc: "វត្ថុធាតុដើមស្រស់ៗគុណភាពខ្ពស់ ផ្តល់ជូនរសជាតិសាច់គោឡុកឡាក់ដ៏ឈ្ងុយឆ្ងាញ់។", alt: "សេវាកម្មម្ហូបការ - សាច់គោឡុកឡាក់គុណភាពខ្ពស់" }
   ],
   en: [
     { title: "Assorted Appetizer Platter", image: menu01, desc: "Six classic cold starters, portioned and temperature-controlled to begin the service efficiently without overwhelming the palate." },
@@ -78,7 +80,8 @@ export const menuItems: Record<string, MenuItem[]> = {
     { title: "Hong Kong Style Roast Duck", image: menu12, desc: "Batch-roasted using traditional techniques to render fat evenly, ensuring the meat stays moist until plated." },
     { title: "Traditional Khmer Desserts", image: menu13, desc: "Fresh coconut milk and pandan prepared with strict sanitation protocols to securely close the meal." },
     { title: "Tom Yum River Prawn Soup", image: menu14, desc: "A robust, high-acid soup base that retains its heat and flavor profile perfectly from the kitchen to the table." },
-    { title: "Signature Whole Roasted Pig", image: menu15, desc: "The centerpiece of large banquets, requiring exact timing and heat management to deliver a crispy, uniform finish." }
+    { title: "Signature Whole Roasted Pig", image: menu15, desc: "The centerpiece of large banquets, requiring exact timing and heat management to deliver a crispy, uniform finish." },
+    { title: "Cambodian Beef Lok Lak", image: menu16, desc: "Premium quality fresh beef wok-tossed to perfection in our signature glossy brown sauce, served with crisp fresh vegetables." }
   ],
   zh: [
     { title: "六福拼盘", image: menu01, desc: "经典的六款开胃凉菜，用料扎实、口味丰富，让宾客胃口大开。" },
@@ -95,7 +98,8 @@ export const menuItems: Record<string, MenuItem[]> = {
     { title: "正宗港式明炉烧鸭", image: menu12, desc: "师傅烤制逼出多余油脂，外皮香脆、肉质多汁不干柴。" },
     { title: "传统高棉特色甜点", image: menu13, desc: "在地高棉风味甜品，用新鲜椰浆与斑斓叶制作，为办桌完美收尾。" },
     { title: "冬荫功野生大虾汤", image: menu14, desc: "道地的东南亚酸辣风味，搭配紧实弹牙的鲜虾，喝下去非常过瘾。" },
-    { title: "金牌原只烤乳猪", image: menu15, desc: "办桌最顾面子的一道大菜，外皮金黄酥脆，肉质软嫩不油腻。" }
+    { title: "金牌原只烤乳猪", image: menu15, desc: "办桌最顾面子的一道大菜，外皮金黄酥脆，肉质软嫩不油腻。" },
+    { title: "高棉黑椒摇摇牛", image: menu16, desc: "严选高品质新鲜牛肉，大火快炒锁住肉汁，搭配特制黑椒酱汁，肉质软嫩多汁。" }
   ]
 };
 
