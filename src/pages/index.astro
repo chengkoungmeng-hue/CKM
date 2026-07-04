@@ -115,7 +115,7 @@ const recentPosts = [...featuredPosts, ...otherPosts].slice(0, 3);
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                  <article class="bg-white p-8 rounded-sm border border-slate-100 shadow-sm hover:shadow-glow transition-all">
                     <div class="w-14 h-14 bg-champagne/10 rounded-full flex items-center justify-center mb-6">
-                        <Utensils class="w-7 h-7 text-champagne" strokeWidth={1.5} />
+                        <Utensils class="w-7 h-7 text-champagne-dark" strokeWidth={1.5} />
                     </div>
                     <h3 class="text-xl font-km-serif font-bold text-onyx mb-4">រៀបចំម្ហូបការប្រពៃណីខ្មែរ និងតុបតែងទីតាំង</h3>
                     <p class="text-slate-600 font-km-sans leading-relaxed">
@@ -125,7 +125,7 @@ const recentPosts = [...featuredPosts, ...otherPosts].slice(0, 3);
                  
                  <article class="bg-white p-8 rounded-sm border border-slate-100 shadow-sm hover:shadow-glow transition-all">
                     <div class="w-14 h-14 bg-champagne/10 rounded-full flex items-center justify-center mb-6">
-                        <Building2 class="w-7 h-7 text-champagne" strokeWidth={1.5} />
+                        <Building2 class="w-7 h-7 text-champagne-dark" strokeWidth={1.5} />
                     </div>
                     <h3 class="text-xl font-km-serif font-bold text-onyx mb-4">ពិធីជប់លៀងបែបចិន និងកម្មវិធីអាជីវកម្ម</h3>
                     <p class="text-slate-600 font-km-sans leading-relaxed">
@@ -135,7 +135,7 @@ const recentPosts = [...featuredPosts, ...otherPosts].slice(0, 3);
                  
                  <article class="bg-white p-8 rounded-sm border border-slate-100 shadow-sm hover:shadow-glow transition-all">
                     <div class="w-14 h-14 bg-champagne/10 rounded-full flex items-center justify-center mb-6">
-                        <Zap class="w-7 h-7 text-champagne" strokeWidth={1.5} />
+                        <Zap class="w-7 h-7 text-champagne-dark" strokeWidth={1.5} />
                     </div>
                     <h3 class="text-xl font-km-serif font-bold text-onyx mb-4">ផ្នែកភេសជ្ជៈ និងការដោះស្រាយបញ្ហាភ្លាមៗ</h3>
                     <p class="text-slate-600 font-km-sans leading-relaxed">
@@ -156,7 +156,7 @@ const recentPosts = [...featuredPosts, ...otherPosts].slice(0, 3);
           <div class="space-y-6">
             <div class="flex flex-col md:flex-row gap-6 items-start p-8 rounded-sm bg-pearl border border-slate-100 hover:border-champagne/30 transition-colors">
               <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shrink-0 shadow-sm">
-                <Award class="w-6 h-6 text-champagne" strokeWidth={1.5} />
+                <Award class="w-6 h-6 text-champagne-dark" strokeWidth={1.5} />
               </div>
               <div>
                 <h3 class="text-xl font-km-serif font-bold text-onyx mb-2">រសជាតិម្ហូបឆ្ងាញ់ថេរ</h3>
@@ -168,7 +168,7 @@ const recentPosts = [...featuredPosts, ...otherPosts].slice(0, 3);
 
             <div class="flex flex-col md:flex-row gap-6 items-start p-8 rounded-sm bg-pearl border border-slate-100 hover:border-champagne/30 transition-colors">
               <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shrink-0 shadow-sm">
-                <Clock class="w-6 h-6 text-champagne" strokeWidth={1.5} />
+                <Clock class="w-6 h-6 text-champagne-dark" strokeWidth={1.5} />
               </div>
               <div>
                 <h3 class="text-xl font-km-serif font-bold text-onyx mb-2">ពេលវេលាចេញម្ហូប និងការគ្រប់គ្រងសីតុណ្ហភាព</h3>
@@ -180,7 +180,7 @@ const recentPosts = [...featuredPosts, ...otherPosts].slice(0, 3);
 
             <div class="flex flex-col md:flex-row gap-6 items-start p-8 rounded-sm bg-pearl border border-slate-100 hover:border-champagne/30 transition-colors">
               <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shrink-0 shadow-sm">
-                <Sparkles class="w-6 h-6 text-champagne" strokeWidth={1.5} />
+                <Sparkles class="w-6 h-6 text-champagne-dark" strokeWidth={1.5} />
               </div>
               <div>
                 <h3 class="text-xl font-km-serif font-bold text-onyx mb-2">វត្ថុធាតុដើមស្រស់ៗ និងអនាម័យជាចម្បង</h3>
@@ -203,7 +203,7 @@ const recentPosts = [...featuredPosts, ...otherPosts].slice(0, 3);
           <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4">
             {menuImages.map((img, i) => (
               <div class="group relative aspect-square overflow-hidden rounded-sm bg-slate-100">
-                <Image src={img} alt={altTexts[i] || `រូបភាពម្ហូបការ CKM ទី ${i + 1}`} class="w-full h-full object-cover transition-transform duration-[1500ms] group-hover:scale-105" loading="lazy" decoding="async" />
+                <Image src={img} alt={altTexts[i] || `រូបភាពម្ហូបការ CKM ទី ${i + 1}`} format="avif" quality={80} class="w-full h-full object-cover transition-transform duration-[1500ms] group-hover:scale-105" loading="lazy" decoding="async" />
               </div>
             ))}
           </div>
