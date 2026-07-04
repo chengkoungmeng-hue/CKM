@@ -24,12 +24,7 @@ import {
 } from '../data/homeData';
 
 const menuImagesGlob = import.meta.glob<{ default: ImageMetadata }>('../assets/processed_images_ai/menu-*.png', { eager: true });
-const galleryImagesGlob = import.meta.glob<{ default: ImageMetadata }>('../assets/images/gallery/gallery_*.png', { eager: true });
-
-const menuImages = [
-  ...Object.values(menuImagesGlob).map(m => m.default),
-  ...Object.values(galleryImagesGlob).map(m => m.default)
-];
+const menuImages = Object.values(menuImagesGlob).map(m => m.default);
 
 const altTexts = [
   "ទិដ្ឋភាពរៀបចំសាច់ជ្រូកខ្វៃស្រួយឆ្ងាញ់ក្នុងពិធីមង្គលការដោយ CKM",
