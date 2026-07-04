@@ -21,7 +21,7 @@ export default {
       fontFamily: {
         // [防禦升級] 建立由英至中、再至高棉文的「瀑布流降級矩陣」
         heading: ['"Playfair Display"', '"Noto Serif SC"', '"Hanuman"', 'serif'],
-        body: ['system-ui', '-apple-system', '"PingFang SC"', '"Kantumruy Pro"', 'sans-serif'],
+        body: ['system-ui', '-apple-system', '"PingFang SC"', 'sans-serif'],
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

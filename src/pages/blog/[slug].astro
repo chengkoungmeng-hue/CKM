@@ -2,16 +2,7 @@
 // src/pages/blog/[slug].astro
 import { getCollection, render } from 'astro:content';
 import { Image } from 'astro:assets';
-import Layout from '../../layouts/Layout.astro'; 
-
-import '@fontsource/hanuman/400.css';
-import '@fontsource/hanuman/700.css';
-import '@fontsource/kantumruy-pro/300.css';
-import '@fontsource/kantumruy-pro/400.css';
-import '@fontsource/kantumruy-pro/500.css';
-import '@fontsource/playfair-display/600.css';
-import '@fontsource/playfair-display/700.css';
-import '@fontsource/playfair-display/600-italic.css';
+import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection('blog', ({id}) => !id.includes('/'));
