@@ -24,7 +24,12 @@ import {
 } from '../data/homeData';
 
 const menuImagesGlob = import.meta.glob<{ default: ImageMetadata }>('../assets/processed_images_ai/menu-*.png', { eager: true });
-const menuImages = Object.values(menuImagesGlob).map(m => m.default);
+const galleryImagesGlob = import.meta.glob<{ default: ImageMetadata }>('../assets/images/gallery/gallery_*.png', { eager: true });
+
+const menuImages = [
+  ...Object.values(menuImagesGlob).map(m => m.default),
+  ...Object.values(galleryImagesGlob).map(m => m.default)
+];
 
 const altTexts = [
   "ទិដ្ឋភាពរៀបចំសាច់ជ្រូកខ្វៃស្រួយឆ្ងាញ់ក្នុងពិធីមង្គលការដោយ CKM",
@@ -89,7 +94,7 @@ const recentPosts = [...featuredPosts, ...otherPosts].slice(0, 3);
                     <Phone class="w-5 h-5" strokeWidth={1.5} />
                     <span>ទូរស័ព្ទសាកសួរព័ត៌មាន</span>
                 </a>
-                <a href={telegramLink} target="_blank" rel="noopener noreferrer" class="bg-[#005f8f] hover:bg-[#004b73] text-white px-6 py-4 rounded-sm font-km-sans font-medium text-base transition-colors flex items-center justify-center gap-2 shadow-lg">
+                <a href={telegramLink} target="_blank" rel="noopener noreferrer" class="bg-onyx/50 hover:bg-onyx/80 backdrop-blur-sm border border-champagne text-champagne hover:text-white px-6 py-4 rounded-sm font-km-sans font-medium text-base transition-colors flex items-center justify-center gap-2 shadow-lg">
                     <Send class="w-5 h-5" strokeWidth={1.5} />
                     <span>ផ្ញើសារតាមតេឡេក្រាម</span>
                 </a>
@@ -124,7 +129,7 @@ const recentPosts = [...featuredPosts, ...otherPosts].slice(0, 3);
          <div class="max-w-7xl mx-auto px-6">
             <div class="text-center mb-16">
               <h2 class="text-3xl md:text-4xl font-km-serif font-bold text-onyx mb-4">សេវាកម្មចម្បងរបស់យើង</h2>
-              <p class="text-slate-600 font-km-sans max-w-2xl mx-auto">យើងខ្ញុំត្រៀមខ្លួនជាស្រេចក្នុងការជួយសម្រួលរាល់ការងារហត់នឿយរបស់លោកអ្នក។</p>
+              <p class="text-slate-600 font-km-sans max-w-2xl mx-auto tracking-widest">យើងខ្ញុំត្រៀមខ្លួនជាស្រេចក្នុងការជួយសម្រួលរាល់ការងារហត់នឿយរបស់លោកអ្នក។</p>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -165,7 +170,7 @@ const recentPosts = [...featuredPosts, ...otherPosts].slice(0, 3);
         <div class="max-w-5xl mx-auto px-6">
           <div class="text-center mb-16">
             <h2 class="text-3xl md:text-4xl font-km-serif font-bold text-onyx mb-4">ការធានាគុណភាពពី CKM</h2>
-            <p class="text-slate-600 font-km-sans">ពួកយើងធ្វើការដោយក្តីស្មោះត្រង់ និងយកចិត្តទុកដាក់បំផុតចំពោះភ្ញៀវរបស់អ្នក។</p>
+            <p class="text-slate-600 font-km-sans tracking-widest">ពួកយើងធ្វើការដោយក្តីស្មោះត្រង់ និងយកចិត្តទុកដាក់បំផុតចំពោះភ្ញៀវរបស់អ្នក។</p>
           </div>
           
           <div class="space-y-6">
@@ -212,13 +217,13 @@ const recentPosts = [...featuredPosts, ...otherPosts].slice(0, 3);
         <div class="max-w-7xl mx-auto px-6">
           <div class="text-center mb-16">
             <h2 class="text-3xl md:text-4xl font-km-serif font-bold text-onyx mb-4">រូបភាពមុខម្ហូបពិសេសៗ</h2>
-            <p class="text-slate-600 font-km-sans">រូបភាពពិតៗពីកម្មវិធីដែលរៀបចំដោយក្រុមចុងភៅ CKM</p>
+            <p class="text-slate-600 font-km-sans tracking-widest">រូបភាពពិតៗពីកម្មវិធីដែលរៀបចំដោយក្រុមចុងភៅ CKM</p>
           </div>
           
           <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {menuImages.map((img, i) => (
               <div class="group relative aspect-square overflow-hidden rounded-sm bg-slate-100">
-                <Image src={img} alt={altTexts[i] || `រូបភាពម្ហូបការ CKM ទី ${i + 1}`} class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy" decoding="async" />
+                <Image src={img} alt={altTexts[i] || `រូបភាពម្ហូបការ CKM ទី ${i + 1}`} class="w-full h-full object-cover transition-transform duration-[1500ms] group-hover:scale-105" loading="lazy" decoding="async" />
               </div>
             ))}
           </div>
@@ -229,7 +234,7 @@ const recentPosts = [...featuredPosts, ...otherPosts].slice(0, 3);
         <div class="max-w-7xl mx-auto px-6">
           <div class="text-center mb-16">
             <h2 class="text-3xl md:text-4xl font-km-serif font-bold text-onyx mb-4">អត្ថបទ និងចំណេះដឹង</h2>
-            <p class="text-slate-600 font-km-sans">ស្វែងយល់បន្ថែមអំពីការរៀបចំកម្មវិធី និងបទពិសោធន៍របស់ CKM</p>
+            <p class="text-slate-600 font-km-sans tracking-widest">ស្វែងយល់បន្ថែមអំពីការរៀបចំកម្មវិធី និងបទពិសោធន៍របស់ CKM</p>
           </div>
           
           <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -240,7 +245,7 @@ const recentPosts = [...featuredPosts, ...otherPosts].slice(0, 3);
                   <article class="bg-white rounded-sm border border-slate-100 shadow-sm hover:shadow-glow-lg hover:border-champagne/30 transition-all duration-500 overflow-hidden flex flex-col h-full">
                     {post.data.coverImage && (
                       <div class="w-full aspect-[16/9] overflow-hidden bg-slate-100">
-                        <Image src={post.data.coverImage} alt={post.data.title} width={600} height={337} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                        <Image src={post.data.coverImage} alt={post.data.title} width={600} height={337} class="w-full h-full object-cover transition-transform duration-[1500ms] group-hover:scale-105" />
                       </div>
                     )}
                     <div class="p-6 md:p-8 flex flex-col flex-grow">
