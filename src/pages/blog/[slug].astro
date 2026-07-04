@@ -207,8 +207,30 @@ const articleSchema = JSON.stringify({
     font-size: 1.125rem;
     line-height: 1.8;
   }
+  .ckm-prose img, .ckm-prose iframe, .ckm-prose video {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    margin: 2rem auto;
+  }
+  .ckm-prose table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+  }
+  .ckm-prose pre {
+    max-width: 100%;
+    overflow-x: auto;
+    padding: 1rem;
+    border-radius: 0.25rem;
+  }
   .ckm-prose p {
     margin-bottom: 2em;
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
   .ckm-prose h2 {
     color: #0f172a; 
