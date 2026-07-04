@@ -11,7 +11,7 @@ interface Props extends BlogPost {
 
 const { title, subTitle, link, image, titleClass, subTitleClass, linkClass, linkLabel } = Astro.props;
 ---
-<a href={link} class="group block bg-white rounded-sm overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-500 border border-slate-100 flex flex-col h-full">
+<a href={link} class="group block bg-white rounded-sm overflow-hidden shadow-sm hover:shadow-glow-lg transition-all duration-500 border border-slate-100 hover:border-champagne/30 flex flex-col h-full">
     <div class="block aspect-[16/9] overflow-hidden relative bg-slate-200">
       <Image src={image} alt={title} width={1200} height={360} widths={[300, 510, 640]} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" format="avif" quality={50} decoding="async" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-700"/>
     </div>

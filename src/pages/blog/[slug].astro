@@ -42,7 +42,7 @@ const prevSlug = prevPost?._slug;
 const nextSlug = nextPost?._slug;
 
 const { title, seoTitle, description, coverImage, targetGeo, authoritySignals } = entry.data;
-const baseUrl = "https://www.ckmkh.com";
+const baseUrl = "https://ckmkh.com";
 const currentUrl = `${baseUrl}/blog/${slug}`;
 
 const absoluteCoverImage = `${baseUrl}/blog/og/${slug}.png`;
@@ -98,7 +98,7 @@ const articleSchema = JSON.stringify({
   </Fragment>
 
   <div class="bg-slate-50 min-h-[calc(100vh-80px)] py-10 md:py-16 selection:bg-amber-200 selection:text-slate-900 typo-km">
-      <article class="max-w-4xl mx-auto px-5 sm:px-8">
+      <article class="max-w-4xl mx-auto px-5 sm:px-8 reveal">
         
         <header class="mb-10 text-center">
           <div class="inline-block bg-slate-200 text-slate-700 px-4 py-1.5 rounded-sm text-xs font-bold tracking-widest uppercase mb-6 shadow-sm border border-slate-300">

@@ -24,6 +24,7 @@
     "@fontsource/kantumruy-pro": "^5.2.8",
     "@fontsource/noto-serif-sc": "^5.2.9",
     "@fontsource/playfair-display": "^5.2.8",
+    "@lucide/astro": "^1.23.0",
     "@resvg/resvg-js": "^2.6.2",
     "satori": "^0.26.0",
     "typescript": "^6.0.3",

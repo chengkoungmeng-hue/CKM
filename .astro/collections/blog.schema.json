@@ -4,16 +4,16 @@
   "properties": {
     "title": {
       "type": "string",
-      "maxLength": 200
+      "maxLength": 1000
     },
     "seoTitle": {
       "type": "string",
-      "maxLength": 120
+      "maxLength": 1000
     },
     "description": {
       "type": "string",
       "minLength": 10,
-      "maxLength": 400
+      "maxLength": 1000
     },
     "date": {
       "type": "string",

@@ -4,12 +4,19 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#7F1D1D',      // 深紅 (保留作為特定警示或印章點綴)
-        primaryLight: '#B91C1C', // 亮红 
-        gold: '#F59E0B',         // [校準] 完美對齊 Tailwind 的 amber-500，確保全站金屬色澤統一
-        goldLight: '#FCD34D',    // [校準] 對齊 amber-300
-        dark: '#0F172A',         // [校準] 完美對齊 slate-900 (午夜藍黑，極致奢華)
-        cream: '#F8FAFC',        // [校準] 對齊 slate-50 (高冷白，取代偏黃的奶油色，讓白皮書更具智庫感)
+        // Quiet Luxury Palette
+        onyx: '#171717',        // 深瑪瑙黑 (取代 slate-900)
+        champagne: '#C5A059',   // 香檳金 (取代 amber-600)
+        'champagne-dark': '#8C6D31', // 深古銅金 (用於淺色背景的文字)
+        pearl: '#FDFCF8',       // 珍珠米白 (取代 slate-50)
+        
+        // Legacy (Will be phased out)
+        primary: '#7F1D1D',
+        primaryLight: '#B91C1C',
+        gold: '#F59E0B',
+        goldLight: '#FCD34D',
+        dark: '#0F172A',
+        cream: '#F8FAFC',
       },
       fontFamily: {
         // [防禦升級] 建立由英至中、再至高棉文的「瀑布流降級矩陣」
@@ -22,8 +29,9 @@ export default {
         'luxury-shimmer': 'linear-gradient(110deg, rgba(255,255,255,0) 40%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0) 60%)',
       },
       boxShadow: {
-        // [視覺微調] 降低透明度，擴散半徑，從刺眼的「發光」轉化為沉穩的「奢華微光」
-        'glow': '0 0 30px rgba(245, 158, 11, 0.15)',
+        // [視覺微調] 降低透明度，擴散半徑，從刺眼的「發光」轉化為沉穩的「奢華微光」 (Champagne Glow)
+        'glow': '0 0 30px rgba(197, 160, 89, 0.15)',
+        'glow-lg': '0 10px 40px rgba(197, 160, 89, 0.2)',
       }
     },
   },

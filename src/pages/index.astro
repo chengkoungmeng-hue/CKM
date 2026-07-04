@@ -3,6 +3,7 @@
 // 狀態: CKM Landing Page Refactor V1.3 (純粹白話文與信賴錨點)
 import Layout from '../layouts/Layout.astro'; 
 import { Image } from 'astro:assets';
+import { Phone, Send, Utensils, Building2, Zap, Award, Clock, Sparkles, ChevronRight } from '@lucide/astro';
 
 import { getCollection } from 'astro:content';
 
@@ -26,21 +27,21 @@ const menuImagesGlob = import.meta.glob<{ default: ImageMetadata }>('../assets/p
 const menuImages = Object.values(menuImagesGlob).map(m => m.default);
 
 const altTexts = [
-  "ទិដ្ឋភាពរៀបចំសាច់ជ្រូកខ្វៃក្នុងពិធីមង្គលការនៅទីវាល",
-  "បង្កងទន្លេបំពងខ្ទឹមសក្នុងពិធីជប់លៀងដ៏ធំ",
-  "ស៊ុបប៉ាវហ៊ឺក្នុងថាសប្រាក់ដ៏ប្រណិត",
-  "អាម៉ុកត្រីវេចខ្ចប់ដោយស្លឹកចេកបែបប្រពៃណី",
-  "ក្តាមឆាម្រេចកំពតស្រស់ៗក្នុងកម្មវិធីជប់លៀង",
-  "ត្រីចំហុយទឹកស៊ីអ៊ីវជាមួយខ្ញីលើចង្ក្រានក្តៅៗ",
-  "សាច់គោឡុកឡាក់ជាមួយប៉េងប៉ោះនិងសាឡាត់",
-  "ការីសាច់មាន់បែបខ្មែរញ៉ាំជាមួយនំប៉័ង",
-  "សាច់ជ្រូកខទំពាំងក្នុងកម្មវិធីជប់លៀង",
-  "ណែមបំពងស្រួយៗរៀបចំយ៉ាងស្រស់ស្អាត",
-  "អយស្ទ័រស្រស់ៗនៅលើទឹកកក",
-  "បាយឆាគ្រឿងសមុទ្រខ្ទះធំ",
-  "ថាសផ្លែឈើចម្រុះស្រស់ៗ",
-  "ក្រុមអ្នករត់តុរៀបចំម្ហូបអាហារយ៉ាងមមាញឹក",
-  "តុអាហារដ៏丰盛ក្រោមពន្លឺភ្លើងពិធីជប់លៀង"
+  "ទិដ្ឋភាពរៀបចំសាច់ជ្រូកខ្វៃស្រួយឆ្ងាញ់ក្នុងពិធីមង្គលការដោយ CKM",
+  "បង្កងទន្លេបំពងខ្ទឹមស សេវាកម្មម្ហូបការលំដាប់ខ្ពស់",
+  "ស៊ុបប៉ាវហ៊ឺពិសេសក្នុងម៉ឺនុយម្ហូបការ ៨ មុខ",
+  "អាម៉ុកត្រីបែបប្រពៃណីខ្មែរសម្រាប់ពិធីជប់លៀង",
+  "ក្តាមឆាម្រេចកំពតស្រស់ៗ សម្រាប់កម្មវិធីអាជីវកម្ម",
+  "ត្រីចំហុយទឹកស៊ីអ៊ីវ ធានារសជាតិឆ្ងាញ់ថេរ",
+  "សាច់គោឡុកឡាក់ វត្ថុធាតុដើមស្រស់ៗគុណភាពខ្ពស់",
+  "ការីសាច់មាន់បែបខ្មែរ ចុងភៅរៀបចំម្ហូបការភ្នំពេញ",
+  "សាច់ជ្រូកខទំពាំងសម្រាប់ពិធីបុណ្យប្រពៃណីចិន",
+  "ណែមបំពងស្រួយ រៀបចំយ៉ាងស្រស់ស្អាតនិងមានអនាម័យ",
+  "អយស្ទ័រស្រស់ៗ ក្នុងកម្មវិធីជប់លៀងក្រុមហ៊ុន",
+  "បាយឆាគ្រឿងសមុទ្រ សេវាកម្មរៀបចំម្ហូបអាហារ CKM",
+  "ថាសផ្លែឈើចម្រុះស្រស់ៗ ការតុបតែងប្រណិត",
+  "ក្រុមការងារ CKM ត្រៀមបម្រើសេវាកម្មម្ហូបការ",
+  "តុអាហារពិធីជប់លៀងដ៏ប្រណិត និងការគ្រប់គ្រងសីតុណ្ហភាព"
 ];
 
 // 過濾：只抓取根目錄 (沒有含 '/' 的 id)，代表高棉文原始文章
@@ -69,89 +70,89 @@ const recentPosts = [...featuredPosts, ...otherPosts].slice(0, 3);
         <div class="absolute inset-0 bg-black/70 bg-gradient-to-b from-black/80 via-black/50 to-slate-900/90"></div>
         
         <div class="relative z-10 text-center px-4 max-w-4xl mx-auto pt-10">
-            <Image src={logo} format="avif" alt="និមិត្តសញ្ញាក្រុមចុងភៅ ចេង គួងម៉េង" width={176} height={176} widths={[128, 176, 256]} sizes="(max-width: 768px) 128px, 176px" class="w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-amber-500 mx-auto mb-8 shadow-[0_0_40px_rgba(245,158,11,0.5)]" fetchpriority="high" loading="eager" decoding="sync" />
+            <Image src={logo} format="avif" alt="និមិត្តសញ្ញាក្រុមចុងភៅ ចេង គួងម៉េង" width={176} height={176} widths={[128, 176, 256]} sizes="(max-width: 768px) 128px, 176px" class="w-32 h-32 md:w-44 md:h-44 rounded-full border-2 border-champagne/50 mx-auto mb-8 shadow-glow-lg" fetchpriority="high" loading="eager" decoding="sync" />
             
             <h1 class="text-3xl md:text-5xl lg:text-6xl font-km-serif font-bold text-white mb-6 leading-tight">
-              ក្រុមចុងភៅ <span class="text-amber-500">ចេង គួងម៉េង</span>
+              ក្រុមចុងភៅ <span class="text-champagne">ចេង គួងម៉េង</span>
             </h1>
             
-            <h2 class="text-lg md:text-xl font-km-sans font-medium text-amber-400 mb-6 max-w-2xl mx-auto leading-relaxed">
+            <h2 class="text-lg md:text-xl font-km-sans font-medium text-champagne mb-6 max-w-2xl mx-auto leading-relaxed">
               ក្រុមចុងភៅ CKM គឺជាក្រុមចុងភៅនៅរាជធានីភ្នំពេញដែលមានបទពិសោធន៍ ៦០ ឆ្នាំ ឯកទេសខាងរៀបចំម្ហូបការប្រពៃណីខ្មែរ និងការជួបជុំផ្សេងៗ។
             </h2>
             
             <p class="text-base md:text-lg text-gray-200 mb-10 max-w-3xl mx-auto font-km-sans font-light leading-relaxed">
-              យើងខ្ញុំរៀបចំម្ហូបការ និងចាត់ចែងកម្មវិធីជប់លៀងជូនលោកអ្នកដោយក្តីយកចិត្តទុកដាក់។ ជាមួយនឹងបទពិសោធន៍ដ៏យូរអង្វែង យើងនឹងជួយសម្រួលរាល់កិច្ចការងាររៀបចំកម្មវិធី ដើម្បីឱ្យលោកអ្នកអាចទទួលភ្ញៀវដោយក្តីរីករាយ និងមិនមានក្តីបារម្ភអ្វីទាំងអស់។
+              យើងខ្ញុំផ្តល់ជូន <strong class="text-white font-medium">សេវាកម្មម្ហូបការ</strong> និង <strong class="text-white font-medium">សេវាកម្មរៀបចំម្ហូបអាហារ</strong> គ្រប់ប្រភេទដោយក្តីយកចិត្តទុកដាក់។ ជាមួយនឹងបទពិសោធន៍ដ៏យូរអង្វែង យើងនឹងជួយសម្រួលរាល់កិច្ចការងារ រួមទាំងមានសេវាកម្ម <strong class="text-white font-medium">ការភ្លក្សរសជាតិម្ហូប</strong> ជាមុន ដើម្បីឱ្យលោកអ្នកអាចទទួលភ្ញៀវដោយក្តីរីករាយ និងមិនមានក្តីបារម្ភអ្វីទាំងអស់។
             </p>
             
             <div class="flex flex-col sm:flex-row gap-4 justify-center w-full max-w-md mx-auto sm:max-w-none">
-                <a href={`tel:+855${mainPhone.replace(/\s/g, '').substring(1)}`} class="bg-amber-500 hover:bg-amber-600 text-slate-900 px-6 py-4 rounded-sm font-km-sans font-bold text-base transition-colors flex items-center justify-center gap-2 shadow-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                <a href={`tel:+855${mainPhone.replace(/\s/g, '').substring(1)}`} class="bg-champagne hover:bg-[#d6b76c] text-onyx px-6 py-4 rounded-sm font-km-sans font-bold text-base transition-colors flex items-center justify-center gap-2 shadow-lg">
+                    <Phone class="w-5 h-5" strokeWidth={1.5} />
                     <span>ទូរស័ព្ទសាកសួរព័ត៌មាន</span>
                 </a>
                 <a href={telegramLink} target="_blank" rel="noopener noreferrer" class="bg-[#005f8f] hover:bg-[#004b73] text-white px-6 py-4 rounded-sm font-km-sans font-medium text-base transition-colors flex items-center justify-center gap-2 shadow-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                    <Send class="w-5 h-5" strokeWidth={1.5} />
                     <span>ផ្ញើសារតាមតេឡេក្រាម</span>
                 </a>
             </div>
         </div>
       </header>
 
-      <section class="py-12 bg-amber-500 relative z-20 shadow-xl">
+      <section class="py-12 bg-onyx relative z-20 shadow-xl border-y border-slate-800 reveal">
         <div class="max-w-5xl mx-auto px-6">
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-x divide-amber-600/30">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-x divide-slate-800">
             <div class="flex flex-col items-center justify-center">
-              <span class="text-3xl md:text-4xl font-km-serif font-bold text-slate-950 mb-2">៦០+</span>
-              <span class="text-slate-800 text-sm font-km-sans font-medium">ឆ្នាំនៃបទពិសោធន៍</span>
+              <span class="text-3xl md:text-4xl font-km-serif font-bold text-champagne mb-2">៦០+</span>
+              <span class="text-slate-400 text-sm font-km-sans font-medium">ឆ្នាំនៃបទពិសោធន៍</span>
             </div>
             <div class="flex flex-col items-center justify-center">
-              <span class="text-3xl md:text-4xl font-km-serif font-bold text-slate-950 mb-2">១ម៉ឺន+</span>
-              <span class="text-slate-800 text-sm font-km-sans font-medium">អតិថិជនដែលធ្លាប់បានបម្រើ</span>
+              <span class="text-3xl md:text-4xl font-km-serif font-bold text-champagne mb-2">១ម៉ឺន+</span>
+              <span class="text-slate-400 text-sm font-km-sans font-medium">អតិថិជនដែលធ្លាប់បានបម្រើ</span>
             </div>
             <div class="flex flex-col items-center justify-center">
-              <span class="text-3xl md:text-4xl font-km-serif font-bold text-slate-950 mb-2">ឆ្ងាញ់</span>
-              <span class="text-slate-800 text-sm font-km-sans font-medium">ធានារសជាតិថេរ</span>
+              <span class="text-3xl md:text-4xl font-km-serif font-bold text-champagne mb-2">ឆ្ងាញ់</span>
+              <span class="text-slate-400 text-sm font-km-sans font-medium">ធានារសជាតិថេរ</span>
             </div>
             <div class="flex flex-col items-center justify-center">
-              <span class="text-3xl md:text-4xl font-km-serif font-bold text-slate-950 mb-2">ស្អាត</span>
-              <span class="text-slate-800 text-sm font-km-sans font-medium">អនាម័យជាចម្បង</span>
+              <span class="text-3xl md:text-4xl font-km-serif font-bold text-champagne mb-2">ស្អាត</span>
+              <span class="text-slate-400 text-sm font-km-sans font-medium">អនាម័យជាចម្បង</span>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="services" class="py-20 bg-slate-50 relative">
+      <section id="services" class="py-20 bg-pearl relative reveal">
          <div class="max-w-7xl mx-auto px-6">
             <div class="text-center mb-16">
-              <h2 class="text-3xl md:text-4xl font-km-serif font-bold text-slate-900 mb-4">សេវាកម្មចម្បងរបស់យើង</h2>
+              <h2 class="text-3xl md:text-4xl font-km-serif font-bold text-onyx mb-4">សេវាកម្មចម្បងរបស់យើង</h2>
               <p class="text-slate-600 font-km-sans max-w-2xl mx-auto">យើងខ្ញុំត្រៀមខ្លួនជាស្រេចក្នុងការជួយសម្រួលរាល់ការងារហត់នឿយរបស់លោកអ្នក។</p>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                 <article class="bg-white p-8 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-                    <div class="w-14 h-14 bg-amber-50 rounded-full flex items-center justify-center mb-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                 <article class="bg-white p-8 rounded-sm border border-slate-100 shadow-sm hover:shadow-glow transition-all">
+                    <div class="w-14 h-14 bg-champagne/10 rounded-full flex items-center justify-center mb-6">
+                        <Utensils class="w-7 h-7 text-champagne" strokeWidth={1.5} />
                     </div>
-                    <h3 class="text-xl font-km-serif font-bold text-slate-900 mb-4">រៀបចំម្ហូបការប្រពៃណីខ្មែរ និងតុបតែងទីតាំង</h3>
+                    <h3 class="text-xl font-km-serif font-bold text-onyx mb-4">រៀបចំម្ហូបការប្រពៃណីខ្មែរ និងតុបតែងទីតាំង</h3>
                     <p class="text-slate-600 font-km-sans leading-relaxed">
                       យើងជួយរៀបចំម្ហូបអាហារសម្រាប់ពិធីសារពាង្គការប្រពៃណីខ្មែរ ព្រមទាំងមានសេវាជួលរោង និងតុបតែងទីតាំងកម្មវិធីឱ្យបានស្អាត និងរៀបរយ។ លោកអ្នកមិនចាំបាច់ហត់នឿយក្នុងការរៀបចំដោយខ្លួនឯងឡើយ។
                     </p>
                  </article>
                  
-                 <article class="bg-white p-8 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-                    <div class="w-14 h-14 bg-amber-50 rounded-full flex items-center justify-center mb-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg>
+                 <article class="bg-white p-8 rounded-sm border border-slate-100 shadow-sm hover:shadow-glow transition-all">
+                    <div class="w-14 h-14 bg-champagne/10 rounded-full flex items-center justify-center mb-6">
+                        <Building2 class="w-7 h-7 text-champagne" strokeWidth={1.5} />
                     </div>
-                    <h3 class="text-xl font-km-serif font-bold text-slate-900 mb-4">ពិធីជប់លៀងបែបចិន និងកម្មវិធីអាជីវកម្ម</h3>
+                    <h3 class="text-xl font-km-serif font-bold text-onyx mb-4">ពិធីជប់លៀងបែបចិន និងកម្មវិធីអាជីវកម្ម</h3>
                     <p class="text-slate-600 font-km-sans leading-relaxed">
-                      សម្រាប់កម្មវិធីជួបជុំគ្រួសារ ពិធីបុណ្យប្រពៃណីចិន ឬការជួបជុំអាជីវកម្ម យើងមានមុខម្ហូបពិសេសៗដែលស័ក្តិសមបំផុតសម្រាប់ទទួលភ្ញៀវកិត្តិយសរបស់លោកអ្នកដោយក្តីមោទនភាព។
+                      សម្រាប់កម្មវិធីជួបជុំគ្រួសារ ពិធីបុណ្យ ឬការជួបជុំអាជីវកម្ម យើងមាន <strong class="text-onyx font-medium">ម៉ឺនុយម្ហូបការ ៨ មុខ</strong> រួមមានមុខម្ហូបពិសេសៗដូចជា <strong class="text-onyx font-medium">សាច់ជ្រូកខ្វៃ</strong> និង <strong class="text-onyx font-medium">ស៊ុបប៉ាវហឺ</strong> ដែលស័ក្តិសមបំផុតសម្រាប់ទទួលភ្ញៀវកិត្តិយស។
                     </p>
                  </article>
                  
-                 <article class="bg-white p-8 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-                    <div class="w-14 h-14 bg-amber-50 rounded-full flex items-center justify-center mb-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                 <article class="bg-white p-8 rounded-sm border border-slate-100 shadow-sm hover:shadow-glow transition-all">
+                    <div class="w-14 h-14 bg-champagne/10 rounded-full flex items-center justify-center mb-6">
+                        <Zap class="w-7 h-7 text-champagne" strokeWidth={1.5} />
                     </div>
-                    <h3 class="text-xl font-km-serif font-bold text-slate-900 mb-4">ផ្នែកភេសជ្ជៈ និងការដោះស្រាយបញ្ហាភ្លាមៗ</h3>
+                    <h3 class="text-xl font-km-serif font-bold text-onyx mb-4">ផ្នែកភេសជ្ជៈ និងការដោះស្រាយបញ្ហាភ្លាមៗ</h3>
                     <p class="text-slate-600 font-km-sans leading-relaxed">
                       យើងមានក្រុមការងារចាំជួយរៀបចំផ្នែកភេសជ្ជៈ និងប្រព័ន្ធភ្លើង។ ទោះបីជាមានបញ្ហាអាកាសធាតុ ភ្លៀងធ្លាក់ ឬដាច់ភ្លើងក៏ដោយ ក៏យើងមានដំណោះស្រាយរួចជាស្រេច ដើម្បីឱ្យកម្មវិធីដើរទៅមុខដោយរលូន។
                     </p>
@@ -160,46 +161,46 @@ const recentPosts = [...featuredPosts, ...otherPosts].slice(0, 3);
          </div>
       </section>
 
-      <section id="guarantee" class="py-20 bg-white">
+      <section id="guarantee" class="py-20 bg-white border-t border-slate-100 reveal">
         <div class="max-w-5xl mx-auto px-6">
           <div class="text-center mb-16">
-            <h2 class="text-3xl md:text-4xl font-km-serif font-bold text-slate-900 mb-4">ការធានាគុណភាពពី CKM</h2>
+            <h2 class="text-3xl md:text-4xl font-km-serif font-bold text-onyx mb-4">ការធានាគុណភាពពី CKM</h2>
             <p class="text-slate-600 font-km-sans">ពួកយើងធ្វើការដោយក្តីស្មោះត្រង់ និងយកចិត្តទុកដាក់បំផុតចំពោះភ្ញៀវរបស់អ្នក។</p>
           </div>
           
-          <div class="space-y-8">
-            <div class="flex flex-col md:flex-row gap-6 items-start p-6 rounded-xl bg-slate-50 border border-slate-100">
-              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center shrink-0">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <div class="space-y-6">
+            <div class="flex flex-col md:flex-row gap-6 items-start p-8 rounded-sm bg-pearl border border-slate-100 hover:border-champagne/30 transition-colors">
+              <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shrink-0 shadow-sm">
+                <Award class="w-6 h-6 text-champagne" strokeWidth={1.5} />
               </div>
               <div>
-                <h3 class="text-xl font-km-serif font-bold text-slate-900 mb-2">រសជាតិម្ហូបឆ្ងាញ់ថេរ</h3>
+                <h3 class="text-xl font-km-serif font-bold text-onyx mb-2">រសជាតិម្ហូបឆ្ងាញ់ថេរ</h3>
                 <p class="text-slate-600 font-km-sans leading-relaxed">
                   យើងចម្អិនដោយយកចិត្តទុកដាក់ ធានាថារសជាតិម្ហូបគឺឆ្ងាញ់ដូចគ្នាគ្រប់កម្មវិធី មិនថាកម្មវិធីរបស់លោកអ្នកតូច ឬធំនោះទេ។ ភ្ញៀវនឹងសរសើរពីរសជាតិម្ហូប។
                 </p>
               </div>
             </div>
 
-            <div class="flex flex-col md:flex-row gap-6 items-start p-6 rounded-xl bg-slate-50 border border-slate-100">
-              <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center shrink-0">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <div class="flex flex-col md:flex-row gap-6 items-start p-8 rounded-sm bg-pearl border border-slate-100 hover:border-champagne/30 transition-colors">
+              <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shrink-0 shadow-sm">
+                <Clock class="w-6 h-6 text-champagne" strokeWidth={1.5} />
               </div>
               <div>
-                <h3 class="text-xl font-km-serif font-bold text-slate-900 mb-2">ពេលវេលាចេញម្ហូបទៀងទាត់</h3>
+                <h3 class="text-xl font-km-serif font-bold text-onyx mb-2">ពេលវេលាចេញម្ហូប និងការគ្រប់គ្រងសីតុណ្ហភាព</h3>
                 <p class="text-slate-600 font-km-sans leading-relaxed">
-                  ភ្ញៀវរបស់លោកអ្នកមិនចាំបាច់រង់ចាំយូរឡើយ។ យើងមានទម្លាប់ចេញម្ហូបបានលឿន និងក្តៅៗជានិច្ច ស្របតាមពេលវេលាដែលបានកំណត់យ៉ាងច្បាស់លាស់។
+                  ភ្ញៀវរបស់លោកអ្នកមិនចាំបាច់រង់ចាំយូរឡើយ។ យើងមានទម្លាប់ចេញម្ហូបបានលឿន ព្រមទាំងមាន <strong class="text-onyx font-medium">ការគ្រប់គ្រងសីតុណ្ហភាព</strong> បានល្អ ដើម្បីធានាថាម្ហូបតែងតែក្តៅៗជានិច្ច ស្របតាមពេលវេលាដែលបានកំណត់។
                 </p>
               </div>
             </div>
 
-            <div class="flex flex-col md:flex-row gap-6 items-start p-6 rounded-xl bg-slate-50 border border-slate-100">
-              <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center shrink-0">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <div class="flex flex-col md:flex-row gap-6 items-start p-8 rounded-sm bg-pearl border border-slate-100 hover:border-champagne/30 transition-colors">
+              <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shrink-0 shadow-sm">
+                <Sparkles class="w-6 h-6 text-champagne" strokeWidth={1.5} />
               </div>
               <div>
-                <h3 class="text-xl font-km-serif font-bold text-slate-900 mb-2">អនាម័យ និងភាពស្អាតជានិច្ច</h3>
+                <h3 class="text-xl font-km-serif font-bold text-onyx mb-2">វត្ថុធាតុដើមស្រស់ៗ និងអនាម័យជាចម្បង</h3>
                 <p class="text-slate-600 font-km-sans leading-relaxed">
-                  ចាប់តាំងពីការរៀបចំវត្ថុធាតុដើម រហូតដល់ការចម្អិន និងការលាងសម្អាតចាន យើងអនុវត្តតាមស្តង់ដារអនាម័យខ្ពស់ ដើម្បីសុវត្ថិភាពនិងសុខភាពភ្ញៀវគ្រប់រូប។
+                  ចាប់តាំងពីការជ្រើសរើស <strong class="text-onyx font-medium">វត្ថុធាតុដើមស្រស់ៗ</strong> រហូតដល់ការចម្អិន និងលាងសម្អាត យើងអនុវត្តតាមស្តង់ដារសុវត្ថិភាពម្ហូបអាហារ និងអនាម័យខ្ពស់បំផុត។
                 </p>
               </div>
             </div>
@@ -207,27 +208,27 @@ const recentPosts = [...featuredPosts, ...otherPosts].slice(0, 3);
         </div>
       </section>
 
-      <section id="gallery" class="py-20 bg-slate-50 border-t border-slate-200">
+      <section id="gallery" class="py-20 bg-pearl border-t border-slate-100 reveal">
         <div class="max-w-7xl mx-auto px-6">
           <div class="text-center mb-16">
-            <h2 class="text-3xl md:text-4xl font-km-serif font-bold text-slate-900 mb-4">រូបភាពមុខម្ហូបពិសេសៗ</h2>
+            <h2 class="text-3xl md:text-4xl font-km-serif font-bold text-onyx mb-4">រូបភាពមុខម្ហូបពិសេសៗ</h2>
             <p class="text-slate-600 font-km-sans">រូបភាពពិតៗពីកម្មវិធីដែលរៀបចំដោយក្រុមចុងភៅ CKM</p>
           </div>
           
           <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {menuImages.map((img, index) => (
-              <div class="rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                  <Image src={img} alt={`មុខម្ហូបការប្រពៃណីខ្មែរទី${index + 1}`} width={400} height={400} class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async" />
+            {menuImages.map((img, i) => (
+              <div class="group relative aspect-square overflow-hidden rounded-sm bg-slate-100">
+                <Image src={img} alt={altTexts[i] || `រូបភាពម្ហូបការ CKM ទី ${i + 1}`} class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy" decoding="async" />
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section id="blog" class="py-20 bg-white border-t border-slate-200">
+      <section id="blog" class="py-20 bg-white border-t border-slate-100 reveal">
         <div class="max-w-7xl mx-auto px-6">
           <div class="text-center mb-16">
-            <h2 class="text-3xl md:text-4xl font-km-serif font-bold text-slate-900 mb-4">អត្ថបទ និងចំណេះដឹង</h2>
+            <h2 class="text-3xl md:text-4xl font-km-serif font-bold text-onyx mb-4">អត្ថបទ និងចំណេះដឹង</h2>
             <p class="text-slate-600 font-km-sans">ស្វែងយល់បន្ថែមអំពីការរៀបចំកម្មវិធី និងបទពិសោធន៍របស់ CKM</p>
           </div>
           
@@ -236,17 +237,17 @@ const recentPosts = [...featuredPosts, ...otherPosts].slice(0, 3);
               const slug = post.id.replace(/\.mdx?$/, '');
               return (
                 <a href={`/blog/${slug}/`} class="group block h-full">
-                  <article class="bg-white rounded-lg border border-slate-200 shadow-sm group-hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col h-full">
+                  <article class="bg-white rounded-sm border border-slate-100 shadow-sm hover:shadow-glow-lg hover:border-champagne/30 transition-all duration-500 overflow-hidden flex flex-col h-full">
                     {post.data.coverImage && (
                       <div class="w-full aspect-[16/9] overflow-hidden bg-slate-100">
-                        <Image src={post.data.coverImage} alt={post.data.title} width={600} height={337} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <Image src={post.data.coverImage} alt={post.data.title} width={600} height={337} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                       </div>
                     )}
-                    <div class="p-6 flex flex-col flex-grow">
-                      <h3 class="text-xl font-km-serif font-bold text-slate-900 group-hover:text-amber-600 transition-colors duration-300 mb-3 line-clamp-2">{post.data.title}</h3>
-                      <p class="text-slate-600 font-km-sans text-sm mb-6 line-clamp-3">{post.data.description}</p>
-                      <div class="mt-auto text-amber-600 font-bold font-km-sans group-hover:text-amber-700 transition-colors flex items-center gap-2">
-                        អានបន្ថែម <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    <div class="p-6 md:p-8 flex flex-col flex-grow">
+                      <h3 class="text-xl font-km-serif font-bold text-onyx group-hover:text-champagne-dark transition-colors duration-300 mb-4 line-clamp-2 leading-relaxed">{post.data.title}</h3>
+                      <p class="text-slate-500 font-km-sans text-sm mb-6 line-clamp-3 leading-relaxed">{post.data.description}</p>
+                      <div class="mt-auto text-champagne-dark font-bold font-km-sans flex items-center gap-2">
+                        អានបន្ថែម <ChevronRight class="w-4 h-4" strokeWidth={2} />
                       </div>
                     </div>
                   </article>
@@ -256,44 +257,44 @@ const recentPosts = [...featuredPosts, ...otherPosts].slice(0, 3);
           </div>
           
           <div class="text-center mt-12">
-             <a href="/blog/" class="inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-8 py-4 rounded-sm font-km-sans font-bold transition-colors shadow-md">
-               អត្ថបទទាំងអស់
+             <a href="/blog/" class="inline-flex items-center justify-center gap-2 bg-onyx hover:bg-slate-800 text-white px-8 py-4 rounded-sm font-km-sans font-medium transition-all shadow-md hover:shadow-lg">
+               អត្ថបទទាំងអស់ <ChevronRight class="w-4 h-4" strokeWidth={1.5} />
              </a>
           </div>
         </div>
       </section>
 
-      <section id="contact" class="py-20 bg-slate-900 relative">
+      <section id="contact" class="py-20 bg-onyx relative border-t border-slate-800 reveal">
           <div class="max-w-4xl mx-auto px-6 relative z-10 text-center">
               <h2 class="text-3xl md:text-4xl font-km-serif font-bold text-white mb-6">ត្រូវការពិភាក្សាអំពីកម្មវិធីរបស់លោកអ្នក?</h2>
-              <p class="text-slate-300 font-km-sans mb-10">
-                  សូមទំនាក់ទំនងមកកាន់យើងខ្ញុំឥឡូវនេះ ដើម្បីទទួលបានការប្រឹក្សាយោបល់ដោយឥតគិតថ្លៃ។
+              <p class="text-slate-400 font-km-sans mb-10">
+                  សូមទំនាក់ទំនងមកកាន់យើងខ្ញុំឥឡូវនេះ ដើម្បីទទួលបានការប្រឹក្សាយោបល់ និង <strong class="text-white font-medium">ពិភាក្សាពីថវិកា ឬ តម្លៃម្ហូបការ</strong> ដោយឥតគិតថ្លៃ។
               </p>
               
-              <div class="bg-slate-800 p-8 rounded-lg inline-block w-full max-w-2xl text-left border border-slate-700">
+              <div class="bg-slate-900 p-8 rounded-sm inline-block w-full max-w-2xl text-left border border-slate-800 shadow-xl">
                   <div class="flex flex-col md:flex-row gap-8 items-center justify-between">
                       <div>
-                          <p class="text-slate-400 font-km-sans text-sm mb-4">លេខទូរស័ព្ទទំនាក់ទំនង៖</p>
+                          <p class="text-slate-500 font-km-sans text-sm mb-4">លេខទូរស័ព្ទទំនាក់ទំនង៖</p>
                           <div class="flex flex-col gap-3 mb-6">
                               {phoneNumbers.map((contact) => (
                                   <a href={`tel:+855${contact.num.replace(/\s/g, '').substring(1)}`} class="flex items-center gap-3 group">
-                                      <div class="w-10 h-10 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center group-hover:border-amber-500 transition-colors" set:html={contact.svg} />
+                                      <div class="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center group-hover:border-champagne transition-colors text-slate-400 group-hover:text-champagne" set:html={contact.svg} />
                                       <div>
-                                          <span class="text-lg font-bold text-amber-500 font-sans tracking-wider block leading-none group-hover:text-amber-400 transition-colors">{contact.num}</span>
+                                          <span class="text-lg font-bold text-white font-sans tracking-wider block leading-none group-hover:text-champagne-dark transition-colors">{contact.num}</span>
                                           <span class="text-xs text-slate-500 font-sans uppercase tracking-widest">{contact.type}</span>
                                       </div>
                                   </a>
                               ))}
                           </div>
-                          <p class="text-slate-400 font-km-sans text-sm">ទីតាំង៖ ផ្ទះលេខ 33 ផ្លូវ 257 សង្កាត់ទឹកល្អក់ទី២ ខណ្ឌទួលគោក រាជធានីភ្នំពេញ</p>
+                          <p class="text-slate-500 font-km-sans text-sm">ទីតាំង៖ ផ្ទះលេខ 33 ផ្លូវ 257 សង្កាត់ទឹកល្អក់ទី២ ខណ្ឌទួលគោក រាជធានីភ្នំពេញ</p>
                       </div>
                       
                       <div class="flex gap-4">
-                          <a href={telegramLink} target="_blank" rel="noopener noreferrer" aria-label="ផ្ញើសារតាម Telegram" class="w-14 h-14 rounded-full bg-[#005f8f] hover:bg-[#004b73] flex items-center justify-center text-white transition-colors">
-                              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                          <a href={telegramLink} target="_blank" rel="noopener noreferrer" aria-label="ផ្ញើសារតាម Telegram" class="w-14 h-14 rounded-full bg-[#005f8f] hover:bg-[#004b73] flex items-center justify-center text-white transition-colors shadow-lg">
+                              <Send class="w-6 h-6" strokeWidth={1.5} />
                           </a>
-                          <a href={facebookLink} target="_blank" rel="noopener noreferrer" aria-label="ទំព័រ Facebook" class="w-14 h-14 rounded-full bg-[#1877F2] hover:bg-[#166FE5] flex items-center justify-center text-white transition-colors">
-                              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                          <a href={facebookLink} target="_blank" rel="noopener noreferrer" aria-label="ទំព័រ Facebook" class="w-14 h-14 rounded-full bg-[#1877F2] hover:bg-[#166FE5] flex items-center justify-center text-white transition-colors shadow-lg">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
                           </a>
                       </div>
                   </div>

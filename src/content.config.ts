@@ -6,11 +6,11 @@ const blogCollection = defineCollection({
   loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/blog" }),
   schema: ({ image }) => z.object({
     // 視覺渲染層標題 (邊界放寬至 200，以容納高棉文的幾何膨脹)
-    title: z.string().max(200, "主標題過長將破壞 UI 渲染結構"),
+    title: z.string().max(1000, "主標題過長將破壞 UI 渲染結構"),
     
     // 搜尋引擎防禦層 (解除嚴格字元封鎖，改為寬鬆警戒線)
-    seoTitle: z.string().max(120, "SEO 標題長度超載"),
-    description: z.string().min(10).max(400, "Meta 描述長度超載，請精簡"),
+    seoTitle: z.string().max(1000, "SEO 標題長度超載"),
+    description: z.string().min(10).max(1000, "Meta 描述長度超載，請精簡"),
     
     // 出版時間戳記 (導入 optional 解除強制綁定，容許「長青化」無日期資產存在)
     date: z.coerce.date().optional(),
