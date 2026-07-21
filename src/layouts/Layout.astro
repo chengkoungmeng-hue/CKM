@@ -1,7 +1,7 @@
 ---
 // src/layouts/Layout.astro
 import { Image } from "astro:assets";
-import { Phone, Send, Menu, X } from "@lucide/astro";
+import { Phone, Send, Menu, X, ChevronUp } from "@lucide/astro";
 import brandCkmLogoGold from "../assets/images/home/brand-ckm-logo-gold.webp";
 // 狀態: 終極渲染封裝 4.3。實裝 baseLang 語系降維攔截器，修復 km-KH 路由與字典錯位問題。
 const {
@@ -534,7 +534,15 @@ const breadcrumbSchemaData = generateBreadcrumbs();
             </div>
         </div>
 
-            </body>
+        <!-- Scroll to Top Button -->
+        <button
+            id="scroll-to-top"
+            class="fixed bottom-24 right-6 z-50 p-3.5 rounded-full bg-onyx/90 border border-champagne/40 text-champagne hover:bg-slate-800 hover:text-white hover:border-champagne hover:scale-110 active:scale-95 transition-all duration-300 shadow-xl opacity-0 pointer-events-none focus:outline-none focus:ring-2 focus:ring-champagne"
+            aria-label="ត្រឡប់ទៅខាងលើ (Scroll to Top)"
+        >
+            <ChevronUp class="w-5 h-5" stroke-width={2} />
+        </button>
+    </body>
 </html>
 
 <script>
@@ -582,6 +590,23 @@ const breadcrumbSchemaData = generateBreadcrumbs();
                 }, 300);
             });
         });
+
+        // Scroll to top button functionality
+        const scrollTopBtn = document.getElementById("scroll-to-top");
+        if (scrollTopBtn) {
+            window.addEventListener("scroll", () => {
+                if (window.scrollY > 400) {
+                    scrollTopBtn.classList.remove("opacity-0", "pointer-events-none");
+                    scrollTopBtn.classList.add("opacity-100", "pointer-events-auto");
+                } else {
+                    scrollTopBtn.classList.add("opacity-0", "pointer-events-none");
+                    scrollTopBtn.classList.remove("opacity-100", "pointer-events-auto");
+                }
+            });
+            scrollTopBtn.addEventListener("click", () => {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            });
+        }
     }
 </script>
 

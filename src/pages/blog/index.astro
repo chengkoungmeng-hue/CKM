@@ -30,11 +30,29 @@ const t = {
   readMore: "អានបន្ថែម",
   homeUrl: "/"
 };
+
+const breadcrumbSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "ទំព័រដើម",
+      "item": "https://ckmkh.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "អត្ថបទ និងចំណេះដឹង",
+      "item": "https://ckmkh.com/blog/"
+    }
+  ]
+});
 ---
 
 <Layout title={`${t.title} - CKM Premium Catering`} description={t.desc} lang="km-KH">
-  <Fragment slot="head">
-  </Fragment>
+  <script type="application/ld+json" is:inline set:html={breadcrumbSchema}></script>
 
   <style is:global>
     .font-km-serif { font-family: 'Hanuman', serif; }
