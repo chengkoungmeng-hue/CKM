@@ -11,7 +11,7 @@ const {
     lang = "km",
 } = Astro.props;
 
-const baseLang = "km";
+const baseLang: string = "km";
 
 // Dynamic root URL resolution (使用 baseLang)
 const homeUrl = baseLang === "km" ? "/" : `/${baseLang}/`;
@@ -53,7 +53,7 @@ const brandDict = {
     zh: { title: "CKM 鍾光明", subtitle: "頂級宴席與現場統籌" },
     en: { title: "CKM CATERING", subtitle: "PRECISION EVENT LOGISTICS" },
 };
-const brand = brandDict[baseLang];
+const brand = brandDict[baseLang as keyof typeof brandDict];
 
 // Grounded navigation and CTA dictionary
 const navTranslations = {
@@ -88,7 +88,7 @@ const navTranslations = {
         copyright: "All Rights Reserved.",
     },
 };
-const t = navTranslations[baseLang];
+const t = navTranslations[baseLang as keyof typeof navTranslations];
 
 const getLocalizedPath = (targetLang: "km" | "zh" | "en") => {
     // 1. 強制剝除當前網址開頭的任何語言前綴，取得絕對乾淨的路徑 (例如 /blog/..., /tanghuot)
@@ -406,17 +406,16 @@ const breadcrumbSchemaData = generateBreadcrumbs();
                         aria-label={t.contact}
                         class="hidden md:inline-flex relative z-50 items-center gap-2 bg-onyx hover:bg-slate-800 text-white px-6 min-h-[44px] rounded-sm font-sans font-medium text-sm transition-all shadow-lg hover:shadow-xl"
                     >
-                        <Phone class="w-4 h-4 text-champagne" strokeWidth={1.5} />
-                        {t.contact}
+                        <Phone class="w-4 h-4 text-champagne" stroke-width={1.5} />
                     </a>
-
                     <button
-                        id="mobile-menu-btn"
-                        class="md:hidden text-onyx relative z-50 p-2 focus:outline-none"
+                        id="mobile-menu-toggle"
+                        class="p-2 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-champagne transition-colors focus:outline-none focus:ring-2 focus:ring-champagne focus:ring-offset-2 focus:ring-offset-slate-900"
                         aria-label="Toggle Navigation Menu"
+                        aria-expanded="false"
                     >
-                        <span id="icon-bars" class="block"><Menu class="w-6 h-6" strokeWidth={1.5} /></span>
-                        <span id="icon-close" class="hidden"><X class="w-6 h-6" strokeWidth={1.5} /></span>
+                        <span id="icon-bars" class="block"><Menu class="w-6 h-6" stroke-width={1.5} /></span>
+                        <span id="icon-close" class="hidden"><X class="w-6 h-6" stroke-width={1.5} /></span>
                     </button>
                 </div>
             </div>
@@ -519,16 +518,16 @@ const breadcrumbSchemaData = generateBreadcrumbs();
                     aria-label={t.call}
                     class="flex-1 flex items-center justify-center gap-2 bg-onyx text-white font-sans font-medium text-sm transition-colors active:bg-slate-800"
                 >
-                    <Phone class="w-4 h-4 text-champagne" strokeWidth={1.5} />
-                    {t.call}
+                    <Phone class="w-4 h-4 text-champagne" stroke-width={1.5} />
+                    <span class="font-medium tracking-wider">{mainPhone}</span>
                 </a>
                 <a
                     href={telegramLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="flex-1 flex items-center justify-center gap-2 bg-[#006699] text-white font-sans font-medium text-sm transition-colors active:bg-[#005580]"
+                    class="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-sky-500 hover:from-blue-500 hover:to-sky-400 text-white font-medium py-3 px-4 rounded-xl shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all duration-300 text-sm"
                 >
-                    <Send class="w-4 h-4" strokeWidth={1.5} />
+                    <Send class="w-4 h-4" stroke-width={1.5} />
                     {t.telegram}
                 </a>
             </div>

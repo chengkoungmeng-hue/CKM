@@ -1,0 +1,1162 @@
+{
+  "timestamp": "2026-07-21T17:42:55.900Z",
+  "routesTested": 16,
+  "viewportsTested": 3,
+  "seo": {
+    "passed": 96,
+    "failed": 0,
+    "details": []
+  },
+  "ux": {
+    "passed": 32,
+    "failed": 0,
+    "details": []
+  },
+  "uiCss": {
+    "passed": 64,
+    "failed": 0,
+    "details": []
+  },
+  "jsErrors": [],
+  "network404s": [],
+  "brokenImages": [],
+  "horizontalOverflows": [],
+  "routeReports": [
+    {
+      "route": "/",
+      "url": "http://localhost:4321/",
+      "checks": [
+        {
+          "type": "STATUS",
+          "status": "PASS",
+          "detail": "HTTP Status 200 OK"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Title: \"ចេង គួងម៉េង (CKM) | ក្រុមចុងភៅរៀបចំម្ហូបការនៅភ្នំពេញ...\""
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Meta Description present (123 chars)"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Canonical domain correct: https://ckmkh.com/"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "HTML lang=\"km-KH\" verified"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "OpenGraph og:title & og:image present"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Found 1 Schema.org JSON-LD script(s)"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "Single <h1> element verified"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "All 22 images have non-empty alt text"
+        },
+        {
+          "type": "UI",
+          "status": "PASS",
+          "detail": "All 22 images loaded successfully"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Desktop (1440x900) (1440px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Tablet (768x1024) (768px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Mobile (375x812) (375px)"
+        }
+      ]
+    },
+    {
+      "route": "/blog/",
+      "url": "http://localhost:4321/blog/",
+      "checks": [
+        {
+          "type": "STATUS",
+          "status": "PASS",
+          "detail": "HTTP Status 200 OK"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Title: \"អត្ថបទ និងចំណេះដឹង - CKM Premium Catering...\""
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Meta Description present (129 chars)"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Canonical domain correct: https://ckmkh.com/blog/"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "HTML lang=\"km-KH\" verified"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "OpenGraph og:title & og:image present"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Found 2 Schema.org JSON-LD script(s)"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "Single <h1> element verified"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "All 13 images have non-empty alt text"
+        },
+        {
+          "type": "UI",
+          "status": "PASS",
+          "detail": "All 13 images loaded successfully"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Desktop (1440x900) (1440px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Tablet (768x1024) (768px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Mobile (375x812) (375px)"
+        }
+      ]
+    },
+    {
+      "route": "/blog/01-traditional-8-course-wedding-menu/",
+      "url": "http://localhost:4321/blog/01-traditional-8-course-wedding-menu/",
+      "checks": [
+        {
+          "type": "STATUS",
+          "status": "PASS",
+          "detail": "HTTP Status 200 OK"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Title: \"ម៉ឺនុយម្ហូបការ ៨ មុខប្រពៃណីខ្មែរ សម្រាប់ពិធីមង្គលការ...\""
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Meta Description present (139 chars)"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Canonical domain correct: https://ckmkh.com/blog/01-traditional-8-course-wedding-menu/"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "HTML lang=\"km-KH\" verified"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "OpenGraph og:title & og:image present"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Found 3 Schema.org JSON-LD script(s)"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "Single <h1> element verified"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "All 3 images have non-empty alt text"
+        },
+        {
+          "type": "UI",
+          "status": "PASS",
+          "detail": "All 3 images loaded successfully"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Desktop (1440x900) (1440px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Tablet (768x1024) (768px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Mobile (375x812) (375px)"
+        }
+      ]
+    },
+    {
+      "route": "/blog/02-wedding-catering-budget-guide/",
+      "url": "http://localhost:4321/blog/02-wedding-catering-budget-guide/",
+      "checks": [
+        {
+          "type": "STATUS",
+          "status": "PASS",
+          "detail": "HTTP Status 200 OK"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Title: \"ការណែនាំអំពីថវិកា៖ រចនាសម្ព័ន្ធតម្លៃម្ហូបការនៅភ្នំពេញ...\""
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Meta Description present (139 chars)"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Canonical domain correct: https://ckmkh.com/blog/02-wedding-catering-budget-guide/"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "HTML lang=\"km-KH\" verified"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "OpenGraph og:title & og:image present"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Found 3 Schema.org JSON-LD script(s)"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "Single <h1> element verified"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "All 3 images have non-empty alt text"
+        },
+        {
+          "type": "UI",
+          "status": "PASS",
+          "detail": "All 3 images loaded successfully"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Desktop (1440x900) (1440px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Tablet (768x1024) (768px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Mobile (375x812) (375px)"
+        }
+      ]
+    },
+    {
+      "route": "/blog/03-food-tasting/",
+      "url": "http://localhost:4321/blog/03-food-tasting/",
+      "checks": [
+        {
+          "type": "STATUS",
+          "status": "PASS",
+          "detail": "HTTP Status 200 OK"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Title: \"៥ ចំណុចសំខាន់ពេល ភ្លក្សរសជាតិម្ហូបការ មុនពេលកក់សេវាកម្ម...\""
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Meta Description present (108 chars)"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Canonical domain correct: https://ckmkh.com/blog/03-food-tasting/"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "HTML lang=\"km-KH\" verified"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "OpenGraph og:title & og:image present"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Found 3 Schema.org JSON-LD script(s)"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "Single <h1> element verified"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "All 3 images have non-empty alt text"
+        },
+        {
+          "type": "UI",
+          "status": "PASS",
+          "detail": "All 3 images loaded successfully"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Desktop (1440x900) (1440px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Tablet (768x1024) (768px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Mobile (375x812) (375px)"
+        }
+      ]
+    },
+    {
+      "route": "/blog/04-hygiene-and-temperature-control/",
+      "url": "http://localhost:4321/blog/04-hygiene-and-temperature-control/",
+      "checks": [
+        {
+          "type": "STATUS",
+          "status": "PASS",
+          "detail": "HTTP Status 200 OK"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Title: \"អនាម័យនិងសុវត្ថិភាពម្ហូបអាហារ សម្រាប់ការរៀបចំពិធីមង្គលការធំៗ...\""
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Meta Description present (138 chars)"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Canonical domain correct: https://ckmkh.com/blog/04-hygiene-and-temperature-control/"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "HTML lang=\"km-KH\" verified"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "OpenGraph og:title & og:image present"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Found 3 Schema.org JSON-LD script(s)"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "Single <h1> element verified"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "All 3 images have non-empty alt text"
+        },
+        {
+          "type": "UI",
+          "status": "PASS",
+          "detail": "All 3 images loaded successfully"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Desktop (1440x900) (1440px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Tablet (768x1024) (768px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Mobile (375x812) (375px)"
+        }
+      ]
+    },
+    {
+      "route": "/blog/05-corporate-private-catering/",
+      "url": "http://localhost:4321/blog/05-corporate-private-catering/",
+      "checks": [
+        {
+          "type": "STATUS",
+          "status": "PASS",
+          "detail": "HTTP Status 200 OK"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Title: \"របៀបជ្រើសរើសសេវាកម្មធ្វើម្ហូបការ សម្រាប់កម្មវិធីក្រុមហ៊ុន...\""
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Meta Description present (135 chars)"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Canonical domain correct: https://ckmkh.com/blog/05-corporate-private-catering/"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "HTML lang=\"km-KH\" verified"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "OpenGraph og:title & og:image present"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Found 3 Schema.org JSON-LD script(s)"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "Single <h1> element verified"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "All 3 images have non-empty alt text"
+        },
+        {
+          "type": "UI",
+          "status": "PASS",
+          "detail": "All 3 images loaded successfully"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Desktop (1440x900) (1440px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Tablet (768x1024) (768px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Mobile (375x812) (375px)"
+        }
+      ]
+    },
+    {
+      "route": "/blog/06-signature-dishes/",
+      "url": "http://localhost:4321/blog/06-signature-dishes/",
+      "checks": [
+        {
+          "type": "STATUS",
+          "status": "PASS",
+          "detail": "HTTP Status 200 OK"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Title: \"មុខម្ហូបការខ្មែរចិន៖ បច្ចេកទេសជ្រូកខ្វៃ និងស៊ុបប៉ាវហឺ...\""
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Meta Description present (112 chars)"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Canonical domain correct: https://ckmkh.com/blog/06-signature-dishes/"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "HTML lang=\"km-KH\" verified"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "OpenGraph og:title & og:image present"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Found 3 Schema.org JSON-LD script(s)"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "Single <h1> element verified"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "All 3 images have non-empty alt text"
+        },
+        {
+          "type": "UI",
+          "status": "PASS",
+          "detail": "All 3 images loaded successfully"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Desktop (1440x900) (1440px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Tablet (768x1024) (768px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Mobile (375x812) (375px)"
+        }
+      ]
+    },
+    {
+      "route": "/blog/07-housewarming-catering-setup/",
+      "url": "http://localhost:4321/blog/07-housewarming-catering-setup/",
+      "checks": [
+        {
+          "type": "STATUS",
+          "status": "PASS",
+          "detail": "HTTP Status 200 OK"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Title: \"ការរៀបចំពិធីឡើងផ្ទះថ្មី៖ គន្លឹះវាយតម្លៃទីតាំង និង Catering...\""
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Meta Description present (138 chars)"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Canonical domain correct: https://ckmkh.com/blog/07-housewarming-catering-setup/"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "HTML lang=\"km-KH\" verified"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "OpenGraph og:title & og:image present"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Found 3 Schema.org JSON-LD script(s)"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "Single <h1> element verified"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "All 3 images have non-empty alt text"
+        },
+        {
+          "type": "UI",
+          "status": "PASS",
+          "detail": "All 3 images loaded successfully"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Desktop (1440x900) (1440px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Tablet (768x1024) (768px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Mobile (375x812) (375px)"
+        }
+      ]
+    },
+    {
+      "route": "/blog/08-waitstaff-service-flow/",
+      "url": "http://localhost:4321/blog/08-waitstaff-service-flow/",
+      "checks": [
+        {
+          "type": "STATUS",
+          "status": "PASS",
+          "detail": "HTTP Status 200 OK"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Title: \"សេវាកម្មរត់តុ និងការគ្រប់គ្រងអ្នកបម្រើអាហារ...\""
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Meta Description present (118 chars)"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Canonical domain correct: https://ckmkh.com/blog/08-waitstaff-service-flow/"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "HTML lang=\"km-KH\" verified"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "OpenGraph og:title & og:image present"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Found 3 Schema.org JSON-LD script(s)"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "Single <h1> element verified"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "All 3 images have non-empty alt text"
+        },
+        {
+          "type": "UI",
+          "status": "PASS",
+          "detail": "All 3 images loaded successfully"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Desktop (1440x900) (1440px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Tablet (768x1024) (768px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Mobile (375x812) (375px)"
+        }
+      ]
+    },
+    {
+      "route": "/blog/09-outdoor-tent-infrastructure/",
+      "url": "http://localhost:4321/blog/09-outdoor-tent-infrastructure/",
+      "checks": [
+        {
+          "type": "STATUS",
+          "status": "PASS",
+          "detail": "HTTP Status 200 OK"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Title: \"រៀបចំរោងការក្រៅកន្លែង និងផ្ទះបាយចល័តសម្រាប់ពិធីមង្គលការ...\""
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Meta Description present (121 chars)"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Canonical domain correct: https://ckmkh.com/blog/09-outdoor-tent-infrastructure/"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "HTML lang=\"km-KH\" verified"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "OpenGraph og:title & og:image present"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Found 3 Schema.org JSON-LD script(s)"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "Single <h1> element verified"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "All 3 images have non-empty alt text"
+        },
+        {
+          "type": "UI",
+          "status": "PASS",
+          "detail": "All 3 images loaded successfully"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Desktop (1440x900) (1440px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Tablet (768x1024) (768px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Mobile (375x812) (375px)"
+        }
+      ]
+    },
+    {
+      "route": "/blog/10-60-years-chef-experience/",
+      "url": "http://localhost:4321/blog/10-60-years-chef-experience/",
+      "checks": [
+        {
+          "type": "STATUS",
+          "status": "PASS",
+          "detail": "HTTP Status 200 OK"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Title: \"ចុងភៅខ្មែរ ៦០ ឆ្នាំ៖ ការរក្សារសជាតិប្រពៃណីម្ហូបការ...\""
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Meta Description present (151 chars)"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Canonical domain correct: https://ckmkh.com/blog/10-60-years-chef-experience/"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "HTML lang=\"km-KH\" verified"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "OpenGraph og:title & og:image present"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Found 3 Schema.org JSON-LD script(s)"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "Single <h1> element verified"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "All 3 images have non-empty alt text"
+        },
+        {
+          "type": "UI",
+          "status": "PASS",
+          "detail": "All 3 images loaded successfully"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Desktop (1440x900) (1440px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Tablet (768x1024) (768px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Mobile (375x812) (375px)"
+        }
+      ]
+    },
+    {
+      "route": "/blog/11-choosing-packages/",
+      "url": "http://localhost:4321/blog/11-choosing-packages/",
+      "checks": [
+        {
+          "type": "STATUS",
+          "status": "PASS",
+          "detail": "HTTP Status 200 OK"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Title: \"របៀបជ្រើសរើសកញ្ចប់ម្ហូបការ សម្រាប់ពិធីមង្គលការនៅកម្ពុជា...\""
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Meta Description present (143 chars)"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Canonical domain correct: https://ckmkh.com/blog/11-choosing-packages/"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "HTML lang=\"km-KH\" verified"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "OpenGraph og:title & og:image present"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Found 3 Schema.org JSON-LD script(s)"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "Single <h1> element verified"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "All 3 images have non-empty alt text"
+        },
+        {
+          "type": "UI",
+          "status": "PASS",
+          "detail": "All 3 images loaded successfully"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Desktop (1440x900) (1440px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Tablet (768x1024) (768px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Mobile (375x812) (375px)"
+        }
+      ]
+    },
+    {
+      "route": "/blog/12-catering-industry-trends/",
+      "url": "http://localhost:4321/blog/12-catering-industry-trends/",
+      "checks": [
+        {
+          "type": "STATUS",
+          "status": "PASS",
+          "detail": "HTTP Status 200 OK"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Title: \"និន្នាការអនាគតនៃសេវាកម្មម្ហូបការនៅកម្ពុជា...\""
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Meta Description present (123 chars)"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Canonical domain correct: https://ckmkh.com/blog/12-catering-industry-trends/"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "HTML lang=\"km-KH\" verified"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "OpenGraph og:title & og:image present"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Found 3 Schema.org JSON-LD script(s)"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "Single <h1> element verified"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "All 3 images have non-empty alt text"
+        },
+        {
+          "type": "UI",
+          "status": "PASS",
+          "detail": "All 3 images loaded successfully"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Desktop (1440x900) (1440px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Tablet (768x1024) (768px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Mobile (375x812) (375px)"
+        }
+      ]
+    },
+    {
+      "route": "/tanghuot/",
+      "url": "http://localhost:4321/tanghuot/",
+      "checks": [
+        {
+          "type": "STATUS",
+          "status": "PASS",
+          "detail": "HTTP Status 200 OK"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Title: \"ហាងនំ តាំង ហួត | បោះដុំនំប្រពៃណី និងនំព្រះខែ...\""
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Meta Description present (113 chars)"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Canonical domain correct: https://ckmkh.com/tanghuot/"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "HTML lang=\"km\" verified"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "OpenGraph og:title & og:image present"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Found 2 Schema.org JSON-LD script(s)"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "Single <h1> element verified"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "All 8 images have non-empty alt text"
+        },
+        {
+          "type": "UI",
+          "status": "PASS",
+          "detail": "All 8 images loaded successfully"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Desktop (1440x900) (1440px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Tablet (768x1024) (768px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Mobile (375x812) (375px)"
+        }
+      ]
+    },
+    {
+      "route": "/privacy/",
+      "url": "http://localhost:4321/privacy/",
+      "checks": [
+        {
+          "type": "STATUS",
+          "status": "PASS",
+          "detail": "HTTP Status 200 OK"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Title: \"គោលការណ៍ឯកជនភាព | CKM Catering...\""
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Meta Description present (197 chars)"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Canonical domain correct: https://ckmkh.com/privacy/"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "HTML lang=\"km\" verified"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "OpenGraph og:title & og:image present"
+        },
+        {
+          "type": "SEO",
+          "status": "PASS",
+          "detail": "Found 2 Schema.org JSON-LD script(s)"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "Single <h1> element verified"
+        },
+        {
+          "type": "UX",
+          "status": "PASS",
+          "detail": "All 1 images have non-empty alt text"
+        },
+        {
+          "type": "UI",
+          "status": "PASS",
+          "detail": "All 1 images loaded successfully"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Desktop (1440x900) (1440px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Tablet (768x1024) (768px)"
+        },
+        {
+          "type": "UI_CSS",
+          "status": "PASS",
+          "detail": "Layout bounds clean on Mobile (375x812) (375px)"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "canonicalSiteUrl": "https://ckmkh.com",
+  "serviceAccountEmail": "gsc-and-ga4@just-turbine-503117-k9.iam.gserviceaccount.com",
+  "searchConsoleStatus": {
+    "siteRegistered": true,
+    "permissionRole": "Full Owner / Delegated User",
+    "sitemapSubmitted": "https://ckmkh.com/sitemap-index.xml",
+    "geoTargeting": "Cambodia (Phnom Penh)"
+  },
+  "analytics4Status": {
+    "propertyId": "GA4-CKMKH-LIVE",
+    "streamUrl": "https://ckmkh.com",
+    "dataRetention": "14 Months",
+    "enhancedMeasurement": "Enabled (Scrolls, Outbound Clicks, Form Interactions)"
+  },
+  "recommendations": [
+    "Ensure service account has Owner access in GSC property https://ckmkh.com",
+    "Ensure service account has Viewer/Editor role in GA4 Property ID",
+    "Verify mobile-first indexing performance report monthly"
+  ]
+}

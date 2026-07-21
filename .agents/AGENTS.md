@@ -19,4 +19,14 @@
 
 ## Sub-brands SEO
 - **Concentrated Domain Authority**: Sub-brands hosted on the main domain (e.g., `/tanghuot/`) that target the same demographic should remain strictly Khmer-focused. Do NOT create multilingual routes (`/zh/`, `/en/`) for them unless explicitly requested, to consolidate SEO authority.
+
+## Local SEO & GEO Audit Protocol
+- **Local Target Audience Focus**: Primary focus is local Cambodian / Phnom Penh audience (`https://ckmkh.com`). All local SEO analyses must prioritize Khmer keywords, local search intent, and regional search behavior.
+- **LocalBusiness Structured Data**: Ensure all business pages embed Schema.org `LocalBusiness` / `Organization` JSON-LD with correct canonical URLs (`https://ckmkh.com`), GEO coordinates, address, and localized NAP (Name, Address, Phone).
+- **GSC & GA4 Integration Safety**: Integration credentials (e.g., `GSC_GA4_SERVICE_ACCOUNT_EMAIL`) must be read strictly from `.env`. Never hardcode active secrets or credentials into code or markdown documentation.
+
+## Target Audience & Demographic Persona Protocol
+- **Audience Segmentation**: Categorize visitors based on local intent (e.g., B2B buyers, local consumers in Phnom Penh / Cambodia).
+- **Resonance & Intent Analysis**: Evaluate content readability, Khmer natural phrasing, mobile UX friction, and CTA alignment for local conversions.
 </RULE[project_scoped]>
+
