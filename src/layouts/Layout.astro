@@ -411,7 +411,7 @@ const breadcrumbSchemaData = generateBreadcrumbs();
                     </a>
                     <button
                         id="mobile-menu-toggle"
-                        class="p-2 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-champagne transition-colors focus:outline-none focus:ring-2 focus:ring-champagne focus:ring-offset-2 focus:ring-offset-slate-900"
+                        class="md:hidden p-2 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-champagne transition-colors focus:outline-none focus:ring-2 focus:ring-champagne focus:ring-offset-2 focus:ring-offset-slate-900"
                         aria-label="Toggle Navigation Menu"
                         aria-expanded="false"
                     >
@@ -546,50 +546,54 @@ const breadcrumbSchemaData = generateBreadcrumbs();
 </html>
 
 <script>
-    const btn = document.getElementById("mobile-menu-btn");
-    const overlay = document.getElementById("mobile-menu-overlay");
-    const iconBars = document.getElementById("icon-bars");
-    const iconClose = document.getElementById("icon-close");
-    const links = document.querySelectorAll(".mobile-link");
+    const initMobileMenu = () => {
+        const btn = document.getElementById("mobile-menu-toggle");
+        const overlay = document.getElementById("mobile-menu-overlay");
+        const iconBars = document.getElementById("icon-bars");
+        const iconClose = document.getElementById("icon-close");
+        const links = document.querySelectorAll(".mobile-link");
 
-    if (btn && overlay && iconBars && iconClose) {
-        btn.addEventListener("click", () => {
-            const isHidden = overlay.classList.contains("hidden");
+        if (btn && overlay && iconBars && iconClose) {
+            btn.addEventListener("click", () => {
+                const isHidden = overlay.classList.contains("hidden");
+                btn.setAttribute("aria-expanded", isHidden ? "true" : "false");
 
-            if (isHidden) {
-                overlay.classList.remove("hidden");
-                overlay.classList.add("flex");
-                setTimeout(() => overlay.classList.remove("opacity-0"), 10);
+                if (isHidden) {
+                    overlay.classList.remove("hidden");
+                    overlay.classList.add("flex");
+                    setTimeout(() => overlay.classList.remove("opacity-0"), 10);
 
-                iconBars.classList.replace("block", "hidden");
-                iconClose.classList.replace("hidden", "block");
-                document.body.style.overflow = "hidden";
-            } else {
-                overlay.classList.add("opacity-0");
+                    iconBars.classList.replace("block", "hidden");
+                    iconClose.classList.replace("hidden", "block");
+                    document.body.style.overflow = "hidden";
+                } else {
+                    overlay.classList.add("opacity-0");
 
-                iconClose.classList.replace("block", "hidden");
-                iconBars.classList.replace("hidden", "block");
-                document.body.style.overflow = "";
+                    iconClose.classList.replace("block", "hidden");
+                    iconBars.classList.replace("hidden", "block");
+                    document.body.style.overflow = "";
 
-                setTimeout(() => {
-                    overlay.classList.add("hidden");
-                    overlay.classList.remove("flex");
-                }, 300);
-            }
-        });
-
-        links.forEach((link) => {
-            link.addEventListener("click", () => {
-                overlay.classList.add("opacity-0");
-                iconClose.classList.replace("block", "hidden");
-                iconBars.classList.replace("hidden", "block");
-                document.body.style.overflow = "";
-                setTimeout(() => {
-                    overlay.classList.add("hidden");
-                    overlay.classList.remove("flex");
-                }, 300);
+                    setTimeout(() => {
+                        overlay.classList.add("hidden");
+                        overlay.classList.remove("flex");
+                    }, 300);
+                }
             });
-        });
+
+            links.forEach((link) => {
+                link.addEventListener("click", () => {
+                    overlay.classList.add("opacity-0");
+                    btn.setAttribute("aria-expanded", "false");
+                    iconClose.classList.replace("block", "hidden");
+                    iconBars.classList.replace("hidden", "block");
+                    document.body.style.overflow = "";
+                    setTimeout(() => {
+                        overlay.classList.add("hidden");
+                        overlay.classList.remove("flex");
+                    }, 300);
+                });
+            });
+        }
 
         // Scroll to top button functionality
         const scrollTopBtn = document.getElementById("scroll-to-top");
@@ -607,6 +611,11 @@ const breadcrumbSchemaData = generateBreadcrumbs();
                 window.scrollTo({ top: 0, behavior: "smooth" });
             });
         }
+    };
+
+    document.addEventListener("astro:page-load", initMobileMenu);
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+        initMobileMenu();
     }
 </script>
 
