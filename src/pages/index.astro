@@ -32,8 +32,40 @@ const featuredPosts = allPosts.filter(post => post.data.featured);
 const otherPosts = allPosts.filter(post => !post.data.featured);
 const recentPosts = [...featuredPosts, ...otherPosts].slice(0, 3);
 
+const faqSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "តើសេវាកម្មម្ហូបការ CKM នៅភ្នំពេញ មានតម្លៃប៉ុន្មានក្នុងមួយតុ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "យើងខ្ញុំមានកញ្ចប់សេវាកម្មម្ហូបការចម្រុះ ចាប់ពីម៉ឺនុយ ៨ មុខ បែបប្រពៃណីខ្មែរ-ចិន ជាមួយនឹងមុខម្ហូបពិសេសដូចជា កូនជ្រូកខ្វៃ និងស៊ុបប៉ាវហឺ។ សូមទាក់ទងមក Cellcard 011 827 782 ដើម្បីទទួលបានការប្រឹក្សា និងព័ត៌មានតម្លៃលម្អិត។"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "តើ CKM មានសេវាជួលរោងការ និងតុបតែងទីតាំងកម្មវិធីដែរឬទេ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "បាទ/ចាស! ក្រៅពីសេវាកម្មចម្អិនម្ហូប យើងខ្ញុំមានសេវាកម្មរៀបចំទីតាំង ជួលរោង និងរៀបចំប្រព័ន្ធភ្លើង និងតុបតែងទីតាំងកម្មវិធីឱ្យបានស្អាត និងរៀបរយ។"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "តើ CKM ទទួលរៀបចំកម្មវិធីអ្វីខ្លះនៅភ្នំពេញ និងតាមខេត្ត?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "យើងខ្ញុំទទួលរៀបចំពិធីសារពាង្គការមង្គលការ ពិធីជប់លៀងឡើងផ្ទះថ្មី ពិធីបុណ្យ ពិធីជប់លៀងក្រុមហ៊ុន និងអាហារប៊ូហ្វេ ទាំងនៅក្នុងរាជធានីភ្នំពេញ និងបណ្តាខេត្តនានា។"
+      }
+    }
+  ]
+});
+
 ---
 <Layout title="ចេង គួងម៉េង (CKM) | សេវាកម្មម្ហូបការ ភ្នំពេញ និងចុងភៅរៀបចំម្ហូបការមង្គលការ" description="ចេង គួងម៉េង (CKM) ផ្តល់ជូនសេវាកម្មម្ហូបការ សេវាកម្មទទួលរៀបចំកម្មវិធី និងចុងភៅរៀបចំម្ហូបការមង្គលការលំដាប់ខ្ពស់នៅភ្នំពេញ។ មានម៉ឺនុយ ៨ មុខ កូនជ្រូកខ្វៃ ស៊ុបប៉ាវហឺ និងសេវាកម្មរៀបចំតុបតែងទីតាំងពេញលេញ។" lang="km-KH">
+  <script type="application/ld+json" is:inline set:html={faqSchema}></script>
 
 
   <style>
@@ -239,6 +271,53 @@ const recentPosts = [...featuredPosts, ...otherPosts].slice(0, 3);
              <a href="/blog/" class="inline-flex items-center justify-center gap-2 bg-onyx hover:bg-slate-800 text-white px-8 py-4 rounded-sm font-km-sans font-medium transition-all shadow-md hover:shadow-lg">
                អត្ថបទទាំងអស់ <ChevronRight class="w-4 h-4" stroke-width={1.5} />
              </a>
+          </div>
+        </div>
+      </section>
+
+      <section id="faq" class="py-20 bg-pearl border-t border-slate-100 reveal">
+        <div class="max-w-4xl mx-auto px-6">
+          <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-km-serif font-bold text-onyx mb-4">សំណួរដែលសួរញឹកញាប់អំពីសេវាកម្មម្ហូបការ</h2>
+            <p class="text-slate-600 font-km-sans tracking-widest">ចម្លើយច្បាស់ៗចំពោះការរៀបចំកម្មវិធី និងតម្លៃសេវាកម្មនៅភ្នំពេញ</p>
+          </div>
+          
+          <div class="space-y-6">
+            <details class="group bg-white p-6 rounded-sm border border-slate-200 shadow-sm [&_summary::-webkit-details-marker]:hidden">
+              <summary class="flex items-center justify-between cursor-pointer font-km-serif font-bold text-lg text-onyx group-open:text-champagne-dark transition-colors">
+                <span>តើសេវាកម្មម្ហូបការ CKM នៅភ្នំពេញ មានតម្លៃប៉ុន្មានក្នុងមួយតុ?</span>
+                <span class="ml-4 shrink-0 transition duration-300 group-open:-rotate-180">
+                  <ChevronRight class="w-5 h-5" stroke-width={2} />
+                </span>
+              </summary>
+              <p class="mt-4 font-km-sans text-slate-600 leading-relaxed">
+                យើងខ្ញុំមានកញ្ចប់សេវាកម្មម្ហូបការចម្រុះ ចាប់ពីម៉ឺនុយ ៨ មុខ បែបប្រពៃណីខ្មែរ-ចិន ជាមួយនឹងមុខម្ហូបពិសេសដូចជា កូនជ្រូកខ្វៃ និងស៊ុបប៉ាវហឺ។ លោកអ្នកអាចអានបន្ថែមអំពី <a href="/blog/11-choosing-packages/" class="text-champagne-dark underline font-medium">ការជ្រើសរើសកញ្ចប់ម្ហូបការ</a> ឬទាក់ទងមក Cellcard 011 827 782 ដើម្បីទទួលបានការប្រឹក្សា និងព័ត៌មានតម្លៃលម្អិត។
+              </p>
+            </details>
+
+            <details class="group bg-white p-6 rounded-sm border border-slate-200 shadow-sm [&_summary::-webkit-details-marker]:hidden">
+              <summary class="flex items-center justify-between cursor-pointer font-km-serif font-bold text-lg text-onyx group-open:text-champagne-dark transition-colors">
+                <span>តើ CKM មានសេវាជួលរោងការ និងតុបតែងទីតាំងកម្មវិធីដែរឬទេ?</span>
+                <span class="ml-4 shrink-0 transition duration-300 group-open:-rotate-180">
+                  <ChevronRight class="w-5 h-5" stroke-width={2} />
+                </span>
+              </summary>
+              <p class="mt-4 font-km-sans text-slate-600 leading-relaxed">
+                បាទ/ចាស! ក្រៅពីសេវាកម្មចម្អិនម្ហូប យើងខ្ញុំមានសេវាកម្មរៀបចំទីតាំង ជួលរោង និងរៀបចំប្រព័ន្ធភ្លើង ព្រមទាំងតុបតែងទីតាំងកម្មវិធីឱ្យបានស្អាត និងរៀបរយ។ លោកអ្នកអាចស្វែងយល់បន្ថែមអំពី <a href="/blog/09-outdoor-tent-infrastructure/" class="text-champagne-dark underline font-medium">ការជួលរោងការនិងរៀបចំទីតាំង</a>។
+              </p>
+            </details>
+
+            <details class="group bg-white p-6 rounded-sm border border-slate-200 shadow-sm [&_summary::-webkit-details-marker]:hidden">
+              <summary class="flex items-center justify-between cursor-pointer font-km-serif font-bold text-lg text-onyx group-open:text-champagne-dark transition-colors">
+                <span>តើ CKM ទទួលរៀបចំកម្មវិធីអ្វីខ្លះនៅភ្នំពេញ និងតាមខេត្ត?</span>
+                <span class="ml-4 shrink-0 transition duration-300 group-open:-rotate-180">
+                  <ChevronRight class="w-5 h-5" stroke-width={2} />
+                </span>
+              </summary>
+              <p class="mt-4 font-km-sans text-slate-600 leading-relaxed">
+                យើងខ្ញុំទទួលរៀបចំពិធីសារពាង្គការមង្គលការ ពិធីជប់លៀងឡើងផ្ទះថ្មី ពិធីបុណ្យ ពិធីជប់លៀងក្រុមហ៊ុន និងអាហារប៊ូហ្វេ ទាំងនៅក្នុងរាជធានីភ្នំពេញ និងបណ្តាខេត្តនានា។ អានបន្ថែមអំពី <a href="/blog/07-housewarming-catering-setup/" class="text-champagne-dark underline font-medium">សេវាម្ហូបជប់លៀងឡើងផ្ទះថ្មី</a>។
+              </p>
+            </details>
           </div>
         </div>
       </section>
