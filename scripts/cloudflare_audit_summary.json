@@ -1,0 +1,128 @@
+{
+  "timestamp": "2026-07-21T18:16:38.405Z",
+  "tokenValid": true,
+  "zone": {
+    "id": "d459c80e06d000c6e1927783fc6b3a7a",
+    "name": "ckmkh.com",
+    "status": "active",
+    "paused": false,
+    "type": "full",
+    "nameServers": [
+      "adam.ns.cloudflare.com",
+      "leanna.ns.cloudflare.com"
+    ],
+    "plan": "Free Website"
+  },
+  "settings": {
+    "0rtt": "on",
+    "advanced_ddos": "on",
+    "always_online": "off",
+    "always_use_https": "on",
+    "automatic_https_rewrites": "on",
+    "brotli": "on",
+    "browser_cache_ttl": 14400,
+    "browser_check": "on",
+    "cache_level": "aggressive",
+    "challenge_ttl": 1800,
+    "ciphers": [],
+    "cname_flattening": "flatten_at_root",
+    "development_mode": "off",
+    "early_hints": "on",
+    "ech": "on",
+    "edge_cache_ttl": 7200,
+    "email_obfuscation": "off",
+    "filter_logs_to_cloudflare": "off",
+    "hotlink_protection": "off",
+    "http2": "on",
+    "http3": "on",
+    "ip_geolocation": "off",
+    "ipv6": "on",
+    "log_to_cloudflare": "on",
+    "long_lived_grpc": "off",
+    "max_upload": 100,
+    "min_tls_version": "1.2",
+    "minify": {
+      "css": "off",
+      "html": "off",
+      "js": "off"
+    },
+    "mirage": "off",
+    "mobile_redirect": {
+      "status": "off",
+      "mobile_subdomain": null,
+      "strip_uri": false
+    },
+    "opportunistic_encryption": "on",
+    "opportunistic_onion": "off",
+    "orange_to_orange": "off",
+    "origin_error_page_pass_thru": "off",
+    "polish": "off",
+    "pq_keyex": "on",
+    "prefetch_preload": "off",
+    "privacy_pass": "on",
+    "proxy_read_timeout": "100",
+    "pseudo_ipv4": "off",
+    "replace_insecure_js": "off",
+    "response_buffering": "off",
+    "rocket_loader": "off",
+    "security_header": {
+      "strict_transport_security": {
+        "enabled": false,
+        "max_age": 0,
+        "include_subdomains": false,
+        "preload": false,
+        "nosniff": false
+      }
+    },
+    "security_level": "medium",
+    "server_side_exclude": "on",
+    "sort_query_string_for_cache": "off",
+    "ssl": "full",
+    "tls_1_2_only": "off",
+    "tls_1_3": "zrt",
+    "tls_client_auth": "off",
+    "true_client_ip_header": "off",
+    "visitor_ip": "on",
+    "waf": "off",
+    "webp": "off",
+    "websockets": "on"
+  },
+  "dnsRecords": [],
+  "rulesets": [
+    {
+      "id": "70339d97bdb34195bbf054b1ebe81f76",
+      "name": "Cloudflare Normalization Ruleset",
+      "phase": "http_request_sanitize"
+    },
+    {
+      "id": "77454fe2d30c4220b5701f6fdfb893ba",
+      "name": "Cloudflare Managed Free Ruleset",
+      "phase": "http_request_firewall_managed"
+    },
+    {
+      "id": "4d21379b4f9f4bb088e0729962c8b3cf",
+      "name": "DDoS L7 ruleset",
+      "phase": "ddos_l7"
+    },
+    {
+      "id": "b9b0e99bbc504911b4ba747d1e2804ab",
+      "name": "default",
+      "phase": "http_request_dynamic_redirect"
+    },
+    {
+      "id": "fe4df8ecb08d4760994aa8c10c30598b",
+      "name": "default",
+      "phase": "http_ratelimit"
+    },
+    {
+      "id": "8011f2d19e1e40618061193a2e63fc8a",
+      "name": "default",
+      "phase": "http_request_firewall_custom"
+    },
+    {
+      "id": "53e3349181b8436e9734b891523d0f04",
+      "name": "CKM Astro Cache Rules",
+      "phase": "http_request_cache_settings"
+    }
+  ]
+}
