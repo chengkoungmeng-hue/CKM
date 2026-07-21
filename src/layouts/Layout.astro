@@ -243,6 +243,7 @@ const breadcrumbSchemaData = generateBreadcrumbs();
         
         <!-- Font Preloading (Performance & CLS Fix) -->
         <link rel="preload" href="/fonts/hanuman-khmer-700-normal.woff2" as="font" type="font/woff2" crossorigin />
+        <link rel="preload" href="/fonts/hanuman-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin />
         <style>
             /* Hanuman */
             @font-face {
@@ -354,10 +355,10 @@ const breadcrumbSchemaData = generateBreadcrumbs();
                     <Image
                         src={brandCkmLogoGold}
                         alt="CKM Logo"
-                        width="144"
-                        height="144"
+                        width={96}
+                        height={96}
                         format="avif"
-                        quality={80}
+                        quality={75}
                         decoding="async"
                         fetchpriority="high"
                         class="w-10 h-10 md:w-12 md:h-12 rounded-full border border-amber-500 shadow-md"
@@ -598,15 +599,23 @@ const breadcrumbSchemaData = generateBreadcrumbs();
         // Scroll to top button functionality
         const scrollTopBtn = document.getElementById("scroll-to-top");
         if (scrollTopBtn) {
+            let isTicking = false;
             window.addEventListener("scroll", () => {
-                if (window.scrollY > 400) {
-                    scrollTopBtn.classList.remove("opacity-0", "pointer-events-none");
-                    scrollTopBtn.classList.add("opacity-100", "pointer-events-auto");
-                } else {
-                    scrollTopBtn.classList.add("opacity-0", "pointer-events-none");
-                    scrollTopBtn.classList.remove("opacity-100", "pointer-events-auto");
+                if (!isTicking) {
+                    window.requestAnimationFrame(() => {
+                        if (window.scrollY > 400) {
+                            scrollTopBtn.classList.remove("opacity-0", "pointer-events-none");
+                            scrollTopBtn.classList.add("opacity-100", "pointer-events-auto");
+                        } else {
+                            scrollTopBtn.classList.add("opacity-0", "pointer-events-none");
+                            scrollTopBtn.classList.remove("opacity-100", "pointer-events-auto");
+                        }
+                        isTicking = false;
+                    });
+                    isTicking = true;
                 }
-            });
+            }, { passive: true });
+
             scrollTopBtn.addEventListener("click", () => {
                 window.scrollTo({ top: 0, behavior: "smooth" });
             });
