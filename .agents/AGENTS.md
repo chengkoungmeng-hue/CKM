@@ -28,5 +28,8 @@
 ## Target Audience & Demographic Persona Protocol
 - **Audience Segmentation**: Categorize visitors based on local intent (e.g., B2B buyers, local consumers in Phnom Penh / Cambodia).
 - **Resonance & Intent Analysis**: Evaluate content readability, Khmer natural phrasing, mobile UX friction, and CTA alignment for local conversions.
+
+## Brand Palette & Aesthetic System
+- **Canonical Color Tokens**: Strictly maintain the "Royal Champagne & Onyx" Quiet Luxury palette (`#0B0F17` Onyx, `#FAF9F6` Pearl, `#D4AF37` / `#C5A059` Champagne Gold). Avoid raw primary colors (plain red, plain blue, plain green) to preserve the 60-year VIP banquet prestige.
 </RULE[project_scoped]>
 
