@@ -424,29 +424,29 @@ const breadcrumbSchemaData = generateBreadcrumbs();
 
             <div
                 id="mobile-menu-overlay"
-                class="fixed inset-0 bg-white/98 backdrop-blur-md z-40 hidden flex-col items-center justify-start opacity-0 transition-opacity duration-300 pt-32 overflow-y-auto pb-24"
+                class="fixed inset-0 bg-onyx z-40 hidden flex-col items-center justify-start opacity-0 transition-opacity duration-300 pt-32 overflow-y-auto pb-24 border-b border-champagne/20"
             >
                 <div
-                    class="flex flex-col items-center gap-8 text-onyx font-serif text-2xl w-full px-6"
+                    class="flex flex-col items-center gap-8 text-white font-serif text-2xl w-full px-6"
                 >
                     <a
                         href={`${homeUrl}#services`}
-                        class="mobile-link hover:text-champagne-dark transition-colors"
+                        class="mobile-link hover:text-champagne transition-colors"
                         >{t.service}</a
                     >
                     <a
                         href={`${homeUrl}#gallery`}
-                        class="mobile-link hover:text-champagne-dark transition-colors"
+                        class="mobile-link hover:text-champagne transition-colors"
                         >{t.portfolio}</a
                     >
                     <a
                         href={`${homeUrl}#blog`}
-                        class="mobile-link hover:text-champagne-dark transition-colors"
+                        class="mobile-link hover:text-champagne transition-colors"
                         >{t.insights}</a
                     >
                     <a
                         href={`${homeUrl}tanghuot/`}
-                        class="mobile-link text-champagne-dark hover:text-onyx font-bold border border-champagne/30 px-8 py-2 rounded-full bg-champagne/5 hover:bg-champagne/10 transition-colors mt-2 shadow-glow"
+                        class="mobile-link text-champagne hover:text-white font-bold border border-champagne/40 px-8 py-2 rounded-full bg-champagne/10 hover:bg-champagne/20 transition-colors mt-2 shadow-glow"
                         >{t.mooncake}</a
                     >
                 </div>
