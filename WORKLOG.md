@@ -54,9 +54,13 @@
 - [2026-07-22] Added Local SEO & GEO Audit Protocol and Target Audience & Demographic Persona Protocol rules to `.agents/AGENTS.md`.
 - [2026-07-22] Created custom skill `.agents/skills/local_seo_analyzer/SKILL.md` for evaluating local SEO, LocalBusiness JSON-LD schema, local Khmer keywords, and GEO targeting.
 - [2026-07-22] Created custom skill `.agents/skills/audience_analyzer/SKILL.md` for analyzing local B2B/B2C customer personas, user search intent, and mobile conversion friction.
-
--   [ 2 0 2 6 - 0 7 - 0 4 ]   R e m o v e d   h e a v y   @ f o n t s o u r c e   W e b   F o n t s   ( K a n t u m r u y   P r o )   f o r   b o d y   t e x t   a n d   s w i t c h e d   t o   s y s t e m - u i   f a l l b a c k ,   r e s o l v i n g   L C P   a n d   C L S   i s s u e s .   A c h i e v e d   L i g h t h o u s e   1 0 0 / 1 0 0 / 1 0 0 / 1 0 0 .  
- -   [ 2 0 2 6 - 0 7 - 0 4 ]   F i x e d   W C A G   C o n t r a s t   R a t i o   i s s u e   ( t e x t - s l a t e - 5 0 0   - >   t e x t - s l a t e - 4 0 0   o n   d a r k   b a c k g r o u n d s ) .  
- -   [ 2 0 2 6 - 0 7 - 0 4 ]   C l e a n e d   u p   u n u s e d   f o n t   f i l e s   f r o m   p u b l i c / f o n t s / .  
- -   [ 2 0 2 6 - 0 7 - 0 4 ]   T r a n s l a t e d   t h e   f o o t e r   n a v i g a t i o n   c o m p l e t e l y   t o   K h m e r   ( " B l o g   /   I n s i g h t s "   - >   " ¢  Ò  ” ‘   /   … Æ Ž Á Ç Š ¹ „ " ,   P r i v a c y   P o l i c y   - >   " ‚ Ä › € ¶ š Ž Í ¯ € ‡ “ — ¶ – " ,   a n d   C o p y r i g h t ) .  
- -   [ 2 0 2 6 - 0 7 - 0 4 ]   V a l i d a t e d   S E O   s t r a t e g y   f o r   t h e   T a n g   H u o t   B a k e r y   s u b - b r a n d   ( / t a n g h u o t / ) .   D e c i d e d   t o   r e m a i n   s t r i c t l y   K h m e r - f o c u s e d   b a s e d   o n   u s e r   i n s t r u c t i o n .
+- [2026-07-22] Created Playwright automated E2E audit script `scripts/playwright_audit.js` testing 16 canonical routes across Desktop (1440x900), Tablet (768x1024), and Mobile (375x812). Achieved 100% pass rate across 96 SEO checks, 32 UX checks, and 64 UI/CSS checks with 0 JS console errors and 0 horizontal overflows.
+- [2026-07-22] Implemented Cambodian Local Intent FAQ section on `src/pages/index.astro` targeting Phnom Penh banquet pricing, tent rentals, and event scope, backed by Schema.org `FAQPage` JSON-LD for Google Rich Snippets.
+- [2026-07-22] Injected Schema.org `BreadcrumbList` JSON-LD across all canonical pages (`/`, `/blog/`, `/privacy/`, `/tanghuot/`) for 100% structured data coverage.
+- [2026-07-22] Added smooth "Scroll to Top" floating button with Khmer ARIA label and `requestAnimationFrame` passive scroll listener in `src/layouts/Layout.astro`.
+- [2026-07-22] Resolved mobile burger menu ID mismatch (`mobile-menu-toggle`), added `md:hidden` to desktop button, and re-bound JS on Astro `astro:page-load` SPA events.
+- [2026-07-22] Fixed desktop navbar link contrast (`text-onyx font-bold`) and updated mobile menu overlay to a seamless Pearl White backdrop (`bg-white z-[90]`) with dark luxury Khmer typography, resolving color bleed-through issues.
+- [2026-07-22] Performed Google Lighthouse performance optimizations: preloaded `hanuman-latin-700-normal.woff2` font, reduced hero image payload from 26 KiB to 7 KiB, and resized brand logo to 96x96px.
+- [2026-07-22] Formalized "Royal Champagne & Onyx" Quiet Luxury brand palette rule in `.agents/AGENTS.md`.
+- [2026-07-22] Created Cloudflare Live API audit suite `scripts/cloudflare_audit.js`. Conducted deep live audit of Cloudflare WAF, Cache, and Speed configurations (`ckmkh.com` Zone ID: `d459c80...`). Confirmed 1-year edge asset caching (`CKM Astro Cache Rules`), Brotli, HTTP/3, Early Hints, 0-RTT, and WAF SEO Bypass protocol (`robots.txt` & `sitemap.xml`) are active.
+- [2026-07-22] All changes tested via `npx astro check` (0 errors), `npm run build` (17 static pages compiled), and pushed to GitHub `origin/main`.
