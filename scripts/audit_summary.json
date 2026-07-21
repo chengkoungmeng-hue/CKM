@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-07-21T17:42:55.900Z",
+  "timestamp": "2026-07-21T18:13:23.694Z",
   "routesTested": 16,
   "viewportsTested": 3,
   "seo": {
@@ -18,7 +18,68 @@
     "details": []
   },
   "jsErrors": [],
-  "network404s": [],
+  "network404s": [
+    {
+      "route": "/blog/",
+      "url": "http://localhost:4321/_image/?href=%2F%40fs%2FC%3A%2FProjects%2FCKM%2Fsrc%2Fassets%2Fgrounded_images%2Fblog_12_cover_khmer.png%3ForigWidth%3D1024%26origHeight%3D1024%26origFormat%3Djpg&w=640&h=192&q=50&f=avif",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "route": "/blog/",
+      "url": "http://localhost:4321/_image/?href=%2F%40fs%2FC%3A%2FProjects%2FCKM%2Fsrc%2Fassets%2Fgrounded_images%2Fblog_11_cover_khmer.png%3ForigWidth%3D1024%26origHeight%3D1024%26origFormat%3Djpg&w=640&h=192&q=50&f=avif",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "route": "/blog/",
+      "url": "http://localhost:4321/_image/?href=%2F%40fs%2FC%3A%2FProjects%2FCKM%2Fsrc%2Fassets%2Fgrounded_images%2Fblog_10_cover_khmer.png%3ForigWidth%3D1024%26origHeight%3D1024%26origFormat%3Djpg&w=640&h=192&q=50&f=avif",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "route": "/blog/",
+      "url": "http://localhost:4321/_image/?href=%2F%40fs%2FC%3A%2FProjects%2FCKM%2Fsrc%2Fassets%2Fgrounded_images%2Fblog_09_cover_khmer.png%3ForigWidth%3D1024%26origHeight%3D1024%26origFormat%3Djpg&w=640&h=192&q=50&f=avif",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "route": "/blog/",
+      "url": "http://localhost:4321/_image/?href=%2F%40fs%2FC%3A%2FProjects%2FCKM%2Fsrc%2Fassets%2Fgrounded_images%2Fblog_08_cover_khmer.png%3ForigWidth%3D1024%26origHeight%3D1024%26origFormat%3Djpg&w=640&h=192&q=50&f=avif",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "route": "/blog/",
+      "url": "http://localhost:4321/_image/?href=%2F%40fs%2FC%3A%2FProjects%2FCKM%2Fsrc%2Fassets%2Fgrounded_images%2Fblog_07_cover_khmer.png%3ForigWidth%3D1024%26origHeight%3D1024%26origFormat%3Djpg&w=640&h=192&q=50&f=avif",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "route": "/blog/",
+      "url": "http://localhost:4321/_image/?href=%2F%40fs%2FC%3A%2FProjects%2FCKM%2Fsrc%2Fassets%2Fgrounded_images%2Fblog_06_cover_khmer.png%3ForigWidth%3D1024%26origHeight%3D1024%26origFormat%3Djpg&w=640&h=192&q=50&f=avif",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "route": "/blog/",
+      "url": "http://localhost:4321/_image/?href=%2F%40fs%2FC%3A%2FProjects%2FCKM%2Fsrc%2Fassets%2Fgrounded_images%2Fblog_05_cover_khmer.png%3ForigWidth%3D1024%26origHeight%3D1024%26origFormat%3Djpg&w=640&h=192&q=50&f=avif",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "route": "/blog/",
+      "url": "http://localhost:4321/_image/?href=%2F%40fs%2FC%3A%2FProjects%2FCKM%2Fsrc%2Fassets%2Fgrounded_images%2Fblog_04_cover_khmer.png%3ForigWidth%3D1024%26origHeight%3D1024%26origFormat%3Djpg&w=640&h=192&q=50&f=avif",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "route": "/blog/",
+      "url": "http://localhost:4321/_image/?href=%2F%40fs%2FC%3A%2FProjects%2FCKM%2Fsrc%2Fassets%2Fgrounded_images%2Fblog_03_cover_khmer.png%3ForigWidth%3D1024%26origHeight%3D1024%26origFormat%3Djpg&w=640&h=192&q=50&f=avif",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "route": "/blog/",
+      "url": "http://localhost:4321/_image/?href=%2F%40fs%2FC%3A%2FProjects%2FCKM%2Fsrc%2Fassets%2Fgrounded_images%2Fblog_02_cover_khmer.png%3ForigWidth%3D1024%26origHeight%3D1024%26origFormat%3Djpg&w=640&h=192&q=50&f=avif",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "route": "/blog/",
+      "url": "http://localhost:4321/_image/?href=%2F%40fs%2FC%3A%2FProjects%2FCKM%2Fsrc%2Fassets%2Fgrounded_images%2Fblog_01_cover_khmer.png%3ForigWidth%3D1024%26origHeight%3D1024%26origFormat%3Djpg&w=640&h=192&q=50&f=avif",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
   "brokenImages": [],
   "horizontalOverflows": [],
   "routeReports": [
@@ -34,12 +95,12 @@
         {
           "type": "SEO",
           "status": "PASS",
-          "detail": "Title: \"ចេង គួងម៉េង (CKM) | ក្រុមចុងភៅរៀបចំម្ហូបការនៅភ្នំពេញ...\""
+          "detail": "Title: \"ចេង គួងម៉េង (CKM) | សេវាកម្មម្ហូបការ ភ្នំពេញ និងចុងភៅរៀបចំម្...\""
         },
         {
           "type": "SEO",
           "status": "PASS",
-          "detail": "Meta Description present (123 chars)"
+          "detail": "Meta Description present (195 chars)"
         },
         {
           "type": "SEO",
@@ -59,7 +120,7 @@
         {
           "type": "SEO",
           "status": "PASS",
-          "detail": "Found 1 Schema.org JSON-LD script(s)"
+          "detail": "Found 2 Schema.org JSON-LD script(s)"
         },
         {
           "type": "UX",
@@ -130,7 +191,7 @@
         {
           "type": "SEO",
           "status": "PASS",
-          "detail": "Found 2 Schema.org JSON-LD script(s)"
+          "detail": "Found 3 Schema.org JSON-LD script(s)"
         },
         {
           "type": "UX",
@@ -1124,7 +1185,7 @@
         {
           "type": "SEO",
           "status": "PASS",
-          "detail": "Found 2 Schema.org JSON-LD script(s)"
+          "detail": "Found 3 Schema.org JSON-LD script(s)"
         },
         {
           "type": "UX",

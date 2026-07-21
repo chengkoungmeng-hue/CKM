@@ -73,7 +73,7 @@ async function runAudit() {
     });
 
     try {
-      const response = await page.goto(targetUrl, { waitUntil: 'networkidle', timeout: 15000 });
+      const response = await page.goto(targetUrl, { waitUntil: 'domcontentloaded', timeout: 15000 });
       const status = response ? response.status() : 0;
       if (status !== 200) {
         routeReport.checks.push({ type: 'STATUS', status: 'FAIL', detail: `HTTP Status: ${status}` });
@@ -143,14 +143,17 @@ async function runAudit() {
       }
 
       // --- 2. UX & ACCESSIBILITY AUDIT ---
-      // Heading Hierarchy (H1 count)
-      const h1Count = await page.$$eval('h1', els => els.length);
+      // Heading Hierarchy (H1 count) - Exclude Astro Dev Toolbar Shadow DOM in dev mode
+      const h1Elements = await page.$$eval('h1', els => 
+        els.filter(e => e.getRootNode() === document).map(e => e.outerHTML)
+      );
+      const h1Count = h1Elements.length;
       if (h1Count === 1) {
         auditResults.ux.passed++;
         routeReport.checks.push({ type: 'UX', status: 'PASS', detail: 'Single <h1> element verified' });
       } else {
         auditResults.ux.failed++;
-        routeReport.checks.push({ type: 'UX', status: 'FAIL', detail: `Found ${h1Count} <h1> elements (Expected exactly 1)` });
+        routeReport.checks.push({ type: 'UX', status: 'FAIL', detail: `Found ${h1Count} <h1> elements: ${JSON.stringify(h1Elements)}` });
       }
 
       // Image Alt attributes & Broken Images check
