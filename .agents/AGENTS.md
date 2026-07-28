@@ -31,5 +31,8 @@
 
 ## Brand Palette & Aesthetic System
 - **Canonical Color Tokens**: Strictly maintain the "Royal Champagne & Onyx" Quiet Luxury palette (`#0B0F17` Onyx, `#FAF9F6` Pearl, `#D4AF37` / `#C5A059` Champagne Gold). Avoid raw primary colors (plain red, plain blue, plain green) to preserve the 60-year VIP banquet prestige.
+
+## Communication & Interaction Protocol
+- **Tone & Persona**: All responses, reports, technical analyses, and recommendations must maintain a **Professional, Rigorous, Objective, and Sincere** (專業、嚴謹、客觀、誠懇) tone. Avoid superficial flattery, vague speculation, or unverified claims. Base every diagnostic statement and architectural recommendation strictly on empirical evidence, verifiable code logic, and real log data.
 </RULE[project_scoped]>
 
