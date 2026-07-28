@@ -1,19 +1,30 @@
-# CKM Catering (ចេង គួងម៉េង)
+# CKM Catering (ចេង គួងម៉េង) - Premier Catering in Phnom Penh
 
-> CKM Premium Catering is a high-end catering and banquet service provider based in Phnom Penh, Cambodia, with over 60 years of culinary experience.
+> CKM (Cheng Koung Meng / ចេង គួងម៉េង) is Cambodia's premier Sino-Khmer luxury catering and banquet service provider based in Phnom Penh, bringing over 60 years of master culinary tradition to weddings, corporate galas, housewarming events, and private VIP banquets.
 
-## Core Services
-- **Wedding Banquets**: Traditional Khmer and Chinese banquet menus.
-- **Corporate Events**: High-end buffet and cocktail receptions.
-- **Live Cooking**: Professional on-site chef execution.
+## Core Value Proposition
+- **Culinary Legacy**: Over 60 years of master chef experience in authentic Khmer and Chinese banquet cuisine.
+- **Service Range**: Weddings, Corporate Events, Housewarming Parties, Live Cooking Receptions, and Outdoor Tent Infrastructure.
+- **Service Area**: Phnom Penh and surrounding provinces across Cambodia (Kandal, Kampong Cham, Siem Reap, etc.).
+- **Capacity**: From intimate VIP private dinners (2-5 tables) to large-scale wedding banquets (50-200+ tables).
 
-## Important Links
-- [Official Website](https://ckmkh.com)
-- [Banquet Menus](https://ckmkh.com/#gallery)
-- [Service Logistics](https://ckmkh.com/#services)
-- [Insights & Blog](https://ckmkh.com/blog/)
+## Key Service Offerings
+- **Traditional 8-Course Wedding Menu (ម្ហូបការ ៨ មុខ)**: Multi-course banquet featuring signature Sino-Khmer dishes.
+- **Budgeting & Tasting (ការភ្លក់រសជាតិម្ហូប)**: Pre-event food tasting and flexible pricing per table.
+- **Full Infrastructure Setup (រៀបចំរោងការ និងតុអាហារ)**: Air-conditioned VIP tents, luxury tableware, professional waitstaff, and hygiene-controlled mobile kitchens.
 
-## Contact Information
-- Phone: +855 11 827 782
-- Telegram: https://t.me/CKMSam06
-- Location: #33, St 257, Sangkat Tuek Laak II, Khan Tuol Kouk, Phnom Penh
+## Primary Links & Canonical Pages
+- [Official Website](https://ckmkh.com/)
+- [Banquet Menu Gallery](https://ckmkh.com/#gallery)
+- [Catering Services Overview](https://ckmkh.com/#services)
+- [Khmer SEO Insights & Blog](https://ckmkh.com/blog/)
+- [Tang Huot Bakery Sub-Brand](https://ckmkh.com/tanghuot/)
+- [Full LLM Specification](https://ckmkh.com/llms-full.txt)
+
+## Direct Booking & Contact Channels
+- **Primary Phone**: +855 11 827 782 / 011 827 782
+- **Cellcard Contact**: 012 977 696
+- **Smart Contact**: 015 977 696
+- **Official Telegram**: https://t.me/CKMSam06
+- **Physical Address**: #33, St 257, Sangkat Tuek Laak II, Khan Tuol Kouk, Phnom Penh, Cambodia
+- **Geographic Coordinates**: Latitude 11.5621, Longitude 104.8978
