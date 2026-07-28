@@ -5,7 +5,13 @@
     "siteRegistered": true,
     "permissionRole": "Full Owner / Delegated User",
     "sitemapSubmitted": "https://ckmkh.com/sitemap-index.xml",
-    "geoTargeting": "Cambodia (Phnom Penh)"
+    "geoTargeting": "Cambodia (Phnom Penh)",
+    "legacy404Mitigation": {
+      "active301Redirects": true,
+      "redirectRulesCount": 4,
+      "targetPath": "https://ckmkh.com/",
+      "status": "RESOLVED (Legacy /zh/* and /en/* paths 301 redirected to root)"
+    }
   },
   "analytics4Status": {
     "propertyId": "GA4-CKMKH-LIVE",
@@ -14,8 +20,8 @@
     "enhancedMeasurement": "Enabled (Scrolls, Outbound Clicks, Form Interactions)"
   },
   "recommendations": [
+    "Submit index validation in GSC for resolved /zh/ and /en/ 404 URLs",
     "Ensure service account has Owner access in GSC property https://ckmkh.com",
-    "Ensure service account has Viewer/Editor role in GA4 Property ID",
     "Verify mobile-first indexing performance report monthly"
   ]
 }

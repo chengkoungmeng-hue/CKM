@@ -19,6 +19,12 @@ export default defineConfig({
   // 強制統一目錄斜線結尾，避免 Cloudflare 301 重定向迴圈 (GSC Redirect error)
   trailingSlash: 'always',
 
+  // 301 重定向矩陣：修復舊有 /zh 與 /en 移除後的 404 GSC 錯誤 (搭配 public/_redirects 萬用字元)
+  redirects: {
+    '/zh': '/',
+    '/en': '/',
+  },
+
   // 開啟 Prefetch 以達成零延遲換頁
   prefetch: true,
 

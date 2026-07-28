@@ -24,7 +24,7 @@ import blogWeddingServiceGuide from '../assets/images/home/blog-wedding-service-
 import menu13 from '../assets/images/home/menu-13.webp';
 import menu16 from '../assets/processed_images_ai/menu-16.png';
 
-export const siteDomain = "https://www.ckmkh.com";
+export const siteDomain = "https://ckmkh.com";
 export const telegramLink = "https://t.me/CKMSam06";
 export const facebookLink = "https://www.facebook.com/CKMFOODS";
 
