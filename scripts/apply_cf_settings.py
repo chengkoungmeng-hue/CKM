@@ -32,6 +32,7 @@ if __name__ == "__main__":
     patch_setting("early_hints", {"value": "on"})
     patch_setting("minify", {"value": {"css": "on", "html": "on", "js": "on"}})
     patch_setting("browser_cache_ttl", {"value": 14400})
+    patch_setting("security_level", {"value": "medium"})
 
     # 2. Bot Management (Skipped: 403 Forbidden for this token/plan)
     # put_bot_management({"fight_mode": False})
@@ -46,14 +47,14 @@ if __name__ == "__main__":
                     "edge_ttl": {"mode": "override_origin", "default": 31536000},
                     "browser_ttl": {"mode": "override_origin", "default": 31536000}
                 },
-                "expression": '(http.request.uri.path contains "/_astro/") or (http.request.uri.path contains "/assets/")',
+                "expression": '(http.request.uri.path contains "/_astro/") or (http.request.uri.path contains "/assets/") or (http.request.uri.path contains "/fonts/")',
                 "description": "Astro Static Assets Cache"
             }
         ]
     }
     put_ruleset_phase("http_request_cache_settings", cache_payload)
 
-    # 4. WAF Custom Rules (Skip Rule)
+    # 4. WAF Custom Rules (SEO Bypass Protocol)
     waf_payload = {
         "rules": [
             {
@@ -61,7 +62,7 @@ if __name__ == "__main__":
                 "action_parameters": {
                     "phases": ["http_ratelimit", "http_request_sbfm", "http_request_firewall_managed"]
                 },
-                "expression": '(http.request.uri.path eq "/robots.txt") or (http.request.uri.path contains ".xml" and http.request.uri.path contains "sitemap")',
+                "expression": '(http.request.uri.path eq "/robots.txt") or (http.request.uri.path contains ".xml" and http.request.uri.path contains "sitemap") or (http.request.uri.path contains "llms.txt") or (http.request.uri.path contains "llms-full.txt")',
                 "description": "SEO Bypass (The Security Guard Protocol)"
             }
         ]

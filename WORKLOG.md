@@ -1,6 +1,12 @@
 # Work Log
 
-## 2026-07-04
+## 2026-07-28
+- Audited live Cloudflare Zone settings for `ckmkh.com` via Cloudflare REST API.
+- Updated `scripts/apply_cf_settings.py` to enable auto-minify, set security level to `medium`, and expand the WAF SEO Bypass rule to include `/robots.txt`, `sitemap*.xml`, `/llms.txt`, and `/llms-full.txt`.
+- Created `public/_headers` to deploy Cache-Control rules (`max-age=0` for HTML, 1-year immutable for `/_astro/*` and `/fonts/*`) and security headers (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`) to Cloudflare Pages.
+- Executed `apply_cf_settings.py` and `cloudflare_audit.js` to verify API configuration.
+- Successfully built project with `npm run build` and verified `dist/_headers` deployment.
+
 - Checked project dependencies to verify the tech stack. Confirmed the project uses **Astro** and **Tailwind CSS**. Noticed that it uses **FontAwesome** instead of **Lucide** for icons.
 - Initialized `WORKLOG.md` and `.agents/AGENTS.md` to start logging work and maintaining project-specific agent rules.
 - Started the development server (`npm run dev`).

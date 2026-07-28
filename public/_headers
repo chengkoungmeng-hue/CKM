@@ -1,0 +1,26 @@
+# =========================================
+# CKM Catering - Cloudflare Pages Edge Matrix
+# =========================================
+
+# 1. HTML Pages (Instant Cache Revalidation)
+/*
+  Cache-Control: public, max-age=0, must-revalidate
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# 2. Astro Compiled Assets (Hashed - Immutable 1-Year Cache)
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# 3. Static Images (24-Hour Cache with Stale-While-Revalidate)
+/images/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=86400
+
+# 4. Fonts (Immutable 1-Year Cache)
+/*.woff
+  Cache-Control: public, max-age=31536000, immutable
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
