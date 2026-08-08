@@ -343,9 +343,7 @@ Article Summary: {item_to_process['desc_en']}
         entry["id"] = p_id
         entry["slug"] = generate_seo_slug(entry.get("source_title_en", ""), p_id)
 
-    # Retain top 36 articles maximum
-    updated_pulse = updated_pulse[:36]
-
+    # Retain all accumulated pulse articles (No upper limit cap to continuously drive SEO long-tail traffic)
     # Download & synchronize image files locally
     sync_and_download_images(updated_pulse)
 
