@@ -1,0 +1,882 @@
+{
+  "timestamp": "2026-08-08T11:02:16.364Z",
+  "routesTested": 10,
+  "viewportsTested": 3,
+  "astroArchitecture": {
+    "passed": 10,
+    "failed": 0,
+    "details": []
+  },
+  "seo": {
+    "passed": 60,
+    "failed": 0,
+    "details": []
+  },
+  "ux": {
+    "passed": 17,
+    "failed": 3,
+    "details": []
+  },
+  "uiResponsive": {
+    "passed": 40,
+    "failed": 0,
+    "details": []
+  },
+  "jsErrors": [],
+  "networkFailures": [
+    {
+      "route": "/",
+      "url": "http://localhost:4321/_image/?href=%2F%40fs%2FC%3A%2FProjects%2FCKM%2Fsrc%2Fassets%2Fimages%2Fhome%2Fbrand-ckm-logo-gold.webp%3ForigWidth%3D400%26origHeight%3D400%26origFormat%3Dwebp&w=128&h=128&q=70&f=avif",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "route": "/",
+      "url": "http://localhost:4321/_image/?href=%2F%40fs%2FC%3A%2FProjects%2FCKM%2Fsrc%2Fassets%2Fimages%2Fhome%2Fhero-luxury-banquet-setup.webp%3ForigWidth%3D1920%26origHeight%3D1080%26origFormat%3Dwebp&w=768&h=432&q=35&f=avif",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "route": "/blog/",
+      "url": "http://localhost:4321/_image/?href=%2F%40fs%2FC%3A%2FProjects%2FCKM%2Fsrc%2Fassets%2Fgrounded_images%2Fckm_blog_15.png%3ForigWidth%3D1024%26origHeight%3D1024%26origFormat%3Djpg&w=640&h=192&q=50&f=avif",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "route": "/blog/",
+      "url": "http://localhost:4321/_image/?href=%2F%40fs%2FC%3A%2FProjects%2FCKM%2Fsrc%2Fassets%2Fgrounded_images%2Fckm_blog_14.png%3ForigWidth%3D1024%26origHeight%3D1024%26origFormat%3Djpg&w=640&h=192&q=50&f=avif",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "route": "/blog/",
+      "url": "http://localhost:4321/_image/?href=%2F%40fs%2FC%3A%2FProjects%2FCKM%2Fsrc%2Fassets%2Fgrounded_images%2Fgallery-13.webp%3ForigWidth%3D1024%26origHeight%3D1024%26origFormat%3Dwebp&w=640&h=192&q=50&f=avif",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "route": "/blog/",
+      "url": "http://localhost:4321/_image/?href=%2F%40fs%2FC%3A%2FProjects%2FCKM%2Fsrc%2Fassets%2Fgrounded_images%2Fckm_blog_12.png%3ForigWidth%3D1024%26origHeight%3D1024%26origFormat%3Djpg&w=640&h=192&q=50&f=avif",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "route": "/blog/",
+      "url": "http://localhost:4321/_image/?href=%2F%40fs%2FC%3A%2FProjects%2FCKM%2Fsrc%2Fassets%2Fgrounded_images%2Fckm_blog_11.png%3ForigWidth%3D1024%26origHeight%3D1024%26origFormat%3Djpg&w=640&h=192&q=50&f=avif",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "route": "/blog/",
+      "url": "http://localhost:4321/_image/?href=%2F%40fs%2FC%3A%2FProjects%2FCKM%2Fsrc%2Fassets%2Fgrounded_images%2Fckm_blog_10.png%3ForigWidth%3D1024%26origHeight%3D1024%26origFormat%3Djpg&w=640&h=192&q=50&f=avif",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "route": "/blog/",
+      "url": "http://localhost:4321/_image/?href=%2F%40fs%2FC%3A%2FProjects%2FCKM%2Fsrc%2Fassets%2Fgrounded_images%2Fckm_blog_09.png%3ForigWidth%3D1024%26origHeight%3D1024%26origFormat%3Djpg&w=640&h=192&q=50&f=avif",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "route": "/blog/",
+      "url": "http://localhost:4321/_image/?href=%2F%40fs%2FC%3A%2FProjects%2FCKM%2Fsrc%2Fassets%2Fgrounded_images%2Fckm_blog_08.png%3ForigWidth%3D1024%26origHeight%3D1024%26origFormat%3Djpg&w=640&h=192&q=50&f=avif",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "route": "/blog/",
+      "url": "http://localhost:4321/_image/?href=%2F%40fs%2FC%3A%2FProjects%2FCKM%2Fsrc%2Fassets%2Fgrounded_images%2Fckm_blog_07.png%3ForigWidth%3D1024%26origHeight%3D1024%26origFormat%3Djpg&w=640&h=192&q=50&f=avif",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "route": "/blog/",
+      "url": "http://localhost:4321/_image/?href=%2F%40fs%2FC%3A%2FProjects%2FCKM%2Fsrc%2Fassets%2Fgrounded_images%2Fckm_blog_06.png%3ForigWidth%3D1024%26origHeight%3D1024%26origFormat%3Djpg&w=640&h=192&q=50&f=avif",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "route": "/blog/",
+      "url": "http://localhost:4321/_image/?href=%2F%40fs%2FC%3A%2FProjects%2FCKM%2Fsrc%2Fassets%2Fgrounded_images%2Fckm_blog_05.png%3ForigWidth%3D1024%26origHeight%3D1024%26origFormat%3Djpg&w=640&h=192&q=50&f=avif",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "route": "/blog/",
+      "url": "http://localhost:4321/_image/?href=%2F%40fs%2FC%3A%2FProjects%2FCKM%2Fsrc%2Fassets%2Fgrounded_images%2Fckm_blog_04.png%3ForigWidth%3D1024%26origHeight%3D1024%26origFormat%3Djpg&w=640&h=192&q=50&f=avif",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "brokenImages": [],
+  "overflows": [],
+  "routeResults": [
+    {
+      "name": "Homepage (ទំព័រដើម)",
+      "path": "/",
+      "url": "http://localhost:4321/",
+      "seoChecks": [
+        {
+          "check": "Title Tag",
+          "status": "PASS",
+          "detail": "ចេង គួងម៉េង (CKM) | សេវាកម្មម្ហូបការ ភ្នំពេញ និងចុងភៅរៀបចំម្ហូបការមង្គលការ"
+        },
+        {
+          "check": "Meta Description",
+          "status": "PASS",
+          "detail": "195 chars"
+        },
+        {
+          "check": "Canonical URL",
+          "status": "PASS",
+          "detail": "https://ckmkh.com/"
+        },
+        {
+          "check": "HTML lang=\"km-KH\"",
+          "status": "PASS",
+          "detail": "km-KH"
+        },
+        {
+          "check": "OpenGraph Meta Tags",
+          "status": "PASS",
+          "detail": "og:title & og:image present"
+        },
+        {
+          "check": "Schema.org JSON-LD",
+          "status": "PASS",
+          "detail": "2 script(s) found"
+        }
+      ],
+      "uxChecks": [
+        {
+          "check": "Single <h1> Tag",
+          "status": "PASS",
+          "detail": "ក្រុមចុងភៅ ចេង គួងម៉េង"
+        },
+        {
+          "check": "Image Alt Attributes",
+          "status": "WARN",
+          "detail": "6/34 images missing alt text"
+        }
+      ],
+      "uiChecks": [
+        {
+          "check": "Image Loading",
+          "status": "PASS",
+          "detail": "All 34 images rendered successfully"
+        },
+        {
+          "check": "Responsive Bounds (Desktop (1440x900))",
+          "status": "PASS",
+          "detail": "Layout clean (1440px)"
+        },
+        {
+          "check": "Responsive Bounds (Tablet (768x1024))",
+          "status": "PASS",
+          "detail": "Layout clean (768px)"
+        },
+        {
+          "check": "Responsive Bounds (Mobile (375x812))",
+          "status": "PASS",
+          "detail": "Layout clean (375px)"
+        }
+      ],
+      "astroChecks": [
+        {
+          "check": "HTTP Status 200 OK",
+          "status": "PASS",
+          "detail": "Loaded in 775ms"
+        }
+      ]
+    },
+    {
+      "name": "Blog Index (អត្ថបទ និងចំណេះដឹង)",
+      "path": "/blog/",
+      "url": "http://localhost:4321/blog/",
+      "seoChecks": [
+        {
+          "check": "Title Tag",
+          "status": "PASS",
+          "detail": "អត្ថបទ និងចំណេះដឹង - CKM Premium Catering"
+        },
+        {
+          "check": "Meta Description",
+          "status": "PASS",
+          "detail": "127 chars"
+        },
+        {
+          "check": "Canonical URL",
+          "status": "PASS",
+          "detail": "https://ckmkh.com/blog/"
+        },
+        {
+          "check": "HTML lang=\"km-KH\"",
+          "status": "PASS",
+          "detail": "km-KH"
+        },
+        {
+          "check": "OpenGraph Meta Tags",
+          "status": "PASS",
+          "detail": "og:title & og:image present"
+        },
+        {
+          "check": "Schema.org JSON-LD",
+          "status": "PASS",
+          "detail": "3 script(s) found"
+        }
+      ],
+      "uxChecks": [
+        {
+          "check": "Single <h1> Tag",
+          "status": "PASS",
+          "detail": "អត្ថបទ និងចំណេះដឹង"
+        },
+        {
+          "check": "Image Alt Attributes",
+          "status": "PASS",
+          "detail": "All 13 images have non-empty alt text"
+        }
+      ],
+      "uiChecks": [
+        {
+          "check": "Image Loading",
+          "status": "PASS",
+          "detail": "All 13 images rendered successfully"
+        },
+        {
+          "check": "Responsive Bounds (Desktop (1440x900))",
+          "status": "PASS",
+          "detail": "Layout clean (1440px)"
+        },
+        {
+          "check": "Responsive Bounds (Tablet (768x1024))",
+          "status": "PASS",
+          "detail": "Layout clean (768px)"
+        },
+        {
+          "check": "Responsive Bounds (Mobile (375x812))",
+          "status": "PASS",
+          "detail": "Layout clean (375px)"
+        }
+      ],
+      "astroChecks": [
+        {
+          "check": "HTTP Status 200 OK",
+          "status": "PASS",
+          "detail": "Loaded in 475ms"
+        }
+      ]
+    },
+    {
+      "name": "Article 15 - Abalone Soup (អាថ៌កំបាំងស៊ុបប៉ាវហឺ)",
+      "path": "/blog/15-luxury-abalone-banquet-soup/",
+      "url": "http://localhost:4321/blog/15-luxury-abalone-banquet-soup/",
+      "seoChecks": [
+        {
+          "check": "Title Tag",
+          "status": "PASS",
+          "detail": "អាថ៌កំបាំងស៊ុបប៉ាវហឺប្រណីត - CKM Premium Catering"
+        },
+        {
+          "check": "Meta Description",
+          "status": "PASS",
+          "detail": "138 chars"
+        },
+        {
+          "check": "Canonical URL",
+          "status": "PASS",
+          "detail": "https://ckmkh.com/blog/15-luxury-abalone-banquet-soup/"
+        },
+        {
+          "check": "HTML lang=\"km-KH\"",
+          "status": "PASS",
+          "detail": "km-KH"
+        },
+        {
+          "check": "OpenGraph Meta Tags",
+          "status": "PASS",
+          "detail": "og:title & og:image present"
+        },
+        {
+          "check": "Schema.org JSON-LD",
+          "status": "PASS",
+          "detail": "3 script(s) found"
+        }
+      ],
+      "uxChecks": [
+        {
+          "check": "Single <h1> Tag",
+          "status": "PASS",
+          "detail": "អាថ៌កំបាំងស៊ុបប៉ាវហឺប្រណីត ក្នុងពិធីមង្គលការខ្មែរ-ចិន៖ គុណតម្លៃ និងសិល្បៈនៃការចម្អិន"
+        },
+        {
+          "check": "Image Alt Attributes",
+          "status": "PASS",
+          "detail": "All 2 images have non-empty alt text"
+        }
+      ],
+      "uiChecks": [
+        {
+          "check": "Image Loading",
+          "status": "PASS",
+          "detail": "All 2 images rendered successfully"
+        },
+        {
+          "check": "Responsive Bounds (Desktop (1440x900))",
+          "status": "PASS",
+          "detail": "Layout clean (1440px)"
+        },
+        {
+          "check": "Responsive Bounds (Tablet (768x1024))",
+          "status": "PASS",
+          "detail": "Layout clean (768px)"
+        },
+        {
+          "check": "Responsive Bounds (Mobile (375x812))",
+          "status": "PASS",
+          "detail": "Layout clean (375px)"
+        }
+      ],
+      "astroChecks": [
+        {
+          "check": "HTTP Status 200 OK",
+          "status": "PASS",
+          "detail": "Loaded in 484ms"
+        }
+      ]
+    },
+    {
+      "name": "Article 14 - Master Chef (ក្រុមចុងភៅនៅភ្នំពេញ)",
+      "path": "/blog/14-phnom-penh-master-chef-team/",
+      "url": "http://localhost:4321/blog/14-phnom-penh-master-chef-team/",
+      "seoChecks": [
+        {
+          "check": "Title Tag",
+          "status": "PASS",
+          "detail": "របៀបជ្រើសរើសក្រុមចុងភៅនៅភ្នំពេញ - CKM Premium Catering"
+        },
+        {
+          "check": "Meta Description",
+          "status": "PASS",
+          "detail": "170 chars"
+        },
+        {
+          "check": "Canonical URL",
+          "status": "PASS",
+          "detail": "https://ckmkh.com/blog/14-phnom-penh-master-chef-team/"
+        },
+        {
+          "check": "HTML lang=\"km-KH\"",
+          "status": "PASS",
+          "detail": "km-KH"
+        },
+        {
+          "check": "OpenGraph Meta Tags",
+          "status": "PASS",
+          "detail": "og:title & og:image present"
+        },
+        {
+          "check": "Schema.org JSON-LD",
+          "status": "PASS",
+          "detail": "3 script(s) found"
+        }
+      ],
+      "uxChecks": [
+        {
+          "check": "Single <h1> Tag",
+          "status": "PASS",
+          "detail": "របៀបជ្រើសរើសក្រុមចុងភៅនៅភ្នំពេញ សម្រាប់កម្មវិធីមង្គលការ និងពិធីជប់លៀងប្រណីត"
+        },
+        {
+          "check": "Image Alt Attributes",
+          "status": "PASS",
+          "detail": "All 2 images have non-empty alt text"
+        }
+      ],
+      "uiChecks": [
+        {
+          "check": "Image Loading",
+          "status": "PASS",
+          "detail": "All 2 images rendered successfully"
+        },
+        {
+          "check": "Responsive Bounds (Desktop (1440x900))",
+          "status": "PASS",
+          "detail": "Layout clean (1440px)"
+        },
+        {
+          "check": "Responsive Bounds (Tablet (768x1024))",
+          "status": "PASS",
+          "detail": "Layout clean (768px)"
+        },
+        {
+          "check": "Responsive Bounds (Mobile (375x812))",
+          "status": "PASS",
+          "detail": "Layout clean (375px)"
+        }
+      ],
+      "astroChecks": [
+        {
+          "check": "HTTP Status 200 OK",
+          "status": "PASS",
+          "detail": "Loaded in 308ms"
+        }
+      ]
+    },
+    {
+      "name": "Article 13 - Catering Secrets (អាថ៌កំបាំងចុងភៅ)",
+      "path": "/blog/13-master-chef-catering-secrets/",
+      "url": "http://localhost:4321/blog/13-master-chef-catering-secrets/",
+      "seoChecks": [
+        {
+          "check": "Title Tag",
+          "status": "PASS",
+          "detail": "របៀបជ្រើសរើសមុខម្ហូបការប្រណីត - CKM"
+        },
+        {
+          "check": "Meta Description",
+          "status": "PASS",
+          "detail": "141 chars"
+        },
+        {
+          "check": "Canonical URL",
+          "status": "PASS",
+          "detail": "https://ckmkh.com/blog/13-master-chef-catering-secrets/"
+        },
+        {
+          "check": "HTML lang=\"km-KH\"",
+          "status": "PASS",
+          "detail": "km-KH"
+        },
+        {
+          "check": "OpenGraph Meta Tags",
+          "status": "PASS",
+          "detail": "og:title & og:image present"
+        },
+        {
+          "check": "Schema.org JSON-LD",
+          "status": "PASS",
+          "detail": "3 script(s) found"
+        }
+      ],
+      "uxChecks": [
+        {
+          "check": "Single <h1> Tag",
+          "status": "PASS",
+          "detail": "អាថ៌កំបាំងចុងភៅអាជីព CKM៖ របៀបជ្រើសរើសមុខម្ហូបការ និងរៀបចំពិធីជប់លៀងប្រណីតនៅភ្នំពេញ"
+        },
+        {
+          "check": "Image Alt Attributes",
+          "status": "PASS",
+          "detail": "All 2 images have non-empty alt text"
+        }
+      ],
+      "uiChecks": [
+        {
+          "check": "Image Loading",
+          "status": "PASS",
+          "detail": "All 2 images rendered successfully"
+        },
+        {
+          "check": "Responsive Bounds (Desktop (1440x900))",
+          "status": "PASS",
+          "detail": "Layout clean (1440px)"
+        },
+        {
+          "check": "Responsive Bounds (Tablet (768x1024))",
+          "status": "PASS",
+          "detail": "Layout clean (768px)"
+        },
+        {
+          "check": "Responsive Bounds (Mobile (375x812))",
+          "status": "PASS",
+          "detail": "Layout clean (375px)"
+        }
+      ],
+      "astroChecks": [
+        {
+          "check": "HTTP Status 200 OK",
+          "status": "PASS",
+          "detail": "Loaded in 271ms"
+        }
+      ]
+    },
+    {
+      "name": "Article 01 - 8-Course Menu (ម៉ឺនុយ ៨ មុខ)",
+      "path": "/blog/01-traditional-8-course-wedding-menu/",
+      "url": "http://localhost:4321/blog/01-traditional-8-course-wedding-menu/",
+      "seoChecks": [
+        {
+          "check": "Title Tag",
+          "status": "PASS",
+          "detail": "ម៉ឺនុយម្ហូបការ ៨ មុខប្រពៃណីខ្មែរ សម្រាប់ពិធីមង្គលការ"
+        },
+        {
+          "check": "Meta Description",
+          "status": "PASS",
+          "detail": "142 chars"
+        },
+        {
+          "check": "Canonical URL",
+          "status": "PASS",
+          "detail": "https://ckmkh.com/blog/01-traditional-8-course-wedding-menu/"
+        },
+        {
+          "check": "HTML lang=\"km-KH\"",
+          "status": "PASS",
+          "detail": "km-KH"
+        },
+        {
+          "check": "OpenGraph Meta Tags",
+          "status": "PASS",
+          "detail": "og:title & og:image present"
+        },
+        {
+          "check": "Schema.org JSON-LD",
+          "status": "PASS",
+          "detail": "3 script(s) found"
+        }
+      ],
+      "uxChecks": [
+        {
+          "check": "Single <h1> Tag",
+          "status": "PASS",
+          "detail": "ការវិភាគម៉ឺនុយ៖ សិល្បៈនៃតុល្យភាពរសជាតិក្នុងម៉ឺនុយម្ហូបការ ៨ មុខប្រពៃណីខ្មែរ"
+        },
+        {
+          "check": "Image Alt Attributes",
+          "status": "PASS",
+          "detail": "All 3 images have non-empty alt text"
+        }
+      ],
+      "uiChecks": [
+        {
+          "check": "Image Loading",
+          "status": "PASS",
+          "detail": "All 3 images rendered successfully"
+        },
+        {
+          "check": "Responsive Bounds (Desktop (1440x900))",
+          "status": "PASS",
+          "detail": "Layout clean (1440px)"
+        },
+        {
+          "check": "Responsive Bounds (Tablet (768x1024))",
+          "status": "PASS",
+          "detail": "Layout clean (768px)"
+        },
+        {
+          "check": "Responsive Bounds (Mobile (375x812))",
+          "status": "PASS",
+          "detail": "Layout clean (375px)"
+        }
+      ],
+      "astroChecks": [
+        {
+          "check": "HTTP Status 200 OK",
+          "status": "PASS",
+          "detail": "Loaded in 288ms"
+        }
+      ]
+    },
+    {
+      "name": "Catering Pulse (បច្ចុប្បន្នភាពអន្តរជាតិ)",
+      "path": "/pulse/",
+      "url": "http://localhost:4321/pulse/",
+      "seoChecks": [
+        {
+          "check": "Title Tag",
+          "status": "PASS",
+          "detail": "បច្ចុប្បន្នភាព និងនិន្នាការម្ហូបការអន្តរជាតិ - CKM"
+        },
+        {
+          "check": "Meta Description",
+          "status": "PASS",
+          "detail": "147 chars"
+        },
+        {
+          "check": "Canonical URL",
+          "status": "PASS",
+          "detail": "https://ckmkh.com/pulse/"
+        },
+        {
+          "check": "HTML lang=\"km-KH\"",
+          "status": "PASS",
+          "detail": "km-KH"
+        },
+        {
+          "check": "OpenGraph Meta Tags",
+          "status": "PASS",
+          "detail": "og:title & og:image present"
+        },
+        {
+          "check": "Schema.org JSON-LD",
+          "status": "PASS",
+          "detail": "3 script(s) found"
+        }
+      ],
+      "uxChecks": [
+        {
+          "check": "Single <h1> Tag",
+          "status": "PASS",
+          "detail": "បច្ចុប្បន្នភាព និងនិន្នាការម្ហូបការអន្តរជាតិ"
+        },
+        {
+          "check": "Image Alt Attributes",
+          "status": "WARN",
+          "detail": "11/23 images missing alt text"
+        }
+      ],
+      "uiChecks": [
+        {
+          "check": "Image Loading",
+          "status": "PASS",
+          "detail": "All 23 images rendered successfully"
+        },
+        {
+          "check": "Responsive Bounds (Desktop (1440x900))",
+          "status": "PASS",
+          "detail": "Layout clean (1440px)"
+        },
+        {
+          "check": "Responsive Bounds (Tablet (768x1024))",
+          "status": "PASS",
+          "detail": "Layout clean (768px)"
+        },
+        {
+          "check": "Responsive Bounds (Mobile (375x812))",
+          "status": "PASS",
+          "detail": "Layout clean (375px)"
+        }
+      ],
+      "astroChecks": [
+        {
+          "check": "HTTP Status 200 OK",
+          "status": "PASS",
+          "detail": "Loaded in 251ms"
+        }
+      ]
+    },
+    {
+      "name": "Pulse Detail (អត្ថបទដើមអន្តរជាតិ)",
+      "path": "/pulse/pulse-11/",
+      "url": "http://localhost:4321/pulse/pulse-11/",
+      "seoChecks": [
+        {
+          "check": "Title Tag",
+          "status": "PASS",
+          "detail": "ការបង្កើតថ្មីនៃមុខម្ហូបសម្រន់ និងបង្អែមត្រជាក់ស្រស់ថ្លា សម្រាប់ពិធីជប់លៀង - CKM"
+        },
+        {
+          "check": "Meta Description",
+          "status": "PASS",
+          "detail": "115 chars"
+        },
+        {
+          "check": "Canonical URL",
+          "status": "PASS",
+          "detail": "https://ckmkh.com/pulse/pulse-11/"
+        },
+        {
+          "check": "HTML lang=\"km-KH\"",
+          "status": "PASS",
+          "detail": "km-KH"
+        },
+        {
+          "check": "OpenGraph Meta Tags",
+          "status": "PASS",
+          "detail": "og:title & og:image present"
+        },
+        {
+          "check": "Schema.org JSON-LD",
+          "status": "PASS",
+          "detail": "3 script(s) found"
+        }
+      ],
+      "uxChecks": [
+        {
+          "check": "Single <h1> Tag",
+          "status": "PASS",
+          "detail": "ការបង្កើតថ្មីនៃមុខម្ហូបសម្រន់ និងបង្អែមត្រជាក់ស្រស់ថ្លា សម្រាប់ពិធីជប់លៀង"
+        },
+        {
+          "check": "Image Alt Attributes",
+          "status": "WARN",
+          "detail": "1/3 images missing alt text"
+        }
+      ],
+      "uiChecks": [
+        {
+          "check": "Image Loading",
+          "status": "PASS",
+          "detail": "All 3 images rendered successfully"
+        },
+        {
+          "check": "Responsive Bounds (Desktop (1440x900))",
+          "status": "PASS",
+          "detail": "Layout clean (1440px)"
+        },
+        {
+          "check": "Responsive Bounds (Tablet (768x1024))",
+          "status": "PASS",
+          "detail": "Layout clean (768px)"
+        },
+        {
+          "check": "Responsive Bounds (Mobile (375x812))",
+          "status": "PASS",
+          "detail": "Layout clean (375px)"
+        }
+      ],
+      "astroChecks": [
+        {
+          "check": "HTTP Status 200 OK",
+          "status": "PASS",
+          "detail": "Loaded in 222ms"
+        }
+      ]
+    },
+    {
+      "name": "Tang Huot Sub-brand (តាំង ហួត)",
+      "path": "/tanghuot/",
+      "url": "http://localhost:4321/tanghuot/",
+      "seoChecks": [
+        {
+          "check": "Title Tag",
+          "status": "PASS",
+          "detail": "ហាងនំ តាំង ហួត | បោះដុំនំប្រពៃណី និងនំព្រះខែ"
+        },
+        {
+          "check": "Meta Description",
+          "status": "PASS",
+          "detail": "113 chars"
+        },
+        {
+          "check": "Canonical URL",
+          "status": "PASS",
+          "detail": "https://ckmkh.com/tanghuot/"
+        },
+        {
+          "check": "HTML lang=\"km-KH\"",
+          "status": "PASS",
+          "detail": "km"
+        },
+        {
+          "check": "OpenGraph Meta Tags",
+          "status": "PASS",
+          "detail": "og:title & og:image present"
+        },
+        {
+          "check": "Schema.org JSON-LD",
+          "status": "PASS",
+          "detail": "2 script(s) found"
+        }
+      ],
+      "uxChecks": [
+        {
+          "check": "Single <h1> Tag",
+          "status": "PASS",
+          "detail": "ហាងនំ តាំង ហួត"
+        },
+        {
+          "check": "Image Alt Attributes",
+          "status": "PASS",
+          "detail": "All 8 images have non-empty alt text"
+        }
+      ],
+      "uiChecks": [
+        {
+          "check": "Image Loading",
+          "status": "PASS",
+          "detail": "All 8 images rendered successfully"
+        },
+        {
+          "check": "Responsive Bounds (Desktop (1440x900))",
+          "status": "PASS",
+          "detail": "Layout clean (1440px)"
+        },
+        {
+          "check": "Responsive Bounds (Tablet (768x1024))",
+          "status": "PASS",
+          "detail": "Layout clean (768px)"
+        },
+        {
+          "check": "Responsive Bounds (Mobile (375x812))",
+          "status": "PASS",
+          "detail": "Layout clean (375px)"
+        }
+      ],
+      "astroChecks": [
+        {
+          "check": "HTTP Status 200 OK",
+          "status": "PASS",
+          "detail": "Loaded in 510ms"
+        }
+      ]
+    },
+    {
+      "name": "Privacy Policy (គោលការណ៍ឯកជនភាព)",
+      "path": "/privacy/",
+      "url": "http://localhost:4321/privacy/",
+      "seoChecks": [
+        {
+          "check": "Title Tag",
+          "status": "PASS",
+          "detail": "គោលការណ៍ឯកជនភាព | CKM Catering"
+        },
+        {
+          "check": "Meta Description",
+          "status": "PASS",
+          "detail": "197 chars"
+        },
+        {
+          "check": "Canonical URL",
+          "status": "PASS",
+          "detail": "https://ckmkh.com/privacy/"
+        },
+        {
+          "check": "HTML lang=\"km-KH\"",
+          "status": "PASS",
+          "detail": "km"
+        },
+        {
+          "check": "OpenGraph Meta Tags",
+          "status": "PASS",
+          "detail": "og:title & og:image present"
+        },
+        {
+          "check": "Schema.org JSON-LD",
+          "status": "PASS",
+          "detail": "3 script(s) found"
+        }
+      ],
+      "uxChecks": [
+        {
+          "check": "Single <h1> Tag",
+          "status": "PASS",
+          "detail": "គោលការណ៍ឯកជនភាព និងការការពារទិន្នន័យ"
+        },
+        {
+          "check": "Image Alt Attributes",
+          "status": "PASS",
+          "detail": "All 1 images have non-empty alt text"
+        }
+      ],
+      "uiChecks": [
+        {
+          "check": "Image Loading",
+          "status": "PASS",
+          "detail": "All 1 images rendered successfully"
+        },
+        {
+          "check": "Responsive Bounds (Desktop (1440x900))",
+          "status": "PASS",
+          "detail": "Layout clean (1440px)"
+        },
+        {
+          "check": "Responsive Bounds (Tablet (768x1024))",
+          "status": "PASS",
+          "detail": "Layout clean (768px)"
+        },
+        {
+          "check": "Responsive Bounds (Mobile (375x812))",
+          "status": "PASS",
+          "detail": "Layout clean (375px)"
+        }
+      ],
+      "astroChecks": [
+        {
+          "check": "HTTP Status 200 OK",
+          "status": "PASS",
+          "detail": "Loaded in 255ms"
+        }
+      ]
+    }
+  ]
+}

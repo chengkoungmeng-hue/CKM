@@ -1,6 +1,6 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { chromium } from 'playwright';
-import fs from 'fs';
-import path from 'path';
 
 const BASE_URL = 'http://localhost:4321';
 // Trailing slashes strictly enforced per astro.config.mjs trailingSlash: 'always'
@@ -19,6 +19,10 @@ const ROUTES = [
   '/blog/10-60-years-chef-experience/',
   '/blog/11-choosing-packages/',
   '/blog/12-catering-industry-trends/',
+  '/blog/13-master-chef-catering-secrets/',
+  '/blog/14-phnom-penh-master-chef-team/',
+  '/blog/15-luxury-abalone-banquet-soup/',
+  '/pulse/',
   '/tanghuot/',
   '/privacy/'
 ];
@@ -104,7 +108,7 @@ async function runAudit() {
 
       // Canonical URL
       const canonical = await page.$eval('link[rel="canonical"]', el => el.href).catch(() => null);
-      if (!canonical || !canonical.startsWith('https://ckmkh.com')) {
+      if (!canonical?.startsWith('https://ckmkh.com')) {
         auditResults.seo.failed++;
         routeReport.checks.push({ type: 'SEO', status: 'FAIL', detail: `Invalid Canonical domain: ${canonical}` });
       } else {
@@ -114,7 +118,7 @@ async function runAudit() {
 
       // HTML lang attribute
       const lang = await page.$eval('html', el => el.getAttribute('lang')).catch(() => null);
-      if (!lang || !lang.startsWith('km')) {
+      if (!lang?.startsWith('km')) {
         auditResults.seo.failed++;
         routeReport.checks.push({ type: 'SEO', status: 'WARN', detail: `HTML lang attribute is "${lang}" (Expected: "km")` });
       } else {
