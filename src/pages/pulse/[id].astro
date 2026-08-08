@@ -1,0 +1,247 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import pulseData from '../../data/pulseData.json';
+import ReadingProgress from '../../components/ReadingProgress.astro';
+import { getCollection } from 'astro:content';
+import { ArrowLeft, ArrowRight, ArrowUpRight, Calendar, Tag, User, Quote, BookOpen, Clock, Send, Globe } from '@lucide/astro';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const items = (pulseData || []) as any[];
+  return items.map((item: any) => ({
+    params: { id: item.id },
+    props: { item }
+  }));
+}
+
+const { item } = Astro.props as any;
+
+// Fetch 3 highly relevant blog posts to pass Link Juice (internal link equity)
+const allBlogPosts = await getCollection('blog', ({ id }) => !id.includes('/'));
+const pulseCategory = item.category || '';
+const pulseTitle = item.title_km || '';
+
+const relatedPosts = [...allBlogPosts]
+  .map((post) => {
+    let score = 0;
+    const postTitle = post.data.title || '';
+    const postDesc = post.data.description || '';
+    if (pulseCategory && (postTitle.includes(pulseCategory) || postDesc.includes(pulseCategory))) score += 5;
+    if (pulseTitle.includes('ម្ហូប') && postTitle.includes('ម្ហូប')) score += 2;
+    if (pulseTitle.includes('រៀបចំ') && postTitle.includes('រៀបចំ')) score += 2;
+    return { post, score };
+  })
+  .sort((a, b) => b.score - a.score || a.post.id.localeCompare(b.post.id))
+  .map((entry) => entry.post)
+  .slice(0, 3);
+
+const pageTitle = `${item.title_km} - CKM`;
+const pageDesc = item.summary_km;
+
+const articleSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": item.title_km,
+  "description": item.summary_km,
+  "image": [item.image_url],
+  "datePublished": item.pub_date,
+  "author": {
+    "@type": "Organization",
+    "name": "ចេង គួងម៉េង (CKM)"
+  }
+});
+---
+
+<Layout title={pageTitle} description={pageDesc} lang="km-KH">
+  <script type="application/ld+json" is:inline set:html={articleSchema}></script>
+  <ReadingProgress />
+
+  <style is:global>
+    .font-km-serif { font-family: 'Hanuman', serif; }
+    .font-km-sans { font-family: 'Kantumruy Pro', sans-serif; }
+  </style>
+
+  <div class="w-full bg-pearl min-h-screen pt-24 pb-20 typo-km">
+    <div class="max-w-4xl mx-auto px-6">
+      
+      <!-- Breadcrumb Navigation -->
+      <nav class="flex items-center flex-wrap gap-2 text-xs font-km-sans text-slate-400 mb-6">
+        <a href="/" class="hover:text-champagne-dark transition-colors">ទំព័រដើម</a>
+        <span>›</span>
+        <a href="/pulse/" class="hover:text-champagne-dark transition-colors">បច្ចុប្បន្នភាព</a>
+        <span>›</span>
+        <span class="text-slate-600 font-bold truncate max-w-xs md:max-w-md">{item.title_km}</span>
+      </nav>
+
+      <!-- Article Meta Bar -->
+      <div class="flex flex-wrap items-center justify-start md:justify-center gap-3 text-xs text-slate-500 font-km-sans mb-6 border-b border-slate-200/80 pb-4">
+        <div class="flex items-center gap-1.5 font-mono">
+          <Calendar class="w-3.5 h-3.5 text-champagne-dark" />
+          <span>{item.pub_date ? item.pub_date.split(' ').slice(1, 4).join('.') : '2026.08.08'}</span>
+        </div>
+        <span>|</span>
+        <div class="flex items-center gap-1.5">
+          <Clock class="w-3.5 h-3.5 text-champagne-dark" />
+          <span>អានប្រមាណ ៣ នាទី</span>
+        </div>
+        <span>|</span>
+        <div class="flex items-center gap-1.5">
+          <User class="w-3.5 h-3.5 text-champagne-dark" />
+          <span>ក្រុមចុងភៅ ចេង គួងម៉េង</span>
+        </div>
+        <span>|</span>
+        <div class="flex items-center gap-1.5 bg-champagne/10 text-champagne-dark px-2.5 py-0.5 rounded-sm border border-champagne/30 font-bold">
+          <Tag class="w-3.5 h-3.5" />
+          <span>#{item.category}</span>
+        </div>
+      </div>
+
+      <!-- Main Title -->
+      <h1 class="text-3xl md:text-5xl font-km-serif font-bold text-onyx mb-8 leading-relaxed text-left md:text-center max-w-3xl mx-auto py-1">
+        {item.title_km}
+      </h1>
+
+      <!-- Cover Image Banner with Ambient Frosted Blur Background -->
+      <div class="w-full aspect-[16/9] md:aspect-[16/10] max-h-[560px] rounded-sm overflow-hidden bg-onyx/90 mb-12 shadow-sm border border-slate-200/80 mx-auto relative block">
+        <!-- Ambient Blurred Background Image -->
+        <img 
+          src={item.image_url || "/images/blog_01_inline_khmer.webp"} 
+          alt="" 
+          aria-hidden="true"
+          class="absolute inset-0 w-full h-full object-cover blur-2xl opacity-50 scale-125 pointer-events-none"
+        />
+        
+        <!-- Frosted Vignette Overlay -->
+        <div class="absolute inset-0 bg-gradient-to-t from-onyx/40 via-transparent to-black/20 pointer-events-none z-1"></div>
+
+        <!-- Main Foreground Image -->
+        <img 
+          src={item.image_url || "/images/blog_01_inline_khmer.webp"} 
+          alt={item.title_km}
+          class="w-full h-full object-contain relative z-2 drop-shadow-md"
+        />
+      </div>
+
+      <!-- ELEGANT EDITORIAL ARTICLE CARD CONTAINER (Matching user screenshot) -->
+      <article class="bg-white rounded-sm border border-slate-200/90 p-8 md:p-14 shadow-sm relative overflow-hidden">
+        
+        <!-- Watermark Quote Icon in Top Right -->
+        <Quote class="w-20 h-20 text-slate-100 absolute top-6 right-6 pointer-events-none rotate-180" />
+
+        <!-- Executive Summary Section -->
+        <div class="relative z-10 mb-10">
+          <h2 class="text-xs font-bold text-champagne-dark font-mono uppercase tracking-widest mb-4 block">
+            សង្ខេបប្រតិបត្តិ
+          </h2>
+          <p class="text-slate-700 font-km-sans text-base md:text-lg leading-relaxed font-light">
+            {item.summary_km}
+          </p>
+        </div>
+
+        <!-- Key Takeaways Section (Light Luxury Pearl Card with Champagne Accent) -->
+        {item.key_points_km && item.key_points_km.length > 0 && (
+          <div class="bg-pearl/80 border border-champagne/30 rounded-sm p-6 md:p-8 relative z-10 my-8 shadow-2xs">
+            <h2 class="text-lg md:text-xl font-bold font-km-serif text-onyx mb-4 pb-3 border-b border-champagne/20 flex items-center gap-2">
+              <span>ចំណុចវិភាគសំខាន់ៗ</span>
+            </h2>
+            <ul class="space-y-3.5">
+              {item.key_points_km.map((pt: string) => (
+                <li class="flex items-start gap-3 text-sm md:text-base text-slate-800 font-km-sans leading-relaxed">
+                  <span class="w-1.5 h-1.5 rounded-full bg-champagne-dark mt-2.5 shrink-0"></span>
+                  <span>{pt}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <!-- Original Source Attribution Card (100% Pure Khmer, 0 English) -->
+        {item.source_link && item.source_link.startsWith('http') && (
+          <div class="bg-pearl/80 border border-slate-200/90 rounded-sm p-5 relative z-10 my-8 shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <Globe class="w-4 h-4 text-champagne-dark shrink-0" />
+              <div class="text-xs font-km-sans">
+                <span class="text-slate-500 block mb-0.5 font-bold">ប្រភពដើមអន្តរជាតិ:</span>
+                <span class="font-bold text-onyx line-clamp-1">{item.title_km}</span>
+              </div>
+            </div>
+            <a 
+              href={item.source_link}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-1.5 bg-white hover:bg-onyx text-onyx hover:text-white border border-slate-300 hover:border-onyx px-4 py-2 rounded-sm text-xs font-bold font-km-sans transition-all shrink-0 shadow-2xs group/ext"
+            >
+              <span>អានអត្ថបទដើម</span>
+              <ArrowUpRight class="w-3.5 h-3.5 text-champagne-dark group-hover/ext:text-champagne transition-colors" />
+            </a>
+          </div>
+        )}
+
+        <!-- Internal Links / Related Articles Section -->
+        <div class="relative z-10 mb-10 pt-6 border-t border-slate-100">
+          <h2 class="text-xl font-bold font-km-serif text-onyx mb-5 flex items-center gap-2">
+            <BookOpen class="w-5 h-5 text-champagne-dark" />
+            <span>អត្ថបទពាក់ព័ន្ធ</span>
+          </h2>
+          <ul class="space-y-3.5 border-l-2 border-champagne/40 pl-4">
+            {relatedPosts.map(post => {
+              const slug = post.id.replace(/\.mdx?$/, '');
+              return (
+                <li>
+                  <a 
+                    href={`/blog/${slug}/`}
+                    class="text-sm md:text-base font-bold font-km-sans text-onyx hover:text-champagne-dark underline decoration-slate-300 hover:decoration-champagne-dark underline-offset-4 transition-all block leading-relaxed"
+                  >
+                    {post.data.title}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+
+        <!-- Horizontal Divider -->
+        <div class="border-t border-slate-200/80 my-8"></div>
+
+        <!-- Bottom Source Action Bar -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
+          <a 
+            href="/pulse/"
+            class="inline-flex items-center justify-center gap-2 bg-slate-50 hover:bg-slate-100 border border-slate-300 hover:border-champagne-dark text-onyx px-6 py-3 rounded-sm font-km-sans font-bold text-xs transition-all shadow-2xs shrink-0"
+          >
+            <span>មើលបច្ចុប្បន្នភាពទាំងអស់</span>
+            <ArrowRight class="w-3.5 h-3.5 text-champagne-dark" />
+          </a>
+          <span class="text-xs text-slate-400 font-km-sans">
+            — ព័ត៌មាន និងស្តង់ដារបដិសណ្ឋារកិច្ចអន្តរជាតិ
+          </span>
+        </div>
+
+      </article>
+
+      <!-- Bottom Navigation & Telegram Contact Bar -->
+      <div class="mt-8 pt-6 border-t border-slate-200/80 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <a 
+          href="/pulse/" 
+          class="inline-flex items-center gap-2 text-xs font-bold font-km-sans text-slate-600 hover:text-onyx transition-colors duration-200 group"
+        >
+          <ArrowLeft class="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+          <span>ត្រឡប់ទៅកាន់បញ្ជីព័ត៌មាន</span>
+        </a>
+        <a 
+          href="https://t.me/CKMSam06" 
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center justify-center gap-2 bg-onyx hover:bg-slate-800 text-white px-5 py-2.5 rounded-sm font-km-sans font-bold text-xs transition-all shadow-md"
+        >
+          <Send class="w-3.5 h-3.5 text-champagne" />
+          <span>ពិគ្រោះយោបល់តាម Telegram</span>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</Layout>
+
+

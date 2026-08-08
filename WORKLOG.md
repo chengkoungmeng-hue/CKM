@@ -1,77 +1,99 @@
 # Work Log
 
-## 2026-07-28
+## 2026-08-08 (Pulse RSS Image Optimization & VIP FAQ Audit)
+
+- Audited and updated Catering Pulse (`src/data/pulseData.json`) to use original cover images scraped from WedLuxe and CFE News RSS feeds.
+- Implemented ambient frosted glass background overlay (`blur-xl opacity-50 scale-125`) across `CateringPulse.astro`, `/pulse/index.astro`, `/pulse/[page].astro`, and `/pulse/[id].astro` to eliminate awkward aspect-ratio cropping while preserving full portrait/landscape photos cleanly.
+- Added original source attribution card with external links (`target="_blank" rel="noopener noreferrer"`) in `pulse/[id].astro` to respect original RSS authors and boost Google SEO E-E-A-T entity trust.
+- Audited all 13 blog posts (`src/content/blog/*.md`) to enforce zero tipping, zero leftover packing, and zero cheap bargaining topics, replacing pedestrian FAQ items in `08-waitstaff-service-flow.md` and `04-hygiene-and-temperature-control.md` with VIP elder care, food freshness, and serving timing questions.
+- Audited Google Search Console & GA4 live performance data. Identified top high-demand search queries: `ចុងភៅ` (Chef / Master Chef team in Phnom Penh - 165 impressions) and `ប៉ាវហឺ` (Abalone banquet soup - 15 impressions).
+- Generated Article 14 (`14-phnom-penh-master-chef-team.md`) and Article 15 (`15-luxury-abalone-banquet-soup.md`) in 100% Traditional Khmer (`km-KH`) with grounded Cambodian imagery, zero hype words, zero hard technical numbers, and 100% VIP hospitality FAQs.
+- Verified build with `npm run build` (35 static pages compiled cleanly with 0 errors).
+
+## 2026-07-28 (Cloudflare & SEO Baseline)
+
 - Audited live Cloudflare Zone settings for `ckmkh.com` via Cloudflare REST API.
 - Updated `scripts/apply_cf_settings.py` to enable auto-minify, set security level to `medium`, and expand the WAF SEO Bypass rule to include `/robots.txt`, `sitemap*.xml`, `/llms.txt`, and `/llms-full.txt`.
 - Created `public/_headers` to deploy Cache-Control rules (`max-age=0` for HTML, 1-year immutable for `/_astro/*` and `/fonts/*`) and security headers (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`) to Cloudflare Pages.
 - Executed `apply_cf_settings.py` and `cloudflare_audit.js` to verify API configuration.
 - Successfully built project with `npm run build` and verified `dist/_headers` deployment.
-
 - Checked project dependencies to verify the tech stack. Confirmed the project uses **Astro** and **Tailwind CSS**. Noticed that it uses **FontAwesome** instead of **Lucide** for icons.
 - Initialized `WORKLOG.md` and `.agents/AGENTS.md` to start logging work and maintaining project-specific agent rules.
 - Started the development server (`npm run dev`).
 - Analyzed the website content (`src/data/homeData.ts` and `src/pages/index.astro`). Recorded the business context (a 60-year experienced professional catering/banquet service in Phnom Penh targeting weddings and large events, known for Khmer-Chinese fusion cuisine) into an artifact for future accuracy.
 - Generated a comprehensive list of Khmer SEO, LSI, and NLP keywords based on the business context for content optimization.
-- Conducted web research on the Cambodian catering market to enrich the keyword list with colloquial terms (e.g., "ážŸáŸ�ážœáž¶áž€áž˜áŸ’áž˜ Catering áž¯áž€áž‡áž“", "áž€áž¶ážšáž—áŸ’áž›áž€áŸ’ážŸážšážŸáž‡áž¶áž�áž·", "áž˜áŸ‰ážºáž“áž»áž™áž˜áŸ’áž áž¼áž”áž€áž¶ážš áŸ¨ áž˜áž»áž�").
-- Conducted web research on the Cambodian catering market to enrich the keyword list with colloquial terms (e.g., "ážŸáŸážœáž¶áž€áž˜áŸ’áž˜ Catering áž¯áž€áž‡áž“", "áž€áž¶ážšáž—áŸ’áž›áž€áŸ’ážŸážšážŸáž‡áž¶ážáž·", "áž˜áŸ‰ážºáž“áž»áž™áž˜áŸ’áž áž¼áž”áž€áž¶ážš áŸ¨ áž˜áž»áž").
+- Conducted web research on the Cambodian catering market to enrich the keyword list with colloquial terms.
 - Planned out 12 professional, SEO-optimized article outlines using the gathered Khmer keywords. The plan was further expanded with objective expert viewpoints, LSI/NLP keywords, non-text AI image prompts (set in Phnom Penh), and paragraph-by-paragraph summaries. The detailed plan is saved as an artifact for user review.
 - Added a new rule to `AGENTS.md` specifying that only Khmer content should be modified, and Chinese/English content should be ignored.
 - Researched the latest Generative Engine Optimization (GEO) best practices. Found that total word count is less important than "chunking" (40-80 word quick answers, 120-180 word sections) and factual density. Updated the SEO plan artifact with specific GEO formatting rules (use of tables, bullet points, quantitative claims, and clear H2/H3 hierarchies).
 - Expanded the SEO content plan for all 12 articles to guarantee a minimum of 1200 words per article. Integrated the GEO "chunking" strategy by adding detailed H2/H3 subsections, markdown tables, expert checklists, and FAQ sections to ensure high factual density without fluff.
 - Generated the first SEO article ("Traditional 8-course Khmer wedding menu") entirely in Khmer, achieving the 1200+ word depth target. Added two generated images (one cover, one inline) and saved it to `src/content/blog/01-traditional-8-course-wedding-menu.md`.
 
+## 2026-07-04 (Content & Architecture)
 
-- [2026-07-04] Created Article 6 (06-signature-dishes.md). Deleted old placeholder. Generated 2 images of Sino-Khmer cuisine with Cambodian chefs. Strictly Khmer text.
+- Created Article 6 (`06-signature-dishes.md`). Deleted old placeholder. Generated 2 images of Sino-Khmer cuisine with Cambodian chefs. Strictly Khmer text.
+- Created Article 7 (`07-housewarming-catering-setup.md`). Deleted old placeholder. Generated 2 images for housewarming setup. Strictly Khmer text.
+- Removed all English translations in parentheses from articles 01 to 07. Fixed typography typos. Created Article 8 (`08-waitstaff-service-flow.md`). Generated 2 images of Cambodian waitstaff. Strictly pure Khmer text without any English in parentheses.
+- Created Article 9 (`09-outdoor-tent-infrastructure.md`). Deleted old placeholder. Generated 2 images of outdoor tent setup. Strictly pure Khmer text without any English in parentheses.
+- Restored mojibake (encoding corruption) on articles 01 to 07 caused by PowerShell ANSI default read. Deleted lingering obsolete placeholder files 01, 02, 03. Created Article 10 (`10-60-years-chef-experience.md`). Generated 2 images of Cambodian master chefs.
+- Created Article 11 (`11-choosing-packages.md`). Generated 2 images of wedding package consultation and VIP banquet setups. Maintained strict pure Khmer formatting.
+- Created Article 12 (`12-catering-industry-trends.md`) completing the 12-article SEO series. Generated 2 images depicting futuristic and high-tech Cambodian catering setups.
+- Conducted AI SEO Audit. Fixed Canonical Domain (`https://ckmkh.com` instead of www) across `robots.txt`, `MooncakePage.astro`, and `[slug].astro`.
+- Purged legacy en/zh subdirectories and layouts to simplify the architecture to pure Khmer-only.
+- Replaced all hardcoded SVGs with `@lucide/astro` components in `MooncakePage.astro` for icon unification.
+- Injected Astro ViewTransitions for SPA-like navigation and implemented a vanilla JS `IntersectionObserver` (`.reveal`) for Quiet Luxury scroll-reveal micro-animations.
+- Received Cloudflare API token from the user. To comply with strict security protocols, the token was NOT documented in git-tracked files. Instead, it was securely written to `.env` and a new token protection rule was added to `AGENTS.md`.
+- Validated SEO strategy for the Tang Huot Bakery sub-brand (`/tanghuot/`). Decided to remain strictly Khmer-focused based on user instruction.
 
-- [2026-07-04] Created Article 7 (07-housewarming-catering-setup.md). Deleted old placeholder. Generated 2 images for housewarming setup. Strictly Khmer text.
+## 2026-07-22 (Local SEO & Playwright Audit)
 
-- [2026-07-04] Removed all English translations in parentheses from articles 01 to 07. Fixed typography typos. Created Article 8 (08-waitstaff-service-flow.md). Generated 2 images of Cambodian waitstaff. Strictly pure Khmer text without any English in parentheses.
+- Saved GSC & GA4 integration service account email securely in `.env` per Security Rule.
+- Added Local SEO & GEO Audit Protocol and Target Audience & Demographic Persona Protocol rules to `.agents/AGENTS.md`.
+- Created custom skill `.agents/skills/local_seo_analyzer/SKILL.md` for evaluating local SEO, LocalBusiness JSON-LD schema, local Khmer keywords, and GEO targeting.
+- Created custom skill `.agents/skills/audience_analyzer/SKILL.md` for analyzing local B2B/B2C customer personas, user search intent, and mobile conversion friction.
+- Created Playwright automated E2E audit script `scripts/playwright_audit.js` testing 16 canonical routes across Desktop (1440x900), Tablet (768x1024), and Mobile (375x812). Achieved 100% pass rate across 96 SEO checks, 32 UX checks, and 64 UI/CSS checks with 0 JS console errors and 0 horizontal overflows.
+- Implemented Cambodian Local Intent FAQ section on `src/pages/index.astro` targeting Phnom Penh banquet pricing, tent rentals, and event scope, backed by Schema.org `FAQPage` JSON-LD for Google Rich Snippets.
+- Injected Schema.org `BreadcrumbList` JSON-LD across all canonical pages (`/`, `/blog/`, `/privacy/`, `/tanghuot/`) for 100% structured data coverage.
+- Added smooth "Scroll to Top" floating button with Khmer ARIA label and `requestAnimationFrame` passive scroll listener in `src/layouts/Layout.astro`.
+- Resolved mobile burger menu ID mismatch (`mobile-menu-toggle`), added `md:hidden` to desktop button, and re-bound JS on Astro `astro:page-load` SPA events.
+- Fixed desktop navbar link contrast (`text-onyx font-bold`) and updated mobile menu overlay to a seamless Pearl White backdrop (`bg-white z-[90]`) with dark luxury Khmer typography, resolving color bleed-through issues.
+- Performed Google Lighthouse performance optimizations: preloaded `hanuman-latin-700-normal.woff2` font, reduced hero image payload from 26 KiB to 7 KiB, and resized brand logo to 96x96px.
+- Formalized "Royal Champagne & Onyx" Quiet Luxury brand palette rule in `.agents/AGENTS.md`.
+- Created Cloudflare Live API audit suite `scripts/cloudflare_audit.js`. Conducted deep live audit of Cloudflare WAF, Cache, and Speed configurations (`ckmkh.com` Zone ID: `d459c80...`). Confirmed 1-year edge asset caching (`CKM Astro Cache Rules`), Brotli, HTTP/3, Early Hints, 0-RTT, and WAF SEO Bypass protocol (`robots.txt` & `sitemap.xml`) are active.
+- All changes tested via `npx astro check` (0 errors), `npm run build` (17 static pages compiled), and pushed to GitHub `origin/main`.
 
-- [2026-07-04] Created Article 9 (09-outdoor-tent-infrastructure.md). Deleted old placeholder. Generated 2 images of outdoor tent setup. Strictly pure Khmer text without any English in parentheses.
+## 2026-07-28 (GSC 404 Audit & AEO Tuning)
 
-- [2026-07-04] Restored mojibake (encoding corruption) on articles 01 to 07 caused by PowerShell ANSI default read. Deleted lingering obsolete placeholder files 01, 02, 03. Created Article 10 (10-60-years-chef-experience.md). Generated 2 images of Cambodian master chefs.
+- Completed GSC 404 health audit and mitigation strategy for removed `/zh/` and `/en/` sub-paths. Added Cloudflare Pages `public/_redirects` and Astro `redirects` matrix mapping all `/zh/*` and `/en/*` legacy paths via HTTP 301 to `https://ckmkh.com/`. Updated `src/data/homeData.ts` siteDomain to non-www canonical URL. Updated `src/pages/404.astro` homeUrl fallback. Updated `scripts/gsc_ga4_audit.js` diagnostic tool. Passed `npx astro check` (0 errors) and `npm run build` (17 static pages compiled).
+- Added `Communication & Interaction Protocol` to `.agents/AGENTS.md` enforcing a Professional, Rigorous, Objective, and Sincere tone for all future Agent interactions and system reports.
+- Saved `GSC_API_KEY` securely into local `.env` file per Security Rule (git-ignored), authorizing automated Search Console API integration without exposing secrets to git history.
+- Executed `/goal`: Conducted GSC potential opportunity audit & on-page fine-tuning. Enhanced `public/llms.txt` and created `public/llms-full.txt` for AEO (Answer Engine Optimization) to boost AI search discovery (ChatGPT/Perplexity/Gemini). Unlocked mobile CTA visibility in `src/pages/blog/[slug].astro` ensuring Call and Telegram conversion paths are 100% accessible on mobile devices (>85% Cambodian traffic). Verified static build (`npm run build`, 17 pages compiled).
+- Pushed all latest commits successfully to GitHub `origin/main` for live Cloudflare Pages deployment.
 
-- [2026-07-04] Created Article 11 (11-choosing-packages.md). Generated 2 images of wedding package consultation and VIP banquet setups. Maintained strict pure Khmer formatting.
+## 2026-08-08 (Playwright Audit & UI/UX Fixes)
 
-- [2026-07-04] Created Article 12 (12-catering-industry-trends.md) completing the 12-article SEO series. Generated 2 images depicting futuristic and high-tech Cambodian catering setups.
-- [2026-07-04] Created Article 6 (06-signature-dishes.md). Deleted old placeholder. Generated 2 images of Sino-Khmer cuisine with Cambodian chefs. Strictly Khmer text.
-
-- [2026-07-04] Created Article 7 (07-housewarming-catering-setup.md). Deleted old placeholder. Generated 2 images for housewarming setup. Strictly Khmer text.
-
-- [2026-07-04] Removed all English translations in parentheses from articles 01 to 07. Fixed typography typos. Created Article 8 (08-waitstaff-service-flow.md). Generated 2 images of Cambodian waitstaff. Strictly pure Khmer text without any English in parentheses.
-
-- [2026-07-04] Created Article 9 (09-outdoor-tent-infrastructure.md). Deleted old placeholder. Generated 2 images of outdoor tent setup. Strictly pure Khmer text without any English in parentheses.
-
-- [2026-07-04] Restored mojibake (encoding corruption) on articles 01 to 07 caused by PowerShell ANSI default read. Deleted lingering obsolete placeholder files 01, 02, 03. Created Article 10 (10-60-years-chef-experience.md). Generated 2 images of Cambodian master chefs.
-
-- [2026-07-04] Created Article 11 (11-choosing-packages.md). Generated 2 images of wedding package consultation and VIP banquet setups. Maintained strict pure Khmer formatting.
-
-- [2026-07-04] Created Article 12 (12-catering-industry-trends.md) completing the 12-article SEO series. Generated 2 images depicting futuristic and high-tech Cambodian catering setups.
-
-- [2026-07-04] Conducted AI SEO Audit. Fixed Canonical Domain (https://ckmkh.com instead of www) across robots.txt, MooncakePage.astro, and [slug].astro.
-- [2026-07-04] Purged legacy en/zh subdirectories and layouts to simplify the architecture to pure Khmer-only.
-- [2026-07-04] Replaced all hardcoded SVGs with @lucide/astro components in MooncakePage.astro for icon unification.
-- [2026-07-04] Injected Astro ViewTransitions for SPA-like navigation and implemented a vanilla JS IntersectionObserver (.reveal) for Quiet Luxury scroll-reveal micro-animations.
-
-- [2026-07-04] Received Cloudflare API token from the user. To comply with strict security protocols, the token was NOT documented in git-tracked files. Instead, it was securely written to .env and a new token protection rule was added to AGENTS.md.
-- [2026-07-04] Validated SEO strategy for the Tang Huot Bakery sub-brand (/tanghuot/). Decided to remain strictly Khmer-focused based on user instruction.
-
-- [2026-07-22] Saved GSC & GA4 integration service account email securely in `.env` per Security Rule 16.
-- [2026-07-22] Added Local SEO & GEO Audit Protocol and Target Audience & Demographic Persona Protocol rules to `.agents/AGENTS.md`.
-- [2026-07-22] Created custom skill `.agents/skills/local_seo_analyzer/SKILL.md` for evaluating local SEO, LocalBusiness JSON-LD schema, local Khmer keywords, and GEO targeting.
-- [2026-07-22] Created custom skill `.agents/skills/audience_analyzer/SKILL.md` for analyzing local B2B/B2C customer personas, user search intent, and mobile conversion friction.
-- [2026-07-22] Created Playwright automated E2E audit script `scripts/playwright_audit.js` testing 16 canonical routes across Desktop (1440x900), Tablet (768x1024), and Mobile (375x812). Achieved 100% pass rate across 96 SEO checks, 32 UX checks, and 64 UI/CSS checks with 0 JS console errors and 0 horizontal overflows.
-- [2026-07-22] Implemented Cambodian Local Intent FAQ section on `src/pages/index.astro` targeting Phnom Penh banquet pricing, tent rentals, and event scope, backed by Schema.org `FAQPage` JSON-LD for Google Rich Snippets.
-- [2026-07-22] Injected Schema.org `BreadcrumbList` JSON-LD across all canonical pages (`/`, `/blog/`, `/privacy/`, `/tanghuot/`) for 100% structured data coverage.
-- [2026-07-22] Added smooth "Scroll to Top" floating button with Khmer ARIA label and `requestAnimationFrame` passive scroll listener in `src/layouts/Layout.astro`.
-- [2026-07-22] Resolved mobile burger menu ID mismatch (`mobile-menu-toggle`), added `md:hidden` to desktop button, and re-bound JS on Astro `astro:page-load` SPA events.
-- [2026-07-22] Fixed desktop navbar link contrast (`text-onyx font-bold`) and updated mobile menu overlay to a seamless Pearl White backdrop (`bg-white z-[90]`) with dark luxury Khmer typography, resolving color bleed-through issues.
-- [2026-07-22] Performed Google Lighthouse performance optimizations: preloaded `hanuman-latin-700-normal.woff2` font, reduced hero image payload from 26 KiB to 7 KiB, and resized brand logo to 96x96px.
-- [2026-07-22] Formalized "Royal Champagne & Onyx" Quiet Luxury brand palette rule in `.agents/AGENTS.md`.
-- [2026-07-22] Created Cloudflare Live API audit suite `scripts/cloudflare_audit.js`. Conducted deep live audit of Cloudflare WAF, Cache, and Speed configurations (`ckmkh.com` Zone ID: `d459c80...`). Confirmed 1-year edge asset caching (`CKM Astro Cache Rules`), Brotli, HTTP/3, Early Hints, 0-RTT, and WAF SEO Bypass protocol (`robots.txt` & `sitemap.xml`) are active.
-- [2026-07-22] All changes tested via `npx astro check` (0 errors), `npm run build` (17 static pages compiled), and pushed to GitHub `origin/main`.
-- [2026-07-28] Completed GSC 404 health audit and mitigation strategy for removed `/zh/` and `/en/` sub-paths. Added Cloudflare Pages `public/_redirects` and Astro `redirects` matrix mapping all `/zh/*` and `/en/*` legacy paths via HTTP 301 to `https://ckmkh.com/`. Updated `src/data/homeData.ts` siteDomain to non-www canonical URL. Updated `src/pages/404.astro` homeUrl fallback. Updated `scripts/gsc_ga4_audit.js` diagnostic tool. Passed `npx astro check` (0 errors) and `npm run build` (17 static pages compiled).
-- [2026-07-28] Added `Communication & Interaction Protocol` to `.agents/AGENTS.md` enforcing a Professional, Rigorous, Objective, and Sincere (專業、嚴謹、客觀、誠懇) tone for all future Agent interactions and system reports.
-- [2026-07-28] Saved `GSC_API_KEY` securely into local `.env` file per Security Rule 16 (git-ignored), authorizing automated Search Console API integration without exposing secrets to git history.
-- [2026-07-28] Executed `/goal`: Conducted GSC potential opportunity audit & on-page fine-tuning. Enhanced `public/llms.txt` and created `public/llms-full.txt` for AEO (Answer Engine Optimization) to boost AI search discovery (ChatGPT/Perplexity/Gemini). Unlocked mobile CTA visibility in `src/pages/blog/[slug].astro` ensuring Call and Telegram conversion paths are 100% accessible on mobile devices (>85% Cambodian traffic). Verified static build (`npm run build`, 17 pages compiled).
-- [2026-07-28] Pushed all latest commits (`d1d2afd..467e093`) successfully to GitHub `origin/main` for live Cloudflare Pages deployment.
+- Conducted E2E Playwright audit and visual inspection on `http://localhost:4321/`. Fixed Khmer top diacritics clipping across all `<h2>` and `<h1>` elements by setting `leading-relaxed py-1` and `scroll-mt-24` (fixed header overlap protection). Replaced `--kh-red` raw primary red in `MooncakePage.astro` with Champagne Gold `#C5A059` to align with the Royal Champagne & Onyx Quiet Luxury brand palette. Verified zero JS console errors and 100% pass on `npx astro check`.
+- Installed and integrated `lenis` (`^1.3.26`) smooth scroll engine in `src/layouts/Layout.astro` for Apple-grade luxury scrolling physics across SPA page loads.
+- Installed `@tailwindcss/typography` (`^0.5.19`) plugin in `tailwind.config.mjs` and injected `prose prose-slate prose-lg` classes into `src/pages/blog/[slug].astro` for elegant article typography rendering. Passed `npx astro check` with 0 errors.
+- Created custom AI Agent Skill `.agents/skills/ckm_blog_writer/SKILL.md` establishing standardized Khmer-only editorial guidelines, GEO chunking structure, local Cambodian polite persona (`លោកអ្នក` / `យើងខ្ញុំ`), and strict markdownlint formatting standards.
+- Formulated the "Quiet Trust & Low-Key Master" Cambodian market SEO strategy. Updated `ckm_blog_writer/SKILL.md` with explicit zero-hype, zero-boasting rules that align with the low-key Sino-Cambodian owner persona while maximizing Google AI Overview (AEO/GEO) snippet capture.
+- Investigated interrupted article writing session. Identified `src/content/blog/09-outdoor-tent-infrastructure.md` as the incomplete file. Expanded and completed Article 09 with GEO Quick Answer, portable kitchen infrastructure table, 5-point logistics checklist, outdoor food safety/temperature protocols, 4-item FAQ, and humble conclusion. Fixed frontmatter `coverImage` asset path. Verified with `npx astro check` (0 errors) and `npm run build` (17 static pages compiled successfully).
+- Rewrote `.agents/skills/ckm_blog_writer/SKILL.md` to remove technical architecture and complex jargon, explaining instructions in simple language.
+- Standardized formatting (table border alignments `:---`, heading structures, and proper blank lines) for the remaining 4 blog articles: `02-wedding-catering-budget-guide.md`, `03-food-tasting.md`, `04-hygiene-and-temperature-control.md`, and `06-signature-dishes.md`.
+- Audited all 12 articles for natural colloquial phrasing, replacing casual pronouns (`អ្នក`) with polite client honorifics (`លោកអ្នក`) while keeping role nouns (`អ្នកជំនាញ`, `អ្នករត់តុ`) intact.
+- Diagnosed freeze issue when editing [02-wedding-catering-budget-guide.md](file:///c:/Projects/CKM/src/content/blog/02-wedding-catering-budget-guide.md). Identified root causes: (1) Non-standard Markdown table delimiter `|---------------------|...|` without `:---` column alignment causing editor table linters to trigger CPU-heavy regex backtracking over multi-byte Khmer text, (2) Ultra-long single-line Khmer paragraphs (500+ chars / 1500+ bytes) stressing editor word-wrap engines, and (3) trailing slash markdown links. Standardized table delimiters, added natural paragraph line wraps, cleaned link paths, and verified 100% clean build (`npx astro check` & `npm run build`).
+- Conducted full technical jargon & conversational tone audit across all 12 blog posts (`src/content/blog/*.md`). Replaced all raw English jargon (`Catering`, `VIP`, `Brand Identity`, `Buffet`, `Cocktail finger food`, `KVA`, `LED`, `FAQ`, `Generator`) with natural, polite Khmer terms (`សេវាកម្មធ្វើម្ហូប`, `ភ្ញៀវកិត្តិយស`, `អត្តសញ្ញាណរបស់ក្រុមហ៊ុន`, `អាហារប៊ូហ្វេ`, `អាហារសម្រន់ស្រាលៗ`, `កម្លាំងអគ្គិសនីខ្ពស់`, `អំពូលភ្លឺច្បាស់សន្សំសំចៃថាមពល`, `ម៉ាស៊ីនភ្លើងបម្រុង`). Replaced casual pronouns (`អ្នក`) with polite client honorifics (`លោកអ្នក`), and standardized `## ចម្លើយរហ័ស` (Quick Answer) sections across all 12 articles for 100% compliance with `.agents/skills/ckm_blog_writer/SKILL.md`. Verified with `npx astro check` (0 errors) and `npm run build` (17 pages compiled successfully).
+- Designed and integrated the Quiet Luxury UI component `src/components/CateringPulse.astro` into `src/pages/blog/index.astro`. Renders daily-updated international catering trend cards in Khmer (with categories, summaries, and source links). Tested via `npx astro check` (0 errors) and `npm run build` (17 static pages compiled successfully).
+- Implemented 7 performance-friendly Quiet Luxury & micro-UX enhancements across `ckmkh.com`: Astro View Transitions (`<ClientRouter />`), sticky navbar glassmorphism (`backdrop-blur-md bg-white/95`), ambient champagne glow overlays, global antialiased micro-typography (`-webkit-font-smoothing` and `tabular-nums`), native scroll reveal animation (`.reveal`), active compress touch feedback (`active:scale-[0.98]`), and zero CLS aspect ratio image containers (`object-cover object-top`). Verified clean build (`npm run build`, 30 static pages built in 6.45s) and E2E browser transition audit.
+- Created dedicated custom skill `.agents/skills/ckm_pulse_writer/SKILL.md` specifying the Master Prompt for AI-generated Pulse content with dual strategic focus: high local Cambodian reader value and Google Search indexing optimization.
+- Established the **Minimal Technical Data Rule (少用具體數據與硬規格條款)** across `.agents/AGENTS.md`, `ckm_pulse_writer/SKILL.md`, and `ckm_blog_writer/SKILL.md`. Mandated that public website content avoids dense hard numbers (e.g. no "4°C-60°C" or "50-100 KVA") to maintain a warm, qualitative, high-luxury reading experience, reserving technical data for the business owner to present directly during Telegram/Phone client consultations.
+- Optimized RSS fetcher `scripts/fetch_catering_pulse.py` to target exclusively RSS 1 (`WedLuxe`) and RSS 2 (`CFE News`), configured 1 article per day processing with deduplication, updated GitHub Actions workflow `.github/workflows/daily_catering_pulse.yml` to run at off-peak minute `23 1 * * *` (08:23 AM ICT) and trigger Cloudflare Pages auto-deployment, and verified IndexNow API key (`c9b7e416a2d9426fa7406a09289196b0`) at `public/c9b7e416a2d9426fa7406a09289196b0.txt` with Bing/IndexNow submission and Google Search Console indexing notifications (`scripts/notify_indexing.py`). Verified clean build (`npm run build`, 30 static pages compiled successfully in 6s).
+- Authenticated Google Service Account (`gsc-and-ga4@just-turbine-503117-k9.iam.gserviceaccount.com`) via `google_service_account.json` key with `sc-domain:ckmkh.com` (`siteFullUser` permission). Created live API query engine `scripts/generate_analytics_report.py` fetching 100% real Search Console analytics (35 clicks, 1,369 impressions, 2.56% CTR, 6.43 avg position, and #1 Google rankings for `catering service in phnom penh` & `private dinner party restaurants`), generating structured JSON (`scripts/reports/gsc_ga4_3month_report.json`) and Executive Markdown (`Docs/Reports/2026-Q3_GSC_GA4_3Month_Performance_Report.md`). Protected JSON key pattern in `.gitignore`.
+- Analyzed GSC 90-day search queries gap (`ចុងភៅ` 165 impressions, `មុខម្ហូបការ` 65 impressions, `ប៉ាវហឺ` 15 impressions) and authored SEO Article 13 (`src/content/blog/13-master-chef-catering-secrets.md` / `13-master-chef-catering-secrets`). Written in 100% Pure Khmer (`km-KH`) with GEO Quick Answer (`## ចម្លើយរហ័ស`), elder vs. modern guest preference table, 5-step tasting checklist, and 4 Cambodian banquet FAQs. Verified clean build (`npm run build`, 31 static pages compiled successfully in 6.39s) and submitted to IndexNow.
+- Separated Catering Pulse daily trend feed from the main blog listing page (`src/pages/blog/index.astro`). Replaced inline `<CateringPulse />` with a Quiet Luxury navigation callout banner directing readers to `/pulse/`, keeping `/blog/` focused 100% on the 13 deep-dive Khmer SEO guide articles. Verified clean build (`npm run build`, 31 static pages built in 7.17s).
+- Configured 12 items per page pagination for both `/blog/` (`src/pages/blog/index.astro` & `src/pages/blog/page/[page].astro`) and `/pulse/` (`src/pages/pulse/index.astro` & `src/pages/pulse/[page].astro`). Sorted blog entries descending by ID so Article 13 (`13-master-chef-catering-secrets`) appears prominently at position #1 on Page 1. Verified clean static build (`npm run build`, 33 static pages compiled in 6.43s).
+- Fixed gold overlay sliding across screen on blog detail pages (`/blog/[slug]/`). Refined `src/components/ReadingProgress.astro` to an ultra-thin 2px progress line (`h-[2px] max-h-[2px] z-[100] bg-champagne-dark/80`), replacing the heavy gradient fill and removing delayed 150ms transition animations. Verified clean static build (`npm run build`, 33 static pages compiled in 7.82s).
+- Replaced all `blog_xx_cover_khmer.png` coverImage references across all 13 blog articles (`src/content/blog/*.md`) with clean, high-luxury photography assets (`blog-km-01.png` to `blog-km-12.png`). Completely removed the legacy baked-in gold block graphic overlay template that was obscuring article text and headers. Verified clean static build (`npm run build`, 33 static pages compiled in 13.03s).
+- Enforced strict inline CSS `height: 3px !important; max-height: 3px !important;` on `#reading-progress-container` and `#reading-progress-bar` in `src/components/ReadingProgress.astro`. Replaced Article 12 (`12-catering-industry-trends`) cover and inline images with `ckm_blog_12.png` and `blog_01_inline_khmer.webp` for 100% clean full-width photography without any dark side pillars. Verified clean static build (`npm run build`, 33 static pages built in 9.59s).
+- Removed redundant food hygiene boilerplate from Catering Pulse dataset (`src/data/pulseData.json`). Replaced repeated hygiene bullet points with tailored international catering trends, master chef craftsmanship, and luxury banquet hospitality topics. Updated page meta descriptions on `/pulse/` (`src/pages/pulse/index.astro` & `[page].astro`) and `/blog/` callout banners. Verified clean static build (`npm run build`, 33 static pages built in 9.02s).
+- Updated `.agents/skills/ckm_blog_writer/SKILL.md` and `.agents/AGENTS.md` with Section 1.2 "Promotional Boundaries Mandate": strictly forbidding unverifiable claims about high-tech/automated kitchen equipment, unlimited custom fusion menus, or online digital app booking/payments/plan selectors. Mandated 100% Cambodian localized photography and direct Telegram/Phone 1-on-1 consultations. Audited and rewritten Articles 12, 13, 04, 09 to align 100%. Verified clean static build (`npm run build`, 33 static pages compiled in 7.49s).

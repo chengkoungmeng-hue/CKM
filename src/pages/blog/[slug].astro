@@ -3,6 +3,7 @@
 import { getCollection, render } from 'astro:content';
 import { Image } from 'astro:assets';
 import Layout from '../../layouts/Layout.astro';
+import ReadingProgress from '../../components/ReadingProgress.astro';
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection('blog', ({id}) => !id.includes('/'));
@@ -82,21 +83,31 @@ const articleSchema = JSON.stringify({
 });
 ---
 
-<Layout title={seoTitle || title} description={description} image={absoluteCoverImage} lang="km-KH">
+<Layout title={seoTitle || title} description={description} image={absoluteCoverImage} type="article" articleDate={entry.data.date ? entry.data.date.toISOString() : undefined} lang="km-KH">
   <Fragment slot="head">
     <meta name="geo.placename" content={targetGeo} />
     <script type="application/ld+json" set:html={articleSchema}></script>
   </Fragment>
 
+  <ReadingProgress />
   <div class="bg-slate-50 min-h-[calc(100vh-80px)] py-10 md:py-16 selection:bg-amber-200 selection:text-slate-900 typo-km">
       <article class="max-w-4xl mx-auto px-5 sm:px-8 reveal">
         
         <header class="mb-10 text-center">
+          <!-- Breadcrumb Navigation -->
+          <nav class="flex items-center justify-center flex-wrap gap-2 text-xs text-slate-400 mb-6">
+            <a href="/" class="hover:text-amber-600 transition-colors">ទំព័រដើម</a>
+            <span>›</span>
+            <a href="/blog/" class="hover:text-amber-600 transition-colors">កំណត់ហេតុ</a>
+            <span>›</span>
+            <span class="text-slate-600 font-bold truncate max-w-xs md:max-w-md">{title}</span>
+          </nav>
+
           <div class="inline-block bg-slate-200 text-slate-700 px-4 py-1.5 rounded-sm text-xs font-bold tracking-widest uppercase mb-6 shadow-sm border border-slate-300">
             {t.tag}
           </div>
           
-          <h1 class="text-3xl md:text-5xl font-bold mb-6 text-slate-900 leading-snug">
+          <h1 class="text-3xl md:text-5xl font-bold mb-6 text-slate-900 leading-relaxed py-1">
             {title}
           </h1>
           
@@ -111,8 +122,8 @@ const articleSchema = JSON.stringify({
           </div>
         </header>
         
-        <div class="w-full aspect-[16/9] md:aspect-[21/9] overflow-hidden bg-slate-200 rounded-sm shadow-xl mb-12 border border-slate-200/60">
-          <Image src={coverImage} alt={seoTitle || title} width={1200} height={675} decoding="async" class="w-full h-full object-cover" loading="eager" />
+        <div class="w-full aspect-[16/9] md:aspect-[21/9] max-h-[540px] overflow-hidden bg-slate-200 rounded-sm shadow-xl mb-12 border border-slate-200/60">
+          <Image src={coverImage} alt={seoTitle || title} width={1200} height={675} decoding="async" class="w-full h-full object-cover object-top" loading="eager" />
         </div>
         
         <div class="flex flex-wrap justify-center gap-3 mb-12 border-b border-slate-200 pb-12">
@@ -123,7 +134,7 @@ const articleSchema = JSON.stringify({
             ))}
         </div>
     
-        <div class="ckm-prose mx-auto bg-white p-6 md:p-16 rounded-sm shadow-md border border-slate-100">
+        <div class="ckm-prose prose prose-slate prose-lg max-w-none prose-headings:font-bold prose-headings:text-onyx prose-a:text-champagne-dark prose-img:rounded-sm mx-auto bg-white p-6 md:p-16 rounded-sm shadow-md border border-slate-100">
           <Content />
         </div>
 

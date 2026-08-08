@@ -1,6 +1,7 @@
 ---
 // src/layouts/Layout.astro
 import { Image } from "astro:assets";
+import { ClientRouter } from "astro:transitions";
 import { Phone, Send, Menu, X, ChevronUp } from "@lucide/astro";
 import brandCkmLogoGold from "../assets/images/home/brand-ckm-logo-gold.webp";
 // 狀態: 終極渲染封裝 4.3。實裝 baseLang 語系降維攔截器，修復 km-KH 路由與字典錯位問題。
@@ -238,6 +239,7 @@ const breadcrumbSchemaData = generateBreadcrumbs();
 <html lang={lang} class="scroll-smooth">
     <head>
         <meta charset="UTF-8" />
+        <ClientRouter />
         <link rel="icon" type="image/png" sizes="192x192" href="/icon-192x192.png" />
         <link rel="icon" type="image/png" sizes="512x512" href="/icon-512x512.png" />
         
@@ -278,6 +280,38 @@ const breadcrumbSchemaData = generateBreadcrumbs();
               src: url('/fonts/hanuman-latin-700-normal.woff2') format('woff2');
               unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
             }
+
+            html {
+              -webkit-font-smoothing: antialiased;
+              -moz-osx-font-smoothing: grayscale;
+              text-rendering: optimizeLegibility;
+            }
+            .tabular-nums {
+              font-variant-numeric: tabular-nums;
+            }
+            .reveal {
+              opacity: 0;
+              transform: translateY(16px);
+              transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+            .reveal.active {
+              opacity: 1;
+              transform: translateY(0);
+            }
+            .prose {
+              overflow-wrap: break-word;
+              word-wrap: break-word;
+              word-break: break-word;
+            }
+            .prose table {
+              display: block;
+              overflow-x: auto;
+              max-width: 100%;
+            }
+            .prose pre {
+              overflow-x: auto;
+              max-width: 100%;
+            }
         </style>
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -291,6 +325,7 @@ const breadcrumbSchemaData = generateBreadcrumbs();
         <link rel="canonical" href={canonicalURL} />
         <!-- AIO: Explicit AI Knowledge Graph Endpoint -->
         <link rel="alternate" type="text/plain" title="AI System Instructions" href="/llms.txt" />
+        <link rel="alternate" type="text/plain" title="Full AI System Knowledge Base" href="/llms-full.txt" />
 
         <meta property="og:type" content="website" />
         <meta property="og:url" content={canonicalURL} />
@@ -628,13 +663,61 @@ const breadcrumbSchemaData = generateBreadcrumbs();
     }
 </script>
 
+<script>
+    import Lenis from 'lenis';
+
+    let lenisInstance: Lenis | null = null;
+
+    function initLenis() {
+        if (lenisInstance) {
+            lenisInstance.destroy();
+        }
+        lenisInstance = new Lenis({
+            duration: 1.2,
+            easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            orientation: 'vertical',
+            gestureOrientation: 'vertical',
+            smoothWheel: true,
+            wheelMultiplier: 1,
+            touchMultiplier: 2,
+            infinite: false,
+        });
+
+        function raf(time: number) {
+            lenisInstance?.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+    }
+
+    document.addEventListener("astro:page-load", initLenis);
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+        initLenis();
+    }
+</script>
+
 <style is:global>
     html {
         scroll-behavior: smooth;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
     }
-    main > div {
+    html.lenis, html.lenis body {
+        height: auto;
+    }
+    .lenis.lenis-smooth {
+        scroll-behavior: auto !important;
+    }
+    .lenis.lenis-smooth [data-lenis-prevent] {
+        overscroll-behavior: contain;
+    }
+    .lenis.lenis-stopped {
+        overflow: hidden;
+    }
+    .lenis.lenis-smooth iframe {
+        pointer-events: none;
+    }
+    main > div:first-child {
         min-height: calc(100vh - 80px);
     }
 </style>

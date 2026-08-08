@@ -1,0 +1,131 @@
+---
+import pulseData from '../data/pulseData.json';
+import { Globe, ArrowUpRight, ArrowRight, CheckCheck } from '@lucide/astro';
+
+interface PulseItem {
+  id: string;
+  title_km: string;
+  summary_km: string;
+  key_points_km?: string[];
+  category: string;
+  image_url?: string;
+  source_link: string;
+  source_title_en: string;
+  pub_date: string;
+}
+
+const items: PulseItem[] = pulseData || [];
+---
+
+<div class="w-full bg-white text-onyx rounded-sm p-6 md:p-10 shadow-lg border border-slate-200/90 my-12 typo-km relative overflow-hidden">
+  
+  <!-- Subtle Champagne Glow Overlay -->
+  <div class="absolute -top-24 -right-24 w-96 h-96 bg-champagne/5 rounded-full blur-3xl pointer-events-none"></div>
+
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 border-b border-slate-100 pb-6 relative z-10">
+    <div>
+      <div class="inline-flex items-center gap-2 bg-champagne/10 text-champagne-dark px-3 py-1 rounded-sm text-xs font-bold uppercase tracking-widest border border-champagne/30 mb-3 shadow-xs">
+        <Globe class="w-3.5 h-3.5 text-champagne-dark" />
+        <span>បច្ចុប្បន្នភាពអន្តរជាតិ</span>
+      </div>
+      <h2 class="text-2xl md:text-3xl font-bold font-km-serif text-onyx tracking-wide">
+        បច្ចុប្បន្នភាព និងនិន្នាការម្ហូបការអន្តរជាតិ
+      </h2>
+    </div>
+    <div class="flex items-center gap-4">
+      <p class="text-slate-500 text-xs md:text-sm font-km-sans max-w-xs hidden lg:block leading-relaxed">
+        ទិន្នន័យ និងបទដ្ឋានអន្តរជាតិដែលត្រូវបានធ្វើបច្ចុប្បន្នភាពជាប្រចាំ។
+      </p>
+      <a 
+        href="/pulse/" 
+        class="inline-flex items-center gap-2 bg-onyx hover:bg-slate-800 text-white px-5 py-2.5 rounded-sm text-xs font-bold font-km-sans transition-all duration-300 active:scale-[0.98] shadow-md shrink-0"
+      >
+        <span>មើលបច្ចុប្បន្នភាពទាំងអស់</span>
+        <ArrowRight class="w-4 h-4 text-champagne group-hover:translate-x-1 transition-transform" />
+      </a>
+    </div>
+  </div>
+
+  <!-- Featured Grid (3 to 6 cards) -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
+    {items.slice(0, 6).map((item) => (
+      <a href={`/pulse/${item.id}/`} class="group block h-full">
+        <article class="bg-pearl hover:bg-white border border-slate-200/90 hover:border-champagne/40 rounded-sm overflow-hidden transition-all duration-300 flex flex-col justify-between h-full shadow-sm hover:shadow-glow-lg">
+          
+          <!-- Card Image Container with Ambient Frosted Blur Background -->
+          <div class="w-full aspect-[16/9] overflow-hidden bg-onyx/90 relative block group/img">
+            <!-- Ambient Blurred Background Image -->
+            <img 
+              src={item.image_url || "/images/blog_01_inline_khmer.webp"} 
+              alt="" 
+              aria-hidden="true"
+              class="absolute inset-0 w-full h-full object-cover blur-xl opacity-50 scale-125 transition-transform duration-700 group-hover/img:scale-135 pointer-events-none"
+            />
+            
+            <!-- Frosted Vignette Overlay -->
+            <div class="absolute inset-0 bg-gradient-to-t from-onyx/40 via-onyx/10 to-black/20 pointer-events-none z-1"></div>
+
+            <!-- Foreground Main Image -->
+            <img 
+              src={item.image_url || "/images/blog_01_inline_khmer.webp"} 
+              alt={item.title_km}
+              loading="lazy" 
+              class="w-full h-full object-contain relative z-2 transition-transform duration-500 group-hover:scale-[1.03] drop-shadow-md"
+            />
+
+            <!-- Category Tag -->
+            <div class="absolute top-2.5 left-2.5 z-10 bg-onyx/90 backdrop-blur-md text-champagne text-[10px] font-bold px-2.5 py-0.5 rounded-sm border border-champagne/30 shadow-xs">
+              #{item.category}
+            </div>
+          </div>
+
+          <!-- Body -->
+          <div class="p-5 flex flex-col flex-grow">
+            <!-- Date / Tag bar -->
+            <div class="text-[11px] text-slate-400 font-mono mb-2 flex items-center gap-2">
+              <span>{item.pub_date ? item.pub_date.split(' ').slice(1, 4).join('.') : '2026.08.08'}</span>
+              <span>|</span>
+              <span class="text-champagne-dark font-sans font-bold">#{item.category}</span>
+            </div>
+
+            <!-- Title -->
+            <h3 class="text-base md:text-lg font-bold font-km-serif text-onyx group-hover:text-champagne-dark transition-colors duration-200 mb-3 leading-relaxed">
+              {item.title_km}
+            </h3>
+
+            <!-- Description Paragraph (Blog Skill style: humble, informative, line-clamp-3) -->
+            <p class="text-slate-600 text-xs md:text-sm font-km-sans leading-relaxed line-clamp-3 mb-6 font-light">
+              {item.summary_km}
+            </p>
+
+            <!-- Footer Link (Internal Link Only) -->
+            <div class="pt-3 border-t border-slate-100 flex items-center justify-between mt-auto">
+              <span 
+                class="inline-flex items-center gap-1.5 text-xs text-champagne-dark font-bold font-km-sans group-hover:text-onyx transition-colors"
+              >
+                <span>អានអត្ថបទពេញ</span>
+                <ArrowRight class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </span>
+            </div>
+          </div>
+
+        </article>
+      </a>
+    ))}
+  </div>
+
+  <!-- Bottom CTA -->
+  <div class="mt-8 text-center pt-6 border-t border-slate-100 relative z-10">
+    <a 
+      href="/pulse/" 
+      class="inline-flex items-center gap-2 bg-onyx hover:bg-slate-800 text-white px-8 py-3 rounded-sm text-sm font-bold font-km-sans transition-all duration-300 shadow-md"
+    >
+      <span>មើលបច្ចុប្បន្នភាពទាំងអស់</span>
+      <ArrowRight class="w-4 h-4 text-champagne" />
+    </a>
+  </div>
+
+</div>
+
+

@@ -6,6 +6,8 @@ import { Image } from 'astro:assets';
 import { Phone, Send, Utensils, Building2, Zap, Award, Clock, Sparkles, ChevronRight } from '@lucide/astro';
 
 import { getCollection } from 'astro:content';
+import CateringPulse from '../components/CateringPulse.astro';
+
 
 
 import { 
@@ -134,11 +136,16 @@ const faqSchema = JSON.stringify({
       <section id="services" class="py-20 bg-pearl relative reveal">
          <div class="max-w-7xl mx-auto px-6">
             <div class="text-center mb-16">
-              <h2 class="text-3xl md:text-4xl font-km-serif font-bold text-onyx mb-4">សេវាកម្មចម្បងរបស់យើង</h2>
+              <h2 class="text-3xl md:text-4xl font-km-serif font-bold text-onyx mb-4 scroll-mt-24 leading-relaxed py-1">សេវាកម្មចម្បងរបស់យើង</h2>
               <p class="text-slate-600 font-km-sans max-w-2xl mx-auto tracking-widest">យើងខ្ញុំត្រៀមខ្លួនជាស្រេចក្នុងការជួយសម្រួលរាល់ការងារហត់នឿយរបស់លោកអ្នក។</p>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <CateringPulse />
+
+          <div class="mb-8 border-b border-slate-200 pb-4 mt-12">
+            <h3 class="text-2xl font-km-serif font-bold text-onyx">អត្ថបទវិភាគ និងការណែនាំលម្អិត</h3>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                  <article class="bg-white p-8 rounded-sm border border-slate-100 shadow-sm hover:shadow-glow transition-all">
                     <div class="w-14 h-14 bg-champagne/10 rounded-full flex items-center justify-center mb-6">
                         <Utensils class="w-7 h-7 text-champagne-dark" stroke-width={1.5} />
@@ -175,7 +182,7 @@ const faqSchema = JSON.stringify({
       <section id="guarantee" class="py-20 bg-white border-t border-slate-100 reveal">
         <div class="max-w-5xl mx-auto px-6">
           <div class="text-center mb-16">
-            <h2 class="text-3xl md:text-4xl font-km-serif font-bold text-onyx mb-4">ការធានាគុណភាពពី CKM</h2>
+            <h2 class="text-3xl md:text-4xl font-km-serif font-bold text-onyx mb-4 scroll-mt-24 leading-relaxed py-1">ការធានាគុណភាពពី CKM</h2>
             <p class="text-slate-600 font-km-sans tracking-widest">ពួកយើងធ្វើការដោយក្តីស្មោះត្រង់ និងយកចិត្តទុកដាក់បំផុតចំពោះភ្ញៀវរបស់អ្នក។</p>
           </div>
           
@@ -222,7 +229,7 @@ const faqSchema = JSON.stringify({
       <section id="gallery" class="py-20 bg-pearl border-t border-slate-100 reveal">
         <div class="max-w-7xl mx-auto px-6">
           <div class="text-center mb-16">
-            <h2 class="text-3xl md:text-4xl font-km-serif font-bold text-onyx mb-4">រូបភាពមុខម្ហូបពិសេសៗ</h2>
+            <h2 class="text-3xl md:text-4xl font-km-serif font-bold text-onyx mb-4 scroll-mt-24 leading-relaxed py-1">រូបភាពមុខម្ហូបពិសេសៗ</h2>
             <p class="text-slate-600 font-km-sans tracking-widest">រូបភាពពិតៗពីកម្មវិធីដែលរៀបចំដោយក្រុមចុងភៅ CKM</p>
           </div>
           
@@ -239,7 +246,7 @@ const faqSchema = JSON.stringify({
       <section id="blog" class="py-20 bg-white border-t border-slate-100 reveal">
         <div class="max-w-7xl mx-auto px-6">
           <div class="text-center mb-16">
-            <h2 class="text-3xl md:text-4xl font-km-serif font-bold text-onyx mb-4">អត្ថបទ និងចំណេះដឹង</h2>
+            <h2 class="text-3xl md:text-4xl font-km-serif font-bold text-onyx mb-4 scroll-mt-24 leading-relaxed py-1">អត្ថបទ និងចំណេះដឹង</h2>
             <p class="text-slate-600 font-km-sans tracking-widest">ស្វែងយល់បន្ថែមអំពីការរៀបចំកម្មវិធី និងបទពិសោធន៍របស់ CKM</p>
           </div>
           
@@ -278,7 +285,7 @@ const faqSchema = JSON.stringify({
       <section id="faq" class="py-20 bg-pearl border-t border-slate-100 reveal">
         <div class="max-w-4xl mx-auto px-6">
           <div class="text-center mb-16">
-            <h2 class="text-3xl md:text-4xl font-km-serif font-bold text-onyx mb-4">សំណួរដែលសួរញឹកញាប់អំពីសេវាកម្មម្ហូបការ</h2>
+            <h2 class="text-3xl md:text-4xl font-km-serif font-bold text-onyx mb-4 scroll-mt-24 leading-relaxed py-1">សំណួរដែលសួរញឹកញាប់អំពីសេវាកម្មម្ហូបការ</h2>
             <p class="text-slate-600 font-km-sans tracking-widest">ចម្លើយច្បាស់ៗចំពោះការរៀបចំកម្មវិធី និងតម្លៃសេវាកម្មនៅភ្នំពេញ</p>
           </div>
           

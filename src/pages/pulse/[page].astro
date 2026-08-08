@@ -1,0 +1,143 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import pulseData from '../../data/pulseData.json';
+import { Globe, ArrowUpRight, ArrowRight, ChevronLeft, ChevronRight, CheckCheck } from '@lucide/astro';
+
+export const prerender = true;
+
+export async function getStaticPaths({ paginate }: any) {
+  const items = (pulseData || []) as any[];
+  return paginate(items, { pageSize: 12 });
+}
+
+const { page } = Astro.props as any;
+
+const pageTitle = `បច្ចុប្បន្នភាពអន្តរជាតិ - ទំព័រទី ${page.currentPage} | CKM`;
+const pageDesc = "ស្វែងយល់ពីនិន្នាការម្ហូបការអន្តរជាតិ ស្តង់ដារបដិសណ្ឋារកិច្ចប្រណីត ព្រមទាំងបច្ចេកទេសរៀបចំរោងការ និងផ្ទះបាយចល័តដែលត្រូវបានធ្វើបច្ចុប្បន្នភាពជាប្រចាំ។";
+---
+
+<Layout title={pageTitle} description={pageDesc} lang="km-KH">
+  <style is:global>
+    .font-km-serif { font-family: 'Hanuman', serif; }
+    .font-km-sans { font-family: 'Kantumruy Pro', sans-serif; }
+  </style>
+
+  <div class="w-full bg-pearl min-h-screen pt-24 pb-20 typo-km">
+    <div class="max-w-7xl mx-auto px-6">
+      
+      <!-- Page Header -->
+      <header class="text-center mb-16">
+        <div class="inline-flex items-center gap-2 bg-champagne/10 text-champagne-dark px-4 py-1.5 rounded-sm text-xs font-bold uppercase tracking-widest border border-champagne/30 mb-4 shadow-xs">
+          <Globe class="w-4 h-4 text-champagne-dark" />
+          <span>បច្ចុប្បន្នភាពអន្តរជាតិ</span>
+        </div>
+        <h1 class="text-3xl md:text-5xl font-km-serif font-bold text-onyx mb-4">
+          បច្ចុប្បន្នភាព និងនិន្នាការម្ហូបការអន្តរជាតិ
+        </h1>
+        <p class="text-slate-600 font-km-sans text-base md:text-lg max-w-3xl mx-auto leading-relaxed">
+          {pageDesc}
+        </p>
+      </header>
+
+      <!-- Pulse Listing Grid (12 items per page) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {page.data.map((item: any) => (
+          <a href={`/pulse/${item.id}/`} class="group block h-full">
+            <article class="bg-pearl hover:bg-white border border-slate-200/90 hover:border-champagne/40 rounded-sm overflow-hidden transition-all duration-300 flex flex-col justify-between h-full shadow-sm hover:shadow-glow-lg">
+              
+              <!-- Card Image Container with Ambient Frosted Blur Background -->
+              <div class="w-full aspect-[16/9] overflow-hidden bg-onyx/90 relative block group/img">
+                <!-- Ambient Blurred Background Image -->
+                <img 
+                  src={item.image_url || "/images/blog_01_inline_khmer.webp"} 
+                  alt="" 
+                  aria-hidden="true"
+                  class="absolute inset-0 w-full h-full object-cover blur-xl opacity-50 scale-125 transition-transform duration-700 group-hover/img:scale-135 pointer-events-none"
+                />
+                
+                <!-- Frosted Vignette Overlay -->
+                <div class="absolute inset-0 bg-gradient-to-t from-onyx/40 via-onyx/10 to-black/20 pointer-events-none z-1"></div>
+
+                <!-- Foreground Main Image -->
+                <img 
+                  src={item.image_url || "/images/blog_01_inline_khmer.webp"} 
+                  alt={item.title_km}
+                  loading="lazy" 
+                  class="w-full h-full object-contain relative z-2 transition-transform duration-500 group-hover:scale-[1.03] drop-shadow-md"
+                />
+
+                <!-- Category Tag -->
+                <div class="absolute top-3 left-3 z-10 bg-onyx/90 backdrop-blur-md text-champagne text-[11px] font-bold px-3 py-1 rounded-sm border border-champagne/30 shadow-sm">
+                  #{item.category}
+                </div>
+              </div>
+
+              <!-- Body -->
+              <div class="p-6 flex flex-col flex-grow">
+                <!-- Meta Info -->
+                <div class="text-xs text-slate-400 font-mono mb-3 flex items-center gap-2">
+                  <span>{item.pub_date ? item.pub_date.split(' ').slice(1, 4).join('.') : '2026.08.08'}</span>
+                  <span>|</span>
+                  <span class="text-champagne-dark font-sans font-bold">#{item.category}</span>
+                </div>
+
+                <!-- Title -->
+                <h2 class="text-lg md:text-xl font-bold font-km-serif text-onyx group-hover:text-champagne-dark transition-colors duration-200 mb-3 leading-relaxed">
+                  {item.title_km}
+                </h2>
+
+                <p class="text-slate-600 text-xs md:text-sm font-km-sans leading-relaxed line-clamp-3 mb-6 font-light">
+                  {item.summary_km}
+                </p>
+
+                <!-- Footer Link (Internal Only) -->
+                <div class="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
+                  <span 
+                    class="inline-flex items-center gap-1.5 text-xs text-champagne-dark font-bold font-km-sans group-hover:text-onyx transition-colors"
+                  >
+                    <span>អានអត្ថបទពេញ</span>
+                    <ArrowRight class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                </div>
+              </div>
+            </article>
+          </a>
+        ))}
+      </div>
+
+      <!-- Pagination Navigation -->
+      {page.lastPage > 1 && (
+        <nav class="mt-16 flex justify-center items-center gap-2 font-km-sans">
+          {page.url.prev ? (
+            <a href={page.url.prev === '/pulse' ? '/pulse/' : page.url.prev} class="inline-flex items-center gap-1 bg-white hover:bg-onyx text-onyx hover:text-white px-4 py-2.5 rounded-sm border border-slate-200 text-sm font-bold transition-all shadow-sm">
+              <ChevronLeft class="w-4 h-4" />
+              <span>មុន</span>
+            </a>
+          ) : (
+            <span class="inline-flex items-center gap-1 bg-slate-100 text-slate-400 px-4 py-2.5 rounded-sm border border-slate-200 text-sm font-bold cursor-not-allowed">
+              <ChevronLeft class="w-4 h-4" />
+              <span>មុន</span>
+            </span>
+          )}
+
+          <div class="flex items-center gap-1.5 px-4 text-sm font-bold text-slate-700">
+            <span>ទំព័រ {page.currentPage} នៃ {page.lastPage}</span>
+          </div>
+
+          {page.url.next ? (
+            <a href={page.url.next} class="inline-flex items-center gap-1 bg-white hover:bg-onyx text-onyx hover:text-white px-4 py-2.5 rounded-sm border border-slate-200 text-sm font-bold transition-all shadow-sm">
+              <span>បន្ទាប់</span>
+              <ChevronRight class="w-4 h-4" />
+            </a>
+          ) : (
+            <span class="inline-flex items-center gap-1 bg-slate-100 text-slate-400 px-4 py-2.5 rounded-sm border border-slate-200 text-sm font-bold cursor-not-allowed">
+              <span>បន្ទាប់</span>
+              <ChevronRight class="w-4 h-4" />
+            </span>
+          )}
+        </nav>
+      )}
+
+    </div>
+  </div>
+</Layout>

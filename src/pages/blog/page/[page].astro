@@ -1,0 +1,165 @@
+---
+// src/pages/blog/page/[page].astro
+import { getCollection } from 'astro:content';
+import Layout from '../../../layouts/Layout.astro';
+import InsightCard from '../../../components/InsightCard.astro';
+import { ChevronRight, ChevronLeft, Globe, ArrowRight } from '@lucide/astro';
+
+export const prerender = true;
+
+export async function getStaticPaths({ paginate }: any) {
+  const rawPosts = await getCollection('blog', ({ id, data }) => {
+    if(id.includes('/')) return false;
+    return data.draft !== true;
+  });
+
+  rawPosts.sort((a, b) => b.id.localeCompare(a.id));
+
+  return paginate(rawPosts, { pageSize: 12 });
+}
+
+const { page } = Astro.props as any;
+
+const formatPost = (post: any) => {
+  const slug = post.id.replace(/\.mdx?$/, '');
+  return {
+    title: post.data.title,
+    subTitle: post.data.description,
+    link: `/blog/${slug}/`,
+    image: post.data.coverImage,
+    category: post.data.category
+  };
+};
+
+const t = {
+  title: `អត្ថបទ និងចំណេះដឹង - ទំព័រទី ${page.currentPage}`,
+  desc: "ស្វែងយល់ពីចំណេះដឹង បទពិសោធន៍ និងក្បួនខ្នាតក្នុងការរៀបចំម្ហូបការប្រពៃណីខ្មែរ និងសេវាកម្មម្ហូបការលំដាប់ខ្ពស់ប្រចាំហាងចេង គួងម៉េង។",
+  readMore: "អានបន្ថែម"
+};
+
+const breadcrumbSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "ទំព័រដើម",
+      "item": "https://ckmkh.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "អត្ថបទ និងចំណេះដឹង",
+      "item": "https://ckmkh.com/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": `ទំព័រទី ${page.currentPage}`,
+      "item": `https://ckmkh.com/blog/page/${page.currentPage}/`
+    }
+  ]
+});
+---
+
+<Layout title={`${t.title} - CKM Premium Catering`} description={t.desc} lang="km-KH">
+  <script type="application/ld+json" is:inline set:html={breadcrumbSchema}></script>
+
+  <style is:global>
+    .font-km-serif { font-family: 'Hanuman', serif; }
+    .font-km-sans { font-family: 'Kantumruy Pro', sans-serif; }
+  </style>
+
+  <div class="w-full bg-pearl min-h-screen pt-24 pb-20 typo-km">
+      <div class="max-w-7xl mx-auto px-6">
+        
+        <header class="text-center mb-12 reveal">
+          <h1 class="text-4xl md:text-5xl font-km-serif font-bold text-onyx mb-4">អត្ថបទ និងចំណេះដឹង</h1>
+          <p class="text-slate-500 font-km-sans text-lg max-w-3xl mx-auto">{t.desc}</p>
+        </header>
+
+        <!-- Navigation Banner to Pulse Section -->
+        <section class="reveal mb-12">
+          <div class="bg-white border border-slate-200/90 rounded-sm p-6 md:p-8 shadow-xs flex flex-col md:flex-row items-center justify-between gap-6 hover:border-champagne/40 transition-colors">
+            <div class="flex items-center gap-4">
+              <div class="p-3 bg-champagne/10 text-champagne-dark rounded-sm shrink-0 border border-champagne/20">
+                <Globe class="w-6 h-6" />
+              </div>
+              <div>
+                <h2 class="font-km-serif font-bold text-onyx text-lg md:text-xl mb-1">
+                  បច្ចុប្បន្នភាព និងនិន្នាការម្ហូបការអន្តរជាតិ
+                </h2>
+                <p class="text-slate-500 font-km-sans text-xs md:text-sm">
+                  តាមដានព័ត៌មាន ស្តង់ដារបដិសណ្ឋារកិច្ច និងនិន្នាការធ្វើម្ហូបការអន្តរជាតិប្រចាំថ្ងៃ
+                </p>
+              </div>
+            </div>
+            <a 
+              href="/pulse/" 
+              class="inline-flex items-center gap-2 bg-onyx text-white hover:bg-slate-800 px-6 py-3 rounded-sm font-km-sans text-xs md:text-sm font-bold transition-all shadow-md shrink-0 group"
+            >
+              <span>មើលបច្ចុប្បន្នភាពទាំងអស់</span>
+              <ArrowRight class="w-4 h-4 text-champagne group-hover:translate-x-1 transition-transform" />
+            </a>
+          </div>
+        </section>
+
+        <!-- Deep-dive Blog Posts Section -->
+        <section class="reveal">
+           <div class="mb-8 border-b border-slate-200 pb-4">
+             <h2 class="text-2xl md:text-3xl font-km-serif font-bold text-onyx">
+               អត្ថបទវិភាគ និងការណែនាំលម្អិត
+             </h2>
+           </div>
+           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+              {page.data.map(formatPost).map((post: any) => (
+                <InsightCard 
+                    {...post} 
+                    titleClass="text-lg md:text-xl font-km-serif font-bold text-onyx mb-2 md:mb-3 group-hover:text-champagne-dark transition-colors duration-300 leading-snug" 
+                    subTitleClass="text-slate-500 text-xs md:text-sm font-km-sans font-light mb-4 md:mb-6 leading-relaxed line-clamp-3" 
+                    linkClass="mt-auto inline-flex items-center text-champagne-dark text-xs md:text-sm font-km-sans font-bold hover:text-onyx transition-colors" 
+                    linkLabel={t.readMore}
+                >
+                    <ChevronRight slot="link-icon" class="w-4 h-4 ml-1" stroke-width={2} />
+                </InsightCard>
+              ))}
+           </div>
+        </section>
+
+        <!-- Pagination Navigation -->
+        {page.lastPage > 1 && (
+          <nav class="mt-16 flex justify-center items-center gap-2 font-km-sans">
+            {page.url.prev ? (
+              <a href={page.currentPage === 2 ? '/blog/' : page.url.prev} class="inline-flex items-center gap-1 bg-white hover:bg-onyx text-onyx hover:text-white px-4 py-2.5 rounded-sm border border-slate-200 text-sm font-bold transition-all shadow-sm">
+                <ChevronLeft class="w-4 h-4" />
+                <span>មុន</span>
+              </a>
+            ) : (
+              <span class="inline-flex items-center gap-1 bg-slate-100 text-slate-400 px-4 py-2.5 rounded-sm border border-slate-200 text-sm font-bold cursor-not-allowed">
+                <ChevronLeft class="w-4 h-4" />
+                <span>មុន</span>
+              </span>
+            )}
+
+            <div class="flex items-center gap-1.5 px-4 text-sm font-bold text-slate-700">
+              <span>ទំព័រ {page.currentPage} នៃ {page.lastPage}</span>
+            </div>
+
+            {page.url.next ? (
+              <a href={page.url.next} class="inline-flex items-center gap-1 bg-white hover:bg-onyx text-onyx hover:text-white px-4 py-2.5 rounded-sm border border-slate-200 text-sm font-bold transition-all shadow-sm">
+                <span>បន្ទាប់</span>
+                <ChevronRight class="w-4 h-4" />
+              </a>
+            ) : (
+              <span class="inline-flex items-center gap-1 bg-slate-100 text-slate-400 px-4 py-2.5 rounded-sm border border-slate-200 text-sm font-bold cursor-not-allowed">
+                <span>បន្ទាប់</span>
+                <ChevronRight class="w-4 h-4" />
+              </span>
+            )}
+          </nav>
+        )}
+
+      </div>
+  </div>
+</Layout>
