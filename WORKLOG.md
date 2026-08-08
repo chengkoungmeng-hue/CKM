@@ -2,6 +2,7 @@
 
 ## 2026-08-08 (Pulse Homepage 3-Item Limit & 12-Item Listing Pagination)
 
+- Implemented hybrid relevance + rotated round-robin link juice algorithm in `src/pages/pulse/[id].astro` so Link Juice is passed evenly across all 15 blog articles (previously 100% of links concentrated on posts 01-03 due to alphabetical tie-breaking; now every blog post 01-15 receives 2~3 internal links).
 - Updated `src/components/CateringPulse.astro` homepage section to display top 3 pulse items (`items.slice(0, 3)`) as requested.
 - Downloaded all 11 external Pulse cover images to local assets directory (`public/images/pulse/pulse-01.jpg` ~ `pulse-11.webp`) and updated `src/data/pulseData.json` `image_url` references to eliminate external hotlinking dependencies and speed up page loading.
 - Integrated automatic image downloading and ID-remapping into daily RSS pipeline (`scripts/fetch_catering_pulse.py`), so newly generated articles automatically download their cover images to `public/images/pulse/` and sync relative paths (`/images/pulse/pulse-XX.jpg`).
