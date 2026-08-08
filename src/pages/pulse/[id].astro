@@ -17,24 +17,39 @@ export async function getStaticPaths() {
 
 const { item } = Astro.props as any;
 
-// Fetch 3 highly relevant blog posts to pass Link Juice (internal link equity)
+// Fetch 3 highly relevant & evenly distributed blog posts to pass Link Juice (internal link equity)
 const allBlogPosts = await getCollection('blog', ({ id }) => !id.includes('/'));
+allBlogPosts.sort((a, b) => a.id.localeCompare(b.id));
+
 const pulseCategory = item.category || '';
 const pulseTitle = item.title_km || '';
 
-const relatedPosts = [...allBlogPosts]
-  .map((post) => {
-    let score = 0;
-    const postTitle = post.data.title || '';
-    const postDesc = post.data.description || '';
-    if (pulseCategory && (postTitle.includes(pulseCategory) || postDesc.includes(pulseCategory))) score += 5;
-    if (pulseTitle.includes('ម្ហូប') && postTitle.includes('ម្ហូប')) score += 2;
-    if (pulseTitle.includes('រៀបចំ') && postTitle.includes('រៀបចំ')) score += 2;
-    return { post, score };
-  })
-  .sort((a, b) => b.score - a.score || a.post.id.localeCompare(b.post.id))
-  .map((entry) => entry.post)
-  .slice(0, 3);
+// Deterministic seed offset based on item.id to guarantee even round-robin link distribution across all blog posts (01-15)
+const idNumMatch = (item.id || '').match(/\d+/);
+const idNum = idNumMatch ? parseInt(idNumMatch[0], 10) : 1;
+const seedOffset = ((idNum - 1) * 3) % (allBlogPosts.length || 1);
+
+const scoredPosts = allBlogPosts.map((post, idx) => {
+  let score = 0;
+  const postTitle = post.data.title || '';
+  const postDesc = post.data.description || '';
+  const postCat = post.data.category || '';
+
+  if (pulseCategory && (postTitle.includes(pulseCategory) || postDesc.includes(pulseCategory) || postCat.includes(pulseCategory))) {
+    score += 10;
+  }
+  if (pulseTitle.includes('ម្ហូប') && postTitle.includes('ម្ហូប')) score += 3;
+  if (pulseTitle.includes('រៀបចំ') && postTitle.includes('រៀបចំ')) score += 3;
+
+  // Add rotated seed offset tie-breaker to distribute Link Juice evenly across all posts
+  const rotatedRank = (idx + seedOffset) % allBlogPosts.length;
+  const tieBreaker = (allBlogPosts.length - rotatedRank) * 0.01;
+
+  return { post, score: score + tieBreaker };
+});
+
+scoredPosts.sort((a, b) => b.score - a.score);
+const relatedPosts = scoredPosts.slice(0, 3).map((entry) => entry.post);
 
 const pageTitle = `${item.title_km} - CKM`;
 const pageDesc = item.summary_km;
