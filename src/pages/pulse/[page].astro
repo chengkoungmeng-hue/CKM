@@ -7,7 +7,11 @@ export const prerender = true;
 
 export async function getStaticPaths({ paginate }: any) {
   const items = (pulseData || []) as any[];
-  return paginate(items, { pageSize: 12 });
+  const validItems = items.filter((item: any) => item && item.id);
+  if (validItems.length === 0) {
+    validItems.push({ id: 'pulse-01', title_km: 'បច្ចុប្បន្នភាពអន្តរជាតិ', summary_km: '', category: 'សេវាកម្មធ្វើម្ហូបចល័ត', image_url: '/images/blog_01_inline_khmer.webp', pub_date: '' });
+  }
+  return paginate(validItems, { pageSize: 12 });
 }
 
 const { page } = Astro.props as any;
@@ -68,7 +72,7 @@ const breadcrumbSchema = JSON.stringify({
       <!-- Pulse Listing Grid (12 items per page) -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {page.data.map((item: any) => (
-          <a href={`/pulse/${item.id}/`} class="group block h-full">
+          <a href={`/pulse/${item.slug || item.id}/`} class="group block h-full">
             <article class="bg-pearl hover:bg-white border border-slate-200/90 hover:border-champagne/40 rounded-sm overflow-hidden transition-all duration-300 flex flex-col justify-between h-full shadow-sm hover:shadow-glow-lg">
               
               <!-- Card Image Container with Ambient Frosted Blur Background -->
@@ -78,6 +82,7 @@ const breadcrumbSchema = JSON.stringify({
                   src={item.image_url || "/images/blog_01_inline_khmer.webp"} 
                   alt="" 
                   aria-hidden="true"
+                  onerror="this.onerror=null; this.src='/images/blog_01_inline_khmer.webp';"
                   class="absolute inset-0 w-full h-full object-cover blur-xl opacity-50 scale-125 transition-transform duration-700 group-hover/img:scale-135 pointer-events-none"
                 />
                 
@@ -89,6 +94,7 @@ const breadcrumbSchema = JSON.stringify({
                   src={item.image_url || "/images/blog_01_inline_khmer.webp"} 
                   alt={item.title_km}
                   loading="lazy" 
+                  onerror="this.onerror=null; this.src='/images/blog_01_inline_khmer.webp';"
                   class="w-full h-full object-contain relative z-2 transition-transform duration-500 group-hover:scale-[1.03] drop-shadow-md"
                 />
 

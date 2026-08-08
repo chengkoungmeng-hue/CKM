@@ -46,6 +46,18 @@ def sanitize_text(text):
     cleaned = re.sub(r'[\u4e00-\u9fff]+', '', text)
     return cleaned.strip()
 
+def generate_seo_slug(title_en, item_id):
+    """Generate clean, keyword-rich SEO slug from English title and item ID."""
+    if not title_en:
+        return item_id
+    cleaned = re.sub(r'[^a-zA-Z0-9\s-]', '', title_en).strip().lower()
+    slug = re.sub(r'[\s-]+', '-', cleaned)
+    words = [w for w in slug.split('-') if w][:7]
+    short_slug = '-'.join(words)
+    if not short_slug:
+        return item_id
+    return f"{short_slug}-{item_id}"
+
 def extract_image_multitier(item, fallback, item_link):
     # Tier 1: Check media:content / enclosure tags
     for elem in item:
@@ -249,7 +261,10 @@ def main():
         print("\nNo new RSS items found today. All fetched articles are already in dataset.")
         # Save re-indexed list just in case
         for idx, entry in enumerate(existing_pulse, 1):
-            entry["id"] = f"pulse-{idx:02d}"
+            p_id = f"pulse-{idx:02d}"
+            entry["id"] = p_id
+            if not entry.get("slug") or entry["slug"] == p_id:
+                entry["slug"] = generate_seo_slug(entry.get("source_title_en", ""), p_id)
         sync_and_download_images(existing_pulse)
         with open(out_file, "w", encoding="utf-8") as f:
             json.dump(existing_pulse, f, ensure_ascii=False, indent=2)
@@ -308,6 +323,7 @@ Article Summary: {item_to_process['desc_en']}
 
     new_entry = {
         "id": "pulse-01",
+        "slug": generate_seo_slug(item_to_process["title_en"], "pulse-01"),
         "title_km": title_km,
         "summary_km": summary_km,
         "key_points_km": key_points_km,
@@ -323,7 +339,9 @@ Article Summary: {item_to_process['desc_en']}
     
     # Re-assign sequential IDs (pulse-01, pulse-02, ...)
     for idx, entry in enumerate(updated_pulse, 1):
-        entry["id"] = f"pulse-{idx:02d}"
+        p_id = f"pulse-{idx:02d}"
+        entry["id"] = p_id
+        entry["slug"] = generate_seo_slug(entry.get("source_title_en", ""), p_id)
 
     # Retain top 36 articles maximum
     updated_pulse = updated_pulse[:36]

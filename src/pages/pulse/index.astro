@@ -61,7 +61,7 @@ const breadcrumbSchema = JSON.stringify({
       <!-- Pulse Listing Grid (12 items per page) -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {currentPageItems.map((item: any) => (
-          <a href={`/pulse/${item.id}/`} class="group block h-full">
+          <a href={`/pulse/${item.slug || item.id}/`} class="group block h-full">
             <article class="bg-pearl hover:bg-white border border-slate-200/90 hover:border-champagne/40 rounded-sm overflow-hidden transition-all duration-300 flex flex-col justify-between h-full shadow-sm hover:shadow-glow-lg">
               
               <!-- Card Image Container with Ambient Frosted Blur Background -->
