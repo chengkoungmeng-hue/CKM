@@ -86,7 +86,7 @@ Your task is to adapt an international catering/wedding article into a JSON obje
     "[Actionable Insight 3 relevant to Cambodian hosts in Khmer]"
   ],
   "category": "[One of: រចនាម្ហូបការប្រណីត | អនាម័យម្ហូបអាហារ | និន្នាការមង្គលការ | សេវាកម្មចល័ត]",
-  "image_url": "[Image URL]",
+  "image_url": "/images/pulse/pulse-XX.jpg",
   "source_link": "[Original Link]",
   "source_title_en": "[Original English Title]",
   "pub_date": "[Pub Date]"

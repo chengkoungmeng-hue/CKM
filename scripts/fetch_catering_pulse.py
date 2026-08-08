@@ -153,6 +153,74 @@ def call_gemini_api(prompt):
                 time.sleep(2)
     return None
 
+def sync_and_download_images(items):
+    """
+    Ensures all pulse items have local images in public/images/pulse/.
+    Downloads remote images if necessary and updates item['image_url'] to local paths.
+    Also handles ID shifting (e.g. pulse-01 -> pulse-02) so image files match item IDs.
+    """
+    output_dir = "public/images/pulse"
+    os.makedirs(output_dir, exist_ok=True)
+
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    }
+
+    # Snapshot existing local files into memory before re-mapping
+    temp_map = {}
+    if os.path.exists(output_dir):
+        for filename in os.listdir(output_dir):
+            filepath = os.path.join(output_dir, filename)
+            if os.path.isfile(filepath):
+                try:
+                    with open(filepath, "rb") as f:
+                        temp_map[filename] = f.read()
+                except Exception as e:
+                    print(f"Error reading {filename}: {e}")
+
+    for item in items:
+        item_id = item.get("id", "pulse-01")
+        img_url = item.get("image_url", "")
+        
+        ext = ".jpg"
+        if ".webp" in img_url.lower():
+            ext = ".webp"
+        elif ".png" in img_url.lower():
+            ext = ".png"
+        elif ".jpeg" in img_url.lower():
+            ext = ".jpg"
+
+        target_filename = f"{item_id}{ext}"
+        target_filepath = os.path.join(output_dir, target_filename)
+
+        if img_url.startswith("http"):
+            print(f"Downloading remote image for {item_id}: {img_url}")
+            try:
+                req = urllib.request.Request(img_url, headers=headers)
+                with urllib.request.urlopen(req, timeout=15) as resp:
+                    img_bytes = resp.read()
+                with open(target_filepath, "wb") as out_f:
+                    out_f.write(img_bytes)
+                item["image_url"] = f"/images/pulse/{target_filename}"
+            except Exception as e:
+                print(f"Failed to download remote image {img_url}: {e}")
+                if not os.path.exists(target_filepath):
+                    item["image_url"] = "/images/blog_01_inline_khmer.webp"
+        elif img_url.startswith("/images/pulse/"):
+            old_filename = os.path.basename(img_url)
+            if old_filename in temp_map:
+                with open(target_filepath, "wb") as out_f:
+                    out_f.write(temp_map[old_filename])
+                item["image_url"] = f"/images/pulse/{target_filename}"
+            elif os.path.exists(os.path.join(output_dir, old_filename)):
+                if old_filename != target_filename:
+                    src_path = os.path.join(output_dir, old_filename)
+                    with open(src_path, "rb") as sf, open(target_filepath, "wb") as tf:
+                        tf.write(sf.read())
+                item["image_url"] = f"/images/pulse/{target_filename}"
+
+    print(f"Successfully synchronized local images for {len(items)} pulse items.")
+
 def main():
     out_file = "src/data/pulseData.json"
     existing_pulse = []
@@ -182,6 +250,7 @@ def main():
         # Save re-indexed list just in case
         for idx, entry in enumerate(existing_pulse, 1):
             entry["id"] = f"pulse-{idx:02d}"
+        sync_and_download_images(existing_pulse)
         with open(out_file, "w", encoding="utf-8") as f:
             json.dump(existing_pulse, f, ensure_ascii=False, indent=2)
         return
@@ -258,6 +327,9 @@ Article Summary: {item_to_process['desc_en']}
 
     # Retain top 36 articles maximum
     updated_pulse = updated_pulse[:36]
+
+    # Download & synchronize image files locally
+    sync_and_download_images(updated_pulse)
 
     os.makedirs("src/data", exist_ok=True)
     with open(out_file, "w", encoding="utf-8") as f:

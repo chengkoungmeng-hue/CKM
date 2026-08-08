@@ -2,6 +2,7 @@ import urllib.request
 import json
 import os
 import sys
+import glob
 
 sys.stdout.reconfigure(encoding='utf-8')
 
@@ -62,22 +63,18 @@ def main():
     target_urls = [
         f"{BASE_URL}/",
         f"{BASE_URL}/blog/",
-        f"{BASE_URL}/blog/01-traditional-8-course-wedding-menu/",
-        f"{BASE_URL}/blog/02-wedding-catering-budget-guide/",
-        f"{BASE_URL}/blog/03-food-tasting/",
-        f"{BASE_URL}/blog/04-hygiene-and-temperature-control/",
-        f"{BASE_URL}/blog/05-corporate-private-catering/",
-        f"{BASE_URL}/blog/06-signature-dishes/",
-        f"{BASE_URL}/blog/07-housewarming-catering-setup/",
-        f"{BASE_URL}/blog/08-waitstaff-service-flow/",
-        f"{BASE_URL}/blog/09-outdoor-tent-infrastructure/",
-        f"{BASE_URL}/blog/10-60-years-chef-experience/",
-        f"{BASE_URL}/blog/11-choosing-packages/",
-        f"{BASE_URL}/blog/12-catering-industry-trends/",
         f"{BASE_URL}/pulse/",
         f"{BASE_URL}/tanghuot/"
     ]
 
+    # Dynamically scan all blog post markdown files in src/content/blog/
+    blog_files = glob.glob("src/content/blog/*.md") + glob.glob("src/content/blog/*.mdx")
+    for b_path in sorted(blog_files):
+        b_name = os.path.basename(b_path)
+        slug = os.path.splitext(b_name)[0]
+        target_urls.append(f"{BASE_URL}/blog/{slug}/")
+
+    # Dynamically scan pulse data items
     pulse_file = "src/data/pulseData.json"
     if os.path.exists(pulse_file):
         try:
@@ -87,11 +84,23 @@ def main():
                     p_id = item.get("id")
                     if p_id:
                         target_urls.append(f"{BASE_URL}/pulse/{p_id}/")
+                
+                # Check pagination pages for pulse
+                page_size = 12
+                total_pages = (len(pulse_items) + page_size - 1) // page_size
+                for p in range(2, total_pages + 1):
+                    target_urls.append(f"{BASE_URL}/pulse/{p}/")
         except Exception as e:
             print(f"Warning reading pulseData.json for indexing: {e}")
     
-    print(f"Submitting {len(target_urls)} URLs to IndexNow & GSC Search Engines...")
-    submit_indexnow(target_urls)
+    # Deduplicate while preserving order
+    unique_urls = list(dict.fromkeys(target_urls))
+
+    print(f"Submitting {len(unique_urls)} URLs to IndexNow & GSC Search Engines...")
+    for u in unique_urls:
+        print(f" - {u}")
+
+    submit_indexnow(unique_urls)
     notify_gsc_google()
 
 if __name__ == "__main__":

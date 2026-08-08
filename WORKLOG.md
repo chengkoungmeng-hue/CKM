@@ -1,5 +1,17 @@
 # Work Log
 
+## 2026-08-08 (Pulse Homepage 3-Item Limit & 12-Item Listing Pagination)
+
+- Updated `src/components/CateringPulse.astro` homepage section to display top 3 pulse items (`items.slice(0, 3)`) as requested.
+- Downloaded all 11 external Pulse cover images to local assets directory (`public/images/pulse/pulse-01.jpg` ~ `pulse-11.webp`) and updated `src/data/pulseData.json` `image_url` references to eliminate external hotlinking dependencies and speed up page loading.
+- Integrated automatic image downloading and ID-remapping into daily RSS pipeline (`scripts/fetch_catering_pulse.py`), so newly generated articles automatically download their cover images to `public/images/pulse/` and sync relative paths (`/images/pulse/pulse-XX.jpg`).
+- Updated GitHub Actions workflow `.github/workflows/daily_catering_pulse.yml` to automatically stage and commit `public/images/pulse/*`.
+- Updated `.agents/skills/ckm_pulse_writer/SKILL.md` output spec to enforce local image path formatting.
+- Verified and updated `src/pages/pulse/index.astro` and `src/pages/pulse/[page].astro` list pages to handle 12 items per page (`pageSize: 12`) with automatic fallback navigation (`totalPages > 1` & `page.lastPage > 1`).
+- Added Schema.org `BreadcrumbList` JSON-LD structured data to `src/pages/pulse/[page].astro` for search engine indexing.
+- Ensured smooth static path generation and page 2 -> `/pulse/` previous link routing so automated pulse generator workflows operate without routing errors.
+- Verified build using `npx astro build` (35 pages compiled with 0 errors).
+
 ## 2026-08-08 (Pulse RSS Image Optimization & VIP FAQ Audit)
 
 - Audited and updated Catering Pulse (`src/data/pulseData.json`) to use original cover images scraped from WedLuxe and CFE News RSS feeds.
