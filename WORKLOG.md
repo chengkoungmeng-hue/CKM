@@ -1,5 +1,10 @@
 # Work Log
 
+## 2026-08-10 (CateringPulse Homepage Layout Grid Adjustment)
+
+- Checked and updated `src/components/CateringPulse.astro` homepage featured grid layout from `grid-cols-1 md:grid-cols-2 lg:grid-cols-3` to `grid-cols-1 md:grid-cols-3`.
+- Ensures 1 column on mobile (`grid-cols-1`), and 3 columns in 1 row across iPad/tablet and desktop screens (`md:grid-cols-3`), satisfying responsive UI requirements.
+
 ## 2026-08-09 (East Asian RSS Dataset, WebP Optimization & GitHub Actions Pipeline Fix)
 
 - Configured a 100% geopolitically safe and authentic East Asian RSS dataset in `pulseData.json` (13 articles) containing Khmer, Chinese/Teochew, and Japanese culinary stories.

@@ -50,7 +50,7 @@ const items: PulseItem[] = pulseData || [];
   </div>
 
   <!-- Featured Grid (3 cards) -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
     {items.slice(0, 3).map((item) => (
       <a href={`/pulse/${item.slug || item.id}/`} class="group block h-full">
         <article class="bg-pearl hover:bg-white border border-slate-200/90 hover:border-champagne/40 rounded-sm overflow-hidden transition-all duration-300 flex flex-col justify-between h-full shadow-sm hover:shadow-glow-lg">

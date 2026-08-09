@@ -69,7 +69,7 @@ if __name__ == "__main__":
     }
     put_ruleset_phase("http_request_firewall_custom", waf_payload)
 
-    # 5. Rate Limiting
+    # 5. Rate Limiting (Excludes static assets, 150 reqs / 10s)
     rl_payload = {
         "rules": [
             {
@@ -77,11 +77,11 @@ if __name__ == "__main__":
                 "ratelimit": {
                     "characteristics": ["ip.src", "cf.colo.id"],
                     "period": 10,
-                    "requests_per_period": 50,
+                    "requests_per_period": 150,
                     "mitigation_timeout": 10
                 },
-                "expression": "true",
-                "description": "API Rate Limiting 50/10s"
+                "expression": 'not (http.request.uri.path contains "/_astro/" or http.request.uri.path contains "/images/" or http.request.uri.path contains "/fonts/" or http.request.uri.path contains "/assets/")',
+                "description": "Dynamic Rate Limiting (Excl Static) 150/10s"
             }
         ]
     }
