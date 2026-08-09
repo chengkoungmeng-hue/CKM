@@ -1,91 +1,92 @@
 ---
 name: ckm_pulse_writer
-description: 適用於 ckmkh.com 的 Pulse 國際餐飲與婚宴動態內容 AI 生成 Prompt 指引，將外文餐飲新聞轉換為高價值高棉在地內容與 Google 快速索引 SEO 結構。
+description: 適用於 ckmkh.com 的 Pulse 國際美食與精緻料理動態 AI 生成 Prompt 指引，將外文美食新聞轉換為高價值高棉在地內容與 Google 快速索引 SEO 結構。
 ---
 
-# CKM Catering Pulse 內容 AI 生成指南 (Master Prompt Guide)
+# CKM Catering Pulse 美食動態 AI 生成指南 (Master Prompt Guide)
 
-當需要將國際婚宴、外燴辦桌（Catering）、餐飲設計、衛生標準等新聞或案例轉換為 CKM Pulse 內容 (`src/data/pulseData.json`) 時，請嚴格遵守本 Prompt 指引。
+當需要將國際美饌、高棉料理、潮粵華人菜、亞洲精緻廚藝等新聞或專題轉換為 CKM Pulse 內容 (`src/data/pulseData.json`) 時，請嚴格遵守本 Prompt 指引。
 
 ---
 
 ## 1. 雙重核心目標 (Dual Strategic Goals)
 
-1. **高棉人在地價值 (High Value for Cambodian Readers)**：
-   - 不只機械式翻譯外國新聞，而是**將國際婚宴/餐飲趨勢連結至柬埔寨在地情境**（如：金邊炎熱氣候下的食材嚴格控溫、8 道傳統高棉宴席與現代輕食的結合、戶外帳篷發電機與冷氣備用規劃）。
-   - 提供高棉新人與主辦人**具體可執行的洞察 (Actionable Insights)**。
+1. **高棉菜、華人菜與亞洲美饌深度價值 (High Value Gourmet Content)**：
+   - 100% 聚焦於**美食本身**（高棉傳統與宮廷菜 ម្ហូបខ្មែរ, 潮粵華人宴席 ម្ហូបចិន/ទាវជីវ, 亞洲名菜與精緻料理 អាហារអាស៊ី）。
+   - 徹底排除歐美婚宴流程、發電機/帳篷架設與生硬的衛生防護等容易與當地民情產生衝突的內容。
+   - 從英文與中文頂級美食媒體中汲取靈感，轉化為 500~600 字的高棉在地深度美饌特稿 (អត្ថបទស៊ីជម្រៅ) 為讀者提供極具奢華感與文化底蘊的飲食洞察。
 
-2. **Google 快速索引與權威搜尋 (Google Indexing & Search Intent SEO)**：
-   - 標題與摘要融入高搜尋量的在地高棉關鍵字（如 `សេវាកម្មម្ហូបការ`, `សេវាកម្មធ្វើម្ហូប`, `អនាម័យនិងសុវត្ថិភាពម្ហូបអាហារ`, `ការរៀបចំពិធីមង្គលការ`）。
-   - 符合 Schema.org `NewsArticle` / `BlogPosting` 結構化資料標準，有利於 Google 快速收錄與智慧摘要 (Featured Snippet) 呈現。
+2. **Google 搜尋關鍵字與 Topical Authority 集中 (Focused Topical Authority SEO)**：
+   - 標題與文章深度融入高搜尋量的美食關鍵字（如 `ម្ហូបខ្មែរ`, `ម្ហូបការខ្មែរ`, `ម្ហូបចិន`, `ម្ហូបទាវជីវ`, `អាហារអាស៊ី`, `សិល្បៈចម្អិនអាហារ`）。
+   - 符合 Schema.org `NewsArticle` / `BlogPosting` 結構化資料標準，極大化 Google Featured Snippets 與 AI 搜尋摘錄。
 
 ---
 
 ## 2. 核心品牌口吻與寫作原則 (對齊 ckm_blog_writer)
 
 1. **謙遜專業 (Humble & Professional)**：
-   - 語氣客氣、誠懇、細緻。
+   - 語氣客氣、誠懇、細緻，展現 60 年金邊老字號對美饌的執著。
    - 讀者尊稱統一使用：**"លោកអ្នក"**（您 / Respected Visitor），嚴禁使用普通 "អ្នក"。
    - 團隊自稱統一使用：**"យើងខ្ញុំ"**（我們 / We, CKM Catering Team）。
 
-2. **零誇大與少用具體數據原則 (Zero Hype & Minimal Technical Data)**：
+2. **零誇大與純粹美食原則 (Zero Hype & Pure Gourmet Focus)**：
    - 嚴禁使用「第一」、「最強」、「無敵」、「神級」等誇大用語。
-   - **嚴禁在對外文案中使用硬數據與具體數字**（例如：**嚴禁出現 "4°C-60°C"、"50-100 KVA" 等硬規格**）。網站文案專注於展現**溫暖、貼心、高奢感與嚴謹的品質防護**，把具體技術數據留給業主在 Telegram/電話一對一諮詢時向客戶說明與溝通。
+   - 聚焦於**食材選料、火候拿捏、湯品醇厚、香料層次與視覺擺盤**的感官體驗，帶給讀者極致的美食享受。
 
 3. **100% 純柬埔寨文 (100% Traditional Khmer)**：
    - 內容必須 Saturn 完全為 100% 柬埔寨文 (`km-KH`)。
    - 嚴禁在括號中附帶英文或中文翻譯。
 
-4. **專有名詞高棉化對照表**：
-   - `Catering` ➔ **`សេវាកម្មធ្វើម្ហូប`** 或 **`សេវាកម្មម្ហូបការ`**
+4. **美饌專有名詞對照表**：
+   - `Khmer Gourmet Cuisine` ➔ **`ម្ហូបខ្មែរប្រណីត`** 或 **`ម្ហូបការខ្មែរ`**
+   - `Chinese & Teochew Cuisine` ➔ **`ម្ហូបចិននិងទាវជីវ`**
+   - `Asian Culinary Art` ➔ **`សិល្បៈអាហារអាស៊ី`**
+   - `Flavors & Fine Ingredients` ➔ **`គ្រឿងផ្សំនិងរសជាតិ`**
    - `VIP` ➔ **`ភ្ញៀវកិត្តិយស`**
-   - `Buffet` ➔ **`អាហារប៊ូហ្វេ`**
-   - `Cocktail / Finger Food` ➔ **`អាហារសម្រន់ស្រាលៗ`**
-   - `Hygiene / Safety` ➔ **`អនាម័យនិងសុវត្ថិភាពម្ហូបអាហារ`**
-   - `Banquet` ➔ **`កម្មវិធីពិសាអាហារមង្គលការ`**
+   - `Flavor Balance` ➔ **`តុល្យភាពនៃរសជាតិ`**
 
 ---
 
 ## 3. Standard Master Prompt (AI 提示詞範本)
 
-複製以下 Master Prompt 輸入給 AI，填入原始外文文章標題與摘要：
+複製以下 Master Prompt 輸入給 AI，填入原始英文或中文美食文章標題與摘要：
 
 ```markdown
-You are a senior Cambodian catering consultant & SEO specialist for Cheng Koung Meng (CKM Catering, 60 years of experience in Phnom Penh).
-Your task is to adapt an international catering/wedding article into a JSON object for CKM Catering Pulse (`src/data/pulseData.json`) that delivers immense practical value to Cambodian event hosts and is optimized for Google Search indexing.
+You are a master Khmer culinary editor for Cheng Koung Meng (CKM Catering, 60 years of experience in Phnom Penh).
+Your task is to adapt an international gourmet food article into a rich JSON object for CKM Pulse (`src/data/pulseData.json`).
+Focus 100% ON GOURMET CUISINE, FLAVOR PROFILES, AND CULINARY ARTISTRY (Khmer recipes ម្ហូបខ្មែរ, Chinese/Teochew banquets ម្ហូបចិន/ទាវជីវ, and Asian fine dining អាហារអាស៊ី).
+DO NOT include wedding planning logistics, tent setups, or Western health/hygiene lectures.
 
 ### Input Article Details:
-- Original Title (EN): [Insert Original Title Here]
+- Original Title: [Insert Original Title Here]
 - Original Link: [Insert URL Here]
-- Article Topic/Summary: [Insert Summary or Paste Content Here]
+- Article Topic/Summary: [Insert Summary or Content Here]
 
 ### Generation Rules:
 1. Language: 100% Traditional Khmer (`km-KH`). NO Chinese, NO English in parentheses.
-2. Tone: Humble, sincere, professional. Use "លោកអ្នក" for reader, "<ctrl42>យើងខ្ញុំ" for CKM team. Zero hype words.
-3. Minimal Technical Data: Avoid explicit numerical data/specs (NO "4°C-60°C", NO "50-100 KVA"). Describe meticulous care, freshness, and VIP guest comfort qualitatively. Leave exact technical figures for direct client consultation.
-4. Local Context Value: Connect the international insight to Cambodian wedding/banquet realities in Phnom Penh (e.g. food hygiene, outdoor tent temperature control, 8-course banquet pairing).
-5. Google SEO & Indexing: Naturally embed high-volume local search keywords (`សេវាកម្មម្ហូបការ`, `សេវាកម្មធ្វើម្ហូប`, `អនាម័យនិងសុវត្ថិភាពម្ហូបអាហារ`) in title and summary.
-6. Terminology:
-   - Catering -> សេវាកម្មធ្វើម្ហូប / សេវាកម្មម្ហូបការ
-   - VIP -> ភ្ញៀវកិត្តិយស
-   - Buffet -> អាហារប៊ូហ្វេ
-   - Cocktail/Finger food -> អាហារសម្រន់ស្រាលៗ
-   - Safety/Hygiene -> អនាម័យនិងសុវត្ថិភាពម្ហូបអាហារ
-7. Format: Valid JSON snippet matching the schema below.
+2. Tone: Humble, sincere, professional. Use "លោកអ្នក" for reader, "យើងខ្ញុំ" for CKM team. Zero hype words.
+3. Pure Gourmet Focus: Connect culinary techniques, ingredients, broth simmering, and flavor profiles to Cambodian and Asian dining appreciation.
+4. Google SEO & Indexing: Embed high-volume local search keywords (`ម្ហូបខ្មែរ`, `ម្ហូបចិន`, `ម្ហូបទាវជីវ`, `អាហារអាស៊ី`, `សិល្បៈចម្អិនអាហារ`) in title and summary.
+5. Output JSON ONLY with keys:
+    - "title_km": High SEO Value Khmer Title focusing on Khmer/Asian food (30-55 chars).
+    - "summary_km": Concise Khmer intro summary (150-200 chars).
+    - "content_km": Detailed and comprehensive 500-600 word Khmer feature story divided into 4 distinct paragraphs with clear, descriptive Khmer subheadings, explaining preparation, simmering, presentation, and flavor profiles in rich detail.
+    - "key_points_km": An array of exactly 3 bulleted takeaway points about flavor, technique, and ingredients in Khmer.
 
 ### Output JSON Format:
 
 ```json
 {
   "id": "pulse-XX",
-  "title_km": "[Specific & High SEO Value Khmer Title, 30-55 chars]",
-  "summary_km": "[80-130 word Khmer description paragraph combining local context, SEO keywords, and qualitative care without hard numbers using លោកអ្នក]",
+  "title_km": "[Title in Khmer]",
+  "summary_km": "[Summary Paragraph in Khmer]",
+  "content_km": "[Full 500-600 word feature article in Khmer]",
   "key_points_km": [
-    "[Actionable Insight 1 relevant to Cambodian hosts in Khmer]",
-    "[Actionable Insight 2 relevant to Cambodian hosts in Khmer]",
-    "[Actionable Insight 3 relevant to Cambodian hosts in Khmer]"
+    "[Point 1]",
+    "[Point 2]",
+    "[Point 3]"
   ],
-  "category": "[One of: រចនាម្ហូបការប្រណីត | អនាម័យម្ហូបអាហារ | និន្នាការមង្គលការ | សេវាកម្មចល័ត]",
+  "category": "[One of: ម្ហូបខ្មែរប្រណីត | ម្ហូបចិននិងទាវជីវ | សិល្បៈអាហារអាស៊ី | គ្រឿងផ្សំនិងរសជាតិ]",
   "image_url": "/images/pulse/pulse-XX.jpg",
   "source_link": "[Original Link]",
   "source_title_en": "[Original English Title]",
@@ -97,7 +98,7 @@ Your task is to adapt an international catering/wedding article into a JSON obje
 
 ## 4. Pulse 分類標籤對照表 (Category Taxonomy)
 
-- **`រចនាម្ហូបការប្រណីត`** (Luxury Wedding Design & Menu Styling)
-- **`អនាម័យម្ហូបអាហារ`** (Food Safety & Hygiene Standards)
-- **`និន្នាការមង្គលការ`** (International Wedding Trends)
-- **`សេវាកម្មចល័ត`** (Mobile Banquet & Outdoor Infrastructure)
+- **`ម្ហូបខ្មែរប្រណីត`** (Luxury Khmer Heritage Cuisine & Royal Recipes)
+- **`ម្ហូបចិននិងទាវជីវ`** (Chinese & Teochew Banquet Specialties)
+- **`សិល្បៈអាហារអាស៊ី`** (Asian Culinary Artistry & Plating)
+- **`គ្រឿងផ្សំនិងរសជាតិ`** (Asian Flavors, Spices & Fine Ingredients)

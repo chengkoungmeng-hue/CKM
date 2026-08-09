@@ -1,4 +1,6 @@
 ---
+// 實體路徑: src/pages/pulse/[id].astro
+// 狀態: 終極高棉語美食動態詳情頁 - 支援真實圖片、雙重 Slug 與快取刷新
 import Layout from '../../layouts/Layout.astro';
 import pulseData from '../../data/pulseData.json';
 import ReadingProgress from '../../components/ReadingProgress.astro';
@@ -27,6 +29,7 @@ export async function getStaticPaths() {
 
   return paths;
 }
+// Trigger HMR route re-evaluation for normalized SEO slugs
 
 const { item = {} } = Astro.props as any;
 
@@ -150,7 +153,7 @@ const articleSchema = JSON.stringify({
           src={itemImage} 
           alt={item.title_km}
           onerror="this.onerror=null; this.src='/images/blog_01_inline_khmer.webp';"
-          class="w-full h-full object-contain relative z-2 drop-shadow-md"
+          class="w-full h-full object-cover object-center relative z-2 drop-shadow-md"
         />
       </div>
 
@@ -169,6 +172,20 @@ const articleSchema = JSON.stringify({
             {item.summary_km}
           </p>
         </div>
+
+        <!-- Full Feature Article Story (Pure Khmer Gourmet Content) -->
+        {item.content_km && (
+          <div class="relative z-10 mb-10 pt-6 border-t border-slate-100">
+            <h2 class="text-xl md:text-2xl font-bold font-km-serif text-onyx mb-6">
+              សិល្បៈ និងបទពិសោធន៍ចម្អិនអាហារ
+            </h2>
+            <div class="text-slate-700 font-km-sans text-base md:text-lg leading-relaxed font-light space-y-6">
+              {item.content_km.split('\n\n').map((paragraph: string) => (
+                <p class="leading-relaxed">{paragraph}</p>
+              ))}
+            </div>
+          </div>
+        )}
 
         <!-- Key Takeaways Section (Light Luxury Pearl Card with Champagne Accent) -->
         {item.key_points_km && item.key_points_km.length > 0 && (
@@ -194,7 +211,7 @@ const articleSchema = JSON.stringify({
               <Globe class="w-4 h-4 text-champagne-dark shrink-0" />
               <div class="text-xs font-km-sans">
                 <span class="text-slate-500 block mb-0.5 font-bold">ប្រភពដើមអន្តរជាតិ:</span>
-                <span class="font-bold text-onyx line-clamp-1">{item.title_km}</span>
+                <span class="font-bold text-onyx line-clamp-1">{item.source_title_en || item.title_km}</span>
               </div>
             </div>
             <a 

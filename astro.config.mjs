@@ -1,6 +1,6 @@
 // @ts-nocheck
 // 實體路徑: astro.config.mjs
-// 狀態: 終極編譯封裝 4.3。消滅編譯期重定向，強制 CSS 內嵌以阻斷渲染延遲，突破 Vite 閾值。
+// 狀態: 終極編譯封裝 4.3。消滅編譯期重定向，強制 CSS 內嵌以阻斷渲染延遲，突破 Vite 閾值。(Vite Reload with 13-item Safe East Asian Dataset)
 import { defineConfig } from 'astro/config';
 import tailwind from "@astrojs/tailwind";
 

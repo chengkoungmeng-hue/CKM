@@ -1,11 +1,13 @@
 ---
 import pulseData from '../data/pulseData.json';
-import { Globe, ArrowUpRight, ArrowRight, CheckCheck } from '@lucide/astro';
+import { Globe, ArrowRight } from '@lucide/astro';
 
 interface PulseItem {
   id: string;
+  slug?: string;
   title_km: string;
   summary_km: string;
+  content_km?: string;
   key_points_km?: string[];
   category: string;
   image_url?: string;
@@ -27,15 +29,15 @@ const items: PulseItem[] = pulseData || [];
     <div>
       <div class="inline-flex items-center gap-2 bg-champagne/10 text-champagne-dark px-3 py-1 rounded-sm text-xs font-bold uppercase tracking-widest border border-champagne/30 mb-3 shadow-xs">
         <Globe class="w-3.5 h-3.5 text-champagne-dark" />
-        <span>បច្ចុប្បន្នភាពអន្តរជាតិ</span>
+        <span>បច្ចុប្បន្នភាពម្ហូបខ្មែរ និងអាហារអាស៊ី</span>
       </div>
       <h2 class="text-2xl md:text-3xl font-bold font-km-serif text-onyx tracking-wide">
-        បច្ចុប្បន្នភាព និងនិន្នាការម្ហូបការអន្តរជាតិ
+        បច្ចុប្បន្នភាព និងសិល្បៈម្ហូបការខ្មែរ-អាស៊ី
       </h2>
     </div>
     <div class="flex items-center gap-4">
       <p class="text-slate-500 text-xs md:text-sm font-km-sans max-w-xs hidden lg:block leading-relaxed">
-        ទិន្នន័យ និងបទដ្ឋានអន្តរជាតិដែលត្រូវបានធ្វើបច្ចុប្បន្នភាពជាប្រចាំ។
+        បទដ្ឋាន និន្នាការ និងសិល្បៈចម្អិនម្ហូបការខ្មែរ និងអាហារអាស៊ីប្រណីត សម្រាប់លោកអ្នក។
       </p>
       <a 
         href="/pulse/" 

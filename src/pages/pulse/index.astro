@@ -1,9 +1,10 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import pulseData from '../../data/pulseData.json';
-import { Globe, ArrowUpRight, ArrowRight, ChevronLeft, ChevronRight, CheckCheck } from '@lucide/astro';
+import { Globe, ArrowRight, ChevronLeft, ChevronRight } from '@lucide/astro';
 
 export const prerender = true;
+// Force Vite HMR Cache Refresh for Pulse Index Page
 
 const items = (pulseData || []) as any[];
 const pageSize = 12;
