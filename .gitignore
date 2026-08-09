@@ -4,3 +4,11 @@ dist/
 .astro/
 *.key
 google_service_account.json
+scratch/
+scripts/populate_rich_khmer_pulse_content.py
+scripts/reseed_100pct_real_urls.py
+scripts/seed_12_gourmet_pulse.py
+scripts/reports/
+test_articles.py
+
+
