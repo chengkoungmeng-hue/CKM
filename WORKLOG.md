@@ -1,5 +1,15 @@
 # Work Log
 
+## 2026-08-09 (East Asian RSS Dataset, WebP Optimization & GitHub Actions Pipeline Fix)
+
+- Configured a 100% geopolitically safe and authentic East Asian RSS dataset in `pulseData.json` (13 articles) containing Khmer, Chinese/Teochew, and Japanese culinary stories.
+- Programmatically downloaded and cropped all cover images to 16:9 aspect ratio, compressing them to WebP under 45KB to eliminate CLS and accelerate mobile page loads.
+- Integrated a 10-second API cooldown pacing sleep and robust 429 rate limit backoff retry chain for `gemini-2.0-flash`, `gemini-2.0-flash-lite`, and `gemini-1.5-flash`.
+- Added the Anti-Fool Guard validation in the parser to preserve local data integrity during API outages.
+- Upgraded the Node.js version in `.github/workflows/daily_catering_pulse.yml` from `20` to `22` to satisfy Astro 6 build requirements, resolving the instant CI build abort error.
+- Successfully ran the end-to-end GitHub Actions workflow on GitHub, verifying 100% successful RSS mining, build bundling, GSC/IndexNow indexing, and auto-deployment.
+- Reverted the temporary `push` trigger in `daily_catering_pulse.yml` to restore clean scheduled/manual-only triggers.
+
 ## 2026-08-08 (Pulse Homepage 3-Item Limit & 12-Item Listing Pagination)
 
 - Added automated SEO Slugs generator (`generate_seo_slug`) to `scripts/fetch_catering_pulse.py`, transforming Pulse titles into clean, keyword-rich URLs (e.g. `/pulse/international-mobile-catering-hospitality-standards-pulse-02/`).
