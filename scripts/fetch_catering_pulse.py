@@ -417,7 +417,7 @@ Article Summary: {item_to_process['desc_en']}
         "pub_date": item_to_process["pubDate"]
     }
     
-    updated_list = [new_entry] + existing_pulse[:11]
+    updated_list = [new_entry] + existing_pulse
     
     for idx, entry in enumerate(updated_list, 1):
         p_id = f"pulse-{idx:02d}"
