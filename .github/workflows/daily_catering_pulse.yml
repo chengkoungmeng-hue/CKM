@@ -2,8 +2,9 @@ name: Daily Catering Pulse & Auto-Indexing Pipeline
 
 on:
   schedule:
-    # Runs daily at 01:23 UTC (08:23 AM Phnom Penh Time / ICT) - Off-peak minute to avoid GitHub Actions queue delays
-    - cron: '23 1 * * *'
+    # Runs daily at 20:47 UTC (03:47 AM Phnom Penh Time ICT / 04:47 AM Taipei Time)
+    # Off-peak UTC hour (20:xx UTC) & non-standard minute (47) to eliminate GitHub Actions queue congestion
+    - cron: '47 20 * * *'
   workflow_dispatch:
 
 jobs:
