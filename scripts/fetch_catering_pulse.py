@@ -416,8 +416,16 @@ Article Summary: {item_to_process['desc_en']}
         "source_title_en": item_to_process["title_en"],
         "pub_date": item_to_process["pubDate"]
     }
-    
-    updated_list = [new_entry] + existing_pulse
+    from email.utils import parsedate_to_datetime
+
+    def parse_item_date(item):
+        d_str = item.get("pub_date", "")
+        try:
+            return parsedate_to_datetime(d_str)
+        except Exception:
+            return 0
+
+    updated_list = sorted([new_entry] + existing_pulse, key=parse_item_date, reverse=True)
     
     for idx, entry in enumerate(updated_list, 1):
         p_id = f"pulse-{idx:02d}"
