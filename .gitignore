@@ -10,5 +10,7 @@ scripts/reseed_100pct_real_urls.py
 scripts/seed_12_gourmet_pulse.py
 scripts/reports/
 test_articles.py
+__pycache__/
+*.pyc
 
 

@@ -1,9 +1,12 @@
 # Work Log
 
-## 2026-08-10 (CateringPulse Homepage Layout Grid Adjustment)
+## 2026-08-10 (GitHub Actions Pipeline Optimization, Gemini 3.6 Flash Upgrade & Descending Date Sorting)
 
-- Checked and updated `src/components/CateringPulse.astro` homepage featured grid layout from `grid-cols-1 md:grid-cols-2 lg:grid-cols-3` to `grid-cols-1 md:grid-cols-3`.
-- Ensures 1 column on mobile (`grid-cols-1`), and 3 columns in 1 row across iPad/tablet and desktop screens (`md:grid-cols-3`), satisfying responsive UI requirements.
+- **GitHub Actions Schedule Optimization**: Shifted daily workflow cron in `.github/workflows/daily_catering_pulse.yml` from `23 1 * * *` (01:23 UTC / 08:23 AM ICT) to `47 20 * * *` (20:47 UTC / 03:47 AM ICT / 04:47 AM Taipei Time). Selected a global off-peak window and non-standard minute `:47` to avoid GitHub Actions infrastructure queue delays and guarantee early-morning automated publication before Cambodian readers wake up.
+- **Gemini API Model Upgrade & Free Quota Troubleshooting**: Diagnosed why scheduled runs failed to commit new articles. Discovered that user API key had 0/0 quota for `gemini-2.0-flash` (HTTP 429) while `gemini-1.5-flash` returned HTTP 404. Updated `scripts/fetch_catering_pulse.py` model fallback list to verified active endpoints: `gemini-3.6-flash`, `gemini-3-flash-preview`, `gemini-3.5-flash`, `gemini-flash-latest`, and `gemini-flash-lite-latest` (10 RPM / 250K RPD free quota).
+- **Multi-Page Pagination & Infinite Pulse Accumulation**: Removed the `[:11]` truncation limit in `scripts/fetch_catering_pulse.py`, allowing Pulse articles to accumulate naturally beyond 12 items. Astro static site generator now builds multi-page pagination (`/pulse/`, `/pulse/2/`, `/pulse/3/`) automatically as new articles are published daily.
+- **Strict Descending Date Sorting (Newest First)**: Implemented `parsedate_to_datetime` descending date sorting in `fetch_catering_pulse.py` and `src/data/pulseData.json`. Resolved inverted ordering so newest articles (e.g. `09.Aug.2026`) are always placed at `#1` (`pulse-01`) on Page 1 and the Homepage (`src/components/CateringPulse.astro`), while older articles (`25.Jul.2026`, `24.Jul.2026`) shift naturally to Page 2 (`/pulse/2/`).
+- **End-to-End Pipeline Simulation & Live Verification**: Simulated the full 5-step pipeline for 13th and 14th articles. Verified Astro static build (53 pages compiled with 0 errors), IndexNow/GSC submission (`notify_indexing.py` scanning 34 URLs), and live Cloudflare Pages deployment. Used `browser_subagent` and Playwright to visually confirm that `https://ckmkh.com/pulse/` renders newest articles on Page 1 with page navigation (`ទំព័រ 1 នៃ 2`), and `https://ckmkh.com/pulse/2/` renders older articles cleanly.
 
 ## 2026-08-09 (East Asian RSS Dataset, WebP Optimization & GitHub Actions Pipeline Fix)
 
