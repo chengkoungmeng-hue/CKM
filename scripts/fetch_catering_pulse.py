@@ -135,7 +135,7 @@ def call_gemini_api_robust(prompt, min_content_len=300):
         print("ERROR: GEMINI_API_KEY is missing!", flush=True)
         return None
     
-    models = ["gemini-2.0-flash", "gemini-2.0-flash-lite", "gemini-1.5-flash"]
+    models = ["gemini-3.6-flash", "gemini-3-flash-preview", "gemini-3.5-flash", "gemini-flash-latest", "gemini-flash-lite-latest"]
     
     for model in models:
         url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={env_key}"
