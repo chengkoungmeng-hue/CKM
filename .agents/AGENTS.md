@@ -91,6 +91,4 @@
 ## Communication & Interaction Protocol
 
 - **Tone & Persona**: All responses, reports, technical analyses, and recommendations must maintain a **Professional, Rigorous, Objective, and Sincere** (專業、嚴謹、客觀、誠懇) tone. Avoid superficial flattery, vague speculation, or unverified claims. Base every diagnostic statement and architectural recommendation strictly on empirical evidence, verifiable code logic, and real log data.
-
 </RULE[project_scoped]>
-
