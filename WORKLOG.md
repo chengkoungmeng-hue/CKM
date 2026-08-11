@@ -152,6 +152,6 @@
   - Eliminated redundant `cloudflare/pages-action` direct deployment step to prevent Cloudflare build race conditions and quota duplication.
 - **Cloudflare Edge CDN Cache Purge Automation**:
   - Added Cloudflare Edge CDN cache purge step (`purge_everything: true`) targeting `ckmkh.com` Zone ID `d459c80e06d000c6e1927783fc6b3a7a` via `CLOUDFLARE_API_TOKEN` after 35-second deployment wait.
-- **Search Engine API Modernization**:
-  - Refactored `scripts/notify_indexing.py` to replace deprecated `google.com/ping` URL with official Google Search Console Service Account REST API (`webmasters/v3/sites/sc-domain:ckmkh.com/sitemaps/`).
-  - Tested `scripts/notify_indexing.py` locally (58 URLs submitted to IndexNow and GSC API returned HTTP 204 Success).
+- **Agent Rule Standardization**:
+  - Added `Automated Deployment, Edge Cache Purge & Performance Protocol` to `.agents/AGENTS.md` specifying strict workflow execution order, anti-race-condition rules, Cloudflare Zone Purge SOPs, and editor freeze prevention rules for Khmer text.
+

@@ -72,8 +72,25 @@
   - `Cocktail / Finger Food` ➔ `អាហារសម្រន់ស្រាលៗ`
   - `Food Hygiene / Safety` ➔ `អនាម័យនិងសុវត្ថិភាពម្ហូបអាហារ`
 
+## Automated Deployment, Edge Cache Purge & Performance Protocol (自動化部署、快取清除與防卡頓協定)
+
+- **Workflow Execution Order (嚴禁顛倒流程順序)**:
+  In GitHub Actions workflows (e.g. `.github/workflows/daily_catering_pulse.yml`), always enforce the strict sequential execution order:
+  1. Generate content/JSON data (`fetch_catering_pulse.py`)
+  2. Git Commit & Push to `main` (Triggers single unified Cloudflare Pages deployment)
+  3. Sleep 35 seconds to wait for Cloudflare Pages build completion
+  4. Issue Cloudflare API Cache Purge (`purge_everything: true`) to Zone `d459c80e06d000c6e1927783fc6b3a7a` via `CLOUDFLARE_API_TOKEN`
+  5. Run Search Engine Submission (`scripts/notify_indexing.py` with official GSC REST API and IndexNow API)
+  - **Zero Premature Indexing**: NEVER trigger IndexNow or GSC indexing BEFORE Cloudflare Pages deployment is live and Edge CDN cache is purged.
+  - **Zero Duplicate Deployments**: Do NOT mix `cloudflare/pages-action` direct upload with `git push origin main` in the same workflow to avoid double-build race conditions and Cloudflare quota exhaustion.
+
+- **Editor & Content Processing Freeze Protection (防編輯器卡頓與正則迴溯條約)**:
+  - **Khmer Paragraph Wrapping**: Avoid single-line multi-byte Khmer text exceeding 300 characters. Always break Khmer paragraphs with standard line wraps to prevent IDE word-wrap engine lag.
+  - **Markdown Table Standards**: All Markdown tables in `.md` / `.mdx` files must strictly use standard column alignment delimiters (`| :--- | :--- |`) to prevent table linter CPU regex backtracking freezes on multi-byte UTF-8 text.
+
 ## Communication & Interaction Protocol
 
 - **Tone & Persona**: All responses, reports, technical analyses, and recommendations must maintain a **Professional, Rigorous, Objective, and Sincere** (專業、嚴謹、客觀、誠懇) tone. Avoid superficial flattery, vague speculation, or unverified claims. Base every diagnostic statement and architectural recommendation strictly on empirical evidence, verifiable code logic, and real log data.
 
 </RULE[project_scoped]>
+
