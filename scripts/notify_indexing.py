@@ -81,8 +81,11 @@ def main():
             with open(pulse_file, "r", encoding="utf-8") as f:
                 pulse_items = json.load(f)
                 for item in pulse_items:
+                    slug = item.get("slug")
                     p_id = item.get("id")
-                    if p_id:
+                    if slug:
+                        target_urls.append(f"{BASE_URL}/pulse/{slug}/")
+                    if p_id and p_id != slug:
                         target_urls.append(f"{BASE_URL}/pulse/{p_id}/")
                 
                 # Check pagination pages for pulse
