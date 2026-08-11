@@ -1,5 +1,12 @@
 # Work Log
 
+## 2026-08-11 (Pulse Anti-Fool Audit, Over-Strict Title Guard Fix & Flash-Lite 500 RPD Model Configuration)
+
+- **Pulse Anti-Fool & Deduplication Audit**: Thoroughly audited `scripts/fetch_catering_pulse.py` and `src/data/pulseData.json`. Confirmed that deduplication mechanisms (`source_link` checking against `existing_links`, intra-batch `seen_links`, and content keyword filters) are functioning cleanly with 0 duplicate articles.
+- **Root Cause Resolution for Idle GitHub Workflow Runs**: Identified why scheduled GitHub Actions completed without committing new articles. Discovered an over-strict title guard condition (`"សិល្បៈនៃការចម្អិន" not in parsed.get("title_km", "")`) in `call_gemini_api_robust` that rejected Gemini's valid Khmer culinary titles. Refined the anti-fool check to enforce length and JSON schema validity while adding prompt guidance for title diversity.
+- **500 RPD Model Queue Optimization**: Analyzed user's Google AI Studio Free Tier quota limits. Discovered standard Flash models (3.6 Flash, 2.5 Flash) have a strict 20 RPD (Requests Per Day) limit, while `gemini-3.5-flash-lite` and `gemini-3.1-flash-lite` provide 500 RPD and 15 RPM. Updated `scripts/fetch_catering_pulse.py` model queue to `["gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemini-flash-lite-latest"]` to guarantee 0 rate limit failures.
+- **Dataset Accumulation & SSG Build Verification**: Successfully fetched and processed new Khmer gourmet articles (`pulse-15` through `pulse-19`), generating optimized WebP cover images (`public/images/pulse/pulse-15.webp`~`19.webp`). Verified Astro SSG build (`npm run build`), compiling 57 static pages and sitemaps cleanly with 0 errors.
+
 ## 2026-08-10 (GitHub Actions Pipeline Optimization, Gemini 3.6 Flash Upgrade & Descending Date Sorting)
 
 - **GitHub Actions Schedule Optimization**: Shifted daily workflow cron in `.github/workflows/daily_catering_pulse.yml` from `23 1 * * *` (01:23 UTC / 08:23 AM ICT) to `47 20 * * *` (20:47 UTC / 03:47 AM ICT / 04:47 AM Taipei Time). Selected a global off-peak window and non-standard minute `:47` to avoid GitHub Actions infrastructure queue delays and guarantee early-morning automated publication before Cambodian readers wake up.

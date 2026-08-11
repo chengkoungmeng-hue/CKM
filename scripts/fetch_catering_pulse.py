@@ -135,7 +135,7 @@ def call_gemini_api_robust(prompt, min_content_len=300):
         print("ERROR: GEMINI_API_KEY is missing!", flush=True)
         return None
     
-    models = ["gemini-3.6-flash", "gemini-3-flash-preview", "gemini-3.5-flash", "gemini-flash-latest", "gemini-flash-lite-latest"]
+    models = ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemini-flash-lite-latest"]
     
     for model in models:
         url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={env_key}"
@@ -157,10 +157,10 @@ def call_gemini_api_robust(prompt, min_content_len=300):
                     parsed = json.loads(clean_json)
                     content_km = parsed.get("content_km", "")
                     
-                    if len(content_km) >= min_content_len and "សិល្បៈនៃការចម្អិន" not in parsed.get("title_km", ""):
+                    if len(content_km) >= min_content_len:
                         return raw_text
                     else:
-                        print(f"[{model} attempt {attempt+1}] Response failed anti-fool check (len: {len(content_km)}). Retrying...", flush=True)
+                        print(f"[{model} attempt {attempt+1}] Response failed anti-fool content length check (len: {len(content_km)}). Retrying...", flush=True)
                         time.sleep(3)
             except Exception as e:
                 err_str = str(e)
@@ -369,7 +369,7 @@ STRICT GOURMET DIRECTIVES:
 4. ABSOLUTELY NO wedding planning logistics, NO tent/generator setups, NO Western health/hygiene lectures.
 5. Honorifics: Use 'លោកអ្នក' for reader, 'យើងខ្ញុំ' for CKM team.
 6. Output JSON ONLY with keys:
-   - "title_km": High SEO Value Khmer Title focusing on Khmer/Asian gourmet food (30-55 chars).
+   - "title_km": High SEO Value Khmer Title focusing on Khmer/Asian gourmet food (30-55 chars). Vary the opening phrasing dynamically (e.g., 'អាថ៌កំបាំងនៃការ...', 'សិល្បៈនៃការ...', 'បច្ចេកទេសចម្អិន...').
    - "summary_km": Concise Khmer intro summary (150-200 chars).
    - "content_km": Detailed and comprehensive 500-600 word Khmer feature story divided into 4 distinct paragraphs with clear, descriptive Khmer subheadings, explaining preparation, simmering, presentation, and flavor profiles in rich detail.
    - "key_points_km": An array of exactly 3 bulleted takeaway points about flavor, technique, and ingredients in Khmer.
