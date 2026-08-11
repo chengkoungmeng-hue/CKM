@@ -62,7 +62,7 @@ if __name__ == "__main__":
                 "action_parameters": {
                     "phases": ["http_ratelimit", "http_request_sbfm", "http_request_firewall_managed"]
                 },
-                "expression": '(http.request.uri.path eq "/robots.txt") or (http.request.uri.path contains ".xml" and http.request.uri.path contains "sitemap") or (http.request.uri.path contains "llms.txt") or (http.request.uri.path contains "llms-full.txt")',
+                "expression": '(http.request.uri.path eq "/robots.txt") or (http.request.uri.path contains ".xml" and http.request.uri.path contains "sitemap") or (http.request.uri.path contains ".txt") or (http.request.uri.path contains "llms.txt") or (http.request.uri.path contains "llms-full.txt")',
                 "description": "SEO Bypass (The Security Guard Protocol)"
             }
         ]
