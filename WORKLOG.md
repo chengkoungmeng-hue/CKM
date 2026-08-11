@@ -155,4 +155,3 @@
 - **Search Engine API Modernization**:
   - Refactored `scripts/notify_indexing.py` to replace deprecated `google.com/ping` URL with official Google Search Console Service Account REST API (`webmasters/v3/sites/sc-domain:ckmkh.com/sitemaps/`).
   - Tested `scripts/notify_indexing.py` locally (58 URLs submitted to IndexNow and GSC API returned HTTP 204 Success).
-
