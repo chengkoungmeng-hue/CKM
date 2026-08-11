@@ -38,21 +38,6 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: python scripts/fetch_catering_pulse.py
 
-      - name: Build Project & Generate Static Assets
-        run: npm run build
-
-      - name: Run IndexNow & GSC Search Engine Submission
-        run: python scripts/notify_indexing.py
-
-      - name: Deploy to Cloudflare Pages (Direct Deployment if Secret Configured)
-        uses: cloudflare/pages-action@v1
-        continue-on-error: true
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: ckmkh
-          directory: dist
-
       - name: Commit & Push Generated Pulse Data & IndexNow Assets (Triggers Cloudflare Pages Auto-Deploy)
         run: |
           git config --global user.name "github-actions[bot]"
@@ -64,4 +49,23 @@ jobs:
             git commit -m "chore(pulse): auto-update daily catering pulse & indexnow key"
             git push origin main
           fi
+
+      - name: Wait for Cloudflare Deployment, Purge Edge Cache & Trigger Auto-Indexing
+        if: always()
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          echo "Waiting 35 seconds for Cloudflare Pages live deployment to complete..."
+          sleep 35
+          if [ -n "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "Purging Cloudflare Edge Cache for Zone d459c80e06d000c6e1927783fc6b3a7a (ckmkh.com)..."
+            curl -X POST "https://api.cloudflare.com/client/v4/zones/d459c80e06d000c6e1927783fc6b3a7a/purge_cache" \
+              -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+              -H "Content-Type: application/json" \
+              --data '{"purge_everything":true}'
+          else
+            echo "CLOUDFLARE_API_TOKEN secret is not set. Skipping cache purge."
+          fi
+          python scripts/notify_indexing.py
+
 

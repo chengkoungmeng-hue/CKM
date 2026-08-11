@@ -144,3 +144,15 @@
 - Upgraded the automated daily pipeline script `scripts/fetch_catering_pulse.py` to target `gemini-2.5-flash` model for localized translations and content generation as requested.
 - Integrated a robust 10-second safety cooldown pacing delay (`time.sleep(10)`) between consecutive API calls to prevent HTTP 429 Rate Limit triggers on Google's developer API tier.
 - Verified build compatibility with `npm run build` (48 static pages compiled cleanly with 0 errors).
+
+## 2026-08-11 (Automation Pipeline Alignment & Cloudflare Edge Cache Purge Integration)
+
+- **Workflow Pipeline & Execution Order Realignment**:
+  - Reordered GitHub Action pipeline steps in `.github/workflows/daily_catering_pulse.yml` so that `git commit & push` triggers single unified Cloudflare Pages deployment before running indexing & cache purge scripts.
+  - Eliminated redundant `cloudflare/pages-action` direct deployment step to prevent Cloudflare build race conditions and quota duplication.
+- **Cloudflare Edge CDN Cache Purge Automation**:
+  - Added Cloudflare Edge CDN cache purge step (`purge_everything: true`) targeting `ckmkh.com` Zone ID `d459c80e06d000c6e1927783fc6b3a7a` via `CLOUDFLARE_API_TOKEN` after 35-second deployment wait.
+- **Search Engine API Modernization**:
+  - Refactored `scripts/notify_indexing.py` to replace deprecated `google.com/ping` URL with official Google Search Console Service Account REST API (`webmasters/v3/sites/sc-domain:ckmkh.com/sitemaps/`).
+  - Tested `scripts/notify_indexing.py` locally (58 URLs submitted to IndexNow and GSC API returned HTTP 204 Success).
+

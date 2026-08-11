@@ -45,19 +45,44 @@ def submit_indexnow(urls):
         except Exception as e:
             print(f"IndexNow ({endpoint}) Note: {e}")
 
-def notify_gsc_google():
-    sitemap_url = f"{BASE_URL}/sitemap-index.xml"
-    ping_url = f"https://www.google.com/ping?sitemap={sitemap_url}"
-    print(f"Notifying Google Search Console via Sitemap ping: {sitemap_url}")
+def notify_gsc_api():
+    """Notify Google Search Console via Service Account REST API."""
+    creds_file = 'google_service_account.json'
+    if not os.path.exists(creds_file):
+        print("⚠️ GSC credentials not found. Skipping GSC API call.")
+        return
+
     try:
-        req = urllib.request.Request(
-            ping_url,
-            headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+        import requests
+        from google.oauth2 import service_account
+        import google.auth.transport.requests
+
+        SCOPES = ['https://www.googleapis.com/auth/webmasters']
+        credentials = service_account.Credentials.from_service_account_file(
+            creds_file, scopes=SCOPES
         )
-        with urllib.request.urlopen(req, timeout=10) as resp:
-            print(f"Google Sitemap Ping Status: {resp.status}")
+        req = google.auth.transport.requests.Request()
+        credentials.refresh(req)
+        access_token = credentials.token
+
+        headers = {
+            'Authorization': f'Bearer {access_token}',
+            'Content-Type': 'application/json'
+        }
+
+        site_url = 'sc-domain:ckmkh.com'
+        sitemap_target = f"{BASE_URL}/sitemap-index.xml"
+        sitemap_api_url = f"https://www.googleapis.com/webmasters/v3/sites/{requests.utils.quote(site_url, safe='')}/sitemaps/{requests.utils.quote(sitemap_target, safe='')}"
+
+        res = requests.put(sitemap_api_url, headers=headers, timeout=15)
+        print(f"📡 GSC API Sitemap Resubmission: Status {res.status_code}")
+        if res.status_code in [200, 204]:
+            print("   ✅ Google Search Console API successfully triggered sitemap refresh!")
+        else:
+            print(f"   ℹ️ GSC API Response: {res.status_code} ({res.text[:100]})")
     except Exception as e:
-        print(f"Google Sitemap Ping Response: {e} (Standard response for Google ping endpoint)")
+        print(f"   ⚠️ GSC API Error: {e}")
+
 
 def main():
     target_urls = [
@@ -104,7 +129,8 @@ def main():
         print(f" - {u}")
 
     submit_indexnow(unique_urls)
-    notify_gsc_google()
+    notify_gsc_api()
 
 if __name__ == "__main__":
+
     main()
