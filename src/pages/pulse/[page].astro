@@ -80,7 +80,7 @@ const breadcrumbSchema = JSON.stringify({
                 <!-- Ambient Blurred Background Image -->
                 <img 
                   src={item.image_url || "/images/blog_01_inline_khmer.webp"} 
-                  alt="" 
+                  alt={item.title_km || "CKM Pulse"} 
                   aria-hidden="true"
                   onerror="this.onerror=null; this.src='/images/blog_01_inline_khmer.webp';"
                   class="absolute inset-0 w-full h-full object-cover blur-xl opacity-50 scale-125 transition-transform duration-700 group-hover/img:scale-135 pointer-events-none"

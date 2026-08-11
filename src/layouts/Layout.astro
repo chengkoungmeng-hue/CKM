@@ -29,6 +29,9 @@ if (finalDescription.trim().length === 0) {
         finalDescription = 'ចេង គួងម៉េង (CKM) ផ្តល់ជូនសេវាកម្មម្ហូបការ សេវាកម្មទទួលរៀបចំកម្មវិធី និងចុងភៅរៀបចំម្ហូបការលំដាប់ខ្ពស់នៅភ្នំពេញ។';
     }
 }
+if (finalDescription.length > 155) {
+    finalDescription = `${finalDescription.slice(0, 152).trim()}...`;
+}
 // Ensure canonical path always ends with a slash (except for physical files)
 const ensureSlash = (path: string) => {
     if (path === '/') return path;
