@@ -139,7 +139,7 @@ const articleSchema = JSON.stringify({
         <!-- Ambient Blurred Background Image -->
         <img 
           src={itemImage} 
-          alt={item.title_km || "CKM Pulse Article"} 
+          alt={item.image_alt || item.title_km || "CKM Pulse Article"} 
           aria-hidden="true"
           onerror="this.onerror=null; this.src='/images/blog_01_inline_khmer.webp';"
           class="absolute inset-0 w-full h-full object-cover blur-2xl opacity-50 scale-125 pointer-events-none"
@@ -151,7 +151,7 @@ const articleSchema = JSON.stringify({
         <!-- Main Foreground Image -->
         <img 
           src={itemImage} 
-          alt={item.title_km}
+          alt={item.image_alt || item.title_km}
           onerror="this.onerror=null; this.src='/images/blog_01_inline_khmer.webp';"
           class="w-full h-full object-cover object-center relative z-2 drop-shadow-md"
         />

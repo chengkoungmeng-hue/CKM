@@ -266,6 +266,7 @@ def sync_and_download_images(items):
 
     for item in items:
         item_id = item.get("id", "pulse-01")
+        slug = item.get("slug", item_id)
         img_url = item.get("image_url", "")
         
         ext = ".jpg"
@@ -274,7 +275,7 @@ def sync_and_download_images(items):
         elif ".png" in img_url.lower():
             ext = ".png"
 
-        target_filename = f"{item_id}{ext}"
+        target_filename = f"{slug}{ext}"
         target_filepath = os.path.join(output_dir, target_filename)
 
         if img_url.startswith("http"):
@@ -283,7 +284,7 @@ def sync_and_download_images(items):
                 with urllib.request.urlopen(req, timeout=10) as resp:
                     img_bytes = resp.read()
                 
-                target_webp = f"{item_id}.webp"
+                target_webp = f"{slug}.webp"
                 target_webp_path = os.path.join(output_dir, target_webp)
                 
                 # Aspect ratio & height anti-fool check (reject thin website header banners)
@@ -369,10 +370,11 @@ STRICT GOURMET DIRECTIVES:
 4. ABSOLUTELY NO wedding planning logistics, NO tent/generator setups, NO Western health/hygiene lectures.
 5. Honorifics: Use 'លោកអ្នក' for reader, 'យើងខ្ញុំ' for CKM team.
 6. Output JSON ONLY with keys:
-   - "title_km": High SEO Value Khmer Title focusing on Khmer/Asian gourmet food (30-55 chars). Vary the opening phrasing dynamically (e.g., 'អាថ៌កំបាំងនៃការ...', 'សិល្បៈនៃការ...', 'បច្ចេកទេសចម្អិន...').
+   - "title_km": High SEO Value Khmer Title focusing on Khmer/Asian gourmet food (30-55 chars). Vary the opening phrasing dynamically (e.g., 'អាថ៌កំបាំងនៃការ...', 'សិល្បៈនៃការ...', 'បច្គេកទេសចម្អិន...').
    - "summary_km": Concise Khmer intro summary (150-200 chars).
    - "content_km": Detailed and comprehensive 500-600 word Khmer feature story divided into 4 distinct paragraphs with clear, descriptive Khmer subheadings, explaining preparation, simmering, presentation, and flavor profiles in rich detail.
    - "key_points_km": An array of exactly 3 bulleted takeaway points about flavor, technique, and ingredients in Khmer.
+   - "image_alt": A concise, descriptive Khmer alt text for the food cover image (15-25 words), describing the dish's appearance, main ingredients, and presentation style (e.g., 'រូបភាព...').
 
 Article Title: {item_to_process['title_en']}
 Article Summary: {item_to_process['desc_en']}
@@ -385,6 +387,7 @@ Article Summary: {item_to_process['desc_en']}
     title_km = ""
     summary_km = ""
     content_km = ""
+    image_alt = ""
     key_points_km = []
     
     if khmer_json:
@@ -394,6 +397,7 @@ Article Summary: {item_to_process['desc_en']}
             title_km = sanitize_text(parsed.get("title_km", ""))
             summary_km = sanitize_text(parsed.get("summary_km", ""))
             content_km = sanitize_text(parsed.get("content_km", ""))
+            image_alt = sanitize_text(parsed.get("image_alt", ""))
             raw_pts = parsed.get("key_points_km", [])
             key_points_km = [sanitize_text(pt) for pt in raw_pts if pt]
         except Exception as e:
@@ -412,6 +416,7 @@ Article Summary: {item_to_process['desc_en']}
         "key_points_km": key_points_km,
         "category": item_to_process["category_km"],
         "image_url": item_to_process["image_url"],
+        "image_alt": image_alt or title_km,
         "source_link": item_to_process["link"],
         "source_title_en": item_to_process["title_en"],
         "pub_date": item_to_process["pubDate"]

@@ -9,8 +9,8 @@ interface PulseItem {
   summary_km: string;
   content_km?: string;
   key_points_km?: string[];
-  category: string;
   image_url?: string;
+  image_alt?: string;
   source_link: string;
   source_title_en: string;
   pub_date: string;
@@ -60,7 +60,7 @@ const items: PulseItem[] = pulseData || [];
             <!-- Ambient Blurred Background Image -->
             <img 
               src={item.image_url || "/images/blog_01_inline_khmer.webp"} 
-              alt={item.title_km || "CKM Catering"} 
+              alt={item.image_alt || item.title_km || "CKM Catering"} 
               aria-hidden="true"
               onerror="this.onerror=null; this.src='/images/blog_01_inline_khmer.webp';"
               class="absolute inset-0 w-full h-full object-cover blur-xl opacity-50 scale-125 transition-transform duration-700 group-hover/img:scale-135 pointer-events-none"
@@ -72,7 +72,7 @@ const items: PulseItem[] = pulseData || [];
             <!-- Foreground Main Image -->
             <img 
               src={item.image_url || "/images/blog_01_inline_khmer.webp"} 
-              alt={item.title_km}
+              alt={item.image_alt || item.title_km}
               loading="lazy" 
               onerror="this.onerror=null; this.src='/images/blog_01_inline_khmer.webp';"
               class="w-full h-full object-contain relative z-2 transition-transform duration-500 group-hover:scale-[1.03] drop-shadow-md"
