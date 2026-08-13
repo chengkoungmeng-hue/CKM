@@ -11,6 +11,39 @@ BASE_URL = f"https://{HOST}"
 INDEXNOW_KEY = "e521f0df7f9c42348c416f1b878d9114"
 KEY_FILE_PATH = f"public/{INDEXNOW_KEY}.txt"
 
+def purge_cloudflare_cache():
+    """Purge Cloudflare Edge Cache programmatically."""
+    token = os.getenv("CLOUDFLARE_API_TOKEN")
+    if not token:
+        print("CLOUDFLARE_API_TOKEN secret is not set. Skipping cache purge.")
+        return
+
+    # Defensive check: strip any accidental quotes added to the GitHub secret
+    token = token.strip("\"'")
+    
+    zone_id = "d459c80e06d000c6e1927783fc6b3a7a"
+    url = f"https://api.cloudflare.com/client/v4/zones/{zone_id}/purge_cache"
+    payload = {"purge_everything": True}
+    
+    req = urllib.request.Request(
+        url,
+        data=json.dumps(payload).encode("utf-8"),
+        headers={
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json"
+        },
+        method="POST"
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            res_data = json.loads(resp.read().decode("utf-8"))
+            if res_data.get("success"):
+                print("🧹 Cloudflare Edge Cache successfully purged!")
+            else:
+                print(f"⚠️ Cloudflare Cache Purge failed: {res_data}")
+    except Exception as e:
+        print(f"⚠️ Cloudflare Cache Purge Error: {e}")
+
 def ensure_key_file():
     os.makedirs("public", exist_ok=True)
     with open(KEY_FILE_PATH, "w", encoding="utf-8") as f:
@@ -128,9 +161,9 @@ def main():
     for u in unique_urls:
         print(f" - {u}")
 
+    purge_cloudflare_cache()
     submit_indexnow(unique_urls)
     notify_gsc_api()
 
 if __name__ == "__main__":
-
     main()

@@ -58,15 +58,6 @@ jobs:
         run: |
           echo "Waiting 35 seconds for Cloudflare Pages live deployment to complete..."
           sleep 35
-          if [ -n "$CLOUDFLARE_API_TOKEN" ]; then
-            echo "Purging Cloudflare Edge Cache for Zone d459c80e06d000c6e1927783fc6b3a7a (ckmkh.com)..."
-            curl -X POST "https://api.cloudflare.com/client/v4/zones/d459c80e06d000c6e1927783fc6b3a7a/purge_cache" \
-              -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
-              -H "Content-Type: application/json" \
-              --data '{"purge_everything":true}'
-          else
-            echo "CLOUDFLARE_API_TOKEN secret is not set. Skipping cache purge."
-          fi
           if [ -n "$GSC_SERVICE_ACCOUNT_JSON" ]; then
             echo "$GSC_SERVICE_ACCOUNT_JSON" > google_service_account.json
           fi
