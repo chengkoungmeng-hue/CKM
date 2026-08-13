@@ -1,5 +1,12 @@
 # Work Log
 
+## 2026-08-13 (GitHub Actions CI/CD Pipeline Debugging & GSC Integration Fix)
+
+- **GitHub Actions Workflow Refinement**: Debugged CI/CD pipeline issues in `.github/workflows/daily_catering_pulse.yml`. Updated the pipeline steps to support Google Search Console (GSC) index notification dynamically by installing `requests` and `google-auth` Python libraries in the workflow runner.
+- **Service Account Credentials Integration**: Modified the indexing step to dynamically create `google_service_account.json` from the repository secret `GSC_SERVICE_ACCOUNT_JSON` at runtime.
+- **IndexNow WAF Audit & Diagnosis**: Investigated IndexNow HTTP 403 Forbidden (`UserForbiddedToAccessSite`) error. Verified key file availability (`200 OK` on `https://ckmkh.com/c9b7e416a2d9426fa7406a09289196b0.txt`) and WAF Custom Rules (which already bypass `.txt` files from managed rules, rate-limits, and Super Bot Fight Mode). Identified that Cloudflare Free Plan "Bot Fight Mode" (BFM) is challenging IndexNow's verification requests globally and recommended disabling BFM in Cloudflare dashboard as a resolution.
+- **Documentation & Secrets Check**: Updated `.github/workflows/daily_catering_pulse.yml` to support the required configuration.
+
 ## 2026-08-11 (Pulse Anti-Fool Audit, Over-Strict Title Guard Fix & Flash-Lite 500 RPD Model Configuration)
 
 - **Pulse Anti-Fool & Deduplication Audit**: Thoroughly audited `scripts/fetch_catering_pulse.py` and `src/data/pulseData.json`. Confirmed that deduplication mechanisms (`source_link` checking against `existing_links`, intra-batch `seen_links`, and content keyword filters) are functioning cleanly with 0 duplicate articles.
