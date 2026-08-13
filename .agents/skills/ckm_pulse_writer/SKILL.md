@@ -72,12 +72,14 @@ DO NOT include wedding planning logistics, tent setups, or Western health/hygien
     - "summary_km": Concise Khmer intro summary (150-200 chars).
     - "content_km": Detailed and comprehensive 500-600 word Khmer feature story divided into 4 distinct paragraphs with clear, descriptive Khmer subheadings, explaining preparation, simmering, presentation, and flavor profiles in rich detail.
     - "key_points_km": An array of exactly 3 bulleted takeaway points about flavor, technique, and ingredients in Khmer.
+    - "image_alt": A concise, descriptive Khmer alt text for the food cover image (15-25 words), describing the dish's appearance, main ingredients, and presentation style (e.g., 'រូបភាព...').
 
 ### Output JSON Format:
 
 ```json
 {
   "id": "pulse-XX",
+  "slug": "[seo-friendly-keyword-slug-pulse-XX]",
   "title_km": "[Title in Khmer]",
   "summary_km": "[Summary Paragraph in Khmer]",
   "content_km": "[Full 500-600 word feature article in Khmer]",
@@ -87,7 +89,8 @@ DO NOT include wedding planning logistics, tent setups, or Western health/hygien
     "[Point 3]"
   ],
   "category": "[One of: ម្ហូបខ្មែរប្រណីត | ម្ហូបចិននិងទាវជីវ | សិល្បៈអាហារអាស៊ី | គ្រឿងផ្សំនិងរសជាតិ]",
-  "image_url": "/images/pulse/pulse-XX.jpg",
+  "image_url": "/images/pulse/[seo-friendly-keyword-slug-pulse-XX].webp",
+  "image_alt": "[Descriptive Khmer Alt Text]",
   "source_link": "[Original Link]",
   "source_title_en": "[Original English Title]",
   "pub_date": "[Pub Date]"
