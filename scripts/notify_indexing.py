@@ -8,7 +8,7 @@ sys.stdout.reconfigure(encoding='utf-8')
 
 HOST = "ckmkh.com"
 BASE_URL = f"https://{HOST}"
-INDEXNOW_KEY = "c9b7e416a2d9426fa7406a09289196b0"
+INDEXNOW_KEY = "e521f0df7f9c42348c416f1b878d9114"
 KEY_FILE_PATH = f"public/{INDEXNOW_KEY}.txt"
 
 def ensure_key_file():
