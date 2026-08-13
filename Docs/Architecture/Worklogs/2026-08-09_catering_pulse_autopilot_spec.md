@@ -43,19 +43,23 @@ graph TD
 ## 3. How to Troubleshoot & Modify
 
 ### Scenario A: Modifying the Scraper Feeds or Cuisines (變更 RSS 來源或過濾規則)
+
 If you want to add a new feed or adjust geopolitically sensitive filters:
 - **Feeds**: Go to [fetch_catering_pulse.py](file:///c:/Projects/CKM/scripts/fetch_catering_pulse.py) and update the `FEEDS` array list.
 - **Filters**: Modify the list of banned keyword strings in the `is_excluded_article` method (e.g., check for Thai, Vietnamese, or Western food tokens).
 
 ### Scenario B: Customizing translation style & word length (調整翻譯語氣或文章長度)
+
 If the client wants longer summaries or specific terminology adaptations:
 - Go to [fetch_catering_pulse.py](file:///c:/Projects/CKM/scripts/fetch_catering_pulse.py) line 361.
 - Edit the system instruction prompt string.
 - If you increase the length requirement, make sure to adjust the **Anti-Fool Guard length check** (e.g., `len(content_km) < 450`) to match your new threshold.
 
 ### Scenario C: API Token Rotation (更換平台密鑰)
+
 - **Gemini Key**: Add or rotate `GEMINI_API_KEY` in the repository's GitHub Settings -> Secrets -> Actions tab. Locally, update the variable in `.env`.
 - **IndexNow Key**: If you rotate the IndexNow key, update `INDEXNOW_KEY` in [notify_indexing.py](file:///c:/Projects/CKM/scripts/notify_indexing.py) and ensure the new token TXT file is served at root.
 
 ### Scenario D: Node Version Upgrades (升級執行環境)
+
 - If the Astro framework or other modules are updated in the future and require a newer Node runtime, update the `node-version` parameter under the `Set up Node.js` step in [daily_catering_pulse.yml](file:///c:/Projects/CKM/.github/workflows/daily_catering_pulse.yml) to match the new version.
