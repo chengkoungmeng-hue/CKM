@@ -1,13 +1,17 @@
 # Work Log
 
-## 2026-08-13 (GitHub Actions CI/CD Pipeline Debugging & GSC Integration Fix)
+## 2026-08-13 (GitHub Actions CI/CD Pipeline Debugging & Pulse SEO Automation)
 
-- **GitHub Actions Workflow Refinement**: Debugged CI/CD pipeline issues in `.github/workflows/daily_catering_pulse.yml`. Updated the pipeline steps to support Google Search Console (GSC) index notification dynamically by installing `requests` and `google-auth` Python libraries in the workflow runner.
+- **GitHub Actions Workflow Refinement & Permissions Fix**: Debugged and resolved CI/CD pipeline issues in `.github/workflows/daily_catering_pulse.yml`. Added `permissions: { contents: write }` to the workflow configuration to authorize the `GITHUB_TOKEN` to push committed JSON updates and image files back to the repository, resolving the Git push 403 Forbidden error. Updated steps to install `requests` and `google-auth` Python libraries in the runner.
 - **Service Account Credentials Integration**: Modified the indexing step to dynamically create `google_service_account.json` from the repository secret `GSC_SERVICE_ACCOUNT_JSON` at runtime.
 - **IndexNow Key Rotation**: Updated `INDEXNOW_KEY` to `e521f0df7f9c42348c416f1b878d9114` in `scripts/notify_indexing.py` and replaced `public/c9b7e416a2d9426fa7406a09289196b0.txt` with the new key file `public/e521f0df7f9c42348c416f1b878d9114.txt` to match the user's Bing Webmaster Tools active IndexNow key.
 - **Cloudflare Cache Purge Robustness**: Replaced the shell-based `curl` cache purge command in the GitHub Actions workflow with programmatic execution inside `scripts/notify_indexing.py` using Python's native `urllib.request`. Added defensive quote-stripping to handle cases where the user accidentally wrapped their API token in quotes within GitHub Secrets, resolving the Cloudflare API Error 1012.
+- **Pulse Image SEO Automation**: Updated the Gemini AI generation prompt in `scripts/fetch_catering_pulse.py` to produce highly descriptive Khmer `image_alt` tags. Renamed cover image files to use keyword-rich article slugs instead of legacy `pulse-XX` IDs (e.g., `omurice-japanese-omelette-rice-video-pulse-01.webp` instead of `pulse-01.webp`) in both disk asset names and JSON references.
+- **Assets and Database Migration**: Created and executed `scripts/migrate_pulse_images.py` to rename existing local `.webp` files to their slug-based SEO names, append default `image_alt` to all 19 entries in `src/data/pulseData.json`, and re-crawl the 4 previously timed-out articles (`pulse-16` to `pulse-19`) to download their correct unique images, resolving all duplicate image issues.
+- **Astro Template Integration**: Updated `CateringPulse.astro`, `[page].astro`, `[id].astro`, and `index.astro` to render the descriptive standard `image_alt` attribute for all pulse images to maximize search engine discoverability.
 - **IndexNow WAF Audit & Diagnosis**: Investigated IndexNow HTTP 403 Forbidden (`UserForbiddedToAccessSite`) error. Verified key file availability and WAF Custom Rules (which already bypass `.txt` files from managed rules, rate-limits, and Super Bot Fight Mode). Identified that Cloudflare Free Plan "Bot Fight Mode" (BFM) is challenging IndexNow's verification requests globally and recommended disabling BFM in Cloudflare dashboard as a resolution.
-- **Documentation & Secrets Check**: Updated `.github/workflows/daily_catering_pulse.yml` to support the required configuration.
+- **Local Env & Dispatch Automation**: Added `GITHUB_PAT` locally to the `.env` file (ignored by Git) and successfully dispatched the GitHub actions REST API to trigger the workflow.
+
 
 ## 2026-08-11 (Pulse Anti-Fool Audit, Over-Strict Title Guard Fix & Flash-Lite 500 RPD Model Configuration)
 
