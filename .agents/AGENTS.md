@@ -314,18 +314,23 @@ grep -rhoE "https://[a-z0-9.-]*googleapis\.com/[a-zA-Z0-9/._-]*" --include=*.py 
 #   https://generativelanguage.googleapis.com/…         -> Gemini (AI Studio key, different project)
 ```
 
-| Enabled API | Requests | Keep? |
-| :--- | ---: | :--- |
-| Google Search Console API | 38 | **Yes** — the only API anything here uses |
-| Service Usage API, Service Management API | 0 | **Yes** — these manage other APIs; disabling can lock you out of the console's enable/disable controls |
-| Cloud Logging / Monitoring / Trace / Telemetry | 0 | Harmless GCP defaults, no billing exposure |
-| Google Analytics Data API / Admin API | 3 / 1 | **No code calls GA4.** Those requests were manual tests. Disable unless GA4 reporting is actually built |
-| BigQuery (×7), Cloud SQL, Cloud Storage (×3) | 0 | **Disable.** Never called, and all are billable — a leaked key plus a wide IAM role turns these into someone else's compute and storage on your invoice |
-| Analytics Hub, Dataplex, Dataform, Datastore | 0 | Disable — never called |
+**Grade by damage, not by usage.** "Nothing calls it" is a weak reason on its own — the
+question is what a leaked key could do through that API. Disabling something harmless is
+churn, and worse, it dilutes the recommendations that matter:
+
+| Tier | Examples | Worst case if a key leaks | Action |
+| :--- | :--- | :--- | :--- |
+| **Billable / storage** | BigQuery (×7), Cloud SQL, Cloud Storage (×3) | Someone else's compute and file hosting on your invoice | **Disable** |
+| Read-only, not billable | Google Analytics Data / Admin API | Someone reads your traffic numbers | Either state is fine — not a security decision |
+| Infrastructure | Service Usage, Service Management, Telemetry, Logging, Monitoring, Trace | Nothing | **Keep.** Disabling Service Usage can lock you out of the enable/disable controls themselves |
+| In use | Google Search Console API (56 requests) | — | **Keep** — the only API anything here calls |
+
+State as of 2026-08-14: everything in the billable tier is disabled, along with Analytics
+Hub, Dataplex, Dataform and Datastore. The GA4 pair is also disabled, which was optional.
 
 Disabling an API does **not** revoke IAM roles; the service account's roles are still the
-primary control. It is a cheap second layer: even a leaked key with broad roles cannot
-reach a service whose API is off. Re-enabling is one click, so the change is low-risk.
+primary control. It is a cheap second layer for the billable tier and close to pointless
+for the rest. Re-enabling is one click.
 
 - **[REGRESSION] A scoped token is not automatically a small one.** The single
   `CLOUDFLARE_API_TOKEN` also carried `PUT /rulesets/phases/…/entrypoint`, i.e. the power
@@ -389,6 +394,32 @@ python scripts/gsc_query_report.py --days 90
   rank-1-with-zero-clicks a success.
 - **Always filter to `country = khm`.** Taiwan and US rows are the owner's own team and
   crawlers. Unfiltered totals overstate reach by roughly 25%.
+
+### [REGRESSION] GA4 is installed, and not in this repository
+
+**Grepping the source for `gtag` / `googletagmanager` finds nothing, and concluding "this
+site has no analytics" is wrong.** GA4 is injected by **Cloudflare Zaraz**, configured in
+the Cloudflare dashboard — outside the repo, invisible to any code search.
+
+Worse, `curl https://ckmkh.com/` also finds nothing: Cloudflare skips Zaraz injection for
+non-browser user agents. Verify with a browser UA, which returns ~22 `zaraz` references:
+
+```bash
+curl -s https://ckmkh.com/ -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) \
+AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" | grep -c zaraz
+```
+
+Zaraz is also the right answer to the weight objection — §4 removed Lenis over 19 KB, and
+`gtag.js` is larger than that. Zaraz loads third-party tools at the edge instead. Do not
+"fix" the missing tag by adding `gtag.js` to `Layout.astro`; that would double-count every
+page view and add the payload Zaraz exists to avoid.
+
+**GA4 is collecting but not worth reading yet.** Engagement time, bounce rate and scroll
+depth are *distributions* and need a sample; most articles take 0 clicks per quarter, so
+those numbers describe the one visitor, not the page. Discrete events — how many people
+tapped the Telegram or phone CTA — stay meaningful at any volume and are the only thing
+worth instrumenting at current traffic. Revisit behavioural reports somewhere north of
+1,000 sessions per month; the site is at roughly 15.
 
 ### Measured demand, Cambodia only, 2026-05-15 → 2026-08-12
 
