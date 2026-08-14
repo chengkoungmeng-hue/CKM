@@ -1,26 +1,50 @@
 # =========================================
-# CKM Catering - Cloudflare Pages Edge Matrix
+# CKM Catering — Cloudflare Pages headers
+#
+# max-age   → the visitor's browser
+# s-maxage  → Cloudflare's edge (overrides max-age for the CDN only)
 # =========================================
 
-# 1. HTML Pages (Instant Cache Revalidation)
+# 1. HTML
+#    The browser revalidates every time, so an edit is visible to a returning
+#    visitor immediately. Cloudflare, however, may serve its cached copy for a day:
+#    the deploy pipeline purges the edge after every push, so the only way stale
+#    HTML survives is if that purge fails.
+#    stale-while-revalidate lets the edge answer instantly from the old copy while
+#    it fetches the new one, so nobody ever waits for a revalidation round trip.
+#    Before this, every single page view went back to the origin — measured live as
+#    `cf-cache-status: DYNAMIC`.
 /*
-  Cache-Control: public, max-age=0, must-revalidate
+  Cache-Control: public, max-age=0, must-revalidate, s-maxage=86400, stale-while-revalidate=604800
   X-Content-Type-Options: nosniff
-  X-Frame-Options: SAMEORIGIN
   Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN
+  Permissions-Policy: geolocation=(), microphone=(), camera=(), interest-cohort=()
 
-# 2. Astro Compiled Assets (Hashed - Immutable 1-Year Cache)
+# 2. Astro build assets — content-hashed filenames, so they can never go stale.
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
 
-# 3. Static Images (24-Hour Cache with Stale-While-Revalidate)
+# 3. Images — not content-hashed, so a shorter window plus background revalidation.
 /images/*
-  Cache-Control: public, max-age=86400, stale-while-revalidate=86400
+  Cache-Control: public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400
 
-# 4. Fonts (Immutable 1-Year Cache)
+# 4. Fonts — self-hosted and effectively permanent.
 /*.woff
   Cache-Control: public, max-age=31536000, immutable
 /*.woff2
   Cache-Control: public, max-age=31536000, immutable
-/fonts/*
-  Cache-Control: public, max-age=31536000, immutable
+
+# 5. Crawler and AI-discovery files. Short cache so a robots.txt or llms.txt fix
+#    takes effect quickly; these were previously falling through to the zone-level
+#    4-hour default with no rule of their own.
+/robots.txt
+  Cache-Control: public, max-age=3600, s-maxage=3600
+/llms.txt
+  Cache-Control: public, max-age=3600, s-maxage=3600
+/llms-full.txt
+  Cache-Control: public, max-age=3600, s-maxage=3600
+/sitemap-index.xml
+  Cache-Control: public, max-age=3600, s-maxage=3600
+/sitemap-0.xml
+  Cache-Control: public, max-age=3600, s-maxage=3600

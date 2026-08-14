@@ -46,6 +46,8 @@ export interface MenuItem {
   alt?: string;
 }
 
+// Khmer only — index.astro reads menuItems.km and nothing else. The en/zh
+// translations that used to sit here were never rendered by any page.
 export const menuItems: Record<string, MenuItem[]> = {
   km: [
     { title: "ម្ហូបក្លែម៦មុខ", image: menu01, desc: "ម្ហូបក្លែម៦មុខ រៀបចំយ៉ាងសម្រិតសម្រាំងសម្រាប់ភ្ញៀវហូបលេងមុនពេលម្ហូបធំចេញ ជួយឱ្យកាន់តែមានចំណង់អាហារ។", alt: "សេវាកម្មម្ហូបការ ភ្នំពេញ - ម្ហូបក្លែម៦មុខ ចេង គួងម៉េង" },
@@ -58,81 +60,14 @@ export const menuItems: Record<string, MenuItem[]> = {
     { title: "ស៊ុបប៉ាវហឺ១០មុខ", image: menu08, desc: "រម្ងាស់ដោយភ្លើងតិចៗរយៈពេលយូរ ជាមួយប៉ាវហឺ និងថ្នាំចិន១០មុខ ដើម្បីទាញយករសជាតិផ្អែមពីធម្មជាតិ និងប៉ូវកម្លាំង។", alt: "ទទួលរៀបចំអាហារប៊ូហ្វេ - ស៊ុបប៉ាវហឺ១០មុខ គុណភាពខ្ពស់" },
     { title: "ញាំជើងទាបង្គោរមិក", image: menu09, desc: "ជើងទាដកឆ្អឹងប្រកបដោយអនាម័យ យកមកញាំជូរហឹរស្រាលៗ ជួយកាត់បន្ថយភាពទ្រាន់ពីម្ហូបសាច់។", alt: "ចុងភៅរៀបចំម្ហូបការ - ញាំជើងទាបង្គោរមិក អនាម័យខ្ពស់" },
     { title: "ត្រីតុកកែចំហ៊ុយទឹកស៊ីអ៊ីវ", image: menu10, desc: "គ្រប់គ្រងពេលវេលាចំហុយបានយ៉ាងជាក់លាក់ ដើម្បីធានាថាសាច់ត្រីឆ្អិនល្អ តែនៅតែទន់រលោង ស្រូបជាមួយទឹកស៊ីអ៊ីវឈ្ងុយ។", alt: "សេវាកម្មទទួលរៀបចំកម្មវិធី - ត្រីតុកកែចំហ៊ុយទឹកស៊ីអ៊ីវ" },
-    { title: "បាយខ្ទប់ស្លឹកឈូក", image: menu11, desc: "បាយឆាផ្សំគ្រឿង រុំក្នុងស្លឹកឈូក និងយកទៅចំហុយ ដើម្បីឱ្យក្លិនឈ្ងុយនៃស្លឹកឈូកជ្រាបចូលគ្រប់គ្រាប់បាយ។", alt: "ម៉ឺនុយម្ហូបការខ្មែរ-ចិន - បាយខ្ទប់ស្លឹកឈូកឈ្ងុយឆ្ងាញ់" },
+    { title: "បាយខ្ចប់ស្លឹកឈូក", image: menu11, desc: "បាយឆាផ្សំគ្រឿង រុំក្នុងស្លឹកឈូក និងយកទៅចំហុយ ដើម្បីឱ្យក្លិនឈ្ងុយនៃស្លឹកឈូកជ្រាបចូលគ្រប់គ្រាប់បាយ។", alt: "ម៉ឺនុយម្ហូបការខ្មែរ-ចិន - បាយខ្ចប់ស្លឹកឈូកឈ្ងុយឆ្ងាញ់" },
     { title: "ទាខ្វៃហុងកុង", image: menu12, desc: "ឆ្លងកាត់ការសម្ងួតស្បែក និងខ្វៃក្នុងឡកម្តៅខ្ពស់ ដើម្បីឱ្យស្បែកទាឡើងស្រួយ និងសាច់នៅរក្សាជាតិទឹកល្អ។", alt: "សេវាកម្មម្ហូបការ ភ្នំពេញ - ទាខ្វៃហុងកុង ចេង គួងម៉េង" },
     { title: "បង្អែមខ្មែរបុរាណ", image: menu13, desc: "បង្អែមខ្មែរឈ្ងុយខ្ទិះដូង និងស្លឹកតើយស្រស់ ជាបង្អែមដ៏ស័ក្តិសមបំផុតសម្រាប់បិទបញ្ចប់កម្មវិធីជប់លៀង។", alt: "កញ្ចប់សេវាកម្មរៀបចំពិធីមង្គលការ - បង្អែមខ្មែរបុរាណ" },
     { title: "តុងយាំបង្កងទន្លេ", image: menu14, desc: "ស៊ុបតុងយាំបង្កងទន្លេដែលមានរសជាតិជូរហឹរដិត ជួយកាត់បន្ថយភាពទ្រាន់ និងធ្វើឱ្យអ្នកញ៉ាំបែកញើសស្រួលខ្លួន។", alt: "ទទួលរៀបចំអាហារប៊ូហ្វេ - តុងយាំបង្កងទន្លេ ជូរហឹរ" },
     { title: "កូនជ្រូកខ្វៃទាំងមូល", image: menu15, desc: "មុខម្ហូបលើកមុខមាត់ម្ចាស់កម្មវិធី ខ្វៃដោយបច្ចេកទេសបង្វិលស្មើភ្លើង ធ្វើឱ្យស្បែកស្រួយរឹមៗគ្រប់កន្លែង និងសាច់ទន់ឆ្ងាញ់។", alt: "ចុងភៅរៀបចំម្ហូបការ - កូនជ្រូកខ្វៃទាំងមូល ស្រួយឆ្ងាញ់" },
     { title: "សាច់គោឡុកឡាក់", image: menu16, desc: "វត្ថុធាតុដើមស្រស់ៗគុណភាពខ្ពស់ ផ្តល់ជូនរសជាតិសាច់គោឡុកឡាក់ដ៏ឈ្ងុយឆ្ងាញ់។", alt: "សេវាកម្មម្ហូបការ - សាច់គោឡុកឡាក់គុណភាពខ្ពស់" }
   ],
-  en: [
-    { title: "Assorted Appetizer Platter", image: menu01, desc: "Six classic cold starters, portioned and temperature-controlled to begin the service efficiently without overwhelming the palate." },
-    { title: "Deep-Fried Fish Fillet", image: menu02, desc: "Batch-fried at exact temperatures to maintain a crispy exterior and preserve internal moisture during high-volume service." },
-    { title: "Khmer Style Beef Salad", image: menu03, desc: "Freshly prepared with authentic Khmer spices, providing a high-acid, refreshing contrast to heavy banquet proteins." },
-    { title: "Cereal Butter Prawns", image: menu04, desc: "Wild-caught prawns wok-tossed in butter and cereal flakes, utilizing high heat for rapid execution and flavor." },
-    { title: "Roasted Suckling Pig with Bread", image: menu05, desc: "Traditional suckling pig roasted with strict temperature control to ensure a consistent crispy skin, served with soft bread." },
-    { title: "Sweet & Sour Fish", image: menu06, desc: "Crispy fried whole fish coated in a standardized sweet and sour glaze, engineered to hold its texture during transit." },
-    { title: "Spicy Stir-Fried Fish Fillet", image: menu07, desc: "High-heat wok execution to seal the fish quickly and infuse consistent, fiery aromatics across every batch." },
-    { title: "Abalone Herb Broth", image: menu08, desc: "Slow-simmered in large batches using precise ratios of abalone and herbs to ensure a consistent, temperature-stable hot soup." },
-    { title: "Spicy Duck Feet Salad", image: menu09, desc: "Hand-deboned duck feet prepared under strict hygiene controls, tossed in a sharp vinaigrette for a clean palate reset." },
-    { title: "Steamed Fish with Premium Soy", image: menu10, desc: "Steamed on a strict timer to prevent overcooking, served with a standardized soy sauce base." },
-    { title: "Lotus Leaf Fragrant Rice", image: menu11, desc: "Wok-fried rice steamed in lotus leaves, a reliable carbohydrate staple that holds heat exceptionally well during service." },
-    { title: "Hong Kong Style Roast Duck", image: menu12, desc: "Batch-roasted using traditional techniques to render fat evenly, ensuring the meat stays moist until plated." },
-    { title: "Traditional Khmer Desserts", image: menu13, desc: "Fresh coconut milk and pandan prepared with strict sanitation protocols to securely close the meal." },
-    { title: "Tom Yum River Prawn Soup", image: menu14, desc: "A robust, high-acid soup base that retains its heat and flavor profile perfectly from the kitchen to the table." },
-    { title: "Signature Whole Roasted Pig", image: menu15, desc: "The centerpiece of large banquets, requiring exact timing and heat management to deliver a crispy, uniform finish." },
-    { title: "Cambodian Beef Lok Lak", image: menu16, desc: "Premium quality fresh beef wok-tossed to perfection in our signature glossy brown sauce, served with crisp fresh vegetables." }
-  ],
-  zh: [
-    { title: "六福拼盘", image: menu01, desc: "经典的六款开胃凉菜，用料扎实、口味丰富，让宾客胃口大开。" },
-    { title: "酥炸深海鱼柳", image: menu02, desc: "掌控火候炸至金黄酥脆，锁住新鲜鱼肉的鲜甜汁水，外酥内嫩。" },
-    { title: "高棉风味凉拌牛肉", image: menu03, desc: "使用新鲜高棉香料调味的凉拌菜，酸辣清爽，刚好中和肉类的油腻感。" },
-    { title: "麦片黄油炸大虾", image: menu04, desc: "选用肥美大虾，裹上酥脆麦片与黄油下锅大火快炸，香气十足。" },
-    { title: "脆皮烧猪配软包", image: menu05, desc: "总铺师火候掌控的脆皮烤猪，皮脆肉嫩，搭配软包吃刚好解腻。" },
-    { title: "秘制糖醋鱼", image: menu06, desc: "将鲜鱼炸至酥脆，淋上比例刚好的糖醋酱汁，是一道酸甜讨喜的大菜。" },
-    { title: "猛火香辣鱼片", image: menu07, desc: "靠着大炉猛火快炒，让鱼片滑嫩入味，香辣下饭。" },
-    { title: "十全珍品鲍鱼汤", image: menu08, desc: "用料大方的热汤，加上中药材慢火熬煮，喝起来温润舒服。" },
-    { title: "凉拌剔骨鸭掌", image: menu09, desc: "手工去骨保留脆弹口感，拌入清爽的酸辣酱汁，是非常好的开胃菜。" },
-    { title: "豉油皇火候蒸鱼", image: menu10, desc: "精确掌控清蒸时间，淋上甘甜酱油，吃的是新鲜鱼获的自然鲜味。" },
-    { title: "古法荷叶飘香饭", image: menu11, desc: "把炒好的丰富配料与米饭用荷叶包起来蒸透，让荷叶清香完全入味。" },
-    { title: "正宗港式明炉烧鸭", image: menu12, desc: "师傅烤制逼出多余油脂，外皮香脆、肉质多汁不干柴。" },
-    { title: "传统高棉特色甜点", image: menu13, desc: "在地高棉风味甜品，用新鲜椰浆与斑斓叶制作，为办桌完美收尾。" },
-    { title: "冬荫功野生大虾汤", image: menu14, desc: "道地的东南亚酸辣风味，搭配紧实弹牙的鲜虾，喝下去非常过瘾。" },
-    { title: "金牌原只烤乳猪", image: menu15, desc: "办桌最顾面子的一道大菜，外皮金黄酥脆，肉质软嫩不油腻。" },
-    { title: "高棉黑椒摇摇牛", image: menu16, desc: "严选高品质新鲜牛肉，大火快炒锁住肉汁，搭配特制黑椒酱汁，肉质软嫩多汁。" }
-  ]
 };
 
-export interface BlogPost {
-  title: string;
-  subTitle: string;
-  link: string;
-  image: ImageMetadata;
-}
-
-export const blogPosts: Record<string, BlogPost[]> = {
-  km: [
-    { title: "ការវាយតម្លៃទីតាំង និងរៀបចំផ្លូវចេញម្ហូប", subTitle: "ការរៀបចំទីតាំងកម្មវិធី និងការបែងចែកទំហំរោងការ", link: "/km/blog/01-venue-logistics/", image: blogWeddingServiceGuide },
-    { title: "ការគ្រប់គ្រងការចេញម្ហូបរយតុ", subTitle: "ការរក្សាកម្តៅម្ហូប និងធានាគុណភាពទោះនៅទីតាំងខាងក្រៅ", link: "/km/blog/02-event-party-planning/", image: blogEventPartyPlanning },
-    { title: "ការជ្រើសរើសវត្ថុធាតុដើម និងរក្សាភាពស្រស់", subTitle: "ការរក្សាភាពត្រជាក់ដើម្បីធានាបាននូវរសជាតិដើម", link: "/km/blog/03-chef-professional-standard/", image: blogChefProfessionalStandard },
-    { title: "ការធានាអនាម័យ និងសុវត្ថិភាពម្ហូបការ", subTitle: "ការបែងចែកសាច់ឆៅនិងឆ្អិនដាច់ពីគ្នា និងអនាម័យខ្ពស់បំផុត", link: "/km/blog/04-food-safety-quality/", image: blogFoodSafetyQuality },
-    { title: "ការរៀបចំម៉ឺនុយម្ហូបការខ្មែរ-ចិន", subTitle: "បច្ចេកទេសបុកគ្រឿងដោយដៃ និងការរៀបចំរសជាតិមិនឱ្យទ្រាន់", link: "/km/blog/05-khmer-wedding-menu/", image: blogKhmerWeddingMenu },
-    { title: "ការរៀបចំកម្មវិធីដោយរលូន និងការដោះស្រាយបញ្ហា", subTitle: "ការត្រៀមខ្លួនរួចជាស្រេច និងការទទួលភ្ញៀវប្រកបដោយភាពកក់ក្តៅ", link: "/km/blog/06-service-process-sop/", image: blogServiceProcessSop }
-  ],
-  en: [
-    { title: "Venue Planning & Logistics", subTitle: "Custom Infrastructure for Any Environment", link: "/en/blog/01-venue-logistics/", image: blogWeddingServiceGuide },
-    { title: "100-Table Banquet Execution", subTitle: "Precise Temperature Control & Service Flow", link: "/en/blog/02-event-party-planning/", image: blogEventPartyPlanning },
-    { title: "Ingredient Sourcing & Consistency", subTitle: "Strict Cold Chain & Uncompromising Flavor", link: "/en/blog/03-chef-professional-standard/", image: blogChefProfessionalStandard },
-    { title: "Catering Food Safety Standards", subTitle: "Rigorous Segregation & Temperature Checks", link: "/en/blog/04-food-safety-quality/", image: blogFoodSafetyQuality },
-    { title: "Khmer-Chinese Fusion Menus", subTitle: "Flavor Pairing & Menu Design Strategies", link: "/en/blog/05-khmer-wedding-menu/", image: blogKhmerWeddingMenu },
-    { title: "Event Management & Contingency", subTitle: "Meticulous Scheduling & Backup Protocols", link: "/en/blog/06-service-process-sop/", image: blogServiceProcessSop }
-  ],
-  zh: [
-    { title: "外烩场地评估与动线规划", subTitle: "因地制宜打造完美的宴会硬体设施", link: "/zh/blog/01-venue-logistics/", image: blogWeddingServiceGuide },
-    { title: "百桌大型宴会的出餐统筹", subTitle: "精准控温机制与流畅的服务动线", link: "/zh/blog/02-event-party-planning/", image: blogEventPartyPlanning },
-    { title: "总铺师的食材严选与风味坚持", subTitle: "严密的低温保鲜与始终如一的美味", link: "/zh/blog/03-chef-professional-standard/", image: blogChefProfessionalStandard },
-    { title: "五星级的卫生与食安标准", subTitle: "落实生熟食分离与严格的中心温度检测", link: "/zh/blog/04-food-safety-quality/", image: blogFoodSafetyQuality },
-    { title: "中柬融合菜单设计与搭配逻辑", subTitle: "手工高棉香料与风味层次的完美拿捏", link: "/zh/blog/05-khmer-wedding-menu/", image: blogKhmerWeddingMenu },
-    { title: "现场活动统筹与危机处理", subTitle: "周密的时间排程与备用设施规划", link: "/zh/blog/06-service-process-sop/", image: blogServiceProcessSop }
-  ]
-};
+// BlogPost / blogPosts were removed: nothing imported them, and every link they
+// held pointed at /km/blog/… and /zh/blog/… routes that no longer exist.

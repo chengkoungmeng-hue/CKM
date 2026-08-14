@@ -2,10 +2,17 @@ name: Daily Catering Pulse & Auto-Indexing Pipeline
 
 on:
   schedule:
-    # Runs daily at 20:47 UTC (03:47 AM Phnom Penh Time ICT / 04:47 AM Taipei Time)
-    # Off-peak UTC hour (20:xx UTC) & non-standard minute (47) to eliminate GitHub Actions queue congestion
+    # 20:47 UTC = 03:47 ICT (Phnom Penh). Off-peak hour and a non-round minute to
+    # stay out of the GitHub Actions scheduling stampede.
     - cron: '47 20 * * *'
   workflow_dispatch:
+
+# A scheduled run and a manual dispatch overlapping would produce two commits
+# racing for the same branch, and two Cloudflare builds racing for the same
+# deployment. Serialise them.
+concurrency:
+  group: daily-catering-pulse
+  cancel-in-progress: false
 
 jobs:
   update-pulse-and-index:
@@ -26,43 +33,98 @@ jobs:
       - name: Install Python Dependencies
         run: pip install Pillow requests google-auth
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'npm'
+      # NOTE: no Node.js / npm ci step. Nothing in this pipeline runs JavaScript —
+      # the site is built by Cloudflare Pages, not here. Installing Node 22 and
+      # running a full `npm ci` cost ~40-60s per run and produced nothing.
 
-      - name: Install Node Dependencies
-        run: npm ci
-
-      - name: Run Catering Pulse RSS Miner & AI Localizer (1 Article Per Day)
+      - name: Fetch one new pulse article and localize it
+        id: pulse
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: python scripts/fetch_catering_pulse.py
 
-      - name: Commit & Push Generated Pulse Data & IndexNow Assets (Triggers Cloudflare Pages Auto-Deploy)
+      # Gemini has previously returned Khmer text with Thai and Chinese fragments
+      # spliced in. Those cannot render in Hanuman and shipped as tofu boxes.
+      # The generator now rejects them, and this is the belt-and-braces check
+      # across the whole content tree before anything is committed.
+      - name: Validate content before publishing
+        if: steps.pulse.outputs.changed == 'true'
+        run: python scripts/check_content.py --strict
+
+      - name: Commit & push (triggers Cloudflare Pages deployment)
+        id: commit
+        if: steps.pulse.outputs.changed == 'true'
         run: |
-          git config --global user.name "github-actions[bot]"
+          set -euo pipefail
+          git config --global user.name  "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add src/data/pulseData.json public/*.txt public/images/pulse/*
+
+          git add src/data/pulseData.json
+          # These paths may legitimately be empty; --ignore-unmatch keeps the
+          # step from aborting when the generator produced no new assets.
+          git add --all -- public/images/pulse 2>/dev/null || true
+          for f in public/*.txt; do [ -e "$f" ] && git add "$f"; done
+
           if git diff --staged --quiet; then
-            echo "No new pulse data updates to commit."
-          else
-            git commit -m "chore(pulse): auto-update daily catering pulse & indexnow key"
-            git push origin main
+            echo "Nothing staged after all — skipping."
+            echo "pushed=false" >> "$GITHUB_OUTPUT"
+            exit 0
           fi
 
-      - name: Wait for Cloudflare Deployment, Purge Edge Cache & Trigger Auto-Indexing
-        if: always()
+          git commit -m "chore(pulse): add ${{ steps.pulse.outputs.new_slug }}"
+          # Another job may have pushed while this one was calling the Gemini API.
+          git pull --rebase origin main
+          git push origin main
+          echo "pushed=true" >> "$GITHUB_OUTPUT"
+
+      # The old pipeline slept a flat 35s and then submitted to IndexNow and GSC.
+      # A Cloudflare Pages build for this site (install + astro build + upload)
+      # routinely takes longer than that, so the search engines were often told
+      # about a URL that was not live yet — the exact failure AGENTS.md forbids.
+      # Poll the real URL instead of guessing.
+      - name: Wait for the new page to be live on the edge
+        id: wait
+        if: steps.commit.outputs.pushed == 'true'
+        run: |
+          URL="https://ckmkh.com/pulse/${{ steps.pulse.outputs.new_slug }}/"
+          echo "Waiting for $URL"
+          for i in $(seq 1 40); do
+            CODE=$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 "$URL" || echo 000)
+            if [ "$CODE" = "200" ]; then
+              echo "Live after $((i*15))s (HTTP $CODE)"
+              echo "live=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            echo "  attempt $i: HTTP $CODE — retrying in 15s"
+            sleep 15
+          done
+          echo "::warning::Page did not go live within 10 minutes. Skipping indexing to avoid submitting a 404."
+          echo "live=false" >> "$GITHUB_OUTPUT"
+
+      # Only now: purge the edge cache, then submit to IndexNow and GSC.
+      # notify_indexing.py performs them in that order internally.
+      - name: Purge edge cache & submit to IndexNow + Google Search Console
+        if: steps.wait.outputs.live == 'true'
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
         run: |
-          echo "Waiting 35 seconds for Cloudflare Pages live deployment to complete..."
-          sleep 35
-          if [ -n "$GSC_SERVICE_ACCOUNT_JSON" ]; then
-            echo "$GSC_SERVICE_ACCOUNT_JSON" > google_service_account.json
+          set -euo pipefail
+          if [ -n "${GSC_SERVICE_ACCOUNT_JSON:-}" ]; then
+            printf '%s' "$GSC_SERVICE_ACCOUNT_JSON" > google_service_account.json
           fi
           python scripts/notify_indexing.py
+          rm -f google_service_account.json
 
-
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "### Daily Catering Pulse"
+            echo ""
+            echo "| step | result |"
+            echo "| :--- | :--- |"
+            echo "| new article | \`${{ steps.pulse.outputs.changed }}\` (${{ steps.pulse.outputs.reason }}${{ steps.pulse.outputs.new_slug }}) |"
+            echo "| pushed | \`${{ steps.commit.outputs.pushed }}\` |"
+            echo "| live on edge | \`${{ steps.wait.outputs.live }}\` |"
+          } >> "$GITHUB_STEP_SUMMARY"

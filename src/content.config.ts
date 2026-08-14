@@ -29,6 +29,11 @@ const blogCollection = defineCollection({
     
     // 分流機制：區分核心內容與趨勢誘餌
     category: z.enum(['pillar']).default('pillar'),
+
+    // 目標關鍵字。過去 14 篇文章的 frontmatter 都寫了這個欄位，但 schema 沒定義它，
+    // 而 z.object() 預設剝除未知鍵 —— 所以它從來沒有被任何程式讀到過。
+    // 現在 pulse 詳情頁用它來挑選真正主題相關的內部連結。
+    target_keyword: z.string().optional(),
     
     // 首頁精選文章標記 (前鋒文章)
     featured: z.boolean().default(false),

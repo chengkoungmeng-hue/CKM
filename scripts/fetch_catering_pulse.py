@@ -5,6 +5,7 @@ import urllib.request
 import re
 import xml.etree.ElementTree as ET
 import unicodedata
+import hashlib
 import sys
 
 sys.stdout.reconfigure(encoding='utf-8')
@@ -19,26 +20,72 @@ if not env_key and os.path.exists(".env"):
 
 print(f"Loaded Gemini API Key for Pulse Pipeline (len: {len(env_key)})", flush=True)
 
+# Sources are chosen to match what CKM actually cooks: Khmer heritage dishes and
+# Cantonese/Teochew banquet cuisine. The previous set (Just One Cookbook, Epicurious,
+# BBC Good Food) produced Palm Springs date shakes and Polish cream cake under a
+# Khmer-Chinese banquet brand.
+#
+# Thai and Vietnamese sources are deliberately excluded. Cambodia's relations with both
+# neighbours are politically sensitive and a catering brand has nothing to gain by
+# publishing their cuisine. EXCLUDE_REGEX enforces this at the article level too, in case
+# a source occasionally strays.
 FEEDS = [
     {
-        "source_name": "Just One Cookbook",
-        "category_en": "Authentic Japanese Gourmet & Fine Dining",
-        "category_km": "សិល្បៈអាហារអាស៊ី",
-        "url": "https://www.justonecookbook.com/feed/"
+        "source_name": "Cambodia Recipe",
+        "category_en": "Khmer Heritage Home Cooking",
+        "category_km": "ម្ហូបខ្មែរប្រណីត",
+        "url": "https://cambodiarecipe.com/feed/"
     },
     {
-        "source_name": "Epicurious Gourmet",
-        "category_en": "Epicurious Gourmet Culinary & Recipes",
+        "source_name": "Auntie Emily's Kitchen",
+        "category_en": "Cantonese Banquet & Home Classics",
+        "category_km": "ម្ហូបចិននិងទាវជីវ",
+        "url": "https://auntieemily.com/feed/"
+    },
+    {
+        "source_name": "Christine's Recipes",
+        "category_en": "Hong Kong & Cantonese Soups and Braises",
+        "category_km": "ម្ហូបចិននិងទាវជីវ",
+        "url": "https://en.christinesrecipes.com/feeds/posts/default?alt=rss"
+    },
+    {
+        "source_name": "China Sichuan Food",
+        "category_en": "Chinese Regional Techniques & Seasonings",
         "category_km": "គ្រឿងផ្សំនិងរសជាតិ",
-        "url": "https://www.epicurious.com/feed/rss"
+        "url": "https://www.chinasichuanfood.com/feed/"
     },
     {
-        "source_name": "BBC Good Food",
-        "category_en": "BBC Seasonal Gastronomy & Chef Recipes",
+        "source_name": "Omnivore's Cookbook",
+        "category_en": "Chinese Home Cooking & Technique",
+        "category_km": "គ្រឿងផ្សំនិងរសជាតិ",
+        "url": "https://omnivorescookbook.com/feed/"
+    },
+    {
+        "source_name": "The Woks of Life",
+        "category_en": "Cantonese, Shanghainese & Sichuan Family Cooking",
+        "category_km": "ម្ហូបចិននិងទាវជីវ",
+        "url": "https://thewoksoflife.com/feed/"
+    },
+    {
+        "source_name": "The Hong Kong Cookery",
+        "category_en": "Hong Kong Classics & Pastry Fillings",
         "category_km": "សិល្បៈអាហារអាស៊ី",
-        "url": "https://www.bbcgoodfood.com/feed/rss"
+        "url": "https://www.thehongkongcookery.com/feeds/posts/default?alt=rss"
     }
 ]
+
+# Measured 2026-08-14 — effective yield after EXCLUDE_REGEX, from each feed's own
+# publishing history. One article a day needs 30/month.
+#
+#   Omnivore's Cookbook   19.3/mo    Christine's Recipes    9.9/mo
+#   The Woks of Life       7.3/mo    China Sichuan Food     3.2/mo
+#   The Hong Kong Cookery  2.5/mo    ------------------------------
+#                                    total                 42.2/mo
+#
+# Cambodia Recipe and Auntie Emily are kept despite being dormant (last posts roughly
+# 6 months and 3 years old): they are the most on-brand sources in the list, their back
+# catalogue is still unconsumed, and a dormant feed costs nothing but one HTTP request.
+# Re-measure if the pipeline starts reporting "no new items" several days running.
 
 FOOD_KEYWORDS = [
     "food", "cuisine", "recipe", "recipes", "cooking", "gourmet", "restaurant", 
@@ -49,11 +96,34 @@ FOOD_KEYWORDS = [
     "餐飲", "冰淇淋", "美食", "料理", "甜點", "食材"
 ]
 
+# NOTE: FOOD_REGEX is not applied anywhere — only EXCLUDE_REGEX gates the feed items.
+# That is the correct behaviour now that every source is a dedicated recipe blog: a
+# title-must-contain-"soup"/"recipe" rule would reject exactly the on-brand posts
+# ("Typhoon Shelter Fried Crab 避風塘炒蟹", "Easy Char Siu 簡易叉燒", "Dandan Noodles 擔擔麵").
+# Kept only so the keyword list is available if a general-interest source is ever added.
 FOOD_REGEX = re.compile(r'(' + '|'.join(re.escape(k) for k in FOOD_KEYWORDS) + r')', re.IGNORECASE)
-EXCLUDE_REGEX = re.compile(
-    r'\b(crypto|fast food|burger|pizza|delivery app|flight|hotel room|brain-computer|tech billionaire|cloud computing|leasing market|auction|stock market|movie|movies|film|films|cinema|actor|actress|hollywood|netflix|trailer|tv show|celebrity|director|oscar|entertainment|pub crawl|pub|bar crawl|cobbler|mac and cheese|hot dog|taco|bourbon|viking|cherry cake|cherry cobbler|cherry pie|casserole|pancakes|waffles|sandwich|edinburgh|western recipe|western food|vietnam|vietnamese|saigon|pho|com tam|goi cuon|hanoi|da nang|banh mi|thai|thailand|som tam|tom yum|pad thai|bangkok|phuket|chiang mai|green curry)\b', 
-    re.IGNORECASE
+_EXCLUDE_TERMS = (
+    # Off-topic / non-culinary
+    r'crypto|fast food|burger|pizza|delivery app|flight|hotel room|brain-computer|'
+    r'tech billionaire|cloud computing|leasing market|auction|stock market|movie|movies|'
+    r'film|films|cinema|actor|actress|hollywood|netflix|trailer|tv show|celebrity|'
+    r'director|oscar|entertainment|pub crawl|pub|bar crawl|'
+    # Western dishes that do not belong under a Khmer-Chinese banquet brand
+    r'cobbler|mac and cheese|hot dog|taco|bourbon|viking|cherry cake|cherry cobbler|'
+    r'cherry pie|casserole|pancakes|waffles|sandwich|edinburgh|western recipe|western food|'
+    r'tiramisu|croissant|brownie|cupcake|'
+    # Vietnamese — excluded on geopolitical grounds, not culinary ones
+    r'vietnam|vietnamese|saigon|hanoi|da nang|hue|pho|com tam|goi cuon|banh mi|banh xeo|'
+    r'banh cuon|bun bo|bun cha|cha gio|nuoc cham|nuoc mam|summer roll|rice paper roll|'
+    # Thai — same reason
+    r'thai|thailand|bangkok|phuket|chiang mai|isaan|som tam|tom yum|tom kha|pad thai|'
+    r'khao soi|massaman|panang|larb|laab|green curry|thai basil|'
+    # Japanese / Korean — off-brand for a Khmer-Chinese banquet caterer
+    r'matcha|hojicha|onigiri|bibimbap|tteokbokki|kimchi|ramen|sushi|tempura'
 )
+# NOTE: plain "curry" is deliberately NOT excluded — Khmer red curry (ការីខ្មែរ) is a
+# core CKM dish. Only the specifically Thai curry names are filtered.
+EXCLUDE_REGEX = re.compile(r'\b(' + _EXCLUDE_TERMS + r')\b', re.IGNORECASE)
 
 VALID_FALLBACKS = [
     f"/images/blog_{i:02d}_inline_khmer.webp" for i in range(1, 13)
@@ -65,18 +135,158 @@ def sanitize_text(text):
     cleaned = re.sub(r'[\u4e00-\u9fff]+', '', text)
     return cleaned.strip()
 
-def generate_seo_slug(title_en, item_id):
-    if not title_en:
-        return item_id
-    nfkd_form = unicodedata.normalize('NFKD', title_en)
+def generate_seo_slug(title_en, item_id, taken=()):
+    """Build a PERMANENT slug for a pulse item.
+
+    The slug must never encode the item's position in the list. It used to be
+    f"{words}-{item_id}", and because item_id was reassigned by list position on
+    every run, adding one article silently rewrote all 20 URLs — every previously
+    indexed pulse URL 404'd the next day while notify_indexing.py submitted the
+    new ones to Google and Bing. Slugs are permanent identifiers: assign once,
+    never recompute.
+
+    Collisions are resolved with a short deterministic hash of the source link,
+    never with a positional counter.
+    """
+    nfkd_form = unicodedata.normalize('NFKD', title_en or "")
     ascii_text = nfkd_form.encode('ASCII', 'ignore').decode('utf-8')
     cleaned = re.sub(r'[^a-zA-Z0-9\s-]', '', ascii_text).strip().lower()
-    slug = re.sub(r'[\s-]+', '-', cleaned)
-    words = [w for w in slug.split('-') if w][:7]
-    short_slug = '-'.join(words)
-    if not short_slug:
+    words = [w for w in re.sub(r'[\s-]+', '-', cleaned).split('-') if w][:7]
+    base = '-'.join(words)
+    if not base:
         return item_id
-    return f"{short_slug}-{item_id}"
+    if base not in taken:
+        return base
+    suffix = hashlib.sha1((title_en or item_id).encode('utf-8')).hexdigest()[:6]
+    return f"{base}-{suffix}"
+
+
+def set_action_output(**kwargs):
+    """Expose results to the GitHub Actions job so later steps can branch on them.
+
+    The pipeline previously ran cache-purge + IndexNow + GSC submission with
+    `if: always()`, so it pinged the search engines every single day even when
+    nothing had changed and even when generation had failed. That is a wasted
+    IndexNow quota and a repeated "this changed" signal for URLs that did not.
+    """
+    out = os.getenv("GITHUB_OUTPUT")
+    if not out:
+        return
+    with open(out, "a", encoding="utf-8") as fh:
+        for key, value in kwargs.items():
+            fh.write("%s=%s\n" % (key, value))
+
+
+def next_pulse_id(existing):
+    """Return the next never-before-used pulse id.
+
+    Monotonic: ids are never reused and never shift, so /pulse/pulse-NN/ stays
+    pointing at the same article for the life of the site.
+    """
+    highest = 0
+    for item in existing:
+        m = re.match(r"^pulse-(\d+)$", str(item.get("id", "")))
+        if m:
+            highest = max(highest, int(m.group(1)))
+    return "pulse-%02d" % (highest + 1)
+
+
+# Gemini occasionally returns Khmer text with Thai, Chinese or Japanese fragments
+# spliced in (e.g. หัวใจ, วัฒนธรรม, 環境的控制與使用醬料調配提升風味). Hanuman cannot
+# render those, so they ship as tofu boxes to a Khmer-reading audience. Reject the
+# generation rather than commit it.
+# WHITELIST, not blacklist. An enumerated blacklist of Thai/CJK/Kana/Devanagari let
+# Hebrew through — "עוד" and "צ" shipped inside Khmer words on a generated article,
+# because nobody thought to list Hebrew. There is no end to the scripts a model can
+# emit, so allow only what this site legitimately contains and reject everything else.
+#
+# Allowed: Khmer, Khmer symbols, ASCII (digits, punctuation, the rare brand name),
+# and standard whitespace/typographic punctuation.
+ALLOWED_RANGES = [
+    (0x1780, 0x17FF),   # Khmer
+    (0x19E0, 0x19FF),   # Khmer symbols
+    (0x0020, 0x007E),   # printable ASCII
+    (0x00A0, 0x00A0),   # nbsp
+    (0x2000, 0x206F),   # general punctuation (…, —, quotes)
+]
+ALLOWED_CHARS = set("\n\r\t")
+
+
+def _script_name(cp):
+    for lo, hi, name in (
+        (0x0E00, 0x0E7F, "Thai"), (0x0900, 0x097F, "Devanagari"),
+        (0x0980, 0x09FF, "Bengali"), (0x4E00, 0x9FFF, "CJK"),
+        (0x3040, 0x30FF, "Kana"), (0x0590, 0x05FF, "Hebrew"),
+        (0x0600, 0x06FF, "Arabic"), (0x0400, 0x04FF, "Cyrillic"),
+        (0xAC00, 0xD7AF, "Hangul"), (0x0370, 0x03FF, "Greek"),
+    ):
+        if lo <= cp <= hi:
+            return name
+    return "U+%04X" % cp
+
+
+# Gemini's Khmer is structurally contaminated with Thai — Khmer and Thai share a great
+# deal of Indic-derived vocabulary and the model interchanges them. Prompting does not
+# fix it: three consecutive attempts, with the offending words named explicitly in the
+# prompt, all came back with Thai. So repair deterministically in code.
+#
+# Longest-first: multi-word phrases must be replaced before their constituent words.
+THAI_TO_KHMER = [
+    ("。", "។"),            # CJK full stop -> Khmer khan (recurs often)
+    ("，", "។"),            # CJK comma -> Khmer khan
+    ("รากผักชี", "ឬសជីវ៉ាន់ស៊ុយ"),   # coriander root
+    ("วัฒนธรรม", "វប្បធម៌"),         # culture
+    ("ผักชี", "ជីវ៉ាន់ស៊ុយ"),          # coriander
+    ("หัวใจ", "បេះដូង"),             # heart
+    ("จากการ", "ពីការ"),             # from the act of
+    ("ช่วย", "ជួយ"),                 # to help
+    ("ความ", "ភាព"),                 # -ness (nominaliser)
+    ("การ", "ការ"),                  # act of  (Thai การ -> Khmer ការ)
+    ("และ", "និង"),                  # and
+    ("ของ", "របស់"),                 # of
+    ("ใน", "ក្នុង"),                  # in
+    ("ที่", "ដែល"),                   # that/which
+    ("เป็น", "ជា"),                   # to be
+    ("มี", "មាន"),                    # to have
+]
+
+
+def repair_khmer(text):
+    """Replace recurring Thai fragments with their Khmer equivalents.
+
+    Anything left over after this is genuinely unknown and must be rejected — we do not
+    blind-strip foreign characters, because deleting a word from the middle of a sentence
+    leaves grammatically broken Khmer that reads worse than tofu boxes.
+    """
+    if not isinstance(text, str):
+        return text
+    for thai, khmer in THAI_TO_KHMER:
+        text = text.replace(thai, khmer)
+    return text
+
+
+def repair_khmer_deep(value):
+    if isinstance(value, list):
+        return [repair_khmer_deep(v) for v in value]
+    return repair_khmer(value)
+
+
+def find_foreign_scripts(*texts):
+    """Return every character that is not Khmer, ASCII or standard punctuation."""
+    hits = []
+    for text in texts:
+        for chunk in (text if isinstance(text, list) else [text]):
+            if not isinstance(chunk, str):
+                continue
+            for i, ch in enumerate(chunk):
+                if ch in ALLOWED_CHARS:
+                    continue
+                cp = ord(ch)
+                if any(lo <= cp <= hi for lo, hi in ALLOWED_RANGES):
+                    continue
+                hits.append("%s %r near: %s"
+                            % (_script_name(cp), ch, chunk[max(0, i - 15):i + 10]))
+    return hits
 
 def extract_image_multitier(item, fallback, item_link):
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'}
@@ -124,55 +334,112 @@ def verify_live_url(url):
             return True
         return False
 
+# --- Gemini call budget ---------------------------------------------------------
+#
+# The old structure nested two loops: 4 models x 4 attempts inside call_gemini_api_robust,
+# and the content-quality retry called it 3 times. Worst case that is 48 requests in one
+# run, against a 20 requests/day cap on the Flash tier. It would have exhausted the quota
+# on any bad day and then silently produced nothing.
+#
+# Measured quotas (2026-08-14):
+#   gemini-3.7-flash        5 RPM / 250K TPM /  20 RPD
+#   gemini-3.6-flash        5 RPM / 250K TPM /  20 RPD
+#   gemini-3.5-flash        5 RPM / 250K TPM /  20 RPD
+#   gemini-3.5-flash-lite  15 RPM / 250K TPM / 500 RPD
+#
+# Design: one model per quality-attempt, walking DOWN the ladder. Each model gets a
+# single retry, and only for 429/503 (rate limit / overloaded) — every other failure
+# moves straight to the next model instead of burning three more requests on it.
+# Flash Lite is last because its 500/day cap cannot realistically run out, so the
+# pipeline always has a working fallback even if every Flash tier is exhausted.
+#
+# Worst case per run: 4 models x 2 = 8 requests. Typical: 1.
+# Order is by MEASURED reliability, not by version number. Across 5 generations on
+# 2026-08-14, gemini-3.7-flash was rate-limited or unavailable on every single attempt
+# and gemini-3.6-flash then succeeded every time — so leading with 3.7 spent two wasted
+# requests before every article. 3.6 first cuts a generation from 3 calls to 1.
+# 3.7 stays in the ladder so the pipeline picks it up again once it frees capacity.
+# Re-measure occasionally; this order is an observation, not a permanent truth.
+MODEL_LADDER = [
+    "gemini-3.6-flash",
+    "gemini-3.7-flash",
+    "gemini-3.5-flash",
+    "gemini-3.5-flash-lite",
+]
+API_CALL_BUDGET = 10          # hard ceiling for a single pipeline run
+
+# The old gate was 450 characters — far below anything the model has ever returned
+# (real output runs ~1,900), so it never rejected a single thin response. Set it where
+# it actually bites: below this, the piece cannot be carrying four developed sections.
+MIN_CONTENT_CHARS = 1200
+_api_calls_made = 0
+
+
+def _gemini_once(prompt, model, timeout=45):
+    """Exactly one request. Returns (text, error_kind). No internal retry."""
+    global _api_calls_made
+    if _api_calls_made >= API_CALL_BUDGET:
+        return None, "budget-exhausted"
+    _api_calls_made += 1
+
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={env_key}"
+    req = urllib.request.Request(
+        url,
+        data=json.dumps({"contents": [{"parts": [{"text": prompt}]}]}).encode("utf-8"),
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            res = json.loads(resp.read().decode("utf-8"))
+        return res["candidates"][0]["content"]["parts"][0]["text"].strip(), None
+    except Exception as e:
+        msg = str(e)
+        if "429" in msg:
+            return None, "rate-limit"
+        if "503" in msg or "500" in msg or "timed out" in msg.lower():
+            return None, "unavailable"
+        return None, msg[:80]
+
+
 def call_gemini_api_robust(prompt, min_content_len=300):
-    """
-    Enterprise-grade Gemini API caller with:
-    1. Exponential backoff on HTTP 429 (Rate Limit).
-    2. Multi-model fallback (gemini-2.0-flash-lite -> gemini-2.0-flash -> gemini-1.5-flash).
-    3. Anti-fool guard: Rejects dummy fallback text and retries if response length < min_content_len.
-    """
+    """Walk the model ladder until one returns usable JSON. Budget-bounded."""
+    global _api_calls_made
     if not env_key:
         print("ERROR: GEMINI_API_KEY is missing!", flush=True)
         return None
-    
-    models = ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemini-flash-lite-latest"]
-    
-    for model in models:
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={env_key}"
-        payload = {"contents": [{"parts": [{"text": prompt}]}]}
-        req = urllib.request.Request(
-            url,
-            data=json.dumps(payload).encode("utf-8"),
-            headers={"Content-Type": "application/json"}
-        )
-        
-        for attempt in range(4):
-            try:
-                with urllib.request.urlopen(req, timeout=20) as resp:
-                    res = json.loads(resp.read().decode("utf-8"))
-                    raw_text = res["candidates"][0]["content"]["parts"][0]["text"].strip()
-                    
-                    # Anti-fool check: Validate JSON structure and content length
-                    clean_json = raw_text.replace("```json", "").replace("```", "").strip()
-                    parsed = json.loads(clean_json)
-                    content_km = parsed.get("content_km", "")
-                    
-                    if len(content_km) >= min_content_len:
-                        return raw_text
-                    else:
-                        print(f"[{model} attempt {attempt+1}] Response failed anti-fool content length check (len: {len(content_km)}). Retrying...", flush=True)
-                        time.sleep(3)
-            except Exception as e:
-                err_str = str(e)
-                if "429" in err_str:
-                    sleep_time = 5 * (attempt + 1)
-                    print(f"[{model} attempt {attempt+1}] HTTP 429 Rate Limit hit. Backing off for {sleep_time}s...", flush=True)
-                    time.sleep(sleep_time)
-                else:
-                    print(f"[{model} attempt {attempt+1}] API Error: {e}", flush=True)
-                    time.sleep(3)
-                    
+
+    for model in MODEL_LADDER:
+        for sub in range(2):                      # one retry, transient failures only
+            text, kind = _gemini_once(prompt, model)
+
+            if kind == "budget-exhausted":
+                print(f"API budget of {API_CALL_BUDGET} calls reached — stopping.", flush=True)
+                return None
+
+            if text:
+                try:
+                    parsed = json.loads(text.replace("```json", "").replace("```", "").strip())
+                    if len(parsed.get("content_km", "")) >= min_content_len:
+                        print(f"[{model}] accepted (call {_api_calls_made}).", flush=True)
+                        return text
+                    print(f"[{model}] content too short — next model.", flush=True)
+                except Exception:
+                    print(f"[{model}] unparseable JSON — next model.", flush=True)
+                break                             # a bad answer is the model's fault, move on
+
+            if kind in ("rate-limit", "unavailable") and sub == 0:
+                wait = 8 if kind == "rate-limit" else 4
+                print(f"[{model}] {kind} — retrying once in {wait}s.", flush=True)
+                time.sleep(wait)
+                continue
+
+            print(f"[{model}] {kind} — falling back to next model.", flush=True)
+            break
+
+    print("All models exhausted without a usable response.", flush=True)
     return None
+
 
 def fetch_verified_gourmet_rss_items():
     collected = []
@@ -253,16 +520,10 @@ def sync_and_download_images(items):
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
     }
 
-    temp_map = {}
-    if os.path.exists(output_dir):
-        for filename in os.listdir(output_dir):
-            filepath = os.path.join(output_dir, filename)
-            if os.path.isfile(filepath):
-                try:
-                    with open(filepath, "rb") as f:
-                        temp_map[filename] = f.read()
-                except Exception:
-                    pass
+    # This function used to slurp every file in the directory into memory (25 MB of
+    # WebP) so it could copy image bytes to a new filename whenever an item's slug
+    # changed. Slugs no longer change, so that machinery is gone — it existed only to
+    # paper over the URL churn, and it is what produced 33 orphaned image files.
 
     for item in items:
         item_id = item.get("id", "pulse-01")
@@ -323,11 +584,11 @@ def sync_and_download_images(items):
                 if not os.path.exists(target_filepath):
                     item["image_url"] = "/images/blog_01_inline_khmer.webp"
         elif img_url.startswith("/images/pulse/"):
-            old_filename = os.path.basename(img_url)
-            if old_filename in temp_map:
-                with open(target_filepath, "wb") as out_f:
-                    out_f.write(temp_map[old_filename])
-                item["image_url"] = f"/images/pulse/{target_filename}"
+            # Already downloaded and already correctly named — nothing to do.
+            # Rewriting it with identical bytes on every run only churned mtimes.
+            existing = os.path.join(output_dir, os.path.basename(img_url))
+            if not os.path.exists(existing):
+                print(f"Missing local image for {item_id}: {img_url}", flush=True)
 
 def update_pulse_daily():
     out_file = "src/data/pulseData.json"
@@ -347,69 +608,162 @@ def update_pulse_daily():
 
     if not item_to_process:
         print("\nNo new RSS items found today. All fetched articles are already in dataset.", flush=True)
-        for idx, entry in enumerate(existing_pulse, 1):
-            p_id = f"pulse-{idx:02d}"
-            entry["id"] = p_id
-            if not entry.get("slug") or entry["slug"] == p_id:
-                entry["slug"] = generate_seo_slug(entry.get("source_title_en", ""), p_id)
+        # Do NOT renumber. Existing ids and slugs are live, indexed URLs.
+        # Only backfill an identifier if one is genuinely missing.
+        taken = {p.get("slug") for p in existing_pulse if p.get("slug")}
+        for entry in existing_pulse:
+            if not entry.get("id"):
+                entry["id"] = next_pulse_id(existing_pulse)
+            if not entry.get("slug"):
+                entry["slug"] = generate_seo_slug(
+                    entry.get("source_title_en", ""), entry["id"], taken)
+                taken.add(entry["slug"])
         sync_and_download_images(existing_pulse)
         with open(out_file, "w", encoding="utf-8") as f:
             json.dump(existing_pulse, f, ensure_ascii=False, indent=2)
+        print("Dataset unchanged — no deploy or indexing needed.", flush=True)
+        set_action_output(changed="false", reason="no-new-items")
         return
 
     print(f"\nProcessing 1 NEW article with Rate Limiting & Anti-Fool Guard: {item_to_process['title_en']}", flush=True)
     
     prompt = f"""
-You are a master Khmer culinary editor for CKM Catering (ចេង គួងម៉េង) in Phnom Penh (60 years of experience).
-Task: Adapt this international gourmet food article into 100% PURE KHMER with a strict focus on Khmer traditional recipes (ម្ហូបខ្មែរ), Chinese & Teochew banquet specialties (ម្ហូបចិន/ទាវជីវ), and Asian fine dining (អាហារអាស៊ី).
+You are the senior Khmer culinary editor for CKM Catering (ចេង គួងម៉េង), a family
+banquet kitchen in Phnom Penh with 60 years behind it.
 
-STRICT GOURMET DIRECTIVES:
-1. ABSOLUTELY ZERO Chinese characters (100% 0 漢字/中文).
-2. ABSOLUTELY ZERO raw English words (100% 0 English vocabulary).
-3. 100% PURE FOOD FOCUS: Discuss ingredients, simmering techniques, broth balance, aromas, spice layers, and culinary artistry.
-4. ABSOLUTELY NO wedding planning logistics, NO tent/generator setups, NO Western health/hygiene lectures.
-5. Honorifics: Use 'លោកអ្នក' for reader, 'យើងខ្ញុំ' for CKM team.
-6. Output JSON ONLY with keys:
-   - "title_km": High SEO Value Khmer Title focusing on Khmer/Asian gourmet food (30-55 chars). Vary the opening phrasing dynamically (e.g., 'អាថ៌កំបាំងនៃការ...', 'សិល្បៈនៃការ...', 'បច្គេកទេសចម្អិន...').
-   - "summary_km": Concise Khmer intro summary (150-200 chars).
-   - "content_km": Detailed and comprehensive 500-600 word Khmer feature story divided into 4 distinct paragraphs with clear, descriptive Khmer subheadings, explaining preparation, simmering, presentation, and flavor profiles in rich detail.
-   - "key_points_km": An array of exactly 3 bulleted takeaway points about flavor, technique, and ingredients in Khmer.
-   - "image_alt": A concise, descriptive Khmer alt text for the food cover image (15-25 words), describing the dish's appearance, main ingredients, and presentation style (e.g., 'រូបភាព...').
+A recipe blog has published the article below. Do NOT translate it. Translation of a
+foreign recipe is thin content and will be treated as such by search engines and by
+readers. Your job is to write an ORIGINAL Khmer feature that uses this dish only as a
+starting point, and whose value comes from something the source article does not have:
+the perspective of a Khmer-Chinese banquet kitchen.
 
-Article Title: {item_to_process['title_en']}
-Article Summary: {item_to_process['desc_en']}
+WHAT MAKES THE PIECE WORTH PUBLISHING
+Every article must do all four of these, in this order:
+1. NAME THE TECHNIQUE. Identify the one transferable cooking principle at work — control
+   of heat, the order ingredients enter the wok, how a broth is clarified, how a protein
+   is kept from drying, how a sauce is balanced. Explain WHY it works, not just what to do.
+2. CONNECT IT TO KHMER-CHINESE BANQUET COOKING. Which dish already on a Cambodian
+   wedding table uses this same principle? Name real dishes: ជ្រូកខ្វៃ, ស៊ុបប៉ាវហឺ,
+   ត្រីចំហុយទឹកស៊ីអ៊ីវ, បាយខ្ចប់ស្លឹកឈូក, ញាំជើងទា, តុងយាំបង្កងទន្លេ. Draw a real parallel
+   or a real contrast — never a vague "this is similar to Khmer cooking".
+3. MAKE IT USEFUL TO A CAMBODIAN READER. What changes when you cook this in Phnom Penh —
+   which ingredient is easy to find at a local market and which needs a substitute, how
+   the humidity or heat affects it, what to do differently when cooking for many guests
+   rather than for one family.
+4. SAY WHERE IT FITS IN A MEAL. Opening, main, palate-cleanser, or closing — and why.
+
+BANNED, BECAUSE THEY MAKE CONTENT THIN
+- Restating the source recipe step by step. Never produce an ingredient list or a
+  numbered method.
+- Filler adjectives standing in for information: "ឆ្ងាញ់ណាស់", "ល្អឥតខ្ចោះ",
+  "ប្រណីតបំផុត" with nothing concrete attached.
+- Sentences that would be equally true of any dish on earth.
+- Promising anything on the owner's behalf: no prices, no guarantees, no claims about
+  CKM's equipment, no "we can make any dish you want".
+- Hard technical specifications: no temperatures in degrees, no electrical ratings, no
+  exact hold times. Describe judgement and craft in words instead.
+
+LANGUAGE — ABSOLUTE
+1. 100% Khmer script. ZERO Chinese characters. ZERO raw English words.
+2. ZERO Thai script (ก-๛), ZERO Japanese kana, ZERO Devanagari. Khmer and Thai share
+   Indic vocabulary and your training data mixes them. Do NOT emit ช่วย, หัวใจ,
+   วัฒนธรรม, จากการ, รากผักชี or any other Thai word. If you are unsure of a Khmer word,
+   describe the idea in plain Khmer rather than borrowing a Thai one.
+3. Address the reader as 'លោកអ្នក'. Refer to the team as 'យើងខ្ញុំ'.
+4. Humble and specific. No hype: never '第一', 'ល្អបំផុតក្នុងពិភពលោក', 'គ្មានអ្នកណាប្រៀបបាន'.
+5. Do not mention the source blog, the source country, or that this is adapted.
+
+OUTPUT — JSON ONLY, no commentary, no markdown fences:
+   - "title_km": 30-55 characters. Lead with the technique or the insight, not the foreign
+     dish name. Vary the opening across articles — do not start every title with 'សិល្បៈនៃ'.
+   - "summary_km": 150-200 characters. State the actual insight, so a reader who reads only
+     this line still learns something.
+   - "content_km": 450-600 Khmer words, in exactly 4 sections, each with its own descriptive
+     Khmer subheading, following the four points above in order. Each section must contain at
+     least one concrete, checkable statement.
+   - "key_points_km": exactly 3 items. Each must state a specific technique or judgement a
+     cook could act on. Not summaries of the article, and not slogans.
+   - "image_alt": 15-25 Khmer words describing what is visible in the photograph — the dish,
+     its main ingredients, its presentation. Not keywords.
+
+Source dish: {item_to_process['title_en']}
+Source notes: {item_to_process['desc_en']}
 """
-    # Enforce robust 10-second pacing delay before calling API to fully bypass free-tier rate limits
-    time.sleep(10)
-    
-    khmer_json = call_gemini_api_robust(prompt, min_content_len=450)
-    
-    title_km = ""
-    summary_km = ""
-    content_km = ""
-    image_alt = ""
+    # Roughly half of Gemini's responses splice a Thai fragment into the Khmer, and a
+    # single rejection used to cost the whole day's article. Retry within the run,
+    # feeding the exact offending characters back so the model can correct itself.
+    MAX_ATTEMPTS = 3
+    title_km = summary_km = content_km = image_alt = ""
     key_points_km = []
-    
-    if khmer_json:
-        try:
-            clean_json = khmer_json.replace("```json", "").replace("```", "").strip()
-            parsed = json.loads(clean_json)
-            title_km = sanitize_text(parsed.get("title_km", ""))
-            summary_km = sanitize_text(parsed.get("summary_km", ""))
-            content_km = sanitize_text(parsed.get("content_km", ""))
-            image_alt = sanitize_text(parsed.get("image_alt", ""))
-            raw_pts = parsed.get("key_points_km", [])
-            key_points_km = [sanitize_text(pt) for pt in raw_pts if pt]
-        except Exception as e:
-            print(f"JSON parse error: {e}", flush=True)
+    reject_reason = "generation-failed"
 
-    if not content_km or len(content_km) < 450:
-        print("WARNING: Gemini generation failed anti-fool check. Preserving existing dataset without corrupting items.", flush=True)
+    for attempt in range(1, MAX_ATTEMPTS + 1):
+        attempt_prompt = prompt
+        if attempt > 1:
+            attempt_prompt += (
+                "\n\nRETRY %d/%d. Your previous answer was REJECTED because it contained "
+                "non-Khmer characters: %s\nRewrite it completely. Every character of every "
+                "Khmer field must be Khmer script. Check each word before you emit it."
+                % (attempt, MAX_ATTEMPTS, "; ".join(reject_detail[:5]))
+            )
+
+        # Pacing delay keeps the free tier from rate-limiting us.
+        time.sleep(10)
+        khmer_json = call_gemini_api_robust(attempt_prompt, min_content_len=MIN_CONTENT_CHARS)
+
+        title_km = summary_km = content_km = image_alt = ""
+        key_points_km = []
+        if khmer_json:
+            try:
+                clean_json = khmer_json.replace("```json", "").replace("```", "").strip()
+                parsed = json.loads(clean_json)
+                title_km = sanitize_text(parsed.get("title_km", ""))
+                summary_km = sanitize_text(parsed.get("summary_km", ""))
+                content_km = sanitize_text(parsed.get("content_km", ""))
+                image_alt = sanitize_text(parsed.get("image_alt", ""))
+                key_points_km = [sanitize_text(pt) for pt in parsed.get("key_points_km", []) if pt]
+            except Exception as e:
+                print(f"Attempt {attempt}: JSON parse error: {e}", flush=True)
+
+        if not content_km or len(content_km) < MIN_CONTENT_CHARS:
+            print(f"Attempt {attempt}/{MAX_ATTEMPTS}: content too short — retrying.", flush=True)
+            reject_detail = ["response was truncated or unparseable"]
+            reject_reason = "generation-too-short"
+            continue
+
+        # Deterministic repair pass before judging the output.
+        pre = find_foreign_scripts(title_km, summary_km, content_km, image_alt, key_points_km)
+        if pre:
+            title_km = repair_khmer(title_km)
+            summary_km = repair_khmer(summary_km)
+            content_km = repair_khmer(content_km)
+            image_alt = repair_khmer(image_alt)
+            key_points_km = repair_khmer_deep(key_points_km)
+            print(f"Attempt {attempt}: repaired {len(pre)} foreign character(s) via the "
+                  "Thai-to-Khmer map.", flush=True)
+
+        reject_detail = find_foreign_scripts(title_km, summary_km, content_km, image_alt, key_points_km)
+        if reject_detail:
+            print(f"Attempt {attempt}/{MAX_ATTEMPTS}: unmapped non-Khmer script remains — retrying.", flush=True)
+            for h in reject_detail[:4]:
+                print("   - %s" % h, flush=True)
+            print("   (add these to THAI_TO_KHMER if they recur)", flush=True)
+            reject_reason = "foreign-script-in-output"
+            continue
+
+        print(f"Attempt {attempt}/{MAX_ATTEMPTS}: clean Khmer output accepted.", flush=True)
+        break
+    else:
+        print(f"WARNING: {MAX_ATTEMPTS} attempts all rejected ({reject_reason}). "
+              "Preserving existing dataset rather than publishing broken Khmer.", flush=True)
+        set_action_output(changed="false", reason=reject_reason)
         return
 
+    new_id = next_pulse_id(existing_pulse)
+    taken = {p.get("slug") for p in existing_pulse if p.get("slug")}
     new_entry = {
-        "id": "pulse-01",
-        "slug": generate_seo_slug(item_to_process["title_en"], "pulse-01"),
+        "id": new_id,
+        "slug": generate_seo_slug(item_to_process["title_en"], new_id, taken),
         "title_km": title_km,
         "summary_km": summary_km,
         "content_km": content_km,
@@ -430,19 +784,17 @@ Article Summary: {item_to_process['desc_en']}
         except Exception:
             return 0
 
+    # Sort for display order only. Identity (id + slug) is assigned once at
+    # insert and is never recomputed — reordering must not move any URL.
     updated_list = sorted([new_entry] + existing_pulse, key=parse_item_date, reverse=True)
-    
-    for idx, entry in enumerate(updated_list, 1):
-        p_id = f"pulse-{idx:02d}"
-        entry["id"] = p_id
-        entry["slug"] = generate_seo_slug(entry.get("source_title_en", ""), p_id)
-        
+
     sync_and_download_images(updated_list)
     
     with open(out_file, "w", encoding="utf-8") as f:
         json.dump(updated_list, f, ensure_ascii=False, indent=2)
         
     print(f"SUCCESS: Added 1 new verified Khmer gourmet article to {out_file}!", flush=True)
+    set_action_output(changed="true", new_slug=new_entry["slug"], new_id=new_entry["id"])
 
 if __name__ == "__main__":
     update_pulse_daily()

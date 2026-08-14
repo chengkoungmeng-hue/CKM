@@ -15,84 +15,40 @@ import { Phone, Award, Flame, Sunrise, Send, MapPin } from "@lucide/astro";
 
 
 
-interface Props {
-  lang?: "km" | "en" | "zh";
-}
-
-const { lang = "km" } = Astro.props;
-
-// Multi-language dictionary
-const t = (() => {
-  switch (lang) {
-    case "en":
-      return {
-        seoTitle: "Tang Huot Bakery | Traditional Pastries & Mooncakes Wholesale",
-        seoDesc: "Tang Huot Bakery supplies egg yolk pies, mooncakes, and Fa Gao. We focus on reliable production, hygiene, and consistent quality.",
-        h1: "Tang Huot Bakery",
-        heroSub: "Traditional Pastries Wholesale",
-        heroHighlight: "Reliable High-Volume Supply",
-        heroDesc: "Tang Huot Bakery supplies egg yolk pies, mooncakes, and Fa Gao for wholesale and festive seasons. Operating from our new facility, we focus on maintaining hygiene and a consistent, pleasant taste for all our partners.",
-        preorderTitle: "Wholesale & Orders",
-        sigTag: "Classic Pastry",
-        sigTitle: "Tang Huot Egg Yolk Pie: A Traditional Taste",
-        sigDesc: "The egg yolk pie is a pastry we make with care. Even during large production runs, we carefully monitor the baking process to ensure the crust remains flaky and the center stays soft and flavorful.",
-        mcTitle: "Festive Mooncakes: Baked with Care",
-        mcDesc: "Making mooncakes in large quantities requires careful attention. We use large ovens and monitor temperatures closely to ensure an even bake. We strive to keep the fillings moist and tender for the festive season.",
-        fagaoTitle: "Fa Gao: Prepared for the Lunar New Year",
-        fagaoDesc1: "During the Lunar New Year, we are fully prepared to supply our wholesale partners with a steady quantity of Fa Gao.",
-        fagaoDesc2: "A good Fa Gao requires the right batter and careful steaming. We watch the heat closely to ensure each cake blooms properly, making them a suitable offering for the new year.",
-        contactTitle: "Contact Us",
-        facilityTag: "Modern Production Facility",
-        address: "House 454, Trapeang Thleung 1 Village, Sangkat Chom Chao, Khan Pou Senchey, Phnom Penh",
-      };
-    case "zh":
-      return {
-        seoTitle: "陈发饼家 | 传统糕饼与节庆月饼批发",
-        seoDesc: "陈发饼家专营蛋黄酥、月饼与发糕批发。我们在新厂房中稳定生产，注重卫生与品质，为您提供可靠的糕饼供应。",
-        h1: "陈发饼家",
-        heroSub: "传统糕饼与节庆月饼",
-        heroHighlight: "稳定的大宗批发供应",
-        heroDesc: "陈发饼家主要供应蛋黄酥、中秋月饼与发糕。我们在新的厂房中生产，注重环境卫生与制程稳定，希望能为您的节庆或生意提供可靠、实在的传统糕点。",
-        preorderTitle: "批发与订购咨询",
-        sigTag: "经典糕点",
-        sigTitle: "陈发蛋黄酥：实在的传统味道",
-        sigDesc: "蛋黄酥是我们常年制作的糕点。每一颗的烘焙我们都按部就班，努力让外皮保持酥脆，内馅保持顺口。即使是面对大宗订单，我们也会尽力维持一贯的品质标准。",
-        mcTitle: "节庆月饼：注重火候，用心烘焙",
-        mcDesc: "制作大量月饼需要耐心照顾。我们使用大型烤炉并谨慎控制温度，努力让月饼受热均匀、色泽实在。内馅方面也力求温润顺口，希望在佳节期间为大家提供安心、实在的月饼。",
-        fagaoTitle: "传统发糕：年节祈福的心意",
-        fagaoDesc1: "在农历新年期间，我们有足够的设备与人力，能为批发伙伴提供数量稳定的发糕。",
-        fagaoDesc2: "发糕的制作需要注意面糊比例与蒸煮的火候。我们小心看顾蒸汽的强度，希望能让每一颗发糕都顺利绽放，为您增添新年的福气与好兆头。",
-        contactTitle: "联系我们",
-        facilityTag: "现代厂房生产",
-        address: "金边市 菩森芷区 宗周分区 德邦特楞1村 454号",
-      };
-    case "km":
-    default:
-      return {
-        seoTitle: "ហាងនំ តាំង ហួត | បោះដុំនំប្រពៃណី និងនំព្រះខែ",
-        seoDesc: "ហាងនំ តាំង ហួត ទទួលបោះដុំនំពងទា នំព្រះខែ និងនំហ្វាកាវ។ យើងផលិតដោយយកចិត្តទុកដាក់លើអនាម័យ និងរក្សាគុណភាពជូនអតិថិជន។",
-        h1: "ហាងនំ តាំង ហួត",
-        heroSub: "បោះដុំនំពងទា និងនំប្រពៃណី",
-        heroHighlight: "ផ្គត់ផ្គង់នំក្នុងបរិមាណច្រើន",
-        heroDesc: "ហាងនំ តាំង ហួត ផ្គត់ផ្គង់នំពងទា នំព្រះខែ និងនំហ្វាកាវ សម្រាប់លក់បន្ត និងរដូវកាលបុណ្យទាន។ យើងខិតខំផលិតនំនៅក្នុងរោងនំថ្មី ដោយរក្សាអនាម័យ និងរសជាតិឱ្យបានល្អ ដើម្បីបំពេញតម្រូវការអតិថិជន។",
-        preorderTitle: "ទំនាក់ទំនងបោះដុំ និងលក់រាយ",
-        sigTag: "នំប្រចាំហាង",
-        sigTitle: "នំពងទា តាំង ហួត៖ រសជាតិដើម",
-        sigDesc: "នំពងទា ជានំដែលយើងតែងតែធ្វើជាប្រចាំ។ ទោះបីជាត្រូវផលិតច្រើន យើងនៅតែយកចិត្តទុកដាក់លើការដុតនំ ដើម្បីឱ្យសំបកនំស្អាត ហើយសាច់ខាងក្នុងនៅតែទន់ និងងាយស្រួលញ៉ាំ។",
-        mcTitle: "នំព្រះខែ៖ យកចិត្តទុកដាក់លើការដុត",
-        mcDesc: "ការធ្វើនំព្រះខែក្នុងបរិមាណច្រើន ទាមទារការពិនិត្យមើលឱ្យបានដិតដល់។ យើងប្រើប្រាស់ឡដុតធំៗ និងគ្រប់គ្រងកម្តៅដោយប្រុងប្រយ័ត្ន ដើម្បីឱ្យនំឆ្អិនល្អ មានពណ៌ស្អាត និងសាច់ខាងក្នុងទន់ល្មម មិនស្ងួត។",
-        fagaoTitle: "នំហ្វាកាវ សម្រាប់ចូលឆ្នាំចិន",
-        fagaoDesc1: "នៅពេលចូលឆ្នាំចិន យើងរៀបចំខ្លួនរួចរាល់ ដើម្បីផ្គត់ផ្គង់នំហ្វាកាវជូនអតិថិជនបោះដុំឱ្យបានគ្រប់គ្រាន់។",
-        fagaoDesc2: "ការធ្វើនំហ្វាកាវទាមទារការលាយម្សៅ និងការមើលភ្លើងចំហុយឱ្យបានត្រឹមត្រូវ។ យើងតែងតែប្រុងប្រយ័ត្ន ដើម្បីឱ្យនំរាល់ដុំរីកបានស្អាត សម្រាប់ជាការជូនពរ និងសែនព្រេនក្នុងឆ្នាំថ្មី។",
-        contactTitle: "ទំនាក់ទំនង",
-        facilityTag: "ផលិតក្នុងរោងនំថ្មី",
-        address: "ផ្ទះលេខ៤៥៤ ផ្លូវលំភូមិត្រពាំងថ្លឹង១ សង្កាត់ចោមចៅ ខណ្ឌពោធិ៍សែនជ័យ រាជធានីភ្នំពេញ",
-      };
-  }
-})();
+// The site ships Khmer only — /zh and /en are 301-redirected at the edge.
+// The English and Chinese dictionaries that used to live here were unreachable:
+// nothing ever passed lang="en" or lang="zh" to this component.
+const t = {
+  // Search intent leads, brand follows. Nobody types the shop's name — they type
+  // the pastry and the city. The old title opened with "ហាងនំ តាំង ហួត" and buried
+  // both, and "ភ្នំពេញ" appeared only twice in the whole page.
+  seoTitle: "នំព្រះខែ នំពងទា ភ្នំពេញ | ហាងនំ តាំង ហួត បោះដុំ និងលក់រាយ",
+  seoDesc: "ហាងនំគ្រួសារនៅភ្នំពេញ ធ្វើនំព្រះខែ នំពងទា និងនំហ្វាកាវ ដុតក្នុងរោងនំផ្ទាល់ខ្លួន។ ទទួលទាំងបោះដុំសម្រាប់ហាង និងលក់រាយសម្រាប់គ្រួសារ។ ទូរស័ព្ទ ០១២ ៦៧៧ ៧១០។",
+  h1: "ហាងនំ តាំង ហួត",
+  heroSub: "នំព្រះខែ នំពងទា និងនំប្រពៃណី",
+  heroHighlight: "ទទួលបោះដុំ និងលក់រាយ",
+  heroDesc: "ហាងនំ តាំង ហួត ជាហាងនំគ្រួសារនៅភ្នំពេញ ដែលធ្វើនំព្រះខែ នំពងទា និងនំហ្វាកាវ។ យើងដុតនំនៅរោងនំផ្ទាល់ខ្លួន ដូច្នេះអាចទទួលទាំងការបញ្ជាទិញបោះដុំសម្រាប់ហាង និងការទិញរាយសម្រាប់គ្រួសារ។ សូមទូរស័ព្ទមកសាកសួរ និងកក់ការបញ្ជាទិញ។",
+  preorderTitle: "ទំនាក់ទំនងបោះដុំ និងលក់រាយ",
+  sigTag: "នំប្រចាំហាង",
+  sigTitle: "នំពងទា តាំង ហួត៖ រសជាតិដើម",
+  sigDesc: "នំពងទា គឺជានំដែលយើងធ្វើគ្រប់ថ្ងៃពេញមួយឆ្នាំ។ សំបកនំមានជាន់ស្តើងៗ ហើយពងទានៅចំកណ្តាលទន់ល្មម មិនស្ងួត។ នេះជានំដែលអតិថិជនត្រឡប់មកទិញម្តងហើយម្តងទៀត។",
+  mcTitle: "នំព្រះខែ សម្រាប់បុណ្យភ្ជុំខែ",
+  mcDesc: "នំព្រះខែជានំប្រចាំរដូវរបស់យើង។ យើងដុតជាបាច់តូចៗពេញមួយថ្ងៃ ជាជាងដុតទាំងអស់ក្នុងពេលតែមួយ ដូច្នេះនំដែលដល់ដៃលោកអ្នកនៅថ្មី សាច់ខាងក្នុងទន់ និងសំបកមានពណ៌មាសស្មើគ្នា។ សម្រាប់ចំនួន និងកាលបរិច្ឆេទដែលលោកអ្នកត្រូវការ សូមទូរស័ព្ទមកសាកសួរដោយផ្ទាល់។",
+  fagaoTitle: "នំហ្វាកាវ សម្រាប់ចូលឆ្នាំចិន",
+  fagaoDesc1: "នៅពេលចូលឆ្នាំចិន យើងរៀបចំខ្លួនរួចរាល់ ដើម្បីផ្គត់ផ្គង់នំហ្វាកាវជូនអតិថិជនបោះដុំឱ្យបានគ្រប់គ្រាន់។",
+  fagaoDesc2: "ការធ្វើនំហ្វាកាវទាមទារការលាយម្សៅ និងការមើលភ្លើងចំហុយឱ្យបានត្រឹមត្រូវ។ យើងតែងតែប្រុងប្រយ័ត្ន ដើម្បីឱ្យនំរាល់ដុំរីកបានស្អាត សម្រាប់ជាការជូនពរ និងសែនព្រេនក្នុងឆ្នាំថ្មី។",
+  contactTitle: "ទំនាក់ទំនង",
+  facilityTag: "ផលិតក្នុងរោងនំថ្មី",
+  address: "ផ្ទះលេខ៤៥៤ ផ្លូវលំភូមិត្រពាំងថ្លឹង១ សង្កាត់ចោមចៅ ខណ្ឌពោធិ៍សែនជ័យ រាជធានីភ្នំពេញ",
+};
 ---
 
-<Layout title={t.seoTitle} description={t.seoDesc} lang={lang}>
+{/* Without an explicit image this page inherited /open-graph.png — a CKM wedding
+    banquet photo. Every share of the bakery in a Telegram or Facebook group showed
+    catering, not pastry. /th-image.jpg is the shop's own shot: a 陳發-stamped mooncake
+    beside the business card carrying both phone numbers, which is exactly what should
+    appear in a chat group through the Mid-Autumn season. */}
+<Layout title={t.seoTitle} description={t.seoDesc} lang="km-KH" image="/th-image.jpg">
   <Fragment slot="head">
     <link rel="icon" type="image/x-icon" href="/thicon.ico" />
     <!-- LCP preload removed in favor of Astro Image handling -->
@@ -112,9 +68,26 @@ const t = (() => {
           "addressRegion": "Phnom Penh",
           "addressCountry": "KH"
         },
-        "telephone": "+85512677710",
+        // Both numbers appear on the shop's card and in the contact section; the schema
+        // listed only the Cellcard one, so the Smart number was invisible to Google.
+        "telephone": ["+85512677710", "+85570677710"],
         "url": `https://ckmkh.com/tanghuot/`,
         "priceRange": "$$",
+        // The product shot carries the shop name and both numbers, so it is the more
+        // useful of the two images for a knowledge panel or a rich result.
+        "image": [`https://ckmkh.com/th-image.jpg`, `https://ckmkh.com${imgLogo29.src}`],
+        // Only what the page itself states. No opening hours or coordinates here —
+        // we do not know them, and inventing them would put wrong information in
+        // front of someone trying to visit.
+        "areaServed": { "@type": "City", "name": "Phnom Penh" },
+        "makesOffer": [
+          { "@type": "Offer", "itemOffered": { "@type": "Product", "name": t.mcTitle,
+            "category": "Mooncake", "description": t.mcDesc } },
+          { "@type": "Offer", "itemOffered": { "@type": "Product", "name": t.sigTitle,
+            "category": "Pastry", "description": t.sigDesc } },
+          { "@type": "Offer", "itemOffered": { "@type": "Product", "name": t.fagaoTitle,
+            "category": "Steamed Cake", "description": t.fagaoDesc2 } }
+        ],
         "sameAs": [
           "https://www.facebook.com/people/%E1%9E%A0%E1%9E%B6%E1%9E%84%E1%9E%93%E1%9F%86-%E1%9E%8F%E1%9E%B6%E1%9F%86%E1%9E%84-%E1%9E%A0%E1%9E%BD%E1%9E%8F/100063625998376/"
         ]

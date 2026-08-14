@@ -16,10 +16,12 @@ export async function getStaticPaths() {
   
   for (const item of validItems) {
     const primarySlug = item.slug || item.id;
-    paths.push({ params: { id: primarySlug }, props: { item } });
-    
+    // Both routes stay reachable so older /pulse/pulse-NN/ links keep working,
+    // but both declare the slug URL as canonical.
+    paths.push({ params: { id: primarySlug }, props: { item, canonicalId: primarySlug } });
+
     if (item.slug && item.id && item.slug !== item.id) {
-      paths.push({ params: { id: item.id }, props: { item } });
+      paths.push({ params: { id: item.id }, props: { item, canonicalId: primarySlug } });
     }
   }
 
@@ -31,33 +33,88 @@ export async function getStaticPaths() {
 }
 // Trigger HMR route re-evaluation for normalized SEO slugs
 
-const { item = {} } = Astro.props as any;
+const { item = {}, canonicalId } = Astro.props as any;
 
 // Fetch 3 highly relevant & evenly distributed blog posts to pass Link Juice (internal link equity)
 const allBlogPosts = await getCollection('blog', ({ id }) => !id.includes('/'));
 allBlogPosts.sort((a, b) => a.id.localeCompare(b.id));
 
-const pulseCategory = item.category || '';
-const pulseTitle = item.title_km || '';
+// The whole point of /pulse/ is to catch long-tail search traffic and pass the reader
+// on to the articles that actually sell. That only works if the onward link is about
+// something the reader just showed interest in.
+//
+// The previous scoring awarded +10 when a pulse CATEGORY string appeared in a blog
+// title — but the categories are pulse-only taxonomy labels (ម្ហូបខ្មែរប្រណីត,
+// គ្រឿងផ្សំនិងរសជាតិ …) and they appear in exactly zero of the 15 blog titles or
+// descriptions. That branch never fired once, so the remaining generic +3s and the
+// rotation tie-breaker decided everything: the "related articles" were round-robin.
+// A reader finishing a piece on abalone broth could be handed tent logistics.
+//
+// Now: score on real term overlap between the blog post and the pulse text.
+const pulseHaystack = [
+  item.title_km || '',
+  item.summary_km || '',
+  item.content_km || '',
+  (item.key_points_km || []).join(' '),
+].join(' ');
 
-// Deterministic seed offset based on item.id to guarantee even round-robin link distribution across all blog posts (01-15)
+// Khmer does NOT put spaces between words — a space separates phrases, not words. So
+// splitting on whitespace yields whole clauses, and an exact substring match on a clause
+// never fires. Match on the article's own target_keyword instead, which is short and
+// dish-specific ("ស៊ុបប៉ាវហឺ", "ចុងភៅខ្មែរ", "តម្លៃម្ហូបការ"), plus a sliding window over
+// it so a partial mention still counts.
+// Terms so common across catering copy that matching them tells us nothing. A sliding
+// window over the keyword generated exactly these, and "អនាម័យនិងសុវត្ថិភាពម្ហូបអាហារ"
+// then matched every single pulse article through the fragment "ម្ហូបអាហារ".
+const GENERIC_TERMS = [
+  'ម្ហូបអាហារ', 'ម្ហូបការ', 'សេវាកម្ម', 'អាហារ', 'ម្ហូប', 'ការរៀបចំ', 'រសជាតិ',
+];
+
+const keywordVariants = (kw: string) => {
+  const clean = (kw || '').replace(/[^ក-៿\s]/g, '').trim();
+  if (!clean) return [];
+  // Whole phrases only — no sliding window. A target_keyword is already short and
+  // dish-specific ("ស៊ុបប៉ាវហឺ", "ចុងភៅនៅភ្នំពេញ", "តម្លៃម្ហូបការ").
+  return clean
+    .split(/\s+/)
+    .filter((p) => p.length >= 5 && !GENERIC_TERMS.includes(p));
+};
+
 const idNumMatch = (item.id || '').match(/\d+/);
 const idNum = idNumMatch ? parseInt(idNumMatch[0], 10) : 1;
 const seedOffset = ((idNum - 1) * 3) % (allBlogPosts.length || 1);
 
+// The bridge between a pulse article and a blog article is a named banquet dish.
+// The generation prompt now requires every pulse piece to tie its technique back to a
+// real CKM dish by name, so these are the terms that actually connect the two halves
+// of the site. target_keyword alone was not enough: a pulse piece can discuss
+// ត្រីចំហុយទឹកស៊ីអ៊ីវ while no blog article carries that as its keyword.
+const DISH_TERMS = [
+  'ជ្រូកខ្វៃ', 'ស៊ុបប៉ាវហឺ', 'ត្រីចំហុយទឹកស៊ីអ៊ីវ', 'បាយខ្ចប់ស្លឹកឈូក',
+  'ញាំជើងទា', 'តុងយាំបង្កងទន្លេ', 'បង្កងបំពង', 'បង្អែមខ្មែរ', 'ទាខ្វៃ',
+  'ម៉ឺនុយ ៨ មុខ', 'ចុងភៅ', 'រោងតង់', 'បុគ្គលិកបម្រើ', 'ភ្លក្សរសជាតិ',
+  'សីតុណ្ហភាព', 'ថវិកា', 'កញ្ចប់', 'មង្គលការ', 'ឡើងផ្ទះ',
+];
+
 const scoredPosts = allBlogPosts.map((post, idx) => {
   let score = 0;
-  const postTitle = post.data.title || '';
-  const postDesc = post.data.description || '';
-  const postCat = post.data.category || '';
 
-  if (pulseCategory && (postTitle.includes(pulseCategory) || postDesc.includes(pulseCategory) || postCat.includes(pulseCategory))) {
-    score += 10;
+  // 1. target_keyword — the strongest signal when it fires.
+  const variants = keywordVariants((post.data as any).target_keyword || '');
+  let best = 0;
+  for (const v of variants) {
+    if (pulseHaystack.includes(v)) best = Math.max(best, v.length);
   }
-  if (pulseTitle.includes('ម្ហូប') && postTitle.includes('ម្ហូប')) score += 3;
-  if (pulseTitle.includes('រៀបចំ') && postTitle.includes('រៀបចំ')) score += 3;
+  score += best * 2;
 
-  // Add rotated seed offset tie-breaker to distribute Link Juice evenly across all posts
+  // 2. Shared named dishes / topics between the two articles.
+  const postText = `${post.data.title} ${post.data.description} ${(post.data as any).target_keyword || ''}`;
+  for (const term of DISH_TERMS) {
+    if (postText.includes(term) && pulseHaystack.includes(term)) score += 8;
+  }
+
+  // Rotation still breaks ties, so link equity stays spread across all 15 posts when
+  // several are equally relevant — but relevance now outranks rotation.
   const rotatedRank = (idx + seedOffset) % allBlogPosts.length;
   const tieBreaker = (allBlogPosts.length - rotatedRank) * 0.01;
 
@@ -65,7 +122,17 @@ const scoredPosts = allBlogPosts.map((post, idx) => {
 });
 
 scoredPosts.sort((a, b) => b.score - a.score);
-const relatedPosts = scoredPosts.slice(0, 3).map((entry) => entry.post);
+
+// Two slots go to genuine topical relevance; the third is reserved for rotation.
+// Pure relevance ranking concentrated links badly — one article collected 14 inbound
+// links while another got none at all, which wastes the funnel on the pages that were
+// already easiest to reach. Reserving a slot guarantees every pillar article keeps
+// receiving link equity without diluting the two relevant recommendations.
+const topByRelevance = scoredPosts.slice(0, 2).map((e) => e.post);
+const rotationPick = allBlogPosts[(seedOffset + idNum) % allBlogPosts.length];
+const relatedPosts = topByRelevance.some((p) => p.id === rotationPick.id)
+  ? scoredPosts.slice(0, 3).map((e) => e.post)
+  : [...topByRelevance, rotationPick];
 
 const pageTitle = `${item.title_km || 'បច្ចុប្បន្នភាពអន្តរជាតិ'} - CKM`;
 const pageDesc = item.summary_km || '';
@@ -76,8 +143,16 @@ const articleSchema = JSON.stringify({
   "@type": "NewsArticle",
   "headline": item.title_km || '',
   "description": item.summary_km || '',
-  "image": [itemImage],
-  "datePublished": item.pub_date || '',
+  // Both fields were invalid and Google discarded the whole NewsArticle node:
+  // `image` was a site-relative path (schema.org requires an absolute URL) and
+  // `datePublished` was the feed's RFC-2822 string ("Tue, 11 Aug 2026 21:52:03
+  // +0000") where ISO 8601 is required.
+  "image": [new URL(itemImage, 'https://ckmkh.com').toString()],
+  ...(item.pub_date && !isNaN(new Date(item.pub_date).getTime())
+      ? { "datePublished": new Date(item.pub_date).toISOString() }
+      : {}),
+  "inLanguage": "km-KH",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": `https://ckmkh.com/pulse/${item.slug || item.id}/` },
   "author": {
     "@type": "Organization",
     "name": "ចេង គួងម៉េង (CKM)"
@@ -85,7 +160,7 @@ const articleSchema = JSON.stringify({
 });
 ---
 
-<Layout title={pageTitle} description={pageDesc} lang="km-KH">
+<Layout title={pageTitle} description={pageDesc} lang="km-KH" canonical={`/pulse/${canonicalId || item.slug || item.id}/`}>
   <script type="application/ld+json" is:inline set:html={articleSchema}></script>
   <ReadingProgress />
 
@@ -165,7 +240,7 @@ const articleSchema = JSON.stringify({
 
         <!-- Executive Summary Section -->
         <div class="relative z-10 mb-10">
-          <h2 class="text-xs font-bold text-champagne-dark font-mono uppercase tracking-widest mb-4 block">
+          <h2 class="text-xs font-bold text-champagne-dark font-mono uppercase mb-4 block">
             សង្ខេបប្រតិបត្តិ
           </h2>
           <p class="text-slate-700 font-km-sans text-base md:text-lg leading-relaxed font-light">
