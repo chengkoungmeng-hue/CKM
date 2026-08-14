@@ -36,7 +36,13 @@ export default defineConfig({
   // [極限參數] 強制將輕量 CSS 內嵌至 HTML，物理性消滅 300ms 網路握手與渲染阻塞
   build: {
     format: 'directory',
-    inlineStylesheets: 'always',
+    // Measured 2026-08-14 from GA4 property 534450350: 8.81 pages per session over
+    // 90 days. Inlining meant a visitor re-downloaded the same ~10.7KB gzipped
+    // stylesheet on nearly every one of those pages, because _headers correctly
+    // holds HTML at max-age=0 so it can never be cached. As an external file it is
+    // fetched once and then served from the browser cache under the /_astro/*
+    // immutable rule. Cost: one extra request on first paint, cheap over HTTP/2.
+    inlineStylesheets: 'auto',
   },
 
   // [系統注入] 突破 Vite 預設 4KB 限制，強制內嵌 10KB 以下的所有樣式與資源
