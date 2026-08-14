@@ -13,17 +13,22 @@ export default defineConfig({
   // 整合矩陣：維持最高純淨度，僅保留 Tailwind 渲染引擎
   integrations: [
     tailwind(), 
-    sitemap()
+    sitemap({
+      // /pulse/pulse-NN/ is the legacy id route for an article that also lives at
+      // /pulse/{slug}/. Both resolve, both canonicalise to the slug, and only the
+      // slug belongs in the sitemap — otherwise 24 of 72 submitted URLs are
+      // duplicates of the other 24.
+      filter: (page) => !/\/pulse\/pulse-\d+\/$/.test(page),
+    })
   ],
 
   // 強制統一目錄斜線結尾，避免 Cloudflare 301 重定向迴圈 (GSC Redirect error)
   trailingSlash: 'always',
 
-  // 301 重定向矩陣：修復舊有 /zh 與 /en 移除後的 404 GSC 錯誤 (搭配 public/_redirects 萬用字元)
-  redirects: {
-    '/zh': '/',
-    '/en': '/',
-  },
+  // No `redirects` block here. public/_redirects already 301s /zh and /en at the
+  // Cloudflare edge — verified live: `curl -I https://ckmkh.com/zh` returns 301.
+  // Declaring them here as well only emitted dist/zh/ and dist/en/ meta-refresh
+  // stub pages that nothing ever serves.
 
   // 開啟 Prefetch 以達成零延遲換頁
   prefetch: true,
