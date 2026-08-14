@@ -258,14 +258,100 @@ whether it could contain a credential. If it could, mask it.
 
 ### Storage
 
-- One secret, one home. Duplicating a value into a second location is how it leaks —
-  the PAT was in `.env` *and* in `.git/config`, and only the second one leaked.
-- Local: `.env` (gitignored). CI: GitHub Actions secrets. Git auth: the OS credential
-  manager (`credential.helper = manager`), never a token in the remote URL.
-- `GITHUB_PAT` is not needed by anything. CI uses the auto-provisioned
-  `secrets.GITHUB_TOKEN`; local pushes use the credential manager.
-- `google_service_account.json` is gitignored, written transiently in CI, and deleted in
-  the same step.
+The rule used to read "one secret, one home", immediately followed by "Local: `.env`.
+CI: GitHub Actions secrets" — two homes. That was self-contradictory and is replaced by:
+
+> **A credential lives only where it is genuinely needed, with only the power it needs
+> there. Everywhere else, it must not exist.**
+
+Two consequences, applied in order:
+
+1. **Delete unnecessary copies.** A copy that nothing reads is pure risk at zero benefit.
+   This is what the original rule was reaching for: the leaked PAT was in `.env` *and*
+   `.git/config` on the same machine for the same purpose, and the redundant one leaked.
+2. **Downgrade the necessary ones.** A copy that cannot be deleted should be able to do
+   as little as possible. Splitting a credential in two is worthless unless the second is
+   strictly weaker — the point is least privilege, not the split.
+
+The gain from (2) is not fewer copies, it is: a lower damage ceiling if one leaks,
+revocation that does not break the other environment (so it actually happens promptly),
+and knowing which environment leaked when a key is abused.
+
+**"Not currently in use" and "not needed" are the same risk.** A credential that is used
+a few times a year should be created when needed, given an expiry, and revoked after —
+not parked in `.env` between uses.
+
+### Which copies are justified — audit, do not assume
+
+Run this before claiming any credential is needed:
+
+```bash
+grep -rhoE "os\.(getenv|environ(\.get)?)\(\s*[\"'][A-Z_0-9]+[\"']" scripts/ src/
+grep -rhoE "(process\.env|import\.meta\.env)\.[A-Z_0-9]+" src/ scripts/
+grep -rhoE "secrets\.[A-Z_0-9]+" .github/workflows/
+```
+
+Audited 2026-08-14:
+
+| Credential | Read by | Home |
+| :--- | :--- | :--- |
+| `CLOUDFLARE_API_TOKEN` | CI: `notify_indexing.py` (purge only). Local: `apply_cf_settings.py`, `cloudflare_audit.js` | CI only, scoped to **Cache Purge**. Local WAF work goes through the dashboard |
+| `GEMINI_API_KEY` | `fetch_catering_pulse.py`, run by CI | GitHub Actions secrets |
+| `GSC_SERVICE_ACCOUNT_JSON` | CI, written transiently to `google_service_account.json` and deleted in the same step | GitHub Actions secrets |
+| `google_service_account.json` | Local: `gsc_query_report.py` | Local only. Should be a **read-only** (`webmasters.readonly`) service account, separate from the CI one that can submit indexing |
+| `GSC_GA4_SERVICE_ACCOUNT_EMAIL` | `generate_analytics_report.py`, `gsc_ga4_audit.js` | Not a secret — an email address |
+| `GSC_API_KEY` | **nothing** | **Delete.** GSC authenticates by service account, not API key |
+| `GITHUB_PAT` | **nothing** | **Never store.** CI uses `secrets.GITHUB_TOKEN`; local pushes use the OS credential manager |
+
+### Google Cloud project surface
+
+The project behind `gsc-and-ga4@just-turbine-503117-k9…` exists for one purpose. The whole
+repository calls exactly two Google endpoints — verified 2026-08-14:
+
+```bash
+grep -rhoE "https://[a-z0-9.-]*googleapis\.com/[a-zA-Z0-9/._-]*" --include=*.py --include=*.js scripts/ | sort -u
+#   https://www.googleapis.com/webmasters/v3/…          -> Search Console
+#   https://generativelanguage.googleapis.com/…         -> Gemini (AI Studio key, different project)
+```
+
+| Enabled API | Requests | Keep? |
+| :--- | ---: | :--- |
+| Google Search Console API | 38 | **Yes** — the only API anything here uses |
+| Service Usage API, Service Management API | 0 | **Yes** — these manage other APIs; disabling can lock you out of the console's enable/disable controls |
+| Cloud Logging / Monitoring / Trace / Telemetry | 0 | Harmless GCP defaults, no billing exposure |
+| Google Analytics Data API / Admin API | 3 / 1 | **No code calls GA4.** Those requests were manual tests. Disable unless GA4 reporting is actually built |
+| BigQuery (×7), Cloud SQL, Cloud Storage (×3) | 0 | **Disable.** Never called, and all are billable — a leaked key plus a wide IAM role turns these into someone else's compute and storage on your invoice |
+| Analytics Hub, Dataplex, Dataform, Datastore | 0 | Disable — never called |
+
+Disabling an API does **not** revoke IAM roles; the service account's roles are still the
+primary control. It is a cheap second layer: even a leaked key with broad roles cannot
+reach a service whose API is off. Re-enabling is one click, so the change is low-risk.
+
+- **[REGRESSION] A scoped token is not automatically a small one.** The single
+  `CLOUDFLARE_API_TOKEN` also carried `PUT /rulesets/phases/…/entrypoint`, i.e. the power
+  to rewrite the zone's entire WAF, rate-limit and cache rulesets — while CI used it only
+  to purge cache. Verify what a token can do, not just that it is scoped:
+
+  ```bash
+  export CF_TOKEN=$(grep '^CLOUDFLARE_API_TOKEN=' .env | cut -d= -f2- | tr -d '\r\n"')
+  curl -s https://api.cloudflare.com/client/v4/user/tokens/verify \
+    -H "Authorization: Bearer $CF_TOKEN"
+  ```
+
+- **[REGRESSION] `scripts/apply_cf_settings.py` replaces rulesets, it does not add to
+  them.** Each `put_ruleset_phase()` is a `PUT` on the phase entrypoint, and each phase in
+  that file holds exactly one rule. Running it silently deletes every rule added through
+  the dashboard since it was last edited. Change Cloudflare settings in the dashboard;
+  treat that file as a record of intent, not a tool.
+- The repository is **public**. `.env` and `google_service_account.json` are gitignored and
+  have never been committed (verified across all refs, 2026-08-14). No workflow uses
+  `pull_request` or `pull_request_target`, so fork PRs cannot reach the secrets — do not
+  add such a trigger.
+- **GitHub Actions secrets are write-only and cannot be read back**, not by the API, the
+  `gh` CLI, or an agent. To use a CI-only secret, move the *work* into a workflow; there is
+  no way to move the *value* out.
+- Anyone who can push a workflow to this repo can exfiltrate every secret in it (masking
+  only matches the raw string; base64 defeats it). Repo write access **is** secret access.
 - Never write a live token into `WORKLOG.md`, this file, or any tracked file.
   `scripts/check_content.py` scans for common credential patterns and fails on a hit.
 
