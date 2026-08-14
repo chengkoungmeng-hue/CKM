@@ -18,9 +18,16 @@ def purge_cloudflare_cache():
         print("CLOUDFLARE_API_TOKEN secret is not set. Skipping cache purge.")
         return
 
-    # Defensive check: strip any accidental quotes added to the GitHub secret
-    token = token.strip("\"'")
-    
+    # A GitHub secret pasted with a trailing newline produces the header value
+    # "Bearer <token>\n", which is illegal in HTTP and raises
+    # "Invalid header value b'***'" before the request is ever sent. This purge
+    # had been failing silently on every run for exactly that reason.
+    # Strip whitespace first, then stray quotes, then whitespace again.
+    token = token.strip().strip("\"'").strip()
+    if not token:
+        print("CLOUDFLARE_API_TOKEN is empty after trimming. Skipping cache purge.")
+        return
+
     zone_id = "d459c80e06d000c6e1927783fc6b3a7a"
     url = f"https://api.cloudflare.com/client/v4/zones/{zone_id}/purge_cache"
     payload = {"purge_everything": True}

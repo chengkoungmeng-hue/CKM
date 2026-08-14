@@ -78,10 +78,12 @@ const breadcrumbSchema = JSON.stringify({
               <!-- Card Image Container with Ambient Frosted Blur Background -->
               <div class="w-full aspect-[16/9] overflow-hidden bg-onyx/90 relative block group/img">
                 <!-- Ambient Blurred Background Image -->
-                <img 
-                  src={item.image_url || "/images/blog_01_inline_khmer.webp"} 
-                  alt={item.image_alt || item.title_km || "CKM Pulse"} 
+                <img
+                  src={item.image_url || "/images/blog_01_inline_khmer.webp"}
+                  alt=""
                   aria-hidden="true"
+                  loading="lazy"
+                  decoding="async"
                   onerror="this.onerror=null; this.src='/images/blog_01_inline_khmer.webp';"
                   class="absolute inset-0 w-full h-full object-cover blur-xl opacity-50 scale-125 transition-transform duration-700 group-hover/img:scale-135 pointer-events-none"
                 />
