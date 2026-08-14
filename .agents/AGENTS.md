@@ -1,94 +1,294 @@
-# Project Agent Rules
+# Project Agent Rules — ckmkh.com
 
 <RULE[project_scoped]>
 
-## Maintain Work Log and Rules
+## 0. How to use this file
 
-- **Work Log**: ALWAYS document significant work, decisions, and progress in `WORKLOG.md` located in the root directory.
-- **Agent Rules**: When encountering important project-specific architectural decisions, recurring issues, or specific workflows, MUST document them as rules in this `.agents/AGENTS.md` file to ensure continuity and prevent repeated mistakes.
+- Every rule below describes **what the code actually does today**, not what it should
+  ideally do. Before adding a rule, verify it against the source. Before trusting a rule,
+  spot-check it — this file has drifted from reality before, and a confidently wrong rule
+  is worse than no rule.
+- If you change behaviour that a rule describes, update the rule in the same commit.
+- Rules marked **[REGRESSION]** exist because that exact bug shipped to production.
+  Do not "simplify" them away.
+- Run `python scripts/check_content.py` before committing content. It enforces the
+  mechanical half of this file in under a second.
 
-## Language Scope
+## 1. Work log
 
-- **Khmer Only**: When generating, editing, or updating content (like blog posts or webpage copy), ONLY modify the Khmer content (which is typically located at the root level of content folders, e.g., `src/content/blog/*.md` or `src/pages/index.astro`). Ignore Chinese (`zh/`) and English (`en/`) content unless the user explicitly requests otherwise.
+- Document significant work, decisions and outcomes in `WORKLOG.md` at the repo root.
+- Record architectural decisions and recurring failure modes here, so the next session
+  does not rediscover them.
 
-## Architectural & Aesthetic Standards
+## 2. Language scope
 
-- **Canonical Domain**: The canonical domain is exclusively `https://ckmkh.com`. Do NOT use `www.ckmkh.com` anywhere in `robots.txt`, schemas, or `baseUrl` configurations to avoid SEO canonical mismatch.
-- **Quiet Luxury & Performance**: The UI must maintain a "Quiet Luxury" feel without sacrificing speed. We strictly use Astro SSG + Tailwind. Global fade-in animations are handled via a lightweight `IntersectionObserver` targeting `.reveal` classes. Do NOT introduce heavy animation libraries (like Framer Motion) unless absolutely necessary.
-- **SPA Navigation**: Astro `<ClientRouter />` is enabled in the root layout. Ensure all custom client-side scripts are wrapped in `document.addEventListener("astro:page-load", ...)` instead of `DOMContentLoaded` so they re-trigger on navigation.
-- **Icon System**: Strictly use `@lucide/astro` for icons. Do NOT inline raw SVGs into Astro components to maintain a clean codebase and unified stroke widths.
+- The live site is **Khmer only**. `baseLang` in `src/layouts/Layout.astro` is hardcoded
+  to `"km"`; `/zh/` and `/en/` are 301-redirected via `public/_redirects`.
+- The `zh` / `en` entries in `brandDict`, `navTranslations` and `homeData.ts` are
+  unreachable legacy. Do not extend them. Do not link to `/zh/…` or `/en/…` from content.
+- Only edit Khmer content at the root of content folders (`src/content/blog/*.md`,
+  `src/pages/index.astro`).
 
-## Security & Secrets Management
+## 3. Domain & canonical
 
-- **Token Protection**: NEVER write active API tokens, passwords, or credentials into `WORKLOG.md`, `AGENTS.md`, or any code files committed to the repository. All secrets (e.g., Cloudflare API Tokens) must be saved exclusively in `.env`, which is strictly ignored by Git.
+- Canonical domain is exactly `https://ckmkh.com`. Never `www.`, never bare `http://`.
+- `trailingSlash: 'always'`. Every internal link must end in `/` or Cloudflare issues a
+  301 and the link equity is spent on a redirect.
 
-## Font Strategy
+## 4. Client-side scripts
 
-- **System Fonts First**: For Khmer body text, strictly use `system-ui` fallback fonts instead of heavy Web Fonts to achieve 0 CLS and instant LCP. Use custom self-hosted fonts (like Hanuman) ONLY for large headings, and always load them locally via `public/fonts/`.
+- **[REGRESSION] Guard every listener against double-binding.** `<ClientRouter />` fires
+  `astro:page-load` at window `load`, *and* module scripts run again at
+  `readyState === "interactive"`. Registering in both places binds the same handler twice.
+  This shipped: the mobile menu bound two click listeners, the first opened the overlay and
+  the second closed it inside the same click, so the navigation was completely unusable on
+  mobile for as long as it was live.
+  - Mark the element: `if (el.dataset.ckmBound === "1") return; el.dataset.ckmBound = "1";`
+    The marker rides on a node ClientRouter swaps, so navigation re-binds and never stacks.
+  - Listeners on `window` / `document` are **never** swapped. Bind those once at module
+    scope behind a boolean, and resolve the element lazily inside the handler.
+- No scroll-hijacking libraries. Lenis was removed: on touch devices it defaulted to
+  `syncTouch: false` and intercepted nothing, while still shipping ~19 KB and leaking one
+  immortal `requestAnimationFrame` loop per navigation. Native `scroll-behavior: smooth`
+  on `html` is the whole solution.
+- Respect `prefers-reduced-motion`. The guard lives in the global `<style is:global>` block
+  in `Layout.astro`.
 
-## Sub-brands SEO
+## 5. Astro & CSS scoping
 
-- **Concentrated Domain Authority**: Sub-brands hosted on the main domain (e.g., `/tanghuot/`) that target the same demographic should remain strictly Khmer-focused. Do NOT create multilingual routes (`/zh/`, `/en/`) for them unless explicitly requested, to consolidate SEO authority.
+- **[REGRESSION] A `<style>` block in an `.astro` file is scoped to that component.**
+  `Layout.astro` defined `.reveal { opacity: 0 }` intending it to animate sections in
+  `index.astro`. It compiled to `.reveal[data-astro-cid-…]` and matched nothing, so the
+  animation was dead the entire time — and the `.prose` table-overflow guards in the same
+  block died with it. Styles that must reach slotted children go in `<style is:global>`.
+- `inlineStylesheets: 'always'` + `_headers` setting HTML to `max-age=0, must-revalidate`
+  means the CSS is re-downloaded on every page view and can never be cached across pages.
+  This is a deliberate trade (one less round trip on first paint). Do not change it
+  casually, and measure both sides if you do.
 
-## Local SEO & GEO Audit Protocol
+## 6. Images
 
-- **Local Target Audience Focus**: Primary focus is local Cambodian / Phnom Penh audience (`https://ckmkh.com`). All local SEO analyses must prioritize Khmer keywords, local search intent, and regional search behavior.
-- **LocalBusiness Structured Data**: Ensure all business pages embed Schema.org `LocalBusiness` / `Organization` JSON-LD with correct canonical URLs (`https://ckmkh.com`), GEO coordinates, address, and localized NAP (Name, Address, Phone).
-- **GSC & GA4 Integration Safety**: Integration credentials (e.g., `GSC_GA4_SERVICE_ACCOUNT_EMAIL`) must be read strictly from `.env`. Never hardcode active secrets or credentials into code or markdown documentation.
+- Use Astro's `<Image />` / `getImage()` for anything under `src/assets/`. It emits AVIF
+  and correctly sized variants automatically.
+- **[REGRESSION] `og:image` must resolve.** Blog posts pointed at `/blog/og/{slug}.png`,
+  a route that never existed, so all 15 articles shipped a 404 preview to Facebook and
+  Telegram — the two channels this business actually runs on. Derive share cards from the
+  cover with `getImage({ width: 1200, height: 630, format: 'jpeg' })`; use JPEG, because
+  older social scrapers do not handle AVIF/WebP reliably.
+- **[REGRESSION] Decorative duplicates must be `loading="lazy"`.** The blurred backdrop in
+  `CateringPulse.astro` had no `loading` attribute, so it eagerly fetched the same URL as
+  the lazy foreground image. That put 122 KB of below-the-fold pulse imagery on the
+  homepage critical path — 66% of the initial payload, each image larger than the LCP hero.
+- Blog inline images are `1600×900` (16:9) WebP in `public/images/`, named
+  `blog_NN_inline_khmer.webp`. Article `NN` references image `NN` — nothing else.
+  `check_content.py` enforces this.
+- All imagery must depict authentic Cambodian / Phnom Penh banquet reality. No Western
+  stock kitchens, no industrial hardware.
+- The homepage `#gallery` caption claims real photographs (`រូបភាពពិតៗ`). Only put genuine
+  photos there. Illustrative or AI-assisted imagery belongs in blog bodies, never there.
 
-## Target Audience & Demographic Persona Protocol
+## 7. Icons
 
-- **Audience Segmentation**: Categorize visitors based on local intent (e.g., B2B buyers, local consumers in Phnom Penh / Cambodia).
-- **Resonance & Intent Analysis**: Evaluate content readability, Khmer natural phrasing, mobile UX friction, and CTA alignment for local conversions.
+- Use `@lucide/astro`.
+- Known exceptions, all pre-existing: the Facebook glyph in `index.astro`, three phone
+  glyphs in `homeData.ts`, one warning glyph in `404.astro`, one in `MooncakePage.astro`.
+  These are brand marks or one-offs with no Lucide equivalent — leave them, but do not add
+  more.
+- **[REGRESSION] Never reference an icon font that is not loaded.** Four FontAwesome
+  `<i class="fas …">` tags sat in `blog/[slug].astro` while `@fortawesome/fontawesome-free`
+  was installed but imported nowhere, so the phone and Telegram CTAs on every article had
+  a blank gap where the icon should be.
 
-## Brand Palette & Aesthetic System
+## 8. Fonts
 
-- **Canonical Color Tokens**: Strictly maintain the "Royal Champagne & Onyx" Quiet Luxury palette (`#0B0F17` Onyx, `#FAF9F6` Pearl, `#D4AF37` / `#C5A059` Champagne Gold). Avoid raw primary colors (plain red, plain blue, plain green) to preserve the 60-year VIP banquet prestige.
+- Khmer body text intentionally uses the **system fallback** for 0 CLS and instant LCP.
+  Only Hanuman is self-hosted, from `public/fonts/`, for headings.
+- **Do not name a font family that is not loaded.** `font-km-sans` still resolves to
+  `'Kantumruy Pro'`, which has no `@font-face` anywhere — it silently falls through to
+  `sans-serif`. It reads as a bug to every reviewer. Either load it or drop the name.
+- `@fontsource/*` packages in `package.json` are unused. Do not import them without
+  measuring the cost on 3G first.
 
-## Brand Tone & Content Strategy (業主偏好與品牌口吻指引)
+## 9. Palette
 
-- **Humble & Respectful Tone (溫和謙遜口吻)**: Public web copy must strictly embody a humble, sincere, and respectful tone reflecting the 60-year brand legacy of CKM Catering in Phnom Penh.
-  - Reader Honorific: Always use **"លោកអ្នក"** (Respected Visitor/You), never use plain "អ្នក".
-  - Team Self-Reference: Always use **"យើងខ្ញុំ"** (We / CKM Team).
-  - Zero Hype Mandate: Strictly ban hype words like "第一", "最強", "神級", "無敵".
-- **Minimal Technical Data Rule (少用具體數據與硬規格)**: Public website copy must avoid dense numbers, hard temperature ranges (e.g., NO "4°C-60°C"), or electrical specs (e.g., NO "50-100 KVA"). Describe meticulous care, food freshness, hygiene protection, and VIP guest comfort qualitatively in warm Khmer phrasing. Reserve specific numerical data, exact figures, and technical quotes for the owner to introduce directly to clients during Telegram or phone consultation.
-- **Pure Khmer Copy Standard**: All public-facing content (Blog, Pulse, Service cards) must be written in 100% Traditional Khmer (`km-KH`). Do NOT attach inline English or Chinese translations in parentheses.
-- **Cambodian Cultural Respect & Local Logistics**:
-  - Respect for Elders (មេបា / ចាស់ទុំ): Banquet content must emphasize honoring family elders' tastes (traditional soups, soft textures, low sugar) alongside modern preferences.
-  - Climate Realities (រដូវប្រាំង / រដូវវស្សា): Outdoor/tent banquet advice must address dry season heat management vs. wet season rain protection.
-  - Local Practicalities: FAQ copy must address real-world Phnom Penh concerns (Borey security approval បុរី, parking coordination, customized package consultation).
-- **Promotional Boundaries Mandate (嚴禁宣稱未確認之硬體、數位系統、菜色與稅務發票承諾)**: We promote the client's catering business without making unverifiable operational guarantees. Strictly forbid claims regarding:
-  - High-tech/automated kitchen equipment (smart ovens, digital temperature tracking).
-  - Unlimited custom fusion dishes or international fusion menus.
-  - Online app booking, automated digital payments, or online plan selector apps.
-  - Tax invoice / VAT invoice guarantees (never make legal tax promises on behalf of the owner; direct clients to contact team via Telegram or phone for 1-on-1 consultation).
-  - Direct clients to contact the team via Telegram or phone for one-on-one consultation and personalized quotes.
-- **Zero Tipping & Zero Leftover Packing Mandate (嚴禁小費、打包與低俗尷尬話題)**: Public web copy and FAQs must strictly avoid awkward, pedestrian topics that compromise VIP banquet prestige (NO tipping discussions, NO leftover packing instructions, NO cheap bargaining/discount phrasing). Focus FAQs exclusively on VIP elder care (ការគោរពចាស់ទុំ), fresh ingredient sourcing, serving timing, and venue coordination.
-- **Local Khmer Image Standard (圖片 100% 柬埔寨在地化)**: All blog cover images and inline illustrations must depict authentic Cambodian / Phnom Penh banquet setups, traditional Khmer chefs, and local venue realities. Avoid Western stock photos or industrial kitchen hardware images.
-- **Khmer Terminology Standards**:
-  - `Catering` ➔ `សេវាកម្មធ្វើម្ហូប` or `សេវាកម្មម្ហូបការ`
-  - `VIP` ➔ `ភ្ញៀវកិត្តិយស`
-  - `Buffet` ➔ `អាហារប៊ូហ្វេ`
-  - `Cocktail / Finger Food` ➔ `អាហារសម្រន់ស្រាលៗ`
-  - `Food Hygiene / Safety` ➔ `អនាម័យនិងសុវត្ថិភាពម្ហូបអាហារ`
+Values are authoritative from `tailwind.config.mjs`. Keep this table in sync with it.
 
-## Automated Deployment, Edge Cache Purge & Performance Protocol (自動化部署、快取清除與防卡頓協定)
+| Token | Hex | Use |
+| :--- | :--- | :--- |
+| `onyx` | `#171717` | Dark sections, primary text |
+| `champagne` | `#C5A059` | Gold accent on dark backgrounds |
+| `champagne-dark` | `#8C6D31` | Gold accent on light backgrounds (contrast) |
+| `pearl` | `#FDFCF8` | Light section background |
 
-- **Workflow Execution Order (嚴禁顛倒流程順序)**:
-  In GitHub Actions workflows (e.g. `.github/workflows/daily_catering_pulse.yml`), always enforce the strict sequential execution order:
-  1. Generate content/JSON data (`fetch_catering_pulse.py`)
-  2. Git Commit & Push to `main` (Triggers single unified Cloudflare Pages deployment)
-  3. Sleep 35 seconds to wait for Cloudflare Pages build completion
-  4. Issue Cloudflare API Cache Purge (`purge_everything: true`) to Zone `d459c80e06d000c6e1927783fc6b3a7a` via `CLOUDFLARE_API_TOKEN`
-  5. Run Search Engine Submission (`scripts/notify_indexing.py` with official GSC REST API and IndexNow API)
-  - **Zero Premature Indexing**: NEVER trigger IndexNow or GSC indexing BEFORE Cloudflare Pages deployment is live and Edge CDN cache is purged.
-  - **Zero Duplicate Deployments**: Do NOT mix `cloudflare/pages-action` direct upload with `git push origin main` in the same workflow to avoid double-build race conditions and Cloudflare quota exhaustion.
+- The `primary` / `gold` / `dark` / `cream` block in `tailwind.config.mjs` is legacy.
+  Do not use it in new work.
+- Avoid raw `amber-*` / `blue-*` / `slate-*` accents where a token exists. Plain primary
+  colours undercut the quiet-luxury positioning.
 
-- **Editor & Content Processing Freeze Protection (防編輯器卡頓與正則迴溯條約)**:
-  - **Khmer Paragraph Wrapping**: Avoid single-line multi-byte Khmer text exceeding 300 characters. Always break Khmer paragraphs with standard line wraps to prevent IDE word-wrap engine lag.
-  - **Markdown Table Standards**: All Markdown tables in `.md` / `.mdx` files must strictly use standard column alignment delimiters (`| :--- | :--- |`) to prevent table linter CPU regex backtracking freezes on multi-byte UTF-8 text.
+## 10. Brand voice
 
-## Communication & Interaction Protocol
+- Reader honorific: **`លោកអ្នក`**. Never plain `អ្នក`.
+- Team self-reference: **`យើងខ្ញុំ`**.
+- Zero hype. No `第一`, `最強`, `神級`, `無敵`, or Khmer equivalents.
+- 100% Khmer in public copy. No parenthetical English or Chinese translations.
+- Terminology:
+  `Catering` → `សេវាកម្មម្ហូបការ` / `សេវាកម្មធ្វើម្ហូប` ·
+  `VIP` → `ភ្ញៀវកិត្តិយស` ·
+  `Buffet` → `អាហារប៊ូហ្វេ` ·
+  `Finger food` → `អាហារសម្រន់ស្រាលៗ` ·
+  `Food safety` → `អនាម័យនិងសុវត្ថិភាពម្ហូបអាហារ`
+- Cultural anchors: honour elders (`ចាស់ទុំ`) in menu advice; address dry-season heat and
+  wet-season rain for outdoor events; answer real Phnom Penh logistics (borey approval,
+  parking, narrow lanes).
 
-- **Tone & Persona**: All responses, reports, technical analyses, and recommendations must maintain a **Professional, Rigorous, Objective, and Sincere** (專業、嚴謹、客觀、誠懇) tone. Avoid superficial flattery, vague speculation, or unverified claims. Base every diagnostic statement and architectural recommendation strictly on empirical evidence, verifiable code logic, and real log data.
+## 11. Promotional boundaries
+
+**We market this business on the owner's behalf. We cannot verify his operations, so we
+never commit him to anything.** State what is generally true, and route every specific
+commitment to a direct conversation.
+
+- Forbidden claims: modern/automated kitchen technology, digital temperature monitoring,
+  unlimited custom or international fusion menus, online booking/payment/plan-selection,
+  VAT invoice guarantees.
+- Forbidden absolutes: `១០០%` anything, "no hidden costs whatsoever", any unconditional
+  guarantee. **[REGRESSION]** `សុវត្ថិភាពអនាម័យ១០០%` and `គ្មានការចំណាយលាក់កំបាំង` both
+  shipped, and the latter was contradicted two articles later by our own FAQ.
+- **Never publish the owner's margin.** A cost-breakdown table exposing
+  `ប្រាក់ចំណេញ ១៥%-២០%` shipped on the one page that also publishes prices — handing a
+  negotiating lever to every buyer who read it.
+- Reserve hard figures (temperatures, kVA, exact prices, minimum table counts, service
+  areas) for the owner's own Telegram or phone consultation. `check_content.py` warns on
+  Celsius and kVA specs in article bodies.
+- Forbidden topics: tipping, leftover packing, bargaining or cheapness framing. FAQs stay
+  on elder care, service rhythm, ingredient freshness and venue coordination.
+
+## 12. Content consistency
+
+**[REGRESSION]** The same fact was stated three different ways across the site: abalone
+broth simmer time (`៨ ទៅ ៨៦ ម៉ោង` — a corrupted number — vs `១២ ទៅ ២៤` vs `៨ ដល់ ១២`),
+booking lead time (`៦ ទៅ ៨ ខែ` vs `៤ ទៅ ៦ សប្តាហ៍` vs `២ ទៅ ៣ ខែ`), and room-temperature
+holding (article 06 said 3 hours, article 04 said 2). Before stating a fact, grep for it.
+
+- Booking lead time, site-wide: **`២ ទៅ ៤ សប្តាហ៍`**, always closing with an invitation to
+  contact and confirm the date. Do not reintroduce a busy-season caveat.
+- Simmer times and course positions vary by ingredient size and family custom. Say so;
+  do not invent a fixed number.
+- Dish names must match `src/data/homeData.ts` exactly. Lotus-leaf rice is
+  **`បាយខ្ចប់ស្លឹកឈូក`** — `ខ្ចប់` means "to wrap" and is the root of `កញ្ចប់`; `ខ្ទប់` is
+  not the word and was live on the homepage.
+
+## 13. Khmer text integrity
+
+**[REGRESSION]** Thai, Chinese, Japanese and Devanagari characters shipped inside Khmer
+words — `หัวใจ`, `วัฒนธรรม`, `環境的控制與使用醬料調配提升風味`, a Devanagari `।` standing in
+for `។`, and `ควរ` for `គួរ` inside an H3. Hanuman cannot render any of them, so they
+reach Khmer readers as tofu boxes. `ដើមីបី` (for `ដើម្បី`) appeared 16 times, including in
+a meta description that renders in the Google result.
+
+- Khmer copy contains Khmer, Latin and Khmer numerals only.
+- `scripts/check_content.py` fails the build on any Thai / Devanagari / CJK / Kana
+  codepoint in an article or in a Khmer pulse field.
+- The pulse generator rejects a Gemini response containing foreign script rather than
+  publishing it. Do not downgrade that to silent stripping — removing a Chinese word from
+  the middle of a sentence leaves broken Khmer grammar.
+- Watch for doubled words (`លោកលោកអ្នក` shipped five times, once in an H2).
+
+## 14. Frontmatter & schema
+
+- `src/content.config.ts` is the source of truth. Zod **strips unknown keys**:
+  `target_keyword` and `slug` are in almost every article's frontmatter and are read by
+  nothing. `schemaType` is declared but `blog/[slug].astro` hardcodes `"@type": "Article"`.
+  Either wire them up or delete them — do not add more inert fields.
+- **[REGRESSION] `date:` is required.** When it was missing, `blog/[slug].astro` fell back
+  to `new Date()`, so every deploy re-stamped 14 evergreen articles as published today —
+  a textbook date-manipulation signal. The fallback now omits `datePublished` entirely;
+  keep it that way.
+- `authoritySignals` render as trust badges directly under the hero. Make them carry a
+  checkable fact and vary them per article; identical boilerplate across 15 posts trains
+  readers to ignore the badge.
+
+## 15. Pulse pipeline
+
+- **[REGRESSION] URLs are permanent.** `id` and `slug` used to be reassigned from list
+  position on every run, so adding one article rewrote all 20 URLs; the previous day's
+  pages 404'd while `notify_indexing.py` submitted the new ones to Google and Bing.
+  `id` is now monotonic (`next_pulse_id`) and `slug` never encodes position. Assign both
+  once at insert; never recompute.
+- Order of operations, and it is not negotiable: generate → validate → commit → **wait for
+  the page to actually be live** → purge Cloudflare cache → IndexNow → GSC. The workflow
+  polls the real URL; it does not sleep and hope. Never announce a URL before it resolves.
+- Index only when something actually changed. `if: always()` on the indexing step meant
+  daily submissions of unchanged URLs.
+- Nothing in the workflow runs JavaScript. Do not reintroduce `setup-node` / `npm ci`.
+- Feed sources currently produce Western and Japanese home recipes, which sit oddly under
+  a Khmer-Chinese banquet brand. Prefer sources matching the brand's actual cuisine.
+
+## 16. Secrets
+
+**The agent is responsible for not exposing secrets. The user should never have to think
+about it.** Assume the user will say "the token is in `.env`" and nothing more — that is
+correct and sufficient. Never ask them to paste a value.
+
+### Reading a secret
+
+Pipe it into an environment variable. It must never reach stdout.
+
+```bash
+export GH_TOKEN=$(grep '^GITHUB_PAT=' .env | cut -d= -f2- | tr -d '\r\n"')
+curl -H "Authorization: Bearer $GH_TOKEN" https://api.github.com/...
+```
+
+### **[REGRESSION] Mask before printing anything that can carry a credential**
+
+A live `ghp_…` PAT was embedded in the git remote URL. A plain `git remote -v` printed it
+in full into the transcript. The user had not pasted anything — the leak came entirely
+from an unmasked diagnostic command.
+
+Commands that require masking, always:
+
+| Instead of | Use |
+| :--- | :--- |
+| `git remote -v` | `git remote -v \| sed 's#//[^@]*@#//<hidden>@#'` |
+| `git config -l` | `git config -l \| sed 's/=.*token.*/=<hidden>/I'` |
+| `cat .env` | `sed 's/=.*/=<hidden>/' .env` |
+| `env` / `printenv` | never dump wholesale; read one named variable |
+
+Before running any command that prints a URL, a config file, or an environment, ask
+whether it could contain a credential. If it could, mask it.
+
+### Storage
+
+- One secret, one home. Duplicating a value into a second location is how it leaks —
+  the PAT was in `.env` *and* in `.git/config`, and only the second one leaked.
+- Local: `.env` (gitignored). CI: GitHub Actions secrets. Git auth: the OS credential
+  manager (`credential.helper = manager`), never a token in the remote URL.
+- `GITHUB_PAT` is not needed by anything. CI uses the auto-provisioned
+  `secrets.GITHUB_TOKEN`; local pushes use the credential manager.
+- `google_service_account.json` is gitignored, written transiently in CI, and deleted in
+  the same step.
+- Never write a live token into `WORKLOG.md`, this file, or any tracked file.
+  `scripts/check_content.py` scans for common credential patterns and fails on a hit.
+
+### If a secret is exposed anyway
+
+Say so immediately and plainly, establish the blast radius before advising
+(tracked files? git history? remote?), then clean every local copy. Revoking and issuing
+credentials is the user's action — never do it for them, and never enter credentials.
+
+## 17. Formatting
+
+- Break Khmer paragraphs at sensible lengths; single lines beyond ~300 multi-byte
+  characters stall editor word-wrap engines.
+- Markdown tables must use explicit alignment delimiters (`| :--- |`) — linters can
+  backtrack catastrophically on multi-byte cells without them.
+- Blank line before and after every heading, list and fenced block. No consecutive blank
+  lines. Exactly one trailing newline.
+
+## 18. Communication
+
+- Professional, rigorous, objective, sincere. Ground every diagnosis in a file, a line, a
+  measurement or a log — not in plausibility.
+- State what was verified and what was assumed. If a check was not run, say so.
+- Report failures plainly, including your own.
+
 </RULE[project_scoped]>
