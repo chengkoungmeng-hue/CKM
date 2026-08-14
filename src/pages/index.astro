@@ -75,7 +75,19 @@ const faqSchema = JSON.stringify({
   ]
 });
 ---
-<Layout title="ចេង គួងម៉េង (CKM) | សេវាកម្មម្ហូបការ ភ្នំពេញ និងចុងភៅរៀបចំម្ហូបការមង្គលការ" description="ចេង គួងម៉េង (CKM) ផ្តល់ជូនសេវាកម្មម្ហូបការ សេវាកម្មទទួលរៀបចំកម្មវិធី និងចុងភៅរៀបចំម្ហូបការមង្គលការលំដាប់ខ្ពស់នៅភ្នំពេញ។ មានម៉ឺនុយ ៨ មុខ កូនជ្រូកខ្វៃ ស៊ុបប៉ាវហឺ និងសេវាកម្មរៀបចំតុបតែងទីតាំងពេញលេញ។" lang="km-KH">
+<!--
+  Title/description ordering is driven by measured GSC data (2026-05-15→08-12, see
+  scripts/gsc_query_report.py). The brand name used to lead the title; for the only
+  query with real volume — `ម្ហូបការ`, 240 impressions / position 3.95 — that spent
+  the most valuable characters in the SERP on a name nobody searched. Keyword first,
+  brand last, so truncation eats the brand and not the term.
+  `ចុងភៅ` was dropped on purpose: 240 impressions and 0 clicks across the whole
+  `ចុងភៅ` / `រូបចុងភៅ` / `logo ចុងភៅ` cluster — it is image-and-logo intent, not
+  buying intent, and it collapsed to 5 impressions in the last 28 days.
+  The description is kept under the 155-char slice in Layout.astro so it ends on a
+  full sentence; the old one was 200+ chars and shipped cut mid-word ("ស៊ុ...").
+-->
+<Layout title="សេវាកម្មម្ហូបការ ភ្នំពេញ | មុខម្ហូបការមង្គលការ | ចេង គួងម៉េង (CKM)" description="សេវាកម្មម្ហូបការ និងមុខម្ហូបការមង្គលការនៅភ្នំពេញ ដោយ ចេង គួងម៉េង (CKM)។ មានម៉ឺនុយ ៨ មុខប្រពៃណី កូនជ្រូកខ្វៃ និងស៊ុបប៉ាវហឺ ព្រមទាំងសេវាកម្មរៀបចំទីតាំង។" lang="km-KH">
   <script type="application/ld+json" is:inline set:html={faqSchema}></script>
 
   <style>

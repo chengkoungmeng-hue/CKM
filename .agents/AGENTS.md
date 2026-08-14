@@ -284,7 +284,97 @@ credentials is the user's action — never do it for them, and never enter crede
 - Blank line before and after every heading, list and fenced block. No consecutive blank
   lines. Exactly one trailing newline.
 
-## 18. Communication
+## 18. Search demand — measured, not assumed
+
+**Read this before proposing any SEO work.** Every number below was pulled live on
+2026-08-14 and is reproducible:
+
+```bash
+python scripts/gsc_query_report.py --days 90
+```
+
+- **`scripts/gsc_query_report.py` is the only trustworthy analytics script.** It exits
+  non-zero on an API failure, so a caller can never mistake a placeholder for a
+  measurement. Raw output lands in `scripts/reports/gsc_search_queries.json`.
+- **[REGRESSION] Do not trust `scripts/generate_analytics_report.py`.** It falls back to
+  hardcoded numbers (`35` clicks / `1369` impressions / `2.56%` / `6.43`) that are
+  indistinguishable from live output in the file it writes, and its "關鍵字亮點" section
+  is hardcoded prose that is **not** derived from the data it just fetched. It called
+  rank-1-with-zero-clicks a success.
+- **Always filter to `country = khm`.** Taiwan and US rows are the owner's own team and
+  crawlers. Unfiltered totals overstate reach by roughly 25%.
+
+### Measured demand, Cambodia only, 2026-05-15 → 2026-08-12
+
+| Query | Impressions | Clicks | Position | Verdict |
+| :--- | ---: | ---: | ---: | :--- |
+| `ម្ហូបការ` | 240 | 11 | 3.95 | The only term with real buying intent and clicks |
+| `ចុងភៅ` | 153 | 0 | 7.59 | Image intent — do not target |
+| `រូបចុងភៅ` | 68 | 0 | 6.46 | Image intent — do not target |
+| `មុខម្ហូបការ` | 60 | 2 | 5.23 | Secondary, real |
+| `ម៉ឺនុយ` | 48 | 0 | 5.52 | Generic-term intent mismatch — do not target |
+| `catering service in phnom penh` | 31 | 0 | **1.00** | Rank 1, zero clicks — local pack owns the fold |
+
+- **The `ចុងភៅ` cluster is a trap.** `ចុងភៅ` + `រូបចុងភៅ` + `រូបភាពចុងភៅ` + `logo ចុងភៅ`
+  total ~240 impressions and **0 clicks**. Those searchers want chef photos and logo
+  assets, not catering. The cluster also collapsed to 5 impressions in the last 28 days.
+- **`ម៉ឺនុយ` is not a catering query.** `/blog/01-traditional-8-course-wedding-menu/`
+  has an exactly-matching title (`ម៉ឺនុយម្ហូបការ ៨ មុខ…`), ranks 5.52, and took 0 clicks
+  from 48 impressions. A perfect keyword match that never gets clicked is an intent
+  mismatch, not an optimisation problem.
+- **Coverage is not the constraint.** 15 articles produce ~150 impressions per 90 days
+  combined. Writing article 16 has an expected value of ~10 impressions per quarter.
+  Do not propose "more content" as an SEO fix.
+- **Rankings are not the constraint either.** `ម្ហូបការ` sits at position 2.66 over the
+  last 28 days. The ceiling on this channel is total demand — roughly 300 commercial
+  impressions per 90 days — not placement.
+- **[REGRESSION] Non-Cambodian clicks are not signal.** A prior report highlighted
+  `/blog/07-housewarming-catering-setup/` at "20% CTR". Filtered to Cambodia that page is
+  1 impression and 0 clicks; the clicks came from Taiwan, i.e. the team itself.
+
+### Homepage title and description
+
+`src/pages/index.astro` line ~78. Rewritten 2026-08-14 from measured data — do not
+"optimise" it back:
+
+- **Keyword first, brand last.** The title used to open with `ចេង គួងម៉េង (CKM)`, spending
+  the most valuable characters in the SERP on a name nobody searches. Ordering is now
+  `សេវាកម្មម្ហូបការ ភ្នំពេញ | មុខម្ហូបការមង្គលការ | ចេង គួងម៉េង (CKM)` so that truncation
+  eats the brand, not the term.
+- **`ចុងភៅ` was removed from the title on purpose.** See the cluster note above.
+- **[REGRESSION] Keep any `description` at or under 155 characters.** `Layout.astro`
+  slices at 152 and appends `...`. The homepage description was 195 characters and shipped
+  to the SERP cut mid-word (`…កូនជ្រូកខ្វៃ ស៊ុ...`) on the highest-impression page on the
+  site. All 15 blog descriptions are currently under the limit — verified, keep it that way.
+- `title` also feeds `og:title` and the breadcrumb JSON-LD, so it is the Facebook share
+  headline too. Changing it changes both.
+
+## 19. External backlinks
+
+`.agents/skills/ckm_backlink_writer/SKILL.md` and `Docs/backlink_ledger.md` exist and
+define a Medium / Substack / Blogger publishing flow. **As of 2026-08-14 all three ledger
+entries are 待發佈 with no live URL — nothing has actually been published.**
+
+Before extending that flow, weigh it against §18:
+
+- Links are not this site's constraint. The money keyword already ranks 2.66; there is no
+  ranking gap for a link to close, and total commercial demand caps the channel at roughly
+  50 clicks per quarter under perfect execution.
+- Medium and Substack are believed to mark outbound links `rel="nofollow"`, and
+  `*.blogspot.com` carries near-zero authority. **This was not verified from source** —
+  both platforms blocked a scripted fetch on 2026-08-14. Treat it as unconfirmed and do
+  not build a plan that depends on those links passing signal.
+- Neither platform has meaningful Cambodian readership, so Khmer content there has no
+  distribution value either.
+- **[REGRESSION] Verify a keyword against `gsc_query_report.py` before targeting it.**
+  Ledger entry 002 targets `ចុងភៅនៅភ្នំពេញ`, recorded in `WORKLOG.md` as a "GSC/Bing
+  high-impression query". Measured: **1 impression in 90 days**, and its parent term is
+  the zero-click image cluster.
+- The channels that actually reach this market are Google Business Profile (reviews are
+  local SEO's link equivalent, and GBP is what wins the local pack that is eating the
+  rank-1 zero-click result), Facebook — site referral is currently **0** — and Telegram.
+
+## 20. Communication
 
 - Professional, rigorous, objective, sincere. Ground every diagnosis in a file, a line, a
   measurement or a log — not in plausibility.
