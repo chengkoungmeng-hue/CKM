@@ -414,6 +414,33 @@ Zaraz is also the right answer to the weight objection — §4 removed Lenis ove
 "fix" the missing tag by adding `gtag.js` to `Layout.astro`; that would double-count every
 page view and add the payload Zaraz exists to avoid.
 
+**GA4 is readable programmatically.** `ckm-analytics@` holds Viewer on property
+`534450350`, so `analyticsdata.googleapis.com/v1beta/properties/534450350:runReport`
+works with `google_service_account.json` and the `analytics.readonly` scope. Enabling the
+Data API alone is not enough — that grants the endpoint, not the data; without the
+property grant it returns 403.
+
+### Baseline before any Facebook activity — 90 days to 2026-08-14
+
+The reference point for whether distribution work is doing anything. 150 sessions,
+102 users, 1,322 page views.
+
+| Channel | Sessions | | Country | Sessions |
+| :--- | ---: | :--- | :--- | ---: |
+| Direct | 87 | | Taiwan (the team) | 50 |
+| Organic Search | 61 | | **Cambodia** | **47** |
+| Referral | 2 | | United States (crawlers) | 35 |
+| **Social** | **0** | | everything else | 18 |
+
+- **Facebook referral is zero.** Not small — none.
+- **Direct is 58% and unattributable.** Telegram strips the referrer, so Telegram clicks
+  land here alongside the team's own visits. Tag every posted link with
+  `?utm_source=facebook|telegram&utm_medium=social&utm_campaign=<date-or-topic>` from the
+  first post — traffic that arrives untagged can never be separated retroactively.
+- **8.8 page views per session is not human behaviour** for a catering enquiry. After the
+  team's own visits and crawlers, the count of real prospects is single digits, not 47.
+  Treat that as calibration, not failure: the site is not underperforming, it is unknown.
+
 **GA4 is collecting but not worth reading yet.** Engagement time, bounce rate and scroll
 depth are *distributions* and need a sample; most articles take 0 clicks per quarter, so
 those numbers describe the one visitor, not the page. Discrete events — how many people
