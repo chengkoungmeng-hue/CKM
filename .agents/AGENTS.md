@@ -493,30 +493,50 @@ worth instrumenting at current traffic. Revisit behavioural reports somewhere no
 - `title` also feeds `og:title` and the breadcrumb JSON-LD, so it is the Facebook share
   headline too. Changing it changes both.
 
-## 19. External backlinks
+## 19. External backlinks — dropped, and why
 
-`.agents/skills/ckm_backlink_writer/SKILL.md` and `Docs/backlink_ledger.md` exist and
-define a Medium / Substack / Blogger publishing flow. **As of 2026-08-14 all three ledger
-entries are 待發佈 with no live URL — nothing has actually been published.**
+**Decision, 2026-08-14: this site does not pursue backlinks. Do not restart it, and do not
+propose it as an SEO fix.** `.agents/skills/ckm_backlink_writer/SKILL.md` and
+`Docs/backlink_ledger.md` were deleted; the three ledger entries were all 待發佈 with no
+live URL, so nothing was sunk. The reasoning is recorded here so it is not re-derived.
 
-Before extending that flow, weigh it against §18:
+Four independent reasons, any one of which is sufficient:
 
-- Links are not this site's constraint. The money keyword already ranks 2.66; there is no
-  ranking gap for a link to close, and total commercial demand caps the channel at roughly
-  50 clicks per quarter under perfect execution.
-- Medium and Substack are believed to mark outbound links `rel="nofollow"`, and
-  `*.blogspot.com` carries near-zero authority. **This was not verified from source** —
-  both platforms blocked a scripted fetch on 2026-08-14. Treat it as unconfirmed and do
-  not build a plan that depends on those links passing signal.
-- Neither platform has meaningful Cambodian readership, so Khmer content there has no
-  distribution value either.
-- **[REGRESSION] Verify a keyword against `gsc_query_report.py` before targeting it.**
-  Ledger entry 002 targets `ចុងភៅនៅភ្នំពេញ`, recorded in `WORKLOG.md` as a "GSC/Bing
-  high-impression query". Measured: **1 impression in 90 days**, and its parent term is
-  the zero-click image cluster.
-- The channels that actually reach this market are Google Business Profile (reviews are
-  local SEO's link equivalent, and GBP is what wins the local pack that is eating the
-  rank-1 zero-click result), Facebook — site referral is currently **0** — and Telegram.
+1. **There is no ranking gap for a link to close.** `ម្ហូបការ` sits at position 2.66 over
+   the last 28 days (§18). Links push rankings; the ranking is already there.
+2. **Demand caps the channel, not placement.** Roughly 300 commercial impressions per 90
+   days in Khmer search. Perfect rankings across every term is on the order of 50 clicks a
+   quarter. No amount of link building creates searches that nobody performs.
+3. **The links carry no signal.** Medium and Substack are understood to mark outbound
+   links `rel="nofollow"`, and `*.blogspot.com` carries near-zero authority. The nofollow
+   claim was **not verified from source** — both platforms blocked a scripted fetch — so
+   treat it as unconfirmed, which is itself a reason not to build a plan on it.
+4. **No distribution value either.** Neither platform has meaningful Cambodian readership.
+   Khmer content posted there is read by nobody, so it does not even work as marketing
+   independent of SEO.
+
+**[REGRESSION] Verify a keyword against `gsc_query_report.py` before targeting it.** Ledger
+entry 002 targeted `ចុងភៅនៅភ្នំពេញ`, recorded in `WORKLOG.md` as a "GSC/Bing high-impression
+query". Measured: **1 impression in 90 days**, and its parent term is the zero-click image
+cluster in §18. The whole plan rested on a number nobody had checked.
+
+### When the tactic would be right — for a different project
+
+The technique is not universally worthless; it was wrong *here*. Posting to Medium or
+Substack works when the audience genuinely reads those platforms — English-language B2B,
+SaaS, developer tooling. The value then comes from readers seeing the piece, not from the
+link passing authority. If a future project has that audience, apply that reasoning rather
+than resurrecting the deleted skill.
+
+### What reaches this market instead
+
+- **Google Business Profile.** Reviews are local SEO's equivalent of links, and GBP is what
+  wins the local pack currently absorbing the rank-1, zero-click
+  `catering service in phnom penh` result.
+- **Facebook.** Referral is **0** (§18 baseline). This is the largest gap and the one that
+  does not depend on Google at all. Tag every posted link with UTM parameters from the
+  first post — untagged traffic lands in Direct and can never be separated afterwards.
+- **Telegram.** The site's CTAs already point there; nothing circulates on it.
 
 ## 20. Communication
 
