@@ -13,6 +13,19 @@
   Do not "simplify" them away.
 - Run `python scripts/check_content.py` before committing content. It enforces the
   mechanical half of this file in under a second.
+- **This project has no skills.** `.agents/skills/` was removed on 2026-08-14. The five
+  that existed either duplicated this file (`ckm_blog_writer`, `ckm_pulse_writer`),
+  restated a spec that actually lives in code (`ckm_pulse_writer` again), or were generic
+  audit checklists that would generate plausible findings untethered from the measured
+  data in §18 (`local_seo_analyzer`, `audience_analyzer`). `ckm_backlink_writer` described
+  a programme this project has decided not to run — see §19. Everything worth keeping was
+  merged into this file. **Do not recreate them.** A skill is instructions an agent
+  executes, so a stale one is more dangerous than a stale document.
+- **Prefer measuring over reasoning.** Nearly every error found on 2026-08-14 — a
+  fabricated audit script, a cache purge silently failing for want of a permission, a
+  secret that reported success while still holding the old credential — was invisible to
+  inspection and obvious to a single command. When a claim in this file can be checked,
+  check it.
 
 ## 1. Work log
 
@@ -131,12 +144,22 @@ Values are authoritative from `tailwind.config.mjs`. Keep this table in sync wit
 - Team self-reference: **`យើងខ្ញុំ`**.
 - Zero hype. No `第一`, `最強`, `神級`, `無敵`, or Khmer equivalents.
 - 100% Khmer in public copy. No parenthetical English or Chinese translations.
-- Terminology:
-  `Catering` → `សេវាកម្មម្ហូបការ` / `សេវាកម្មធ្វើម្ហូប` ·
-  `VIP` → `ភ្ញៀវកិត្តិយស` ·
-  `Buffet` → `អាហារប៊ូហ្វេ` ·
-  `Finger food` → `អាហារសម្រន់ស្រាលៗ` ·
-  `Food safety` → `អនាម័យនិងសុវត្ថិភាពម្ហូបអាហារ`
+- **No English word or engineering abbreviation appears in article bodies.** Substitute:
+
+  | English | Khmer |
+  | :--- | :--- |
+  | `Catering` | `សេវាកម្មម្ហូបការ` / `សេវាកម្មធ្វើម្ហូប` |
+  | `VIP` | `ភ្ញៀវកិត្តិយស` |
+  | `Buffet` | `អាហារប៊ូហ្វេ` |
+  | `Cocktail` / `Finger food` | `អាហារសម្រន់ស្រាលៗ` |
+  | `Food safety` / `HACCP` | `អនាម័យនិងសុវត្ថិភាពម្ហូបអាហារ` |
+  | `Brand identity` | `អត្តសញ្ញាណរបស់ក្រុមហ៊ុន` |
+  | `LED` | `អំពូលភ្លឺច្បាស់សន្សំសំចៃថាមពល` |
+  | `Generator` | `ម៉ាស៊ីនភ្លើងបម្រុង` |
+  | `FAQ` (as a heading) | `## សំណួរដែលសួរញឹកញាប់` — never `(FAQ)` |
+
+  `50-100 KVA` → `កម្លាំងអគ្គិសនីខ្ពស់` with Khmer numerals, but see §11: prefer omitting
+  the figure entirely.
 - Cultural anchors: honour elders (`ចាស់ទុំ`) in menu advice; address dry-season heat and
   wet-season rain for outdoor events; answer real Phnom Penh logistics (borey approval,
   parking, narrow lanes).
@@ -203,9 +226,31 @@ a meta description that renders in the Google result.
   to `new Date()`, so every deploy re-stamped 14 evergreen articles as published today —
   a textbook date-manipulation signal. The fallback now omits `datePublished` entirely;
   keep it that way.
-- `authoritySignals` render as trust badges directly under the hero. Make them carry a
-  checkable fact and vary them per article; identical boilerplate across 15 posts trains
-  readers to ignore the badge.
+- `authoritySignals` render as trust badges directly under the hero — the first thing a
+  mobile reader sees. Make them carry a checkable fact and vary them per article; identical
+  boilerplate across 15 posts trains readers to ignore the badge. Shipped placeholders to
+  avoid: `សេវាកម្មប្រកបដោយវិជ្ជាជីវៈ`, `បច្ចេកទេសចម្អិនកម្រិតខ្ពស់`.
+
+### Article structure
+
+Merged here from the retired `ckm_blog_writer` skill, which duplicated most of this file.
+Every item below came out of an audit of the 15 live articles.
+
+- **Length**: at least 1,200 Khmer characters.
+- **Quick answer**: directly under the intro, a `## ចម្លើយរហ័ស` heading with a 40–80
+  character answer to the reader's actual question. This is what AI summaries lift.
+- **One H1 per article.** Everything else is `##` / `###`. Keep heading line-height loose —
+  Khmer diacritics (`ើ ឹ ី`) collide with the line above when it is tight.
+- **At least one comparison table** (budget split, package contrast, table-count estimate)
+  and one practical checklist.
+- **[REGRESSION] Section order is body → `## សំណួរដែលសួរញឹកញាប់` → `## សេចក្តីសន្និដ្ឋាន`.**
+  Articles 02, 03, 04, 10, 11 and 12 shipped with the conclusion *before* the FAQ, so the
+  last thing a reader saw was an administrative note. The conclusion sits closest to the
+  CTA; it belongs where the reader is ready to act.
+- **[REGRESSION] At least 3 in-context links to other `/blog/` articles per post.**
+  Articles 13, 14 and 15 shipped with **zero** internal links — no site authority reaches
+  them and no reader continues from them. Anchor text describes the destination, never
+  "click here"; the URL **must** end in a slash or §3's redirect penalty applies.
 
 ## 15. Pulse pipeline
 
@@ -222,6 +267,13 @@ a meta description that renders in the Google result.
 - Nothing in the workflow runs JavaScript. Do not reintroduce `setup-node` / `npm ci`.
 - Feed sources currently produce Western and Japanese home recipes, which sit oddly under
   a Khmer-Chinese banquet brand. Prefer sources matching the brand's actual cuisine.
+- **The prompt and the category taxonomy live in `scripts/fetch_catering_pulse.py`, not in
+  documentation.** The retired `ckm_pulse_writer` skill restated both, which meant two
+  descriptions of one thing that could drift apart with nothing to catch it. Read the
+  script. The four Khmer categories are defined around lines 35–48; the generation prompt
+  and `MODEL_LADDER` sit near line 363.
+- Pulse copy obeys §10–§13 exactly as articles do. The generator rejects a response
+  containing foreign script rather than publishing it (§13).
 
 ## 16. Secrets
 
