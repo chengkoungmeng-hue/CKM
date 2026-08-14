@@ -49,6 +49,9 @@
         "pillar"
       ]
     },
+    "target_keyword": {
+      "type": "string"
+    },
     "featured": {
       "default": false,
       "type": "boolean"

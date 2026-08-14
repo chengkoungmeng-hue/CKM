@@ -1,5 +1,17 @@
 # Work Log
 
+## 2026-08-14 (Complete 15-Article Blog Editorial Image Generation & 16:9 Media Migration)
+
+- **Full 15-Article AI Image Generation & 16:9 Aspect Ratio Migration**: Generated 1600×900 (16:9) photorealistic editorial food photography for all 15 blog articles using dedicated prompt specifications and unified quiet-luxury style parameters:
+  - Processed all 15 inline WebP images (`public/images/blog_01_inline_khmer.webp` ~ `blog_15_inline_khmer.webp`) with quality 82 (optimized between 96 KB and 248 KB).
+  - Processed all 15 cover PNG images (`src/assets/grounded_images/ckm_blog_01.png` ~ `ckm_blog_15.png`).
+  - Resolved the 16:9 visual clipping defect where previous 1024×1024 square images lost ~28% top/bottom canvas under `aspect-[16/9] object-cover`.
+- **Blog Content & Frontmatter Integration**:
+  - Inserted 16:9 inline image tags with verified descriptive Khmer `alt` attributes into `13-master-chef-catering-secrets.md`, `14-phnom-penh-master-chef-team.md`, and `15-luxury-abalone-banquet-soup.md`.
+  - Normalized all 15 blog article frontmatter `coverImage` paths to point to `ckm_blog_NN.png`.
+- **Image Generation Prompt Reference Vault**: Created `Docs/image-prompts.md` documenting the unified style block, negative filters, and all 15 ready-to-use prompts for future visual consistency.
+- **Static Validation & Build Verification**: Verified 100% compliance with `scripts/check_content.py --strict` (0 errors) and executed `npm run build` compiling 73 static pages, AVIF assets, and OpenGraph variants cleanly with 0 errors.
+
 ## 2026-08-13 (GitHub Actions CI/CD Pipeline Debugging & Pulse SEO Automation)
 
 - **GitHub Actions Workflow Refinement & Permissions Fix**: Debugged and resolved CI/CD pipeline issues in `.github/workflows/daily_catering_pulse.yml`. Added `permissions: { contents: write }` to the workflow configuration to authorize the `GITHUB_TOKEN` to push committed JSON updates and image files back to the repository, resolving the Git push 403 Forbidden error. Updated steps to install `requests` and `google-auth` Python libraries in the runner.
