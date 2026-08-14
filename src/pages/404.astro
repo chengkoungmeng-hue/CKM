@@ -1,21 +1,19 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-const pathname = Astro.url.pathname;
-let lang: "km" | "zh" | "en" = "km";
-if (pathname.startsWith("/zh/")) lang = "zh";
-if (pathname.startsWith("/en/")) lang = "en";
-
+// Khmer only. The zh/en branches here were doubly dead: /zh/ and /en/ are
+// 301-redirected at the edge, so a visitor could never reach this page under
+// either prefix in the first place.
 const t = {
-    km: { title: "404: មិនមានទំព័រនេះទេ", notFound: "មិនមានទំព័រនេះទេ", back: "ត្រឡប់ទៅទំព័រដើម" },
-    zh: { title: "404: 找不到页面", notFound: "找不到页面", back: "返回首页" },
-    en: { title: "404: Page Not Found", notFound: "Page Not Found", back: "Back to Home" }
-}[lang];
+    title: "404: មិនមានទំព័រនេះទេ",
+    notFound: "មិនមានទំព័រនេះទេ",
+    back: "ត្រឡប់ទៅទំព័រដើម",
+};
 
 const homeUrl = "/";
 ---
 
-<Layout title={`${t.title} | CKM Catering`} lang={lang}>
+<Layout title={`${t.title} | CKM Catering`} lang="km-KH">
   <div class="h-[60vh] flex flex-col items-center justify-center text-slate-200 px-6 font-sans text-center gap-6">
     <svg class="w-16 h-16 text-amber-500/50 block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
     
