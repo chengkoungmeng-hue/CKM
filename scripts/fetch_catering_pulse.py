@@ -382,11 +382,15 @@ def _gemini_once(prompt, model, timeout=45):
         return None, "budget-exhausted"
     _api_calls_made += 1
 
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={env_key}"
+    # The key travels in the x-goog-api-key header, not `?key=`. Both authenticate, but a
+    # key in the query string reaches proxy and access logs, and the `except` below turns
+    # exceptions into strings — several urllib errors carry the request URL, which would
+    # print the key straight into the CI log.
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
     req = urllib.request.Request(
         url,
         data=json.dumps({"contents": [{"parts": [{"text": prompt}]}]}).encode("utf-8"),
-        headers={"Content-Type": "application/json"},
+        headers={"Content-Type": "application/json", "x-goog-api-key": env_key},
         method="POST",
     )
     try:
