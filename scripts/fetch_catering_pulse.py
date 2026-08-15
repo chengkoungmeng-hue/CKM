@@ -169,7 +169,38 @@ _EXCLUDE_TERMS = (
 )
 # NOTE: plain "curry" is deliberately NOT excluded — Khmer red curry (ការីខ្មែរ) is a
 # core CKM dish. Only the specifically Thai curry names are filtered.
-EXCLUDE_REGEX = re.compile(r'\b(' + _EXCLUDE_TERMS + r')\b', re.IGNORECASE)
+def _with_inflections(terms):
+    """Let each exclusion term match its singular and plural alike.
+
+    [REGRESSION] The list was written as a mix of singulars and plurals and compiled as
+    \\b(term|term|…)\\b, so the closing \\b failed against any other form and the term
+    simply did not fire. Measured 2026-08-15: "Mango Chicken Summer Rolls" passed the
+    filter and published, even though `summer roll` is on the list — and it is Vietnamese,
+    which §15 excludes on explicit geopolitical grounds, not culinary ones. The same hole
+    let through Fish Tacos, Wagyu Burgers, Almond Croissants, Fudge Brownies and, in the
+    other direction, Belgian Waffle against the plural entry `waffles`.
+
+    Seven of nine probe titles evaded the filter this way. Normalise each term to its
+    stem, then match an optional -s/-es. `actress` and other -ss words are left alone so
+    the stem is not mangled.
+    """
+    out = []
+    for t in terms.split("|"):
+        t = t.strip()
+        if not t:
+            continue
+        if t.endswith("s") and not t.endswith("ss") and len(t) > 4:
+            t = t[:-1]
+        out.append(t + r"(?:e?s)?")
+    return "|".join(out)
+
+
+# NOTE: `hue` (the Vietnamese city) already carried a false-positive risk against the
+# English word "hue"; the inflection suffix extends that to "hues". Left as-is because
+# neither appears in a recipe title in practice, but it is the one term here where a
+# wider match could misfire.
+EXCLUDE_REGEX = re.compile(r'\b(' + _with_inflections(_EXCLUDE_TERMS) + r')\b',
+                           re.IGNORECASE)
 
 # Chinese dishes whose English names collide with the Western terms above. The
 # 2026-08-14 run skipped its entire candidate set, and two of the seven were
@@ -185,6 +216,12 @@ EXCLUDE_REGEX = re.compile(r'\b(' + _EXCLUDE_TERMS + r')\b', re.IGNORECASE)
 # feed, not a wider sieve.
 _ALLOW_TERMS = (
     r'scallion pancake|spring onion pancake|green onion pancake|cong you bing|'
+    # `pancakes` in the exclusion list targets the Western breakfast stack. Chinese
+    # savoury 餅 are a different food that happens to share the English word, and
+    # "Crispy Corn Pancake" from a Chinese recipe blog was caught once the inflection
+    # fix made `pancakes` actually fire. Japanese okonomiyaki is deliberately NOT
+    # allowed through here -- it is off-brand for other reasons.
+    r'corn pancake|'
     r'蔥油餅|葱油饼|三文治'
 )
 ALLOW_REGEX = re.compile(_ALLOW_TERMS, re.IGNORECASE)

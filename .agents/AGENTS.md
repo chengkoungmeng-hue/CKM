@@ -359,6 +359,16 @@ Every item below came out of an audit of the 15 live articles.
   and `MODEL_LADDER` sit near line 363.
 - Pulse copy obeys §10–§13 exactly as articles do. The generator rejects a response
   containing foreign script rather than publishing it (§13).
+- **[REGRESSION] `EXCLUDE_REGEX` terms must match their inflections.** The list mixes
+  singular and plural entries and compiles as `\b(term|term|…)\b`, so any other form
+  slipped past: `summer roll` is on the list and "Mango Chicken **Summer Rolls**"
+  published anyway — Vietnamese, which §15 excludes on explicit geopolitical grounds.
+  Seven of nine probe titles evaded this way, in both directions (`taco` missing "Tacos",
+  `waffles` missing "Waffle"). `_with_inflections()` now stems each term and matches an
+  optional -s/-es. When adding a term, add the base form; do not hand-write both.
+  Verified after the change: 0 of 15 on-brand titles wrongly blocked, and across 109 live
+  feed titles only 3 newly filtered — two Japanese okonomiyaki, correctly, and one
+  Chinese corn pancake, which was added to `ALLOW_REGEX`.
 - **[REGRESSION] An instruction in the prompt is a request; only a gate is a standard.**
   The prompt asks for "exactly 4 sections, each with its own descriptive Khmer
   subheading". Nothing checked it, and measured 2026-08-15 across the six entries
