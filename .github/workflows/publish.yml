@@ -1,0 +1,133 @@
+name: Publish
+
+# One publish path for every way content reaches main: the daily pulse, a
+# hand-written article, or an edit to an existing post. Whatever produced the
+# change, this waits for it to be live, then purges the edge and tells the
+# search engines.
+#
+# Previously only the pulse job did this, inline. A hand-written article was
+# therefore never submitted -- it sat unindexed until the next pulse run
+# happened to resubmit the whole URL list.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/content/**'
+      - 'src/data/**'
+      - 'src/pages/**'
+      - 'src/components/**'
+      - 'public/**'
+  # The pulse commits with GITHUB_TOKEN, and GitHub does not let a
+  # GITHUB_TOKEN push start another workflow -- the guard against a workflow
+  # retriggering itself. So the push trigger above never fires for the daily
+  # run and the chain has to be explicit.
+  workflow_run:
+    workflows: ["Daily Catering Pulse & Auto-Indexing Pipeline"]
+    types: [completed]
+  workflow_dispatch:
+
+concurrency:
+  group: publish
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+    # A failed pulse produced nothing to publish, and workflow_run fires on any
+    # completion regardless of outcome.
+    if: >-
+      github.event_name != 'workflow_run' ||
+      github.event.workflow_run.conclusion == 'success'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # main, not the triggering SHA: on a workflow_run the SHA is the one
+          # the pulse started from, which predates the commit it just made.
+          ref: main
+          fetch-depth: 5
+
+      - name: Find the new article, if there is one
+        id: article
+        run: |
+          set -euo pipefail
+          # The pulse commits as "chore(pulse): add <slug>", so the slug that was
+          # just published is recoverable from the log. This is a better liveness
+          # signal than a timer or a sitemap count: it polls the exact page that
+          # was added and can tell a slow build from a broken one.
+          slug=$(git log -1 --pretty=%s | sed -n 's/^chore(pulse): add \(.*\)$/\1/p' | tr -d ' ')
+          echo "slug=$slug" >> "$GITHUB_OUTPUT"
+          echo "Newest commit: $(git log -1 --pretty=%s)"
+          echo "Pulse slug: ${slug:-<none, treating as an edit>}"
+
+      - name: Wait for the page to be live on the edge
+        id: wait
+        run: |
+          set -euo pipefail
+          slug="${{ steps.article.outputs.slug }}"
+
+          if [ -z "$slug" ]; then
+            # An edit to existing content adds no new URL, so there is nothing
+            # specific to poll for. Deliberately generous: purging early is worse
+            # than purging late, because it refills the edge with the build on
+            # its way out.
+            echo "No new pulse slug; waiting a fixed interval for the build."
+            sleep 240
+            echo "live=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          url="https://ckmkh.com/pulse/$slug/"
+          echo "Polling $url"
+          for i in $(seq 1 40); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 "$url?cb=$i" || echo 000)
+            if [ "$code" = "200" ]; then
+              echo "Live after $((i * 15))s"
+              echo "live=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            echo "  attempt $i: HTTP $code"
+            sleep 15
+          done
+          # Submitting a URL that 404s teaches the search engines the wrong
+          # thing, so stop rather than index a page that never built.
+          echo "::error::$url did not go live within 10 minutes -- skipping purge and indexing."
+          echo "live=false" >> "$GITHUB_OUTPUT"
+          exit 1
+
+      - name: Set up Python
+        if: steps.wait.outputs.live == 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Purge edge cache & submit to IndexNow + Google Search Console
+        if: steps.wait.outputs.live == 'true'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          SEARCH_CONSOLE_SA_JSON: ${{ secrets.SEARCH_CONSOLE_SA_JSON }}
+        run: |
+          set -euo pipefail
+          pip install --quiet requests google-auth
+          # A missing secret used to be skipped silently, which is how a rotated
+          # credential survives unnoticed: the run stays green while nothing is
+          # submitted.
+          if [ -z "${CLOUDFLARE_API_TOKEN:-}" ]; then
+            echo "::error::CLOUDFLARE_API_TOKEN is not set -- the edge would keep serving the previous build."
+            exit 1
+          fi
+          if [ -z "${SEARCH_CONSOLE_SA_JSON:-}" ]; then
+            echo "::error::SEARCH_CONSOLE_SA_JSON is not set -- the sitemap would not be submitted."
+            exit 1
+          fi
+          printf '%s' "$SEARCH_CONSOLE_SA_JSON" > google_service_account.json
+          # notify_indexing.py purges, then submits to IndexNow, then GSC.
+          python scripts/notify_indexing.py
+
+      - name: Remove credential file
+        if: always()
+        run: rm -f google_service_account.json
