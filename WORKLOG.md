@@ -76,6 +76,79 @@
   `scripts/`, which is outside `publish.yml`'s path filter, so pushing them triggers no
   workflow, no cache purge and no search-engine submission.
 
+### Third pass — content standards, llms.txt, and the first measured UI audit (same day)
+
+- **Internal links: 12 added across articles 13, 14 and 15, which had zero.** Method chosen
+  deliberately over porting Sunder's `apply_internal_links.cjs`: that script corrupted 130
+  places across 53 files, and Khmer makes keyword-regex injection strictly worse because
+  Khmer has no spaces between words, so there is no `\b` to anchor a pattern to. Instead
+  `src/data/internalLinks.json` declares an EXACT anchor string that already exists in the
+  article, and `scripts/apply_internal_links.py` wraps it — refusing any anchor that is not
+  unique or that sits in a heading, table row or existing link. Idempotent (verified: a
+  second run reports SKIP 12). Anchors were proposed by a multi-agent pass constrained to
+  copy existing Khmer verbatim and never invent prose, then each was adversarially
+  verified; 12 of 12 survived, each confirmed to occur exactly once.
+- **The durable half is the check, not the injection.** `check_content.py` now fails on
+  fewer than three in-context `/blog/` links and on any internal link missing its trailing
+  slash. The nine missing links were a one-off; an unchecked floor would have let article
+  16 ship the same way.
+- **[REGRESSION] Section order was wrong in 13 of 15 articles, not the 6 AGENTS.md named.**
+  §14 listed 02, 03, 04, 10, 11, 12. Measured: 02–08, 10–12, 14 and 15 had the conclusion
+  before the FAQ, and 13 had no conclusion at all. `scripts/fix_section_order.py` moves the
+  blocks and refuses to write unless the file's content is a permutation of itself, so it
+  can only reorder, never alter Khmer — the diff is 52 lines added and 52 removed, exactly
+  balanced. Article 13's conclusion had to be written; it is the only newly-authored Khmer
+  prose in this work and is the one item that would benefit from a native-speaker read.
+  The rule itself has been rewritten to stop naming specific files, since that is what went
+  stale.
+- **[REGRESSION] English words in article prose.** §10 forbids them and they were live
+  anyway: `(Premium)`, `(Food Tasting)`, `(Borey)` ×2, a bare `Vs`, and `VIP`. Each sat
+  beside the Khmer that already said the same thing, so five of the six were removed
+  outright and `VIP` took §10's prescribed `ភ្ញៀវកិត្តិយស`. Now zero across all 15 articles.
+- **llms.txt now has a generator, and had drifted badly.** `public/llms.txt` and
+  `llms-full.txt` contained **zero** of the site's 15 blog slugs and zero of its 27 pulse
+  slugs — an index of the site's content that indexed none of it. They had also drifted
+  past §11, claiming "climate-controlled banquet tents", "strictly monitored cold-chain
+  storage" and "capable of serving 500+ guests simultaneously" — exactly the commitments
+  the articles are forbidden to make. `scripts/generate_llms_txt.py` derives everything
+  from source (phones and Telegram from `homeData.ts`, address and geo from `Layout.astro`
+  JSON-LD, articles from frontmatter, notes from `pulseData.json`) and exits non-zero
+  rather than emitting a file that looks fine and is quietly wrong. Coverage is now 15/15
+  and 27/27. `check_content.py` scans both files for §11 claims — regression-tested by
+  restoring the old file, which produces 3 errors. The daily workflow regenerates them, so
+  they cannot drift by one entry a day again.
+- **First measured UI/UX audit — and most candidate findings were false.** Worth recording
+  because the failure mode here is reporting plausible problems:
+  - Colour-contrast scanning reported **37 failures**. All false: the white text sits over
+    photographs, and the measurement only walked ancestors for a background *colour*. The
+    real backdrops are `rgba(0,0,0,0.85)` on the hero and `rgba(23,23,23,0.9)` exactly where
+    the caption text sits. Contrast is fine.
+  - Focus indicators looked missing on **19 of 25** controls. Also false: `el.focus()` called
+    from script does not trigger `:focus-visible`, which is what the default ring uses. A
+    real Tab keypress shows `outlineStyle: auto` in gold. Keyboard navigation is fine.
+  - The one nameless link already carries `aria-hidden="true" tabindex="-1"`. Correct as is.
+  - **The one real finding**: four gallery images were `loading="eager"` while sitting at
+    y=1133 and y=1306 on a 375×812 viewport — entirely below the fold — putting **68.7 KB on
+    the critical path against an 11.6 KB LCP hero, 5.9× the weight of the image that decides
+    LCP**, on the 3G/4G connections this audience uses. Same failure as the CateringPulse
+    backdrop in §6. Now lazy, with the measurement recorded inline so it is not "optimised"
+    back.
+  - Clean: one `h1`, no heading-level skips, `lang="km-KH"`, 0 console errors, 0 images
+    without `alt`, 22 of 28 images already lazy.
+- **On-page SEO measured, and mostly already fine.** All 15 descriptions are under the
+  152-character truncation `Layout.astro` applies; every article's opening sentence is
+  unique, so the Sunder problem of 12/42 sharing a formula does not exist here. Two real
+  items remain and are **not** done: 9 of 15 descriptions open with the same `ស្វែងយល់ពី`,
+  and article 07's `seoTitle` is 67 characters and may clip in the SERP. Both are low-value
+  against §18's measured demand ceiling and both require writing new Khmer, so they are
+  left as a deliberate, recorded choice rather than risked for marginal gain.
+- **Verification**: `check_content.py --strict` 0 errors; `fix_section_order.py --check`
+  reports all 15 conforming; `apply_internal_links.py --check` reports 12 SKIP (idempotent);
+  `generate_llms_txt.py` reports both files up to date; `astro check` 0 errors; `astro build`
+  80 pages. **Unlike the previous two commits, this one touches `src/content/`,
+  `src/pages/`, `src/data/` and `public/`, so it does trigger `publish.yml`: a real
+  publish, cache purge and search-engine submission.**
+
 ### Second pass — making the pipeline unattended (same day)
 
 Goal changed mid-session to "confirm the pulse can run as a perpetual machine with

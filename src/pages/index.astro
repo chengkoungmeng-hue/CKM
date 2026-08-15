@@ -223,7 +223,14 @@ const faqSchema = JSON.stringify({
               Mobile is untouched — two columns and sixteen squares divide evenly. */}
           {menuImages.map((img, i) => (
             <figure class={`group relative overflow-hidden rounded-sm bg-slate-100 ${i === 0 ? 'dish-feature' : ''} ${i === menuImages.length - 1 ? 'dish-last aspect-square' : 'aspect-square'}`}>
-              <Image src={img} alt={altTexts[i] || `រូបភាពម្ហូបការ CKM ទី ${i + 1}`} format="avif" quality={80} widths={i === 0 || i === menuImages.length - 1 ? [400, 800] : [200, 400]} sizes={i === 0 ? '(max-width: 768px) 50vw, 50vw' : i === menuImages.length - 1 ? '(max-width: 768px) 50vw, 50vw' : '(max-width: 768px) 50vw, 25vw'} class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.04]" loading={i < 4 ? 'eager' : 'lazy'} decoding="async" />
+              <Image src={img} alt={altTexts[i] || `រូបភាពម្ហូបការ CKM ទី ${i + 1}`} format="avif" quality={80} widths={i === 0 || i === menuImages.length - 1 ? [400, 800] : [200, 400]} sizes={i === 0 ? '(max-width: 768px) 50vw, 50vw' : i === menuImages.length - 1 ? '(max-width: 768px) 50vw, 50vw' : '(max-width: 768px) 50vw, 25vw'} class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.04]" loading="lazy" decoding="async" />
+              {/* [REGRESSION] Gallery images stay lazy. The first four were `eager`, and
+                  measured 2026-08-15 on a 375x812 viewport they sit at y=1133 and y=1306 —
+                  entirely below the fold — while putting 68.7 KB on the critical path
+                  against an 11.6 KB LCP hero: 5.9x the weight of the image that actually
+                  decides LCP, on the 3G/4G connections this audience uses. Same failure as
+                  the CateringPulse backdrop in AGENTS.md §6. The gallery begins below the
+                  fold at every viewport tested, so there is nothing here worth preloading. */}
               <figcaption class="absolute inset-x-0 bottom-0 p-3 md:p-4 bg-gradient-to-t from-onyx/90 via-onyx/40 to-transparent">
                 <span class={`font-km-sans text-white leading-snug block ${i === 0 ? 'text-sm md:text-lg font-bold' : 'text-[11px] md:text-[13px]'}`}>{dishTitles[i]}</span>
               </figcaption>

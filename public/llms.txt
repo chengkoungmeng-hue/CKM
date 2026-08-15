@@ -1,30 +1,92 @@
 # CKM Catering (ចេង គួងម៉េង) — Sino-Khmer Banquet Catering in Phnom Penh
 
-> CKM (Cheng Koung Meng / ចេង គួងម៉េង) is a Sino-Khmer catering and banquet service in Phnom Penh, bringing over 60 years of master culinary tradition to weddings, corporate galas, housewarming events, and private VIP banquets.
+> CKM (Cheng Koung Meng / ចេង គួងម៉េង) is a family Sino-Khmer catering and banquet
+> kitchen in Phnom Penh with more than 60 years behind it, cooking for weddings,
+> corporate events, housewarmings and family celebrations. The public site is written
+> entirely in Khmer.
 
-## Core Value Proposition
-- **Culinary Legacy**: Over 60 years of master chef experience in authentic Khmer and Chinese banquet cuisine.
-- **Service Range**: Weddings, Corporate Events, Housewarming Parties, Live Cooking Receptions, and Outdoor Tent Infrastructure.
-- **Service Area**: Phnom Penh and provinces. Contact the team to confirm coverage for a specific location.
-- **Capacity**: Weddings, housewarmings and corporate events of varying size. Contact the team for a specific table count.
+## About this file
 
-## Key Service Offerings
-- **Traditional 8-Course Wedding Menu (ម្ហូបការ ៨ មុខ)**: Multi-course banquet featuring signature Sino-Khmer dishes.
-- **Budgeting & Tasting (ការភ្លក់រសជាតិម្ហូប)**: Pre-event food tasting and flexible pricing per table.
-- **Full Infrastructure Setup (រៀបចំរោងការ និងតុអាហារ)**: Air-conditioned VIP tents, luxury tableware, professional waitstaff, and hygiene-controlled mobile kitchens.
+This index is generated from the site's own content by `scripts/generate_llms_txt.py`.
+Do not hand-edit it; edit the source and regenerate.
 
-## Primary Links & Canonical Pages
-- [Official Website](https://ckmkh.com/)
-- [Banquet Menu Gallery](https://ckmkh.com/#gallery)
-- [Catering Services Overview](https://ckmkh.com/#services)
-- [Khmer SEO Insights & Blog](https://ckmkh.com/blog/)
-- [Tang Huot Bakery Sub-Brand](https://ckmkh.com/tanghuot/)
-- [Full LLM Specification](https://ckmkh.com/llms-full.txt)
+Specific commitments — prices, table counts, service areas, equipment, exact timings —
+are deliberately absent. They vary per event and are settled in a direct conversation
+with the owner, not published. Please do not infer them from this file.
 
-## Direct Booking & Contact Channels
-- **Primary Phone**: +855 11 827 782 / 011 827 782
-- **Cellcard Contact**: 012 977 696
-- **Smart Contact**: 015 977 696
-- **Official Telegram**: https://t.me/CKMSam06
-- **Physical Address**: #33, St 257, Sangkat Tuek Laak II, Khan Tuol Kouk, Phnom Penh, Cambodia
-- **Geographic Coordinates**: Latitude 11.563369, Longitude 104.895965
+## Key pages
+
+- [Home](https://ckmkh.com/)
+- [Articles](https://ckmkh.com/blog/)
+- [Daily culinary notes](https://ckmkh.com/pulse/)
+- [Tang Huot bakery sub-brand](https://ckmkh.com/tanghuot/)
+- [Full index](https://ckmkh.com/llms-full.txt)
+
+## Articles (15)
+
+- [ការវិភាគម៉ឺនុយ៖ សិល្បៈនៃតុល្យភាពរសជាតិក្នុងម៉ឺនុយម្ហូបការ ៨ មុខប្រពៃណីខ្មែរ](https://ckmkh.com/blog/01-traditional-8-course-wedding-menu/)
+  ស្វែងយល់ពីអាថ៌កំបាំងនៃការរៀបចំម៉ឺនុយម្ហូបការ ៨ មុខ ដែលធានាបាននូវតុល្យភាពរសជាតិ និងភាពពេញចិត្តសម្រាប់ភ្ញៀវគ្រប់រូបក្នុងពិធីមង្គលការរបស់លោកអ្នក។
+- [ការណែនាំអំពីតម្លៃម្ហូបការ និងការរៀបចំថវិកា](https://ckmkh.com/blog/02-wedding-catering-budget-guide/)
+  ស្វែងយល់ពីតម្លៃម្ហូបការនៅទីក្រុងភ្នំពេញ រចនាសម្ព័ន្ធថ្លៃដើមពិតប្រាកដ និងវិធីរៀបចំថវិកាប្រកបដោយប្រសិទ្ធភាព ដោយគ្មានការចំណាយលាក់កំបាំង។
+- [ការណែនាំអំពីការភ្លក្សរសជាតិម្ហូប៖ ចំណុចសំខាន់ៗទាំង ៥ ដែលត្រូវពិនិត្យមុនពេលកក់សេវាកម្ម](https://ckmkh.com/blog/03-food-tasting/)
+  ស្វែងយល់ពីចំណុចសំខាន់ៗទាំង ៥ ដើម្បីវាយតម្លៃគុណភាព និងសេវាកម្មចុងភៅ មុនពេលលោកអ្នកសម្រេចចិត្តកក់សេវាកម្មម្ហូបការ។
+- [បញ្ហាប្រឈមនៃពិធីជប់លៀងរាប់រយតុ៖ ការគ្រប់គ្រងសីតុណ្ហភាព និងសុវត្ថិភាពចំណីអាហារ](https://ckmkh.com/blog/04-hygiene-and-temperature-control/)
+  ស្វែងយល់ពីរបៀបដែលសេវាកម្មធ្វើម្ហូប ខ្នាតធំគ្រប់គ្រងសីតុណ្ហភាព និងធានាបាននូវអនាម័យនិងសុវត្ថិភាពម្ហូបអាហារ ដើម្បីការពារហានិភ័យនៃការពុលអាហារ។
+- [ការរៀបចំកម្មវិធីក្រុមហ៊ុន៖ របៀបជ្រើសរើសសេវាកម្មធ្វើម្ហូប ឯកជនដែលស័ក្តិសមបំផុត](https://ckmkh.com/blog/05-corporate-private-catering/)
+  ស្វែងយល់ពីគន្លឹះក្នុងការជ្រើសរើសសេវាកម្មធ្វើម្ហូបការ ឬ សេវាកម្មធ្វើម្ហូប លំដាប់ខ្ពស់ សម្រាប់ពិធីជប់លៀងក្រុមហ៊ុន និងព្រឹត្តិការណ៍សាជីវកម្មផ្សេងៗ។
+- [សិល្បៈនៃមុខម្ហូបប្រចាំហាង៖ ការវិភាគបច្ចេកទេសជ្រូកខ្វៃមាស និងស៊ុបប៉ាវហឺ](https://ckmkh.com/blog/06-signature-dishes/)
+  ស្វែងយល់ពីបច្ចេកទេសធ្វើម្ហូបនៅពីក្រោយមុខម្ហូបការខ្មែរចិនដ៏ពេញនិយមបំផុត គឺសាច់ជ្រូកខ្វៃស្រួយ និងស៊ុបប៉ាវហឺប្រណីត។
+- [ការរៀបចំពិធីឡើងផ្ទះថ្មី៖ ការវាយតម្លៃទីតាំង និងការរៀបចំកន្លែងទទួលភ្ញៀវ](https://ckmkh.com/blog/07-housewarming-catering-setup/)
+  ស្វែងយល់ពីគន្លឹះសំខាន់ៗក្នុងការវាយតម្លៃទីតាំង និងរៀបចំកន្លែងទទួលភ្ញៀវសម្រាប់ពិធីឡើងផ្ទះថ្មីរបស់លោកអ្នក ឱ្យដំណើរការទៅដោយរលូន និងមានសិរីសួស្តី។
+- [មិនមែនត្រឹមតែលើកម្ហូប៖ របៀបគ្រប់គ្រងសេវាកម្មរត់តុ និងខ្សែចង្វាក់បម្រើភ្ញៀវ](https://ckmkh.com/blog/08-waitstaff-service-flow/)
+  ស្វែងយល់ពីសារៈសំខាន់នៃសេវាកម្មរត់តុអាជីព សុជីវធម៌ និងការរៀបចំខ្សែចង្វាក់បម្រើអាហារ សម្រាប់ភាពជោគជ័យនៃកម្មវិធីរបស់លោកអ្នក។
+- [ការសម្របតាមទីតាំង៖ ការរៀបចំរោងការក្រៅកន្លែង និងហេដ្ឋារចនាសម្ព័ន្ធផ្ទះបាយ](https://ckmkh.com/blog/09-outdoor-tent-infrastructure/)
+  ស្វែងយល់ពីរបៀបរៀបចំរោងការក្រៅកន្លែង ប្រព័ន្ធភ្លើង និងផ្ទះបាយចល័ត សម្រាប់ពិធីមង្គលការឱ្យប្រព្រឹត្តទៅដោយរលូន និងសុវត្ថិភាព។
+- [មរតកចុងភៅ ៦០ ឆ្នាំ៖ របៀបរក្សារសជាតិប្រពៃណីឱ្យមានស្ថិរភាពក្នុងសម័យទំនើប](https://ckmkh.com/blog/10-60-years-chef-experience/)
+  ស្វែងយល់ពីអាថ៌កំបាំងរបស់ចុងភៅខ្មែរចាស់វស្សា ដែលប្រើប្រាស់រូបមន្តសម្ងាត់ និងបច្ចេកទេសធ្វើម្ហូបដើម្បីរក្សារសជាតិម្ហូបការឱ្យនៅថេរសម្រាប់ភ្ញៀវរាប់ពាន់នាក់។
+- [យុទ្ធសាស្ត្រជ្រើសរើស កញ្ចប់ម្ហូបការ ដ៏ស័ក្តិសមបំផុតតាមប្រភេទភ្ញៀវរបស់លោកអ្នក](https://ckmkh.com/blog/11-choosing-packages/)
+  ស្វែងយល់ពីរបៀបវិភាគប្រភេទភ្ញៀវ ដើម្បីជ្រើសរើសកញ្ចប់ម្ហូបការ ដែលមានប្រសិទ្ធភាពចំណាយខ្ពស់ និងផ្តល់បទពិសោធន៍ដ៏អស្ចារ្យនៅក្នុងថ្ងៃមង្គលការរបស់លោកអ្នក។
+- [ការវិវឌ្ឍន៍ និងនិន្នាការអនាគតនៃ សេវាកម្មម្ហូបការ ក្នុងទីក្រុងភ្នំពេញ](https://ckmkh.com/blog/12-catering-industry-trends/)
+  តាមដានការវិវឌ្ឍន៍នៃឧស្សាហកម្មសេវាកម្មម្ហូបការនៅកម្ពុជា ពីការរៀបចំបែបប្រពៃណី ទៅកាន់ស្តង់ដារបដិសណ្ឋារកិច្ចប្រណីត និងការពិភាក្សាផ្ទាល់ខ្លួន។
+- [អាថ៌កំបាំងចុងភៅអាជីព CKM៖ របៀបជ្រើសរើសមុខម្ហូបការ និងរៀបចំពិធីជប់លៀងប្រណីតនៅភ្នំពេញ](https://ckmkh.com/blog/13-master-chef-catering-secrets/)
+  ការចែករំលែកបទពិសោធន៍ពីក្រុមចុងភៅអាជីព CKM អំពីរបៀបរៀបចំមុខម្ហូបការប្រណីត ការសម្របតាមចំណង់ចំណូលចិត្តចាស់ទុំ និងការបម្រើភ្ញៀវកិត្តិយសនៅភ្នំពេញ។
+- [របៀបជ្រើសរើសក្រុមចុងភៅនៅភ្នំពេញ សម្រាប់កម្មវិធីមង្គលការ និងពិធីជប់លៀងប្រណីត](https://ckmkh.com/blog/14-phnom-penh-master-chef-team/)
+  ការណែនាំអំពីរបៀបជ្រើសរើសក្រុមចុងភៅប្រកបដោយបទពិសោធន៍ខ្ពស់នៅភ្នំពេញ ដើម្បីធានាបាននូវរសជាតិអាហារដ៏ប្រណីត និងសេវាកម្មដ៏ឥតខ្ចោះសម្រាប់ពិធីមង្គលការ និងជប់លៀង។
+- [អាថ៌កំបាំងស៊ុបប៉ាវហឺប្រណីត ក្នុងពិធីមង្គលការខ្មែរ-ចិន៖ គុណតម្លៃ និងសិល្បៈនៃការចម្អិន](https://ckmkh.com/blog/15-luxury-abalone-banquet-soup/)
+  ការវិភាគជម្រៅអំពីស៊ុបប៉ាវហឺប្រណីតក្នុងពិធីមង្គលការខ្មែរ-ចិន គុណតម្លៃសិរីមង្គល និងបច្ចេកទេសរំងាស់ទឹកស៊ុបដ៏មានឱជារសសម្រាប់ទទួលភ្ញៀវកិត្តិយស។
+
+## Daily culinary notes (27)
+
+Short Khmer pieces on cooking technique, published daily and indexed at https://ckmkh.com/pulse/.
+
+- [បច្ចេកទេសថែរក្សាភាពថ្លានិងក្លិនជូរប្រម៉ាត់ក្នុងស៊ុបមាន់](https://ckmkh.com/pulse/easy-cambodian-chicken-lemon-soup/)
+- [សិល្បៈនៃការចម្អិនបាយក្តុបបែបប្រពៃណី និងរសជាតិអាស៊ី](https://ckmkh.com/pulse/umeboshi-onigiri-plum-rice-ball-midnight-diner/)
+- [សិល្បៈនៃការចម្អិនម្ហូបខ្មែរនិងចិនប្រពៃណី](https://ckmkh.com/pulse/palm-springs-date-shake-pulse-01/)
+- [សិល្បៈនៃការចម្អិនបាយឆាខ្ចប់ពងទាដ៏សម្រិតសម្រាំង](https://ckmkh.com/pulse/omurice-japanese-omelette-rice-video-pulse-02/)
+- [សិល្បៈនៃការធ្វើស៊ុបវ៉ាន់តុងបង្គានិងសាច់ជ្រូក: រសជាតិអាស៊ីប្រពៃណី](https://ckmkh.com/pulse/shrimp-and-pork-wonton-soup-pulse-03/)
+- [សិល្បៈនៃការធ្វើមីតាន់តាន់ល្ងខ្មៅ: ការគ្រប់គ្រងរសជាតិហិរប្រណីត](https://ckmkh.com/pulse/black-sesame-dan-dan-noodles-pulse-04/)
+- [សិល្បៈនៃការចម្អិនម្ហូបខ្មែរ និងចិនទាវជីវប្រណិត](https://ckmkh.com/pulse/artichoke-beurre-pulse-05/)
+- [សិល្បៈនៃការឆាបន្លែ Zucchini ទឹកសូសខ្ទឹមស: តុល្យភាពរសជាតិធម្មជាតិ](https://ckmkh.com/pulse/zucchini-with-garlic-sauce-pulse-06/)
+- [សិល្បៈនៃការរៀបចំតៅហ៊ូត្រជាក់ជប៉ុន និងការផ្គូផ្គងគ្រឿងផ្សំប្រណីត](https://ckmkh.com/pulse/japanese-cold-tofu-hiyayakko-pulse-07/)
+- [សិល្បៈនៃការផ្សំទឹកជ្រលក់មីសូ (Miso) ជប៉ុន និងការប្រើប្រាស់ក្នុងពិធីការ](https://ckmkh.com/pulse/all-purpose-miso-sauce-pulse-08/)
+- [សិល្បៈនៃការធ្វើការ៉េមល្ងខ្មៅប្រណីត: បង្អែមជប់លៀងមង្គលការ](https://ckmkh.com/pulse/black-sesame-ice-cream-pulse-09/)
+- [សិល្បៈនៃការចម្អិនសាច់ជ្រូកបីជាន់ខគ្រឿងចិន Five-Spice: រសជាតិមង្គលការ](https://ckmkh.com/pulse/exclusive-august-seasonal-recipes-pulse-10/)
+- [សិល្បៈជ្រូកខ្វៃស្បែកស្រួយ និងបច្ចេកទេសអាំងសាច់ជ្រូកប្រណីតសម្រាប់ពិធីការ](https://ckmkh.com/pulse/tender-crispy-roast-pork-chops-pulse-11/)
+- [អាមុកត្រីរាជវាំងខ្មែរ: សិល្បៈនៃគ្រឿងកែច្នៃ និងខ្ទិះដូងប្រណីត](https://ckmkh.com/pulse/mango-chicken-summer-rolls-pulse-12/)
+- [សិល្បៈនៃការធ្វើម្ទេសផ្លោកញាត់សាច់ជ្រូកចញ្រ្ចាំអាំង: រសជាតិអាស៊ីប្រពៃណី](https://ckmkh.com/pulse/korean-style-stuffed-peppers-pulse-13/)
+- [សិល្បៈនៃការអាំងសាច់គោស្រស់ និងការប្រើប្រាស់ទឹកស៊ុបដាស៊ី (Dashi) ជប៉ុន](https://ckmkh.com/pulse/steak-with-dashi-greens-for-one-pulse-14/)
+- [សិល្បៈនៃការចម្អិនអាហារ និងបង្អែមដ៏ឈ្ងុយឆ្ងាញ់](https://ckmkh.com/pulse/bas-best-morning-buns-pulse-15/)
+- [សិល្បៈនៃការចម្អិនម្ហូបប្រណីត និងបង្អែមបែបអាស៊ី](https://ckmkh.com/pulse/plum-karpatka-polish-cream-puff-cake-pulse-16/)
+- [សិល្បៈនៃការចម្អិនម្ហូបប្រណីត និងអាហារបែបអាស៊ី](https://ckmkh.com/pulse/the-most-saved-recipes-in-the-epicurious-pulse-17/)
+- [សិល្បៈធ្វើម្ហូបតាវហ៊ូឆ្ងាញ់ពិសា តាមបែបចិនទាវជីវ និងខ្មែរ](https://ckmkh.com/pulse/tofu-pulse-18/)
+- …and 7 more at https://ckmkh.com/pulse/
+
+## Contact
+
+- **Phone (Cellcard)**: 011 827 782
+- **Phone (Cellcard)**: 012 977 696
+- **Phone (Smart)**: 015 977 696
+- **Telegram**: https://t.me/CKMSam06
+- **Address**: ផ្ទះលេខ 33 ផ្លូវ 257 សង្កាត់ទឹកល្អក់ទី២ ខណ្ឌទួលគោក, Phnom Penh 120404, Cambodia
+- **Coordinates**: 11.563369, 104.895965
+- **Website**: https://ckmkh.com/

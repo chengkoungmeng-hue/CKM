@@ -47,6 +47,13 @@ jobs:
       # spliced in. Those cannot render in Hanuman and shipped as tofu boxes.
       # The generator now rejects them, and this is the belt-and-braces check
       # across the whole content tree before anything is committed.
+      # llms.txt indexes every article and pulse note, so it goes stale by one entry a
+      # day unless it is regenerated with them. Both files previously had no generator
+      # at all and had drifted to containing zero of the site's 42 URLs.
+      - name: Regenerate llms.txt from the new content
+        if: steps.pulse.outputs.changed == 'true'
+        run: python scripts/generate_llms_txt.py
+
       - name: Validate content before publishing
         if: steps.pulse.outputs.changed == 'true'
         run: python scripts/check_content.py --strict

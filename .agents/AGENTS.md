@@ -244,13 +244,33 @@ Every item below came out of an audit of the 15 live articles.
 - **At least one comparison table** (budget split, package contrast, table-count estimate)
   and one practical checklist.
 - **[REGRESSION] Section order is body → `## សំណួរដែលសួរញឹកញាប់` → `## សេចក្តីសន្និដ្ឋាន`.**
-  Articles 02, 03, 04, 10, 11 and 12 shipped with the conclusion *before* the FAQ, so the
-  last thing a reader saw was an administrative note. The conclusion sits closest to the
-  CTA; it belongs where the reader is ready to act.
+  The conclusion sits closest to the CTA; it belongs where the reader is ready to act, not
+  before an administrative note. This rule previously named articles 02, 03, 04, 10, 11
+  and 12. **Measured 2026-08-15, thirteen of fifteen were non-conforming** — 02–08 and
+  10–12 and 14–15 had the conclusion first, and 13 had no conclusion at all. Only 01 and
+  09 were correct. All fixed; `scripts/fix_section_order.py --check` re-verifies in a
+  second and refuses to write unless the file's content is a permutation of itself, so it
+  can only ever move blocks, never alter Khmer.
+  *A rule that names specific files goes stale silently. Prefer a checker.*
 - **[REGRESSION] At least 3 in-context links to other `/blog/` articles per post.**
   Articles 13, 14 and 15 shipped with **zero** internal links — no site authority reaches
   them and no reader continues from them. Anchor text describes the destination, never
   "click here"; the URL **must** end in a slash or §3's redirect penalty applies.
+  Enforced by `check_content.py` (`too-few-internal-links`, and `link-missing-slash`), so
+  article 16 cannot ship the same way.
+- **Internal links are declared, not pattern-matched.** `src/data/internalLinks.json` names
+  the article, an EXACT anchor string that already exists in that article's prose, and the
+  destination; `scripts/apply_internal_links.py` wraps it. It is idempotent and refuses any
+  anchor that is not unique or that sits in a heading, a table row or an existing link.
+  **Do not port a keyword-regex injector.** Sunder's `apply_internal_links.cjs` corrupted
+  130 places across 53 files by replacing `（TCO）` with ` [TCO](…)`, and Khmer makes that
+  approach strictly worse: Khmer has no spaces between words, so there is no `\b` to
+  anchor a pattern to and no way to tell a word from the middle of a longer one. Exact
+  strings sidestep the whole problem.
+- **[REGRESSION] No English word appears in article prose, including parenthetical
+  glosses.** §10 says this, and it had drifted anyway: `(Premium)`, `(Food Tasting)`,
+  `(Borey)` ×2 and a bare `Vs` and `VIP` were live, each sitting beside the Khmer that
+  already said it. A gloss in brackets is still an English word.
 
 ## 15. Pulse pipeline
 

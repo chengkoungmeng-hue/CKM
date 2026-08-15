@@ -373,6 +373,76 @@ def check_dead_locale_links(path, text):
 
 # ---------------------------------------------------------------- main
 
+INTERNAL_LINK_FLOOR = 3
+BLOG_LINK = re.compile(r"\]\((/blog/[^)]*)\)")
+
+# AGENTS.md section 11 applies to everything published under this domain, not only to
+# article bodies. public/llms.txt and llms-full.txt had drifted into exactly the claims
+# the articles are forbidden to make -- "climate-controlled banquet tents", "strictly
+# monitored cold-chain storage", "capable of serving 500+ guests simultaneously" -- and
+# nothing checked them, because the checker only ever looked at src/content.
+LLMS_FORBIDDEN = [
+    (r"cold[- ]chain", "cold-chain storage claim"),
+    (r"climate[- ]controlled", "climate-control equipment claim"),
+    (r"air[- ]conditioned", "air-conditioning equipment claim"),
+    (r"digital temperature|temperature[- ]monitor", "temperature-monitoring claim"),
+    (r"\d{3,}\+?\s*guests", "hard capacity figure"),
+    (r"\bVAT\b", "VAT/invoice guarantee"),
+    (r"unlimited", "unlimited-customisation claim"),
+    (r"\b100%\b", "absolute guarantee"),
+]
+
+
+def check_llms_txt():
+    """The AI-facing index is public copy too, and section 11 governs it."""
+    for rel in ("public/llms.txt", "public/llms-full.txt"):
+        path = os.path.join(ROOT, rel)
+        if not os.path.isfile(path):
+            warn("llms-missing", rel, 1,
+                 "file is absent — run scripts/generate_llms_txt.py")
+            continue
+        text = read(path)
+        for pat, label in LLMS_FORBIDDEN:
+            m = re.search(pat, text, re.IGNORECASE)
+            if m:
+                err("llms-over-promise", rel, lineno(text, m.start()),
+                    "%s — AGENTS.md 11 forbids committing the owner to this" % label)
+
+
+def check_internal_links(path, text):
+    """AGENTS.md section 14: at least three in-context links to other /blog/ articles.
+
+    [REGRESSION] Articles 13, 14 and 15 shipped with ZERO. No site authority reached them
+    and no reader continued from them, and nothing in the build noticed. Detecting this
+    is the durable half of the fix — the nine missing links were a one-off, but an
+    unchecked floor would let article 16 ship the same way.
+
+    Deliberately a check and not an injector: Khmer has no spaces between words, so a
+    keyword-matching injector has no word boundary to anchor to. Links are declared in
+    src/data/internalLinks.json and applied by exact string match instead.
+    """
+    body = text.split("---", 2)[2] if text.startswith("---") else text
+    self_slug = os.path.splitext(os.path.basename(path))[0]
+
+    links = []
+    for m in BLOG_LINK.finditer(body):
+        url = m.group(1)
+        line = body[:m.start()].count("\n") + 1
+        # A link to the article's own URL is not an internal link out.
+        if url.strip("/").endswith(self_slug):
+            continue
+        if not url.endswith("/"):
+            err("link-missing-slash", path, line,
+                "internal link %s must end in '/' or Cloudflare 301s it (AGENTS.md 3)" % url)
+        links.append(url)
+
+    if len(links) < INTERNAL_LINK_FLOOR:
+        err("too-few-internal-links", path, 1,
+            "%d in-context /blog/ link(s); AGENTS.md 14 requires at least %d. "
+            "Declare them in src/data/internalLinks.json and run "
+            "scripts/apply_internal_links.py" % (len(links), INTERNAL_LINK_FLOOR))
+
+
 def main():
     strict = "--strict" in sys.argv
 
@@ -392,8 +462,10 @@ def main():
         check_inline_image_number(path, text)
         check_frontmatter(path, text)
         check_dead_locale_links(path, text)
+        check_internal_links(path, text)
 
     check_pulse()
+    check_llms_txt()
     check_secrets()
 
     for label, items in (("ERROR", ERRORS), ("WARN", WARNINGS)):
