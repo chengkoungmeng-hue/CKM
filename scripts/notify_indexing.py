@@ -15,8 +15,9 @@ def purge_cloudflare_cache():
     """Purge Cloudflare Edge Cache programmatically."""
     token = os.getenv("CLOUDFLARE_API_TOKEN")
     if not token:
-        print("CLOUDFLARE_API_TOKEN secret is not set. Skipping cache purge.")
-        return
+        print("::error::CLOUDFLARE_API_TOKEN is not set - the edge would keep serving "
+              "the previous build.")
+        return False
 
     # A GitHub secret pasted with a trailing newline produces the header value
     # "Bearer <token>\n", which is illegal in HTTP and raises
@@ -25,8 +26,8 @@ def purge_cloudflare_cache():
     # Strip whitespace first, then stray quotes, then whitespace again.
     token = token.strip().strip("\"'").strip()
     if not token:
-        print("CLOUDFLARE_API_TOKEN is empty after trimming. Skipping cache purge.")
-        return
+        print("::error::CLOUDFLARE_API_TOKEN is empty after trimming.")
+        return False
 
     zone_id = "d459c80e06d000c6e1927783fc6b3a7a"
     url = f"https://api.cloudflare.com/client/v4/zones/{zone_id}/purge_cache"
@@ -46,10 +47,12 @@ def purge_cloudflare_cache():
             res_data = json.loads(resp.read().decode("utf-8"))
             if res_data.get("success"):
                 print("🧹 Cloudflare Edge Cache successfully purged!")
-            else:
-                print(f"⚠️ Cloudflare Cache Purge failed: {res_data}")
+                return True
+            print(f"::error::Cloudflare Cache Purge failed: {res_data}")
+            return False
     except Exception as e:
-        print(f"⚠️ Cloudflare Cache Purge Error: {e}")
+        print(f"::error::Cloudflare Cache Purge Error: {e}")
+        return False
 
 def ensure_key_file():
     os.makedirs("public", exist_ok=True)
@@ -71,6 +74,7 @@ def submit_indexnow(urls):
         "urlList": urls
     }
     
+    accepted = 0
     for endpoint in endpoints:
         req = urllib.request.Request(
             endpoint,
@@ -80,17 +84,27 @@ def submit_indexnow(urls):
         try:
             with urllib.request.urlopen(req, timeout=10) as resp:
                 print(f"IndexNow ({endpoint}) Status: {resp.status} (Success/Accepted)")
+                if 200 <= resp.status < 300:
+                    accepted += 1
         except urllib.error.HTTPError as e:
             print(f"IndexNow ({endpoint}) HTTP {e.code}: {e.reason}")
         except Exception as e:
             print(f"IndexNow ({endpoint}) Note: {e}")
 
+    # One endpoint refusing is ordinary and the other still carries the submission.
+    # Both refusing means the key, the key file or the payload is wrong, and that is
+    # a real failure that used to pass as success.
+    if accepted == 0:
+        print("::error::No IndexNow endpoint accepted the submission.")
+        return False
+    return True
+
 def notify_gsc_api():
     """Notify Google Search Console via Service Account REST API."""
     creds_file = 'google_service_account.json'
     if not os.path.exists(creds_file):
-        print("⚠️ GSC credentials not found. Skipping GSC API call.")
-        return
+        print("::error::GSC credentials not found - the sitemap was not submitted.")
+        return False
 
     try:
         import requests
@@ -118,10 +132,12 @@ def notify_gsc_api():
         print(f"📡 GSC API Sitemap Resubmission: Status {res.status_code}")
         if res.status_code in [200, 204]:
             print("   ✅ Google Search Console API successfully triggered sitemap refresh!")
-        else:
-            print(f"   ℹ️ GSC API Response: {res.status_code} ({res.text[:100]})")
+            return True
+        print(f"::error::GSC API rejected the sitemap: {res.status_code} ({res.text[:120]})")
+        return False
     except Exception as e:
-        print(f"   ⚠️ GSC API Error: {e}")
+        print(f"::error::GSC API Error: {e}")
+        return False
 
 
 def main():
@@ -168,9 +184,23 @@ def main():
     for u in unique_urls:
         print(f" - {u}")
 
-    purge_cloudflare_cache()
-    submit_indexnow(unique_urls)
-    notify_gsc_api()
+    # [REGRESSION] Every one of these three used to catch its own exceptions, print a
+    # warning and return None, so main() always succeeded. The repo's own history
+    # records the consequence: the Cloudflare purge "had been failing silently on every
+    # run" behind a green workflow because a trailing newline in the secret made the
+    # Authorization header illegal (see purge_cloudflare_cache above). A publish step
+    # that cannot fail is a publish step that cannot be trusted.
+    results = {
+        "cloudflare purge": purge_cloudflare_cache(),
+        "indexnow": submit_indexnow(unique_urls),
+        "search console": notify_gsc_api(),
+    }
+    failed = [name for name, ok in results.items() if not ok]
+    if failed:
+        print(f"::error::Publishing steps failed: {', '.join(failed)}")
+        return 1
+    print("All publishing steps succeeded.")
+    return 0
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

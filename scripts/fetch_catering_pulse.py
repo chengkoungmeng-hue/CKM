@@ -73,6 +73,34 @@ FEEDS = [
         "category_en": "Hong Kong Classics & Pastry Fillings",
         "category_km": "សិល្បៈអាហារអាស៊ី",
         "url": "https://www.thehongkongcookery.com/feeds/posts/default?alt=rss"
+    },
+    # Added 2026-08-15. Surveyed 25 candidates; this was the only one added, and the
+    # only one that needed no widening of EXCLUDE_REGEX to be safe. 116 of 120 archived
+    # posts survive the filter, 115 of them with bilingual titles (so slugs stay
+    # descriptive), and the repertoire is CKM's own: 紅燒鮑魚海參花膠煲, 客家酿豆腐卜,
+    # 糖水, 南乳炸雞翅.
+    #
+    # Rejected, recorded so they are not re-surveyed:
+    #   christinesrecipes.com (Chinese edition) -- the SAME BLOG as the configured
+    #     en.christinesrecipes.com. 20 of 25 items identical, timestamps seconds apart.
+    #     Dedupe keys on source_link, which differs per edition, so every dish would
+    #     have published twice.
+    #   tasteasianfood.com  -- 5.9/mo and 112 archived, but heavily Malay and Indian
+    #     (Nasi Minyak, Ayam Masak, Aloo Matar) which EXCLUDE_REGEX does not catch.
+    #     Would need ~15 new exclusion terms; that is how the old source set ended up
+    #     producing Palm Springs date shakes.
+    #   anncoojournal.com   -- Western baking (pound cake, banana pie) under a banquet brand.
+    #   siftandsimmer.com   -- bubble tea and bagels.
+    #   chinesecookingdemystified.substack.com -- excellent technique writing, but Substack
+    #     serves one page only (no archive depth) and many posts are essays rather than
+    #     dishes, and the generation prompt is dish-centric ("Source dish: ...").
+    #   redhousespice.com, rasamalaysia.com -- HTTP 403 to scripted fetches; a GitHub
+    #     Actions IP will fare no better.
+    {
+        "source_name": "Huang Kitchen",
+        "category_en": "Malaysian-Chinese Home & Banquet Cooking",
+        "category_km": "ម្ហូបចិននិងទាវជីវ",
+        "url": "https://www.huangkitchen.com/feed/"
     }
 ]
 
@@ -88,6 +116,22 @@ FEEDS = [
 # 6 months and 3 years old): they are the most on-brand sources in the list, their back
 # catalogue is still unconsumed, and a dormant feed costs nothing but one HTTP request.
 # Re-measure if the pipeline starts reporting "no new items" several days running.
+#
+# Re-measured 2026-08-15. Two corrections to the reading above:
+#
+# 1. Monthly rate is the wrong headline number. The pipeline publishes at most one item
+#    a day, so what matters is whether an unseen candidate exists, not the total. A
+#    Monte Carlo over these measured rates (2000 trials x 365 days, modelling each RSS
+#    window as finite and items pushed out of it as permanently lost) returned ZERO
+#    zero-output days, and barely touched the dormant reserve. Supply is not the
+#    constraint and has not been.
+#
+# 2. The real fragility was concentration, and archive depth has since answered it.
+#    Omnivore's Cookbook alone is 43% of arrivals; without it the same simulation gives
+#    48 zero-output days a year, and without it and Christine's, 166. But MAX_FEED_DEPTH
+#    now reaches ~1,124 filtered items across these feeds -- about three years of daily
+#    publishing from the back catalogue alone -- so even the total loss of every active
+#    source degrades slowly rather than stopping the site.
 
 FOOD_KEYWORDS = [
     "food", "cuisine", "recipe", "recipes", "cooking", "gourmet", "restaurant", 
@@ -454,14 +498,21 @@ def _gemini_once(prompt, model, timeout=45):
         return None, msg[:80]
 
 
-def call_gemini_api_robust(prompt, min_content_len=300):
-    """Walk the model ladder until one returns usable JSON. Budget-bounded."""
-    global _api_calls_made
+def call_gemini_api_robust(prompt, min_content_len=300, start=0):
+    """Walk the model ladder until one returns usable JSON. Budget-bounded.
+
+    `start` skips the first N models. The content-quality retry loop passes the attempt
+    number, so attempt 2 begins one rung down the ladder instead of asking the same
+    model to correct work it just got wrong. Every rejection used to restart at
+    MODEL_LADDER[0], and since gemini-3.6-flash reliably returns *something*, all three
+    attempts landed on the same model: a Khmer-quality regression in that one model was
+    therefore permanent and unrecoverable, on a provider-side update with no warning.
+    """
     if not env_key:
         print("ERROR: GEMINI_API_KEY is missing!", flush=True)
         return None
 
-    for model in MODEL_LADDER:
+    for model in MODEL_LADDER[min(start, len(MODEL_LADDER) - 1):]:
         for sub in range(2):                      # one retry, transient failures only
             text, kind = _gemini_once(prompt, model)
 
@@ -493,77 +544,158 @@ def call_gemini_api_robust(prompt, min_content_len=300):
     return None
 
 
-def fetch_verified_gourmet_rss_items():
+# --- Feed archive depth ---------------------------------------------------------
+#
+# A feed's default URL returns only its most recent page — 10 items for the WordPress
+# sources, 25 for the Blogspot ones, 99 in total. That is ample while a source is still
+# publishing, and worth nothing once it stops. It is also how this pipeline dies: not
+# with an error, but one feed going quiet at a time until no unseen item is left, with
+# every run still reporting success.
+#
+# Both platforms expose their archives. Measured 2026-08-15, walking 12 pages of each
+# of the seven configured feeds: 1,380 items, 1,124 surviving EXCLUDE_REGEX — roughly
+# 11x the first-page-only depth, and about three years of daily publishing from the
+# back catalogue alone, before counting anything published from today onward. The walk
+# was truncated at 12 pages, so the true depth is greater.
+#
+# Depth is reached LAZILY. Page 0 of every feed is fetched first and is enough on an
+# ordinary day; the pipeline only walks deeper when a shallower pass turned up nothing
+# unseen. So the common case costs exactly what it costs today.
+FEED_PAGE_SIZE = 25
+MAX_FEED_DEPTH = 12
+
+
+def paginated_feed_url(base, page):
+    """The URL for page `page` of a feed's archive. Page 0 is the feed's own URL.
+
+    Returns None when the feed's platform is not recognised, in which case that source
+    simply contributes its first page and nothing deeper.
+    """
+    if page == 0:
+        return base
+    if "/feeds/posts/default" in base or "blogspot" in base:      # Blogspot / Atom
+        sep = "&" if "?" in base else "?"
+        return "%s%sstart-index=%d&max-results=%d" % (
+            base, sep, 1 + page * FEED_PAGE_SIZE, FEED_PAGE_SIZE)
+    stripped = base.rstrip("/")
+    if stripped.endswith("/feed"):                                # WordPress
+        return "%s/?paged=%d" % (stripped, page + 1)
+    return None
+
+
+def fetch_feed_page(feed, page, seen_links):
+    """Parse one page of one feed. Exactly one HTTP request, and no per-item requests.
+
+    Neither verify_live_url nor extract_image_multitier is called here. Both used to
+    run for every candidate — up to two extra HTTP requests each, ~188 per run to
+    publish a single article — and both are only ever needed for the ONE item that
+    actually gets published. They now run at selection time instead, which is what
+    makes walking the archives affordable at all.
+
+    The raw XML element is carried on the candidate as `_xml_item` so the image can
+    still be extracted from it later without refetching.
+    """
+    url = paginated_feed_url(feed["url"], page)
+    if url is None:
+        return []
+
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'}
+    try:
+        req = urllib.request.Request(url, headers=headers)
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            xml_data = resp.read()
+        root = ET.fromstring(xml_data)
+    except Exception as e:
+        # A dead page deep in an archive is ordinary and must not be fatal; a dead
+        # page 0 is worth saying out loud, because that is a source going away.
+        if page == 0:
+            print(f"Error fetching feed {feed['url']}: {e}", flush=True)
+        return []
+
+    items = root.findall(".//item") or root.findall(".//{http://www.w3.org/2005/Atom}entry")
+    out = []
+    for item in items:
+        title = ""
+        for child in item:
+            if child.tag.endswith("title") and child.text:
+                title = child.text.strip()
+                break
+
+        link = ""
+        for child in item:
+            if child.tag.endswith("link"):
+                if child.text and child.text.strip().startswith("http"):
+                    link = child.text.strip()
+                elif "href" in child.attrib and child.attrib["href"].startswith("http"):
+                    link = child.attrib["href"].strip()
+        if not link:
+            guid = item.find("guid") or item.find("{http://www.w3.org/2005/Atom}id")
+            if guid is not None and guid.text and guid.text.strip().startswith("http"):
+                link = guid.text.strip()
+
+        if not link or not link.startswith("http") or link in seen_links or not title:
+            continue
+
+        if EXCLUDE_REGEX.search(title) and not ALLOW_REGEX.search(title):
+            continue
+
+        desc_text = ""
+        pubDate = ""
+        for child in item:
+            tag = child.tag.lower()
+            if "desc" in tag or "summary" in tag or "content" in tag:
+                desc_text += " " + (child.text or "")
+            elif "date" in tag or "published" in tag or "updated" in tag:
+                pubDate = child.text or pubDate
+
+        seen_links.add(link)
+        out.append({
+            "title_en": title,
+            "desc_en": desc_text[:400],
+            "link": link,
+            "pubDate": pubDate or "Sun, 09 Aug 2026 12:00:00 +0000",
+            "category_km": feed["category_km"],
+            "image_url": "",          # resolved at selection time
+            "_xml_item": item,
+            "_depth": page,
+        })
+    return out
+
+
+def fetch_verified_gourmet_rss_items(existing_links=frozenset(), max_depth=MAX_FEED_DEPTH):
+    """Collect candidates, going deeper into the archives only when it is necessary.
+
+    Returns (candidates, depth_reached). Stops as soon as at least one candidate is
+    unseen, so a healthy day costs one HTTP request per feed — exactly what it cost
+    before archive depth existed.
+    """
     collected = []
     seen_links = set()
-    fallback_idx = 0
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'}
 
-    for feed in FEEDS:
-        try:
-            req = urllib.request.Request(feed["url"], headers=headers)
-            with urllib.request.urlopen(req, timeout=6) as resp:
-                xml_data = resp.read()
-            
-            root = ET.fromstring(xml_data)
-            items = root.findall(".//item") or root.findall(".//{http://www.w3.org/2005/Atom}entry")
-            
-            for item in items:
-                title = ""
-                for child in item:
-                    if child.tag.endswith("title") and child.text:
-                        title = child.text.strip()
-                        break
-                
-                link = ""
-                for child in item:
-                    if child.tag.endswith("link"):
-                        if child.text and child.text.strip().startswith("http"):
-                            link = child.text.strip()
-                        elif "href" in child.attrib and child.attrib["href"].startswith("http"):
-                            link = child.attrib["href"].strip()
-                if not link:
-                    guid = item.find("guid") or item.find("{http://www.w3.org/2005/Atom}id")
-                    if guid is not None and guid.text and guid.text.strip().startswith("http"):
-                        link = guid.text.strip()
+    for page in range(max_depth):
+        for feed in FEEDS:
+            collected.extend(fetch_feed_page(feed, page, seen_links))
 
-                if not link or not link.startswith("http") or link in seen_links or not title:
-                    continue
+        if page == 0 and not collected:
+            # Not "nothing new" — nothing AT ALL. Every feed failed to yield a single
+            # item, which is a DNS, TLS, timeout or blocked-runner problem, not an
+            # editorial one. These two states used to emit the same reason string, so a
+            # total infrastructure outage was indistinguishable from a quiet day. Return
+            # immediately rather than walking 11 more pages of the same failure.
+            print("::error::Every feed returned zero items on its first page. This is a "
+                  "fetch failure, not an empty backlog.", flush=True)
+            return collected, page, False
 
-                if EXCLUDE_REGEX.search(title) and not ALLOW_REGEX.search(title):
-                    print(f"Skipping excluded Western/Entertainment article: {title[:50]}...", flush=True)
-                    continue
+        unseen = [c for c in collected if c["link"].strip() not in existing_links]
+        if unseen:
+            if page > 0:
+                print(f"Nothing unseen on the recent pages — reached archive depth "
+                      f"{page} to find {len(unseen)} candidate(s).", flush=True)
+            return collected, page, True
 
-                desc_text = ""
-                pubDate = ""
-                for child in item:
-                    tag = child.tag.lower()
-                    if "desc" in tag or "summary" in tag or "content" in tag:
-                        desc_text += " " + (child.text or "")
-                    elif "date" in tag or "published" in tag or "updated" in tag:
-                        pubDate = child.text or pubDate
-
-                if not verify_live_url(link):
-                    continue
-
-                seen_links.add(link)
-                fallback_img = VALID_FALLBACKS[fallback_idx % len(VALID_FALLBACKS)]
-                fallback_idx += 1
-
-                img_url = extract_image_multitier(item, fallback_img, link)
-
-                collected.append({
-                    "title_en": title,
-                    "desc_en": desc_text[:400],
-                    "link": link,
-                    "pubDate": pubDate or "Sun, 09 Aug 2026 12:00:00 +0000",
-                    "category_km": feed["category_km"],
-                    "image_url": img_url
-                })
-        except Exception as e:
-            print(f"Error fetching feed {feed['url']}: {e}", flush=True)
-            
-    return collected
+    print(f"Walked all {max_depth} archive pages of every feed and found nothing "
+          f"unseen. The back catalogue is exhausted.", flush=True)
+    return collected, max_depth, True
 
 def sync_and_download_images(items):
     output_dir = "public/images/pulse"
@@ -650,8 +782,8 @@ def update_pulse_daily():
             existing_pulse = json.load(f)
 
     existing_links = set(p.get("source_link", "").strip() for p in existing_pulse if p.get("source_link"))
-    raw_items = fetch_verified_gourmet_rss_items()
-    
+    raw_items, depth_reached, feeds_healthy = fetch_verified_gourmet_rss_items(existing_links)
+
     # [REGRESSION] Take the NEWEST unseen item, not the first one in FEEDS order.
     #
     # Selection used to be `for item in raw_items: ... break`, and raw_items is built
@@ -680,10 +812,39 @@ def update_pulse_daily():
     unseen = [it for it in raw_items if it["link"].strip() not in existing_links]
     # sorted() is stable, so items sharing a timestamp keep their FEEDS order.
     unseen.sort(key=parse_feed_date, reverse=True)
-    item_to_process = unseen[0] if unseen else None
+
+    # Liveness is checked HERE, on the one item about to be published, rather than on
+    # every candidate during the fetch. Walk down the queue until one resolves, so a
+    # single dead link costs the next-best article instead of the whole day.
+    item_to_process = None
+    for cand in unseen:
+        if verify_live_url(cand["link"]):
+            item_to_process = cand
+            break
+        print(f"Candidate URL did not resolve, trying the next: {cand['link'][:70]}", flush=True)
+
+    if item_to_process is not None:
+        fallback_img = VALID_FALLBACKS[len(existing_pulse) % len(VALID_FALLBACKS)]
+        item_to_process["image_url"] = extract_image_multitier(
+            item_to_process.get("_xml_item"), fallback_img, item_to_process["link"])
+
+    print(f"\nQueue: {len(unseen)} unseen candidate(s) of {len(raw_items)} fetched, "
+          f"archive depth {depth_reached}.", flush=True)
 
     if not item_to_process:
-        print("\nNo new RSS items found today. All fetched articles are already in dataset.", flush=True)
+        # Reaching here now means something much stronger than it used to. Selection
+        # walks every archive page of every feed before giving up, so this is not
+        # "nothing new today" — it is "there is nothing left anywhere", or "everything
+        # left is a dead link". Both need a human; neither should look like a quiet day.
+        if not unseen:
+            reason = "archive-exhausted"
+            print("\nEVERY archive page of EVERY feed is exhausted — the current sources "
+                  "have nothing left to publish. A new source is required.", flush=True)
+        else:
+            reason = "all-candidates-dead"
+            print(f"\n{len(unseen)} unseen candidate(s) exist but NONE resolved to a live "
+                  "URL. That points at a network or user-agent problem, not at supply.",
+                  flush=True)
         # Do NOT renumber. Existing ids and slugs are live, indexed URLs.
         # Only backfill an identifier if one is genuinely missing.
         taken = {p.get("slug") for p in existing_pulse if p.get("slug")}
@@ -698,8 +859,16 @@ def update_pulse_daily():
         with open(out_file, "w", encoding="utf-8") as f:
             json.dump(existing_pulse, f, ensure_ascii=False, indent=2)
         print("Dataset unchanged — no deploy or indexing needed.", flush=True)
-        set_action_output(changed="false", reason="no-new-items")
-        return
+        # len(unseen), not 0: in the all-candidates-dead case candidates DO exist and
+        # the distinction is the whole diagnostic value of this field.
+        set_action_output(changed="false", reason=reason, queue_depth=len(unseen),
+                          archive_depth=depth_reached)
+        # Exit non-zero. Every one of these three states needs a person: the sources are
+        # spent, the network is broken, or every candidate URL is dead. None of them
+        # resolves itself, and a green run for any of them is precisely how this pipeline
+        # would stop publishing without anyone noticing.
+        print(f"::error::The pulse published nothing today (reason: {reason}).", flush=True)
+        return 1
 
     print(f"\nProcessing 1 NEW article with Rate Limiting & Anti-Fool Guard: {item_to_process['title_en']}", flush=True)
     
@@ -790,7 +959,9 @@ Source notes: {item_to_process['desc_en']}
 
         # Pacing delay keeps the free tier from rate-limiting us.
         time.sleep(10)
-        khmer_json = call_gemini_api_robust(attempt_prompt, min_content_len=MIN_CONTENT_CHARS)
+        khmer_json = call_gemini_api_robust(attempt_prompt,
+                                            min_content_len=MIN_CONTENT_CHARS,
+                                            start=attempt - 1)
 
         title_km = summary_km = content_km = image_alt = ""
         key_points_km = []
@@ -837,8 +1008,12 @@ Source notes: {item_to_process['desc_en']}
     else:
         print(f"WARNING: {MAX_ATTEMPTS} attempts all rejected ({reject_reason}). "
               "Preserving existing dataset rather than publishing broken Khmer.", flush=True)
-        set_action_output(changed="false", reason=reject_reason)
-        return
+        set_action_output(changed="false", reason=reject_reason,
+                          queue_depth=len(unseen), archive_depth=depth_reached)
+        print(f"::error::Generation failed {MAX_ATTEMPTS}/{MAX_ATTEMPTS} times "
+              f"({reject_reason}). Gemini is unavailable, rate-limited, or its Khmer has "
+              f"drifted below the quality gate.", flush=True)
+        return 1
 
     new_id = next_pulse_id(existing_pulse)
     taken = {p.get("slug") for p in existing_pulse if p.get("slug")}
@@ -882,7 +1057,13 @@ Source notes: {item_to_process['desc_en']}
         json.dump(updated_list, f, ensure_ascii=False, indent=2)
         
     print(f"SUCCESS: Added 1 new verified Khmer gourmet article to {out_file}!", flush=True)
-    set_action_output(changed="true", new_slug=new_entry["slug"], new_id=new_entry["id"])
+    # queue_depth is the runway signal: how many unseen candidates were available today.
+    # A steady figure means the machine is fed; a figure trending toward zero is the
+    # only early warning that the sources are drying up.
+    set_action_output(changed="true", new_slug=new_entry["slug"], new_id=new_entry["id"],
+                      reason="published", queue_depth=len(unseen),
+                      archive_depth=depth_reached)
+    return 0
 
 if __name__ == "__main__":
-    update_pulse_daily()
+    sys.exit(update_pulse_daily())

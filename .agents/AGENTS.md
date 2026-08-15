@@ -259,6 +259,21 @@ Every item below came out of an audit of the 15 live articles.
   pages 404'd while `notify_indexing.py` submitted the new ones to Google and Bing.
   `id` is now monotonic (`next_pulse_id`) and `slug` never encodes position. Assign both
   once at insert; never recompute.
+- **The archive is the reserve, and it is reached lazily.** A feed's default URL returns
+  only its most recent page — 99 items across all eight sources. Both platforms expose
+  their archives (`?paged=N` on WordPress, `?start-index=N&max-results=M` on Blogspot),
+  and walking 12 pages of each reaches **1,124 items surviving `EXCLUDE_REGEX`**: about
+  three years of daily publishing from the back catalogue alone, measured 2026-08-15 and
+  truncated at 12 pages, so the real depth is greater. Page 0 is fetched first and is
+  enough on an ordinary day; `fetch_verified_gourmet_rss_items` only goes deeper when a
+  shallower pass turned up nothing unseen, so a healthy run still costs one request per
+  feed. This is why losing a source is survivable rather than fatal.
+- **`verify_live_url` and `extract_image_multitier` run on the SELECTED item only.** Both
+  used to run for every candidate during the fetch — up to two extra HTTP requests each,
+  ~188 per run to publish one article — and both are only ever needed for the one item
+  that gets published. Moving them to selection time is what makes walking the archives
+  affordable. Selection walks down the sorted queue until a URL resolves, so one dead link
+  costs the next-best article rather than the whole day.
 - **[REGRESSION] The daily item is the NEWEST unseen one, not the first in `FEEDS` order.**
   Selection used to take the first unseen item while walking `FEEDS` in order, so the queue
   followed the source list rather than the calendar. Measured 2026-08-15 with 88 unseen
@@ -283,6 +298,37 @@ Every item below came out of an audit of the 15 live articles.
   polls the real URL; it does not sleep and hope. Never announce a URL before it resolves.
 - Index only when something actually changed. `if: always()` on the indexing step meant
   daily submissions of unchanged URLs.
+- **[REGRESSION] That rule came back through `publish.yml`'s `workflow_run` trigger.** The
+  gate was `conclusion == 'success'`, and a pulse run that publishes *nothing* still
+  succeeds — so on every dry day `publish.yml` ran anyway. Worse, both of its no-slug
+  routes ended in a purge: if `HEAD` was still yesterday's `chore(pulse): add …` commit it
+  polled that stale URL, got 200 immediately and purged; if `HEAD` was any other commit it
+  took the `sleep 240` branch, which set `live=true` with **no HTTP check at all**. Either
+  way the zone was purged and ~75 URLs resubmitted, daily, for nothing. `publish.yml` now
+  requires, on `workflow_run` only, that `HEAD` be a pulse commit less than an hour old.
+- **A failure that cannot turn a run red will not be noticed.** Verified 2026-08-15 by
+  audit: fourteen distinct paths ended with a green run and nothing published. Two rules
+  follow, and both are load-bearing:
+  1. `fetch_catering_pulse.py` exits **non-zero** whenever it publishes nothing. There is
+     no longer such a thing as a legitimate empty day — selection walks every archive page
+     of every feed first, so "nothing to publish" means the sources are spent
+     (`archive-exhausted`), the network is broken (`all-feeds-failed`), every candidate URL
+     is dead (`all-candidates-dead`), or Gemini failed (`generation-*`). Each needs a
+     person. Keep the reason strings distinct; they are the whole diagnosis.
+  2. `notify_indexing.py` returns a status from each of its three steps and exits non-zero
+     if any failed. Every one of them used to catch its own exception, print a warning and
+     return `None`, which is how the Cloudflare purge "had been failing silently on every
+     run" behind a green workflow.
+- **`check_pulse_health.py` is the backstop, and it is deliberately outcome-based.** It
+  ignores *why* a run failed and asks only how long since anything reached
+  `pulseData.json`, failing the job past a threshold. That single test covers all fourteen
+  paths at once, including ones nobody has thought of. Run last, `if: always()`, so it can
+  never block a publish that did succeed.
+- **The retry loop must walk DOWN the model ladder.** `call_gemini_api_robust` takes a
+  `start` index and the quality-retry passes the attempt number. Every rejection used to
+  restart at `MODEL_LADDER[0]`, and since `gemini-3.6-flash` reliably returns *something*,
+  all three attempts hit the same model — a Khmer-quality regression in that one model was
+  therefore permanent, arriving with no warning on a provider-side update.
 - Nothing in the workflow runs JavaScript. Do not reintroduce `setup-node` / `npm ci`.
 - Feed sources currently produce Western and Japanese home recipes, which sit oddly under
   a Khmer-Chinese banquet brand. Prefer sources matching the brand's actual cuisine.

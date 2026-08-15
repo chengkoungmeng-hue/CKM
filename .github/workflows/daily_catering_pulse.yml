@@ -94,6 +94,23 @@ jobs:
             echo "| step | result |"
             echo "| :--- | :--- |"
             echo "| new article | \`${{ steps.pulse.outputs.changed }}\` (${{ steps.pulse.outputs.reason }}${{ steps.pulse.outputs.new_slug }}) |"
+            echo "| unseen candidates | \`${{ steps.pulse.outputs.queue_depth }}\` |"
+            echo "| archive depth reached | \`${{ steps.pulse.outputs.archive_depth }}\` |"
             echo "| pushed | \`${{ steps.commit.outputs.pushed }}\` |"
             echo "| publishing | handed to publish.yml |"
           } >> "$GITHUB_STEP_SUMMARY"
+
+      # The failure mode that actually matters for an unattended pipeline is not a red
+      # run -- a red run sends mail. It is a GREEN run that published nothing, repeated
+      # until the site has quietly stopped updating. Several paths do exactly that: no
+      # unseen candidate, every candidate URL dead, Gemini rejecting all three attempts,
+      # the API budget exhausted, a model retired.
+      #
+      # Rather than alarm on each cause, this checks the outcome -- how long since
+      # anything reached the dataset -- which covers all of them at once, including
+      # causes not yet imagined. It runs last and with always(), so it can never block a
+      # publish that did succeed; it only turns a silent stall into a failed run, which
+      # is the thing that actually reaches a human.
+      - name: Stall detector
+        if: always()
+        run: python scripts/check_pulse_health.py --max-age-days 3

@@ -76,6 +76,101 @@
   `scripts/`, which is outside `publish.yml`'s path filter, so pushing them triggers no
   workflow, no cache purge and no search-engine submission.
 
+### Second pass — making the pipeline unattended (same day)
+
+Goal changed mid-session to "confirm the pulse can run as a perpetual machine with
+near-zero management time". That reframes the question from *does it work today* to
+*what stops it, and would anyone find out*.
+
+- **Supply is not the constraint, and never was.** Monte Carlo over the measured feed
+  rates — 2,000 trials x 365 days, modelling each RSS window as finite and items pushed
+  out of it as permanently lost — returned **zero** zero-output days and barely touched
+  the dormant reserve. The brief's "42.2/month against 30 needed, only 40% headroom" is
+  arithmetically right but answers the wrong question: the pipeline publishes at most one
+  item a day, so what matters is whether an unseen candidate exists, not the total.
+- **The real fragility was concentration, and archive depth answered it.** Omnivore's
+  Cookbook alone is 43% of arrivals; the same simulation without it gives 48 zero-output
+  days a year, and without it and Christine's, 166. Both platforms expose their archives,
+  which nothing was reading: walking 12 pages of each feed reaches **1,124 items after
+  `EXCLUDE_REGEX`, 11.4x the first-page-only depth — about three years of daily
+  publishing from the back catalogue alone**, truncated at 12 pages so the true figure is
+  larger. Even the simultaneous death of every active source now degrades slowly.
+  Reached lazily: page 0 first, deeper only when a shallower pass found nothing unseen,
+  so a healthy run costs exactly what it did before.
+- **~188 HTTP requests per published article removed.** `verify_live_url` and
+  `extract_image_multitier` ran for every candidate during the fetch; both are only ever
+  needed for the one item that gets published, and now run at selection time. Selection
+  walks down the queue until a URL resolves, so a dead link costs the next-best article
+  instead of the day. This is also what makes archive depth affordable.
+- **Audit: 18 failure modes found, 14 confirmed by adversarial verification, all silent.**
+  Six independent lenses (supply, quota, content rejection, credentials, silent success,
+  unbounded growth), each finding verified by a separate skeptic instructed to refute it;
+  4 were refuted and dropped. Everything below came out of that pass.
+- **[REGRESSION] `publish.yml` purged the zone and resubmitted ~75 URLs on days that
+  published nothing.** Its `workflow_run` gate was `conclusion == 'success'`, and a pulse
+  run that publishes nothing still succeeds. Both no-slug routes then ended in a purge: a
+  stale `chore(pulse): add …` at `HEAD` polled yesterday's URL and got 200 immediately,
+  and any other `HEAD` took the `sleep 240` branch which set `live=true` **with no HTTP
+  check at all**. This is the "index only when something actually changed" rule from
+  AGENTS.md §15 returning through a different door. Now requires, on `workflow_run` only,
+  that `HEAD` be a pulse commit under an hour old.
+- **[REGRESSION] Every no-publish path exited 0.** Fourteen ways to get a green run that
+  published nothing, all indistinguishable from a healthy quiet day. The generator now
+  exits non-zero whenever it publishes nothing, with distinct reasons — `archive-exhausted`
+  (sources spent), `all-feeds-failed` (no feed returned a single item: a network, DNS or
+  blocked-runner problem, previously reported as `no-new-items` exactly like a quiet day),
+  `all-candidates-dead`, `generation-*`. With archive depth there is no longer such a thing
+  as a legitimate empty day.
+- **[REGRESSION] `notify_indexing.py` could not fail.** All three steps caught their own
+  exceptions, printed a warning and returned `None`; `main()` had no exit code. The file's
+  own comment records the consequence — the Cloudflare purge "had been failing silently on
+  every run" because a trailing newline in the secret made the Authorization header
+  illegal. Each step now returns a status and `main()` exits non-zero if any failed. One
+  IndexNow endpoint refusing is tolerated; both refusing is a failure.
+- **[REGRESSION] Quality retries never advanced the model ladder.** Each attempt restarted
+  at `MODEL_LADDER[0]`, and since `gemini-3.6-flash` reliably returns *something*, all
+  three attempts hit the same model — so a Khmer-quality regression in that one model was
+  permanent and would arrive with no warning on a provider-side update.
+  `call_gemini_api_robust` now takes a `start` index and the retry passes the attempt
+  number; a test asserts the rung advances.
+- **`scripts/check_pulse_health.py` (new) is the backstop.** Deliberately outcome-based:
+  it ignores *why* a run failed and asks only how long since anything reached
+  `pulseData.json`, failing past a threshold (3 days). One test covering all fourteen
+  paths at once, including ones not yet imagined. Wired into the pulse workflow as a final
+  `if: always()` step so it can never block a publish that did succeed. The audit
+  independently identified this as "THE MINIMUM CHANGE".
+- **`verify_credentials.yml` now runs weekly** (Sunday 19:00 UTC, off-peak, clear of the
+  20:47 pulse). Manual-only meant it had never fired and never would, while every
+  credential in it decays on someone else's schedule and every such failure is invisible
+  in the daily pipeline. Note this schedules a real weekly zone purge; cheap here because
+  HTML is not edge-cached at all (§16), so only content-hashed `/_astro/` assets are
+  evicted.
+- **`check_content.py` size skip is no longer silent.** Files over 2 MB dropped out of the
+  credential scan with no trace; `pulseData.json` grows by one entry a day and crosses
+  that at roughly 344 entries (~day 317), so the file most likely to be written by
+  automation would have stopped being scanned, invisibly. Now warns — for text files only,
+  since a dozen tracked photographs over the limit would have buried the one case that
+  matters. Verified by padding the real file past 2 MB and restoring it.
+- **One source added: Huang Kitchen.** Surveyed 25 candidates; the only one needing no
+  widening of `EXCLUDE_REGEX`. 116 of 120 archived posts survive the filter, 115 with
+  bilingual titles, and the repertoire is CKM's own (紅燒鮑魚海參花膠煲, 客家酿豆腐卜, 糖水).
+  Rejections are recorded in `FEEDS` so they are not re-surveyed — in particular
+  `christinesrecipes.com` (Chinese edition) is the **same blog** as the configured English
+  feed, 20 of 25 items identical with timestamps seconds apart, and would have published
+  every dish twice since dedupe keys on `source_link`.
+- **Not done, deliberately**: IndexNow still resubmits the whole URL inventory on every
+  publish (~75 URLs, ~36% of them `pulse-NN` aliases absent from the sitemap, growing 2/day
+  — reaches IndexNow's 10,000-URL request cap in roughly 13 years). Confirmed but medium
+  severity and it touches live indexing behaviour, so it is left for a deliberate change
+  rather than folded into this pass.
+- **Verification**: three harnesses re-run green after every change (insert path, all three
+  generation-retry routes with a ladder-advance assertion, and four archive-depth scenarios
+  covering lazy/deep/exhausted/all-dead); the 2 MB warning verified by padding the real
+  dataset and restoring it byte-identically; `astro check` 0 errors; `astro build` 80
+  pages; `check_content.py --strict` 0 errors. All changes are in `scripts/`, `.agents/`,
+  `.github/workflows/` and `WORKLOG.md` — none inside `publish.yml`'s path filter, so the
+  push triggers no deployment, purge or indexing.
+
 ## 2026-08-14 (Live GSC Query Audit, Homepage Title/Description Rewrite & Backlink Strategy Correction)
 
 - **Trustworthy GSC Script**: Added `scripts/gsc_query_report.py`, pulling live Search Analytics data for `sc-domain:ckmkh.com` across totals, country, device, query, page, query×page and date, with a `country = khm` filter applied to the market-specific cuts. It has **no fallback values** and exits non-zero on an API failure. Raw output is written to `scripts/reports/gsc_search_queries.json`. Superseded `scripts/generate_analytics_report.py`, which silently falls back to hardcoded numbers (`35` clicks / `1369` impressions / `2.56%` / `6.43`) that are indistinguishable from live data in the report it writes, and whose "關鍵字亮點" section is hardcoded prose rather than derived from the data it fetched.

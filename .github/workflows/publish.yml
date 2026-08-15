@@ -60,9 +60,26 @@ jobs:
           # signal than a timer or a sitemap count: it polls the exact page that
           # was added and can tell a slow build from a broken one.
           slug=$(git log -1 --pretty=%s | sed -n 's/^chore(pulse): add \(.*\)$/\1/p' | tr -d ' ')
-          echo "slug=$slug" >> "$GITHUB_OUTPUT"
+          head_age=$(( $(date +%s) - $(git log -1 --pretty=%ct) ))
           echo "Newest commit: $(git log -1 --pretty=%s)"
-          echo "Pulse slug: ${slug:-<none, treating as an edit>}"
+          echo "HEAD age: ${head_age}s"
+
+          # [REGRESSION] A pulse run that published NOTHING still finishes successfully,
+          # and the only workflow_run gate on this job is conclusion == 'success'. HEAD is
+          # then still YESTERDAY's "chore(pulse): add <slug>" commit, so the slug above is
+          # a stale one whose page has been live for 24 hours. It polls HTTP 200 on the
+          # first attempt, and the job goes on to purge the entire zone and resubmit every
+          # URL to IndexNow and Search Console. That is the "index only when something
+          # actually changed" regression in AGENTS.md 15 coming back through another door.
+          #
+          # A pulse commit older than an hour cannot have been made by the run that just
+          # triggered this one.
+          if [ "${{ github.event_name }}" = "workflow_run" ] && [ "$head_age" -gt 3600 ]; then
+            echo "HEAD predates the triggering pulse run — it published nothing. Skipping."
+            slug=""
+          fi
+          echo "slug=$slug" >> "$GITHUB_OUTPUT"
+          echo "Pulse slug: ${slug:-<none>}"
 
       - name: Wait for the page to be live on the edge
         id: wait
@@ -71,8 +88,18 @@ jobs:
           slug="${{ steps.article.outputs.slug }}"
 
           if [ -z "$slug" ]; then
-            # An edit to existing content adds no new URL, so there is nothing
-            # specific to poll for. Deliberately generous: purging early is worse
+            # On a workflow_run with no slug the pulse published nothing, so there is
+            # no new content to make live and nothing to purge or submit. The old code
+            # fell through to the sleep below and set live=true UNCONDITIONALLY, with no
+            # HTTP check at all — the weakest possible evidence of liveness, followed by
+            # a full-zone purge and 75 URL submissions, every single dry day.
+            if [ "${{ github.event_name }}" = "workflow_run" ]; then
+              echo "Nothing was published by the pulse run — no purge, no indexing."
+              echo "live=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            # A hand-written edit to existing content adds no new URL, so there is
+            # nothing specific to poll for. Deliberately generous: purging early is worse
             # than purging late, because it refills the edge with the build on
             # its way out.
             echo "No new pulse slug; waiting a fixed interval for the build."

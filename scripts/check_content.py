@@ -249,6 +249,15 @@ PULSE_KHMER_FIELDS = ("title_km", "summary_km", "content_km", "key_points_km",
 # A live GitHub PAT once sat in .git/config's remote URL and leaked through a plain
 # `git remote -v`. Nothing is currently tracked with a credential in it — this check
 # exists to keep it that way, since a secret committed to history cannot be un-committed.
+# Extensions whose contents cannot meaningfully hold a pasted credential. Skipped from
+# the size warning below so the one text file that matters is not lost among a dozen
+# oversized photographs.
+BINARY_EXTS = {
+    ".jpg", ".jpeg", ".png", ".webp", ".avif", ".gif", ".ico", ".svg",
+    ".woff", ".woff2", ".ttf", ".otf", ".eot",
+    ".pdf", ".zip", ".gz", ".mp4", ".webm", ".mp3",
+}
+
 SECRET_PATTERNS = [
     (r"ghp_[A-Za-z0-9]{36}", "GitHub personal access token"),
     (r"github_pat_[A-Za-z0-9_]{40,}", "GitHub fine-grained token"),
@@ -275,7 +284,21 @@ def check_secrets():
         if not rel:
             continue
         path = os.path.join(ROOT, rel)
-        if not os.path.isfile(path) or os.path.getsize(path) > 2_000_000:
+        if not os.path.isfile(path):
+            continue
+        # Binary assets cannot carry a pasted credential in any form this scanner would
+        # recognise, and there are a dozen images over the limit. Warning about those
+        # would bury the one case that matters in noise.
+        if os.path.splitext(rel)[1].lower() in BINARY_EXTS:
+            continue
+        # The size guard used to be silent, so the day a tracked TEXT file crossed 2 MB
+        # it simply dropped out of the credential scan with no trace. pulseData.json
+        # grows by one entry a day and reaches that size at roughly 344 entries
+        # (~day 317) — the file most likely to be written by automation would have
+        # stopped being checked, invisibly. Say so instead.
+        if os.path.getsize(path) > 2_000_000:
+            warn("secret-scan-skipped", path, 1,
+                 "text file is over 2 MB and was NOT scanned for credentials")
             continue
         try:
             text = io.open(path, encoding="utf-8", errors="ignore").read()
