@@ -324,6 +324,24 @@ def check_pulse():
 
     for it in items:
         ident = it.get("id", "?")
+
+        # [REGRESSION] source_title_en is NOT a Khmer field, so it is rightly absent from
+        # PULSE_KHMER_FIELDS — but pulse/[id].astro renders it verbatim on the page under
+        # ប្រភពដើមអន្តរជាតិ. Feeds title posts bilingually, so "Pickled Daikon 大根の漬物"
+        # and "Omurice … オムライス" shipped to Khmer readers as tofu boxes, because
+        # Hanuman cannot draw CJK or kana. Anything rendered must be renderable, whatever
+        # language the field nominally holds.
+        src_title = it.get("source_title_en") or ""
+        for i, ch in enumerate(src_title):
+            cp = ord(ch)
+            if cp < 0x0250 or ch in "‘’“”–—…":
+                continue
+            err("source-title-unrenderable", p, 1,
+                "%s.source_title_en contains %s %r and is rendered on the page: ...%s..."
+                % (ident, _script_name(cp), ch,
+                   src_title[max(0, i - 18):i + 12]))
+            break
+
         for field in PULSE_KHMER_FIELDS:
             v = it.get(field)
             if not v:

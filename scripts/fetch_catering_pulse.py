@@ -199,6 +199,33 @@ def sanitize_text(text):
     cleaned = re.sub(r'[\u4e00-\u9fff]+', '', text)
     return cleaned.strip()
 
+
+def sanitize_source_title(text):
+    """Reduce a source title to characters Hanuman can actually draw.
+
+    [REGRESSION] `source_title_en` is rendered verbatim on the pulse detail page, under
+    the label \u1794\u17d2\u179a\u1797\u1796\u178a\u17be\u1798\u17a2\u1793\u17d2\u178f\u179a\u1787\u17b6\u178f\u17b7 (pulse/[id].astro). It is stored straight from the feed,
+    and feeds title their posts bilingually \u2014 so Khmer readers were served
+    "Pickled Daikon \u5927\u6839\u306e\u6f2c\u7269" and "Umeboshi Onigiri \u2026 \u5c0f\u6885\u306e\u304a\u306b\u304e\u308a", whose CJK and kana
+    Hanuman cannot render and which therefore reached them as tofu boxes. That is exactly
+    the failure \u00a713 of AGENTS.md exists to prevent; it was simply never checked on this
+    field, because the field is not one of the Khmer ones.
+
+    Latent for as long as every source titled its posts in English alone. Adding a
+    bilingual source made it the norm rather than the exception: 115 of Huang Kitchen's
+    116 archived titles carry Chinese, as do 13 of The Hong Kong Cookery's 23.
+
+    Latin, digits and ordinary punctuation survive; everything else is dropped. The
+    untouched original is always recoverable from `source_link`, and slugs are unaffected
+    because they are assigned once at insert and never recomputed.
+    """
+    if not text:
+        return ""
+    kept = "".join(ch for ch in text
+                   if ord(ch) < 0x0250            # Latin, incl. accented
+                   or ch in "\u2018\u2019\u201c\u201d\u2013\u2014\u2026")
+    return re.sub(r"\s{2,}", " ", kept).strip(" -\u2013\u2014|,;:")
+
 def generate_seo_slug(title_en, item_id, taken=()):
     """Build a PERMANENT slug for a pulse item.
 
@@ -1043,7 +1070,8 @@ Source notes: {item_to_process['desc_en']}
         "image_url": item_to_process["image_url"],
         "image_alt": image_alt or title_km,
         "source_link": item_to_process["link"],
-        "source_title_en": item_to_process["title_en"],
+        # Rendered on the page, so it must contain only what Hanuman can draw.
+        "source_title_en": sanitize_source_title(item_to_process["title_en"]),
         "pub_date": item_to_process["pubDate"],
         # When this reached the site, as distinct from when the source blog
         # published it. Sorting on pub_date alone buried today's article at
