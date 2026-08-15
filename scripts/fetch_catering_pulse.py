@@ -125,6 +125,24 @@ _EXCLUDE_TERMS = (
 # core CKM dish. Only the specifically Thai curry names are filtered.
 EXCLUDE_REGEX = re.compile(r'\b(' + _EXCLUDE_TERMS + r')\b', re.IGNORECASE)
 
+# Chinese dishes whose English names collide with the Western terms above. The
+# 2026-08-14 run skipped its entire candidate set, and two of the seven were
+# these: "Scallion Pancakes" caught by `pancakes`, and "Hong Kong Clubhouse
+# Sandwich 公司三文治" caught by `sandwich`. Both came from the Chinese-language
+# feeds and are squarely on brand.
+#
+# Deliberately narrow. This is not a way in for Western food -- the exclusions
+# exist because an earlier source set produced Palm Springs date shakes under a
+# Khmer-Chinese banquet brand -- only a way through for dishes that were never
+# Western to begin with. Add a term here when a specific dish is misjudged, not
+# when the yield feels low; the fix for low yield is another Chinese-language
+# feed, not a wider sieve.
+_ALLOW_TERMS = (
+    r'scallion pancake|spring onion pancake|green onion pancake|cong you bing|'
+    r'蔥油餅|葱油饼|三文治'
+)
+ALLOW_REGEX = re.compile(_ALLOW_TERMS, re.IGNORECASE)
+
 VALID_FALLBACKS = [
     f"/images/blog_{i:02d}_inline_khmer.webp" for i in range(1, 13)
 ]
@@ -482,7 +500,7 @@ def fetch_verified_gourmet_rss_items():
                 if not link or not link.startswith("http") or link in seen_links or not title:
                     continue
 
-                if EXCLUDE_REGEX.search(title):
+                if EXCLUDE_REGEX.search(title) and not ALLOW_REGEX.search(title):
                     print(f"Skipping excluded Western/Entertainment article: {title[:50]}...", flush=True)
                     continue
 
