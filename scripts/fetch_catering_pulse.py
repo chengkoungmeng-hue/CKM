@@ -506,6 +506,18 @@ API_CALL_BUDGET = 10          # hard ceiling for a single pipeline run
 # (real output runs ~1,900), so it never rejected a single thin response. Set it where
 # it actually bites: below this, the piece cannot be carrying four developed sections.
 MIN_CONTENT_CHARS = 1200
+
+# The prompt asks for "exactly 4 sections, each with its own descriptive Khmer
+# subheading", and nothing checked whether that arrived. Measured 2026-08-15 across the
+# six entries generated since the prompt was rewritten: only ONE carried four
+# subheadings, the other five carried none. Length and script purity were gated, so a
+# structurally flat wall of text passed every check and published.
+#
+# This is the same lesson as the length gate: an instruction in the prompt is a request,
+# and a request the model can decline is not a standard. Anything the output must have
+# needs a gate, or it holds only when the model feels like it.
+MIN_CONTENT_SECTIONS = 4
+SECTION_HEADING = re.compile(r"^\s{0,3}#{2,4}\s+\S", re.M)
 _api_calls_made = 0
 
 
@@ -1023,6 +1035,15 @@ Source notes: {item_to_process['desc_en']}
             print(f"Attempt {attempt}/{MAX_ATTEMPTS}: content too short — retrying.", flush=True)
             reject_detail = ["response was truncated or unparseable"]
             reject_reason = "generation-too-short"
+            continue
+
+        sections = len(SECTION_HEADING.findall(content_km))
+        if sections < MIN_CONTENT_SECTIONS:
+            print(f"Attempt {attempt}/{MAX_ATTEMPTS}: only {sections} subheading(s), "
+                  f"need {MIN_CONTENT_SECTIONS} — retrying.", flush=True)
+            reject_detail = ["the piece had %d markdown subheadings; the four sections "
+                             "must each carry their own Khmer subheading" % sections]
+            reject_reason = "generation-unstructured"
             continue
 
         # Deterministic repair pass before judging the output.

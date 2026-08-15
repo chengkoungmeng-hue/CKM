@@ -359,6 +359,22 @@ Every item below came out of an audit of the 15 live articles.
   and `MODEL_LADDER` sit near line 363.
 - Pulse copy obeys §10–§13 exactly as articles do. The generator rejects a response
   containing foreign script rather than publishing it (§13).
+- **[REGRESSION] An instruction in the prompt is a request; only a gate is a standard.**
+  The prompt asks for "exactly 4 sections, each with its own descriptive Khmer
+  subheading". Nothing checked it, and measured 2026-08-15 across the six entries
+  generated since the prompt was rewritten, only ONE carried four subheadings — the other
+  five were flat walls of text that passed every check and published. Length and script
+  purity were gated and are honoured; structure was not gated and was not. `MIN_CONTENT_SECTIONS`
+  now rejects and retries, feeding the specific reason back to the model. Anything the
+  output MUST have needs a gate, or it holds only when the model feels like it.
+- **Pulse quality is now the site's quality.** The blog is frozen at 15 articles; pulse
+  grows by one a day, so it passes 90% of the site's pages within a year. Judge a change
+  to the generator by what 400 entries of it will look like, not by the next one.
+- Every pulse page already links to three blog articles, chosen by real term overlap with
+  two slots and a rotating third (`pulse/[id].astro`). Measured: all 15 blog articles are
+  reached, 4 inbound links minimum, 168 total. Do not "fix" this by adding in-body links —
+  the distribution is deliberate, and the rotating slot exists because pure relevance
+  ranking gave one article 14 inbound links and another none.
 
 ## 16. Secrets
 
