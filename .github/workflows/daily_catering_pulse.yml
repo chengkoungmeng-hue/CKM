@@ -2,9 +2,26 @@ name: Daily Catering Pulse & Auto-Indexing Pipeline
 
 on:
   schedule:
-    # 20:47 UTC = 03:47 ICT (Phnom Penh). Off-peak hour and a non-round minute to
-    # stay out of the GitHub Actions scheduling stampede.
+    # Twice a day, roughly twelve hours apart. Non-round minutes stay out of the
+    # GitHub Actions scheduling stampede.
+    #
+    # 20:47 UTC = 03:47 ICT (Phnom Penh)
+    # 08:47 UTC = 15:47 ICT
+    #
+    # Each run still publishes exactly ONE article and takes the whole verified path:
+    # fetch, generate, validate, commit, then publish.yml waits for the page to be live
+    # before purging and indexing. Raising the rate this way adds no new code path and
+    # no new failure mode — the `concurrency` group below serialises the two runs if
+    # they ever overlap, which at ~3 minutes per run they will not.
+    #
+    # Rate chosen 2026-08-15. Archive depth holds ~1,124 filtered items and the active
+    # feeds add ~41/month, so two a day drains the reserve over years, not months, and
+    # uses under a quarter of the Gemini free-tier quota (measured: 1-2 calls per
+    # article against 20/day on each of three flash tiers). Three a day was considered
+    # and rejected: publication velocity is a quality signal for machine-generated
+    # content, and two keeps a wide margin.
     - cron: '47 20 * * *'
+    - cron: '47 8 * * *'
   workflow_dispatch:
 
 # A scheduled run and a manual dispatch overlapping would produce two commits
@@ -118,6 +135,10 @@ jobs:
       # causes not yet imagined. It runs last and with always(), so it can never block a
       # publish that did succeed; it only turns a silent stall into a failed run, which
       # is the thing that actually reaches a human.
+      # Threshold tightened from 3 days to 2 when the cadence went to twice daily:
+      # at two chances a day, three days of silence is six consecutive failures, which
+      # is far too much rope. Two days is still four failures — forgiving enough that a
+      # couple of bad Gemini days cannot cause a false alarm.
       - name: Stall detector
         if: always()
-        run: python scripts/check_pulse_health.py --max-age-days 3
+        run: python scripts/check_pulse_health.py --max-age-days 2
