@@ -3,7 +3,20 @@ node_modules
 dist/
 .astro/
 *.key
-google_service_account.json
+# Match by PATTERN, not by exact filename. Rotating a key naturally produces
+# neighbours -- google_service_account.json.dead, .bak, .old, or the
+# <project>-<keyid>.json that Cloud Console hands you -- and an exact-name rule
+# ignores the file you named while leaving every one of its siblings visible to
+# `git add -A`. This repo is public; a private key needs to be unstageable by
+# accident, not merely by the one spelling somebody thought of.
+google_service_account.json*
+*service_account*.json
+*service-account*.json
+# Cloud Console names a downloaded key <project-id>-<12 hex>.json, which matches
+# none of the patterns above. Anchored to twelve hex characters so it cannot catch
+# package.json, tsconfig.json, pulseData.json or anything else legitimate.
+*-[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f].json
+*.pem
 scratch/
 scripts/populate_rich_khmer_pulse_content.py
 scripts/reseed_100pct_real_urls.py
