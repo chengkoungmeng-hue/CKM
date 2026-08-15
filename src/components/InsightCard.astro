@@ -1,8 +1,17 @@
 ---
 import { Image } from 'astro:assets';
-import type { BlogPost } from '../data/homeData';
 
-interface Props extends BlogPost {
+// Declared here rather than extending a BlogPost type from homeData: that type
+// does not exist there, so every field it was meant to supply -- title,
+// subTitle, link, image -- resolved to nothing and astro check reported five
+// errors on this file. The shape below is what formatPost() in
+// src/pages/blog/index.astro actually passes.
+interface Props {
+  title: string;
+  subTitle: string;
+  link: string;
+  image: ImageMetadata;
+  category?: string;
   titleClass: string;
   subTitleClass: string;
   linkClass: string;

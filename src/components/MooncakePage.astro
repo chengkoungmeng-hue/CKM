@@ -59,7 +59,10 @@ const t = {
         "@context": "https://schema.org",
         "@type": ["WholesaleStore", "Bakery"],
         "name": t.h1,
-        "image": `https://ckmkh.com${imgLogo29.src}`,
+        // "image" is declared once, further down, as the product shot plus the
+        // logo. A second declaration lived here and was silently overridden by
+        // that one -- JavaScript keeps the last, so the logo-only value never
+        // reached the page and the duplicate only surfaced as a type error.
         "description": t.seoDesc,
         "address": {
           "@type": "PostalAddress",
