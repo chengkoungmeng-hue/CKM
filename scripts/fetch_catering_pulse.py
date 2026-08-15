@@ -452,6 +452,21 @@ def verify_live_url(url):
 # requests before every article. 3.6 first cuts a generation from 3 calls to 1.
 # 3.7 stays in the ladder so the pipeline picks it up again once it frees capacity.
 # Re-measure occasionally; this order is an observation, not a permanent truth.
+#
+# Re-measured 2026-08-15 from the last three production run logs, and the picture has
+# already inverted — read the paragraph above as history, not as current fact:
+#
+#   2026-08-14 18:47   [gemini-3.6-flash] accepted (call 1)
+#   2026-08-14 21:05   [gemini-3.6-flash] unavailable x2 -> [gemini-3.7-flash] accepted
+#   2026-08-15 02:52   [gemini-3.6-flash] rate-limit x1  -> [gemini-3.6-flash] accepted
+#
+# So 3.6 was rate-limited or unavailable in two runs of three, which is the opposite of
+# what was observed on 2026-08-14, and 3.7 — described above as the unreliable one — is
+# what caught the run 3.6 dropped. End-to-end failure rate is still 0%.
+#
+# The order is deliberately NOT changed on three samples. The ladder exists precisely so
+# that a model going soft is absorbed rather than fatal, and that is exactly what these
+# logs show it doing. Change the order only on a measured, sustained shift.
 MODEL_LADDER = [
     "gemini-3.6-flash",
     "gemini-3.7-flash",
