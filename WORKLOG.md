@@ -76,6 +76,71 @@
   `scripts/`, which is outside `publish.yml`'s path filter, so pushing them triggers no
   workflow, no cache purge and no search-engine submission.
 
+### Fourth pass — strategy measured, cadence doubled, indexing narrowed (same day)
+
+- **[REGRESSION] The local analytics credential is dead, and nothing said so.**
+  `google_service_account.json` holds `ckm-analytics@` and every scope returns
+  `invalid_grant: Invalid JWT Signature`. Ruled out the alternatives rather than
+  assuming: clock skew is 2.4s, the private key parses locally as a valid 2048-bit RSA
+  key, and all three scopes fail identically (a permission problem returns 403, not a
+  signature failure). The key was removed from the service account in Google Cloud after
+  the 2026-08-14 rebuild that wrote the file. Consequence: `gsc_query_report.py` — which
+  AGENTS.md §18 calls the only trustworthy analytics script — could not run at all, so
+  **nobody could measure anything**, and it fails only at the moment someone tries.
+  Fixed by removing the local dependency instead of the key: `search_report.yml` runs it
+  in CI weekly using the existing `SEARCH_CONSOLE_SA_JSON` (Full includes read, so no new
+  privilege and nothing to issue). Reissuing the local key is optional now.
+- **Measured what the daily pulse is actually worth, 90 days to 2026-08-13.** Cambodia:
+  687 impressions, 13 clicks, 25 queries. **All 13 clicks landed on the homepage** — not
+  one on any of the 15 blog articles, which took 69 impressions and 0 clicks. The whole
+  commercial footprint is two queries: `ម្ហូបការ` (240 imp, 11 clicks, pos 3.93) and
+  `មុខម្ហូបការ` (59 imp, 2 clicks). Zero queries containing a cooking or technique term
+  appear anywhere in the 31-row set.
+- **Do not read the pulse numbers as a verdict.** Pulse first went live 2026-08-08, so it
+  existed for five days of that ninety-day window; its 15 impressions and 1 click are a
+  standing start, not a measurement. I initially framed this as evidence the strategy was
+  not working, which was wrong and unfair — the same error §18 records a previous report
+  making. The blog, however, IS a fair test: 15 articles, 90 days, 0 Cambodian clicks.
+- **The strategy is the owner's, taken with the evidence in view.** Publish daily, give
+  each page a chance at indexation, and let the related-post block pass readers to the
+  commercial articles. The counter-argument is on record — §18's demand ceiling of ~300
+  commercial impressions per 90 days, and the intent mismatch between recipe searches and
+  hiring a caterer — and the decision stands regardless, on the grounds that the site had
+  no traffic to protect and the mechanism costs nothing now that it is automated.
+  **Revisit with the weekly report at 4–8 weeks**, watching whether `/pulse/` impressions
+  move off 15.
+- **Cadence doubled to two a day** (20:47 and 08:47 UTC) by adding a second cron rather
+  than changing code, so each run still takes the whole verified path and no new failure
+  mode exists. Two rather than three: publication velocity is itself a quality signal for
+  machine-generated content, and the archive drains over years at two. Stall detector
+  tightened 3 days → 2 to stay calibrated to the higher cadence.
+- **[REGRESSION] Every publish resubmitted the whole site.** 77 URLs to IndexNow and GSC
+  on each run, of which 24 were `/pulse/pulse-NN/` id aliases that carry a canonical
+  pointing at the slug URL and that the sitemap deliberately omits (sitemap: 53 URLs, zero
+  aliases). The pipeline was asking the search engines to crawl pages it had already told
+  them point elsewhere, daily — and twice daily after the cadence change. §15's "index
+  only when something actually changed" had been implemented as a condition on *whether*
+  to submit and never applied to *which* URLs. A pulse publish now submits three; a
+  hand-written edit derives its URLs from the commit's own diff; both fall back to the
+  now-alias-free 49-URL inventory. **96% fewer URLs per publish.**
+- **[REGRESSION] One spelling of "to taste".** Six articles use ភ្លក្ស (30×); article 13
+  alone used ភ្លក់ (4×). Not cosmetic: `pulse/[id].astro` hardcodes `'ភ្លក្សរសជាតិ'` in
+  the DISH_TERMS array used to score which blog article a pulse piece links to, by
+  substring — so article 13 was silently failing that match in a site whose entire
+  onward-traffic mechanism is that block. The anchor in `internalLinks.json` moved in the
+  same commit, since the declared anchor must exist verbatim in the prose. Site-wide now
+  ភ្លក្ស 34, ភ្លក់ 0.
+- **Independent review of the one piece of newly written Khmer.** Four candidate issues
+  raised across four lenses; three dismissed on corpus evidence, including a detailed
+  grammatical objection to `សូមស្វាគមន៍លោកអ្នកក្នុងការពិគ្រោះយោបល់` that was refuted by two
+  hand-written articles using the same V + object + ក្នុងការ + V frame. Worth recording as
+  a method note: reviewers of AI-written text generate confident, well-argued language
+  errors, and requiring every claim to cite the corpus is what separates them from the one
+  finding that was real.
+- **Verification**: `check_content.py --strict` 0 errors; `apply_internal_links.py --check`
+  12 SKIP; `generate_llms_txt.py` current; `astro check` 0 errors; `astro build` 82 pages;
+  all three generator harnesses green.
+
 ### Third pass — content standards, llms.txt, and the first measured UI audit (same day)
 
 - **Internal links: 12 added across articles 13, 14 and 15, which had zero.** Method chosen
