@@ -15,6 +15,7 @@ interface PulseItem {
   source_link: string;
   source_title_en: string;
   pub_date: string;
+  added_at?: string;
 }
 
 const items: PulseItem[] = pulseData || [];
@@ -94,7 +95,7 @@ const items: PulseItem[] = pulseData || [];
           <div class="p-5 flex flex-col flex-grow">
             <!-- Date / Tag bar -->
             <div class="text-[11px] text-slate-400 font-mono mb-2 flex items-center gap-2">
-              <span>{item.pub_date ? item.pub_date.split(' ').slice(1, 4).join('.') : '2026.08.08'}</span>
+              <span>{(item.added_at || item.pub_date) ? (item.added_at || item.pub_date).split(' ').slice(1, 4).join('.') : '2026.08.08'}</span>
               <span>|</span>
               <span class="text-champagne-dark font-sans font-bold">#{item.category}</span>
             </div>

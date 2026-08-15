@@ -795,16 +795,27 @@ Source notes: {item_to_process['desc_en']}
         "image_alt": image_alt or title_km,
         "source_link": item_to_process["link"],
         "source_title_en": item_to_process["title_en"],
-        "pub_date": item_to_process["pubDate"]
+        "pub_date": item_to_process["pubDate"],
+        # When this reached the site, as distinct from when the source blog
+        # published it. Sorting on pub_date alone buried today's article at
+        # position 26 of 27, on page 3 of the listing: the source post was from
+        # February. A recipe's age is not news, but its arrival here is.
+        "added_at": format_datetime(datetime.now(timezone.utc)),
     }
     from email.utils import parsedate_to_datetime
 
     def parse_item_date(item):
-        d_str = item.get("pub_date", "")
+        # added_at wins where present; entries from before it existed fall back
+        # to pub_date and keep their order relative to each other. Both are
+        # RFC 2822 so one parser covers them.
+        raw = item.get("added_at") or item.get("pub_date", "")
         try:
-            return parsedate_to_datetime(d_str)
+            d = parsedate_to_datetime(raw)
         except Exception:
-            return 0
+            return datetime.min.replace(tzinfo=timezone.utc)
+        # A naive datetime cannot be compared against an aware one, and sorted()
+        # raises TypeError mid-sort rather than degrading.
+        return d if d.tzinfo else d.replace(tzinfo=timezone.utc)
 
     # Sort for display order only. Identity (id + slug) is assigned once at
     # insert and is never recomputed — reordering must not move any URL.

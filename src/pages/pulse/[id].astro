@@ -148,9 +148,17 @@ const articleSchema = JSON.stringify({
   // `datePublished` was the feed's RFC-2822 string ("Tue, 11 Aug 2026 21:52:03
   // +0000") where ISO 8601 is required.
   "image": [new URL(itemImage, 'https://ckmkh.com').toString()],
-  ...(item.pub_date && !isNaN(new Date(item.pub_date).getTime())
-      ? { "datePublished": new Date(item.pub_date).toISOString() }
-      : {}),
+  // added_at, not pub_date. pub_date is when the source blog published the
+  // recipe; this page is an original Khmer piece written here, so its
+  // publication date is when it appeared here. Using the source date told
+  // Google that a page written today was six months old. Entries predating
+  // added_at fall back to pub_date, the best that is known for them.
+  ...((() => {
+      const published = item.added_at || item.pub_date;
+      return published && !isNaN(new Date(published).getTime())
+          ? { "datePublished": new Date(published).toISOString() }
+          : {};
+  })()),
   "inLanguage": "km-KH",
   "mainEntityOfPage": { "@type": "WebPage", "@id": `https://ckmkh.com/pulse/${item.slug || item.id}/` },
   "author": {
@@ -185,7 +193,7 @@ const articleSchema = JSON.stringify({
       <div class="flex flex-wrap items-center justify-start md:justify-center gap-3 text-xs text-slate-500 font-km-sans mb-6 border-b border-slate-200/80 pb-4">
         <div class="flex items-center gap-1.5 font-mono">
           <Calendar class="w-3.5 h-3.5 text-champagne-dark" />
-          <span>{item.pub_date ? item.pub_date.split(' ').slice(1, 4).join('.') : '2026.08.08'}</span>
+          <span>{(item.added_at || item.pub_date) ? (item.added_at || item.pub_date).split(' ').slice(1, 4).join('.') : '2026.08.08'}</span>
         </div>
         <span>|</span>
         <div class="flex items-center gap-1.5">

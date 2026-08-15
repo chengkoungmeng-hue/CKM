@@ -98,7 +98,7 @@ const breadcrumbSchema = JSON.stringify({
               <div class="p-6 flex flex-col flex-grow">
                 <!-- Meta Info -->
                 <div class="text-xs text-slate-400 font-mono mb-3 flex items-center gap-2">
-                  <span>{item.pub_date ? item.pub_date.split(' ').slice(1, 4).join('.') : '2026.08.08'}</span>
+                  <span>{(item.added_at || item.pub_date) ? (item.added_at || item.pub_date).split(' ').slice(1, 4).join('.') : '2026.08.08'}</span>
                   <span>|</span>
                   <span class="text-champagne-dark font-sans font-bold">#{item.category}</span>
                 </div>
