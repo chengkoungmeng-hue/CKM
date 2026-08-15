@@ -152,8 +152,29 @@ jobs:
             exit 1
           fi
           printf '%s' "$SEARCH_CONSOLE_SA_JSON" > google_service_account.json
-          # notify_indexing.py purges, then submits to IndexNow, then GSC.
-          python scripts/notify_indexing.py
+
+          # Submit what actually changed, not the whole site.
+          #
+          # This used to resubmit the entire inventory on every publish -- 77 URLs, of
+          # which 24 were /pulse/pulse-NN/ id aliases that carry a canonical pointing
+          # elsewhere and that the sitemap deliberately omits. Telling the search engines
+          # daily that 53 unchanged pages had changed is wasted IndexNow quota and a
+          # steadily less trustworthy signal; at twice-daily publishing it is twice as
+          # wasteful. AGENTS.md 15 already required "index only when something actually
+          # changed" -- this applies the same rule to WHICH urls, not just whether.
+          slug="${{ steps.article.outputs.slug }}"
+          if [ -n "$slug" ]; then
+            # A pulse publish: the new page, the listing it appears on, and the homepage
+            # which shows the latest three.
+            python scripts/notify_indexing.py --urls \
+              "https://ckmkh.com/pulse/$slug/" \
+              "https://ckmkh.com/pulse/" \
+              "https://ckmkh.com/"
+          else
+            # A hand-written edit: derive the affected URLs from the commit itself,
+            # falling back to the full inventory if the diff yields nothing recognisable.
+            python scripts/notify_indexing.py --changed
+          fi
 
       - name: Remove credential file
         if: always()

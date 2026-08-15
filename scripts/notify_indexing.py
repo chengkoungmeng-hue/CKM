@@ -1,6 +1,8 @@
 import urllib.request
 import json
 import os
+import re
+import subprocess
 import sys
 import glob
 
@@ -140,7 +142,40 @@ def notify_gsc_api():
         return False
 
 
-def main():
+def urls_from_git_diff():
+    """URLs touched by the most recent commit, for a hand-written edit.
+
+    A content edit changes specific pages; submitting the whole inventory because one
+    article was reworded is the same waste as doing it for a pulse post.
+    """
+    try:
+        out = subprocess.run(["git", "diff", "--name-only", "HEAD~1", "HEAD"],
+                             capture_output=True, text=True, timeout=30).stdout
+    except Exception as e:
+        print(f"Could not read the diff ({e}); falling back to the full inventory.")
+        return None
+    urls = []
+    for path in out.splitlines():
+        path = path.strip()
+        m = re.match(r"src/content/blog/(.+)\.mdx?$", path)
+        if m:
+            urls.append(f"{BASE_URL}/blog/{m.group(1)}/")
+        elif path == "src/pages/index.astro":
+            urls.append(f"{BASE_URL}/")
+        elif path.startswith("src/data/pulseData.json"):
+            urls.append(f"{BASE_URL}/pulse/")
+    return urls or None
+
+
+def full_inventory():
+    """Every canonical URL on the site.
+
+    Deliberately EXCLUDES the /pulse/pulse-NN/ id aliases. They exist so an indexed URL
+    never breaks (AGENTS.md 15) and every one of them carries a canonical pointing at the
+    slug URL, which is why @astrojs/sitemap leaves them out: the sitemap holds 53 URLs and
+    none of them is an alias. Submitting them to IndexNow asked the search engines to
+    crawl 24 pages we had already told them point somewhere else.
+    """
     target_urls = [
         f"{BASE_URL}/",
         f"{BASE_URL}/blog/",
@@ -163,11 +198,9 @@ def main():
                 pulse_items = json.load(f)
                 for item in pulse_items:
                     slug = item.get("slug")
-                    p_id = item.get("id")
                     if slug:
                         target_urls.append(f"{BASE_URL}/pulse/{slug}/")
-                    if p_id and p_id != slug:
-                        target_urls.append(f"{BASE_URL}/pulse/{p_id}/")
+                    # the id alias is intentionally omitted -- see the docstring
                 
                 # Check pagination pages for pulse
                 page_size = 12
@@ -177,10 +210,28 @@ def main():
         except Exception as e:
             print(f"Warning reading pulseData.json for indexing: {e}")
     
-    # Deduplicate while preserving order
-    unique_urls = list(dict.fromkeys(target_urls))
+    return list(dict.fromkeys(target_urls))
 
-    print(f"Submitting {len(unique_urls)} URLs to IndexNow & GSC Search Engines...")
+
+def main(argv=None):
+    argv = sys.argv[1:] if argv is None else argv
+
+    if "--urls" in argv:
+        unique_urls = [u for u in argv[argv.index("--urls") + 1:] if u.startswith("http")]
+        source = "explicit"
+    elif "--changed" in argv:
+        unique_urls = urls_from_git_diff() or full_inventory()
+        source = "git diff" if urls_from_git_diff() else "full inventory (diff empty)"
+    else:
+        unique_urls = full_inventory()
+        source = "full inventory"
+
+    if not unique_urls:
+        print("::error::No URLs to submit.")
+        return 1
+
+    print(f"Submitting {len(unique_urls)} URLs to IndexNow & GSC Search Engines "
+          f"[{source}]...")
     for u in unique_urls:
         print(f" - {u}")
 
