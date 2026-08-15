@@ -1,0 +1,93 @@
+name: Search Report
+
+# gsc_query_report.py is the only trustworthy analytics script in this repo (AGENTS.md
+# §18), and on 2026-08-15 it could not run at all: the local key in
+# google_service_account.json returns "invalid_grant: Invalid JWT Signature", meaning
+# the key was revoked or deleted in Google Cloud. Nothing surfaced that — it fails only
+# when somebody tries to measure something, which is exactly when you least want to
+# discover you cannot.
+#
+# This removes the dependency on a local credential entirely. SEARCH_CONSOLE_SA_JSON
+# already exists for the publish step and belongs to ckm-indexing@, which holds Search
+# Console **Full** — Full includes reading Search Analytics, so no new privilege is
+# granted and no new credential is needed. The report lands in the job summary and as a
+# downloadable artifact.
+#
+# Read-only. It calls searchanalytics.query and nothing else: no sitemap submission, no
+# cache purge, no indexing.
+
+on:
+  workflow_dispatch:
+    inputs:
+      days:
+        description: 'Window in days'
+        required: false
+        default: '90'
+  schedule:
+    # Monday 06:00 UTC = 13:00 ICT. Weekly is the right cadence: the site takes single
+    # digit clicks per week, so a daily report would be noise around zero.
+    - cron: '0 6 * * 1'
+
+concurrency:
+  group: search-report
+  cancel-in-progress: false
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install --quiet requests google-auth
+
+      - name: Pull Search Console data
+        env:
+          SEARCH_CONSOLE_SA_JSON: ${{ secrets.SEARCH_CONSOLE_SA_JSON }}
+        run: |
+          set -euo pipefail
+          if [ -z "${SEARCH_CONSOLE_SA_JSON:-}" ]; then
+            echo "::error::SEARCH_CONSOLE_SA_JSON is not set — cannot query Search Console."
+            exit 1
+          fi
+          printf '%s' "$SEARCH_CONSOLE_SA_JSON" > google_service_account.json
+          days="${{ github.event.inputs.days || '90' }}"
+          # The script exits non-zero on any API failure by design, so a broken
+          # credential turns this run red instead of producing a plausible-looking
+          # report full of nothing.
+          python scripts/gsc_query_report.py --days "$days" | tee report.txt
+
+      - name: Publish to the job summary
+        if: always()
+        run: |
+          {
+            echo "### Search Console — last ${{ github.event.inputs.days || '90' }} days"
+            echo ""
+            echo '```'
+            # The summary has a 1 MB cap; the report is a few KB, but bound it anyway.
+            head -c 200000 report.txt 2>/dev/null || echo "(no report produced)"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload raw JSON
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: search-report
+          path: |
+            report.txt
+            scripts/reports/gsc_search_queries.json
+          if-no-files-found: warn
+          retention-days: 90
+
+      - name: Remove credential file
+        if: always()
+        run: rm -f google_service_account.json
