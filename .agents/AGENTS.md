@@ -259,6 +259,25 @@ Every item below came out of an audit of the 15 live articles.
   pages 404'd while `notify_indexing.py` submitted the new ones to Google and Bing.
   `id` is now monotonic (`next_pulse_id`) and `slug` never encodes position. Assign both
   once at insert; never recompute.
+- **[REGRESSION] The daily item is the NEWEST unseen one, not the first in `FEEDS` order.**
+  Selection used to take the first unseen item while walking `FEEDS` in order, so the queue
+  followed the source list rather than the calendar. Measured 2026-08-15 with 88 unseen
+  items queued: the next 14 days would have published content 182 to 1,399 days old, and
+  `omnivorescookbook.com` — the most active source at ~18 posts/month — would not have been
+  reached until day 48, by which point ~28 of its posts would have scrolled out of its
+  10-item window unread. The reason to prefer fresh is **shelf life, not recency**: an
+  active feed's items are perishable, a dormant feed's back catalogue is not. Spend the
+  perishable supply first; the dormant catalogue is the reserve that covers a lean day.
+  Adding a feed to `FEEDS` therefore no longer changes *when* it is reached — only what is
+  in the pool.
+- **[REGRESSION] Feed dates come in two formats and only one parser was applied.**
+  WordPress feeds emit RFC 2822; Blogspot emits ISO 8601, and the extraction loop keeps the
+  *last* matching element, which on Blogspot is the Atom `<updated>` field — so even a feed
+  carrying a valid RFC 2822 `<pubDate>` arrives as ISO. `parsedate_to_datetime` rejects ISO,
+  which silently collapsed 47 of 88 queued items to `datetime.min`. Parse every feed
+  timestamp through `parse_any_date()`, which accepts both, always returns a
+  timezone-aware datetime, and sorts unrecognised input last rather than raising —
+  `sorted()` raises mid-sort and takes the whole run down.
 - Order of operations, and it is not negotiable: generate → validate → commit → **wait for
   the page to actually be live** → purge Cloudflare cache → IndexNow → GSC. The workflow
   polls the real URL; it does not sleep and hope. Never announce a URL before it resolves.

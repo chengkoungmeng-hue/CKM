@@ -7,6 +7,8 @@ import xml.etree.ElementTree as ET
 import unicodedata
 import hashlib
 import sys
+from datetime import datetime, timezone
+from email.utils import format_datetime, parsedate_to_datetime
 
 sys.stdout.reconfigure(encoding='utf-8')
 
@@ -207,6 +209,34 @@ def next_pulse_id(existing):
         if m:
             highest = max(highest, int(m.group(1)))
     return "pulse-%02d" % (highest + 1)
+
+
+def parse_any_date(raw):
+    """Parse a feed timestamp in either format the sources actually emit.
+
+    WordPress feeds emit RFC 2822 ("Fri, 14 Aug 2026 14:13:27 +0000"). Blogspot emits
+    ISO 8601 ("2026-08-11T22:04:01.612-07:00"), and the extraction loop keeps the LAST
+    matching element, which on Blogspot is the Atom <updated> field — so even The Hong
+    Kong Cookery, whose feed carries a perfectly good RFC 2822 <pubDate>, arrives here
+    as ISO. parsedate_to_datetime rejects ISO outright.
+
+    Measured 2026-08-15: 47 of the 88 queued items (Christine's Recipes 24, The Hong
+    Kong Cookery 23) failed to parse and collapsed to datetime.min, which sorted both
+    Blogspot sources to the back of the queue for a parsing failure rather than for
+    their age.
+
+    Always returns a timezone-aware datetime. Unrecognised input sorts last rather
+    than raising, because sorted() raises mid-sort and takes the whole run with it.
+    """
+    if not raw or not isinstance(raw, str):
+        return datetime.min.replace(tzinfo=timezone.utc)
+    for parse in (parsedate_to_datetime, datetime.fromisoformat):
+        try:
+            d = parse(raw.strip())
+        except Exception:
+            continue
+        return d if d.tzinfo else d.replace(tzinfo=timezone.utc)
+    return datetime.min.replace(tzinfo=timezone.utc)
 
 
 # Gemini occasionally returns Khmer text with Thai, Chinese or Japanese fragments
@@ -622,11 +652,35 @@ def update_pulse_daily():
     existing_links = set(p.get("source_link", "").strip() for p in existing_pulse if p.get("source_link"))
     raw_items = fetch_verified_gourmet_rss_items()
     
-    item_to_process = None
-    for item in raw_items:
-        if item["link"].strip() not in existing_links:
-            item_to_process = item
-            break
+    # [REGRESSION] Take the NEWEST unseen item, not the first one in FEEDS order.
+    #
+    # Selection used to be `for item in raw_items: ... break`, and raw_items is built
+    # by walking FEEDS in order, so the queue was feed-ordered rather than date-ordered.
+    # Measured 2026-08-15 against the live feeds, with 88 unseen items queued: the next
+    # 14 days would have published content 182 to 1,399 days old, and
+    # omnivorescookbook.com — the most active source at ~18 posts/month — would not have
+    # been reached until day 48. Its RSS window holds 10 items at ~0.6/day, so an item
+    # survives there about 17 days: roughly 28 posts would have scrolled out unread
+    # before the pipeline ever arrived at that feed.
+    #
+    # The two kinds of supply have different shelf lives, and that is the whole argument.
+    # An active feed's items are PERISHABLE — not taken, they fall out of the window and
+    # are gone. A dormant feed's back catalogue is not: those items sit there
+    # indefinitely. So spend the perishable supply first and let the dormant catalogue be
+    # the reserve that covers a lean day — which is precisely the headroom this pipeline
+    # was short of. Sorting by date gets that with no special case: fresh outranks stale,
+    # and stale is reached only when nothing fresh is left.
+    #
+    # This is display-independent. Identity (id + slug) is still assigned once at insert,
+    # and the listing still orders on added_at.
+    # Undated or unrecognised timestamps sort last rather than jumping the queue.
+    def parse_feed_date(item):
+        return parse_any_date(item.get("pubDate", ""))
+
+    unseen = [it for it in raw_items if it["link"].strip() not in existing_links]
+    # sorted() is stable, so items sharing a timestamp keep their FEEDS order.
+    unseen.sort(key=parse_feed_date, reverse=True)
+    item_to_process = unseen[0] if unseen else None
 
     if not item_to_process:
         print("\nNo new RSS items found today. All fetched articles are already in dataset.", flush=True)
@@ -718,6 +772,11 @@ Source notes: {item_to_process['desc_en']}
     title_km = summary_km = content_km = image_alt = ""
     key_points_km = []
     reject_reason = "generation-failed"
+    # Bound before the loop because the retry prompt below reads it on attempt 2+.
+    # Every `continue` in the body assigns it first, so this is belt-and-braces — but
+    # that invariant is invisible at the point of use, and one new early `continue`
+    # would turn the retry path into a NameError.
+    reject_detail = []
 
     for attempt in range(1, MAX_ATTEMPTS + 1):
         attempt_prompt = prompt
@@ -802,20 +861,16 @@ Source notes: {item_to_process['desc_en']}
         # February. A recipe's age is not news, but its arrival here is.
         "added_at": format_datetime(datetime.now(timezone.utc)),
     }
-    from email.utils import parsedate_to_datetime
 
     def parse_item_date(item):
         # added_at wins where present; entries from before it existed fall back
-        # to pub_date and keep their order relative to each other. Both are
-        # RFC 2822 so one parser covers them.
-        raw = item.get("added_at") or item.get("pub_date", "")
-        try:
-            d = parsedate_to_datetime(raw)
-        except Exception:
-            return datetime.min.replace(tzinfo=timezone.utc)
-        # A naive datetime cannot be compared against an aware one, and sorted()
-        # raises TypeError mid-sort rather than degrading.
-        return d if d.tzinfo else d.replace(tzinfo=timezone.utc)
+        # to pub_date and keep their order relative to each other. added_at is
+        # always RFC 2822, but a legacy pub_date copied from a Blogspot feed is
+        # ISO 8601, so both formats have to be accepted here too.
+        # parse_any_date also guarantees an aware datetime: a naive one cannot be
+        # compared against an aware one, and sorted() raises TypeError mid-sort
+        # rather than degrading.
+        return parse_any_date(item.get("added_at") or item.get("pub_date", ""))
 
     # Sort for display order only. Identity (id + slug) is assigned once at
     # insert and is never recomputed — reordering must not move any URL.

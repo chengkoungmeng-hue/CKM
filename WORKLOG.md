@@ -1,5 +1,81 @@
 # Work Log
 
+## 2026-08-15 (Pulse Pipeline: Crash Fix, Selection Order, Feed-Date Parsing, Source Survey)
+
+- **[REGRESSION] `added_at` Crashed Every Run That Found An Article**: `3ee3cff` introduced
+  `"added_at": format_datetime(datetime.now(timezone.utc))` without importing any of
+  `datetime`, `timezone` or `format_datetime` — only `parsedate_to_datetime` was imported,
+  and inside the function, two lines below the crash. The line sits after generation
+  succeeds, so a day with no new items returned early and never touched it, while a day
+  **with** a new article burned the Gemini calls and then died on `NameError`, producing
+  nothing. Caught before it ever ran: the commit landed 03:03 UTC and the next scheduled
+  run was 20:47 UTC the same day. Verified by driving the real insert path with the Gemini
+  call and feed fetch stubbed, in a throwaway working directory — 27 → 28 entries, all 27
+  existing ids and slugs unchanged and still in order.
+- **[REGRESSION] Selection Was Feed-Ordered, Not Date-Ordered**: `update_pulse_daily` took
+  the first unseen item while walking `FEEDS` in order, so the queue followed the source
+  list rather than the calendar. Measured against the live feeds with **88 unseen items
+  queued**: the next 14 days would have published content **182 to 1,399 days old**, and
+  `omnivorescookbook.com` — the most active source at ~18 posts/month — would not have been
+  reached until **day 48**. Its RSS window holds 10 items at ~0.6/day, so an item survives
+  there about 17 days: roughly **28 posts would have scrolled out unread** before the
+  pipeline arrived. Now sorts the unseen queue newest-first. The argument is shelf life,
+  not freshness for its own sake: an active feed's items are perishable, a dormant feed's
+  back catalogue is not, so spend the perishable supply first and let the dormant
+  catalogue be the reserve that covers a lean day. Measured effect — Omnivore's day 48 →
+  **day 1**, The Woks of Life day 57 → **day 2**, The Hong Kong Cookery day 66 → **day 21**;
+  median age of the next 30 articles **53d → 13d**; Cambodia Recipe and Auntie Emily move
+  to day 67/79 as reserve. Display order is untouched: identity is still assigned once at
+  insert and the listing still sorts on `added_at`.
+- **[REGRESSION] Blogspot Feed Dates Never Parsed**: `parsedate_to_datetime` accepts only
+  RFC 2822, but Blogspot emits ISO 8601, and the date-extraction loop keeps the **last**
+  matching element — the Atom `<updated>` field. So even The Hong Kong Cookery, whose feed
+  carries a valid RFC 2822 `<pubDate>`, arrived as ISO and failed. **47 of the 88 queued
+  items** (Christine's Recipes 24, The Hong Kong Cookery 23) collapsed to `datetime.min`.
+  Latent before this session because ordering ignored dates; the new sort would have
+  buried both Blogspot sources for a parsing failure rather than for their age — they
+  first appeared at day 42 and day 66 until this was fixed. Added `parse_any_date()`,
+  which tries RFC 2822 then ISO 8601, always returns a timezone-aware datetime, and sorts
+  unrecognised input last rather than raising mid-`sorted()`. Used by both the selection
+  sort and the display sort. Unit-checked against both live formats, a `Z` suffix, empty,
+  garbage and `None`.
+- **`reject_detail` Bound Before The Retry Loop**: pyflakes reported `undefined name
+  'reject_detail'` where the retry prompt reads it on attempt 2+. Traced every path and
+  drove all three retry routes (too-short → retry, foreign-script → retry, three
+  consecutive rejections → give up cleanly): both `continue` statements assign it first,
+  so it could not fire. Left as a defensive initialisation anyway — the invariant is
+  invisible at the point of use, and one new early `continue` would turn the retry path
+  into exactly the `NameError` above.
+- **Static Sweep Of All Python Scripts**: pyflakes across `scripts/*.py` found the two
+  undefined-name reports above plus eight cosmetic items (unused imports, f-strings with
+  no placeholders) confined to one-off and legacy scripts. One knowingly-unfixed item
+  remains: a dead `global _api_calls_made` in `call_gemini_api_robust` that is never
+  assigned in that scope. Harmless, left alone to keep the diff focused.
+- **Feed Source Survey — measured, not assumed**: Re-measured the existing seven feeds
+  with production's own `EXCLUDE_REGEX` / `ALLOW_REGEX`. The in-script **42.2/month**
+  figure reproduces (41.6 measured) once the two dormant sources are excluded; dividing by
+  each feed's own window instead inflates the total to 62.8 by crediting Cambodia Recipe
+  with 20/month when it last posted in February. Surveyed 25 candidate sources:
+  - **`christinesrecipes.com` (Chinese edition) must not be added.** It looked like the
+    best candidate — 10.3/month, bilingual titles, on-brand Cantonese — but it is the same
+    blog as the already-configured `en.christinesrecipes.com`: **20 of 25 items match**,
+    same dishes, timestamps seconds apart. Dedupe keys on `source_link`, which differs
+    between the two editions, so every dish would have published twice.
+  - Live and plausible: Huang Kitchen (1.4/mo, bilingual, best brand fit — 客家酿豆腐卜,
+    糖水), Taste of Asian Food (5.9/mo, but substantially Malaysian), Chinese Cooking
+    Demystified (2.2/mo, technique-led), Anncoo Journal (3.0/mo, baking-heavy).
+  - Unusable: Red House Spice and Rasa Malaysia return **403** to scripted fetches (a
+    GitHub Actions IP will fare no better), Made With Lau 404, Miss Chinese Food and Eat
+    What Tonight emit unparseable XML, and Guai Shu Shu / Kitchen Tigress / Dim Sum
+    Central / The Burning Kitchen are dormant by 3–10 years.
+  - **No source was added.** With 88 items already queued and the ordering fixed, supply
+    is not the binding constraint; a new feed appended to `FEEDS` also has no effect on
+    selection now that the queue is date-ordered.
+- **Verification**: `astro check` 0 errors, `astro build` 80 pages, `check_content.py
+  --strict` 0 errors / 6 pre-existing warnings. The pulse changes are confined to
+  `scripts/`, which is outside `publish.yml`'s path filter, so pushing them triggers no
+  workflow, no cache purge and no search-engine submission.
+
 ## 2026-08-14 (Live GSC Query Audit, Homepage Title/Description Rewrite & Backlink Strategy Correction)
 
 - **Trustworthy GSC Script**: Added `scripts/gsc_query_report.py`, pulling live Search Analytics data for `sc-domain:ckmkh.com` across totals, country, device, query, page, query×page and date, with a `country = khm` filter applied to the market-specific cuts. It has **no fallback values** and exits non-zero on an API failure. Raw output is written to `scripts/reports/gsc_search_queries.json`. Superseded `scripts/generate_analytics_report.py`, which silently falls back to hardcoded numbers (`35` clicks / `1369` impressions / `2.56%` / `6.43`) that are indistinguishable from live data in the report it writes, and whose "關鍵字亮點" section is hardcoded prose rather than derived from the data it fetched.
