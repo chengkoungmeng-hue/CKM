@@ -555,6 +555,50 @@ MIN_CONTENT_CHARS = 1200
 # needs a gate, or it holds only when the model feels like it.
 MIN_CONTENT_SECTIONS = 4
 SECTION_HEADING = re.compile(r"^\s{0,3}#{2,4}\s+\S", re.M)
+
+# Pulse titles reach the search result exactly like article titles do, so they answer to
+# the same budget — and it is measured in RENDERED WIDTH, not len(). Khmer base consonants
+# are nearly as wide as CJK while 22 of its codepoints have zero advance width, so counting
+# characters is wrong in both directions.
+#
+# display_width is IMPORTED rather than reimplemented. The per-codepoint table it uses was
+# measured in a browser and lives in exactly one place; a second copy here would drift from
+# the checker and the two would disagree about what passes.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from check_content import display_width  # noqa: E402
+
+# Each rejection tells the model what actually went wrong. Keyed by reject_reason so a
+# new rejection cannot silently inherit another one's explanation.
+RETRY_GUIDANCE = {
+    "generation-failed":
+        "It did not meet the output rules.",
+    "generation-too-short":
+        "The content_km field was truncated or too short. Emit the full 450-600 Khmer "
+        "words as valid JSON, and do not stop early.",
+    "generation-unstructured":
+        "The content_km field did not contain four markdown subheadings. Give each of the "
+        "four sections its own '##' Khmer subheading.",
+    "foreign-script-in-output":
+        "It contained non-Khmer characters. Every character of every Khmer field must be "
+        "Khmer script. Check each word before you emit it.",
+    "title-too-long":
+        "The title was too long for a Google search result. Make title_km markedly "
+        "shorter -- Khmer consonants render wide, so cut words, do not just trim.",
+    "english-in-output":
+        "It contained English words in Khmer copy. Write the dish name in Khmer script; "
+        "do not add the English name in brackets.",
+    "summary-too-long":
+        "The summary was too long for a Google snippet. Cut it down -- state the technique "
+        "and drop decorative adjectives.",
+    "repeated-opener":
+        "The title or summary opened with the same phrase as other published entries. Start "
+        "it a different way -- name the dish, lead with the ingredient, or ask a question.",
+}
+
+PULSE_TITLE_MAX_UNITS = 60
+PULSE_SUMMARY_MAX_UNITS = 155
+PULSE_OPENER_PREFIX = 10
+PULSE_OPENER_CAP = 2
 _api_calls_made = 0
 
 
@@ -1041,11 +1085,19 @@ Source notes: {item_to_process['desc_en']}
     for attempt in range(1, MAX_ATTEMPTS + 1):
         attempt_prompt = prompt
         if attempt > 1:
+            # [REGRESSION] This message used to say "because it contained non-Khmer
+            # characters" for EVERY rejection, whatever the real cause. The run on
+            # 2026-08-16 was rejected three times for `generation-unstructured` — missing
+            # subheadings — and was told all three times to fix its Khmer characters, which
+            # were fine. The retry loop was therefore blind for every reason except the one
+            # it happened to name, and the day's article was lost. Tell the model what
+            # actually failed. (The characters it was told to fix were already correct.)
             attempt_prompt += (
-                "\n\nRETRY %d/%d. Your previous answer was REJECTED because it contained "
-                "non-Khmer characters: %s\nRewrite it completely. Every character of every "
-                "Khmer field must be Khmer script. Check each word before you emit it."
-                % (attempt, MAX_ATTEMPTS, "; ".join(reject_detail[:5]))
+                "\n\nRETRY %d/%d. Your previous answer was REJECTED. %s\nSpecifics: %s\n"
+                "Rewrite the whole answer, keeping every other rule above."
+                % (attempt, MAX_ATTEMPTS,
+                   RETRY_GUIDANCE.get(reject_reason, RETRY_GUIDANCE["generation-failed"]),
+                   "; ".join(reject_detail[:5]) or "none recorded")
             )
 
         # Pacing delay keeps the free tier from rate-limiting us.
@@ -1101,6 +1153,75 @@ Source notes: {item_to_process['desc_en']}
                 print("   - %s" % h, flush=True)
             print("   (add these to THAI_TO_KHMER if they recur)", flush=True)
             reject_reason = "foreign-script-in-output"
+            continue
+
+        # [REGRESSION] The three rules below were prompt instructions only, and the prompt
+        # has asked for all three for a while. Measured 2026-08-16 against the 29 entries
+        # that had accumulated: EIGHT titles ran over the SERP budget (up to 70 units
+        # against a 60 limit), TWENTY-ONE English words sat in Khmer copy — mostly
+        # bracketed dish-name glosses like "(Black Sesame Ice Cream)" — and SIXTEEN of 29
+        # titles opened with the identical phrase `សិល្បៈនៃកា`. Same lesson as the length
+        # gate above: an instruction in the prompt is a request. Enforce it here.
+        title_w = display_width(title_km)
+        if title_w > PULSE_TITLE_MAX_UNITS:
+            print(f"Attempt {attempt}/{MAX_ATTEMPTS}: title is {title_w:.1f} display units "
+                  f"(max {PULSE_TITLE_MAX_UNITS}) — Google would truncate it. Retrying.",
+                  flush=True)
+            reject_detail = ["the title was too long for a search result; it must be at "
+                             "most %d display units, and Khmer consonants are wide"
+                             % PULSE_TITLE_MAX_UNITS]
+            reject_reason = "title-too-long"
+            continue
+
+        english = sorted(set(re.findall(r"[A-Za-z]{3,}", title_km + " " + summary_km)))
+        if english:
+            print(f"Attempt {attempt}/{MAX_ATTEMPTS}: English words in Khmer copy: "
+                  f"{', '.join(english[:6])} — retrying.", flush=True)
+            reject_detail = ["these English words appeared in the Khmer title or summary: "
+                             + ", ".join(english[:6])
+                             + ". A bracketed gloss of the dish name is still an English "
+                               "word. Write the dish name in Khmer script only."]
+            reject_reason = "english-in-output"
+            continue
+
+        # The summary IS the meta description: pulse/[id].astro passes summary_km straight
+        # through. Thirteen of 29 ran over the snippet budget.
+        summary_w = display_width(summary_km)
+        if summary_w > PULSE_SUMMARY_MAX_UNITS:
+            print(f"Attempt {attempt}/{MAX_ATTEMPTS}: summary is {summary_w:.1f} display "
+                  f"units (max {PULSE_SUMMARY_MAX_UNITS}) — retrying.", flush=True)
+            reject_detail = ["the summary was too long for a search snippet; keep it under "
+                             "%d display units and drop decorative adjectives before facts"
+                             % PULSE_SUMMARY_MAX_UNITS]
+            reject_reason = "summary-too-long"
+            continue
+
+        # Opener variety, checked against what is already published rather than against
+        # this run alone -- otherwise every day's entry is "varied" and the archive is not.
+        # A local flag, not `reject_reason`: that variable persists across attempts, so
+        # testing it after the loop would re-trigger on a later attempt whose opener was
+        # actually fine.
+        opener_clash = None
+        for field, key in (("title", "title_km"), ("summary", "summary_km")):
+            value = title_km if field == "title" else summary_km
+            opener = value[:PULSE_OPENER_PREFIX]
+            if len(opener) < PULSE_OPENER_PREFIX:
+                continue
+            clash = [e.get("id", "?") for e in existing_pulse
+                     if (e.get(key) or "")[:PULSE_OPENER_PREFIX] == opener]
+            if len(clash) >= PULSE_OPENER_CAP:
+                opener_clash = (field, opener, clash)
+                break
+        if opener_clash:
+            field, opener, clash = opener_clash
+            print(f"Attempt {attempt}/{MAX_ATTEMPTS}: {field} opens with {opener!r}, already "
+                  f"used by {len(clash)} entries ({', '.join(sorted(clash)[:3])}) — retrying.",
+                  flush=True)
+            reject_detail = ["the %s opened with %r, which %d already-published entries also "
+                             "use. Open with a different construction — name the dish, lead "
+                             "with the ingredient, or state the technique."
+                             % (field, opener, len(clash))]
+            reject_reason = "repeated-opener"
             continue
 
         print(f"Attempt {attempt}/{MAX_ATTEMPTS}: clean Khmer output accepted.", flush=True)

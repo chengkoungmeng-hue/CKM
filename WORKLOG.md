@@ -151,25 +151,68 @@ entry lands every day.
   `check_foreign_scripts` because it whitelists printable ASCII — legitimately, since
   numerals and source titles need it — so an English word is invisible to a codepoint
   whitelist in a way a Chinese word is not. New `pulse-english-word` rule closes that.
-- **Both new pulse rules are ADVISORY on purpose.** Turning them blocking today would stop
-  every build until the back catalogue is rewritten — the exact trap of flipping a gate
-  while violations exist. **30 warnings, 0 errors.**
-- **Not fixed here, and deliberately so.** Rewriting nine Gemini-written Khmer titles in one
-  pass is precisely the batch shape this same session documented as producing uniformity.
-  The durable fix is generator-side: `fetch_catering_pulse.py` already rejects a response
-  containing foreign script and retries, so title width and English words belong in that
-  same rejection loop. That needs to be exercised against live Gemini — if the rejection is
-  too aggressive the daily run publishes nothing — so it is its own task.
-  **Next session: add the rejection, clear the 8, then promote both rules to `err()`.**
+- The two new pulse rules landed ADVISORY, the back catalogue was then cleared, and they
+  were promoted to blocking in the same pass that reached zero — never before, or nothing
+  could be committed.
+### Third pass — pulse cleared, and the generator taught to enforce it
+
+The advisory backlog above is now zero and every rule is blocking. Doing it turned up more
+than the advisory pass had measured.
+
+- **18 of 29 pulse titles were built from one phrase**, not the 8 the length check had
+  found: sixteen opened `សិល្បៈនៃកា` ("the art of the...") and two more `សិល្បៈធ្វើ`. The
+  generator prompt has asked it to vary the opening for a while, and entries 23+ obey —
+  the block that predates that instruction never did. Rewritten with an opening chosen per
+  entry from that entry's own dish.
+- **13 of 29 summaries ran over the snippet budget** (up to 211 units), and ten shared an
+  opener — seven on `ការណែនាំអំ`, three on `ស្វែងយល់ពី`. The opener cap now covers pulse
+  summaries as well as titles.
+- **[REGRESSION] Layout's `truncateKhmer` is a cluster net, not a budget.** It truncates at
+  155 **codepoints**; a 153-codepoint Khmer summary measures **172 units**, so it passed the
+  net and still shipped cut off. Sixteen rendered pages were over. This is the same
+  `len()`-versus-width error the whole session is about, sitting in the fix for a different
+  one. The budget is now enforced at source in units (`pulse-summary-too-long`), and the
+  homepage comment that recommended "under the 155-char slice" has been corrected.
+- **21 English words removed from Khmer copy.** Every one was a bracketed dish-name gloss —
+  `(Black Sesame Ice Cream)`, `(Hiyayakko)`, `(Korean Stuffed Peppers)`, `Zucchini`,
+  `Five-Spice`, `Dashi` — plus a bare `catering` in pulse-01. §14 already said it: a gloss
+  in brackets is still an English word. They survived `check_foreign_scripts` because it
+  whitelists printable ASCII, correctly, for numerals and source titles.
+- **Homepage and privacy descriptions/titles fixed** — the homepage `<title>` was 66.4 units
+  and its description 156.1; privacy carried `CKM Catering`, the plain `អ្នក` instead of the
+  `លោកអ្នក` honorific §10 requires, and a "flawless service" absolute.
+
+**Generator-side enforcement, so none of it can come back.** `fetch_catering_pulse.py` now
+rejects and retries on title width, summary width, English words and repeated openers, in
+the same loop that already rejected foreign script. `display_width` is **imported** from
+`check_content.py` rather than reimplemented — one measured table, two consumers, no drift.
+Openers are checked against what is already **published**, not against the current run, or
+every day's entry is "varied" and the archive is not.
+
+- **[REGRESSION] The retry prompt told the model the wrong thing.** It was hardcoded to say
+  the answer was rejected "because it contained non-Khmer characters" for **every** reason.
+  Today's 09:09 run was rejected three times for `generation-unstructured` — missing
+  subheadings — and was told all three times to fix Khmer characters that were already
+  correct. The retry loop was blind for every cause except the one it happened to name, and
+  the day's article was lost. Each reason now carries its own guidance (`RETRY_GUIDANCE`),
+  and a test asserts every `reject_reason` has an entry.
+- **Verified it cannot spuriously reject**: all five conditions run over the 29 cleaned
+  entries reject **none** of them, while four known-bad inputs are each caught with the
+  right reason. That mattered — adding rejection criteria to a pipeline that already failed
+  today could otherwise have stopped it publishing entirely.
+- Caught in review: the opener check first tested `reject_reason` after its inner loop, but
+  that variable persists across attempts, so a later attempt with a perfectly good opener
+  would have been rejected on a stale value. Replaced with a local flag.
 - **A bug in the new check, caught before commit**: the pulse rules were appended to the
   second loop over `items`, where `ident` still holds the *first* loop's last value — so
   every finding was labelled `pulse-27`. A report that names the wrong entry is worse than
   no report. Now reads the id from its own loop.
 
-- **Validation**: `check_content.py --strict` → **0 errors, 30 advisory warnings** (all
-  pulse). `npx astro check` → 0 errors, 0 warnings. `npm run build` → **82 pages**.
-  All 15 articles within budget, widest rendered title **58.8/60**; zero English words and
-  zero duplicate titles across all 81 rendered pages; accessibility re-verified in-browser.
+- **Validation**: `check_content.py --strict` → **0 errors, 0 warnings**. `npx astro check`
+  → 0 errors, 0 warnings. `npm run build` → **84 pages**. Across all **83 rendered pages**:
+  titles over budget **25 → 0** (widest 59.0/60), descriptions over budget **16 → 0**
+  (widest 152.6/155), English words in titles **0**, duplicate titles **0**. Accessibility
+  re-verified in a real browser. Gate re-probed: exit 1 on an injected violation, 0 after.
 
 ## 2026-08-15 (Pulse Pipeline: Crash Fix, Selection Order, Feed-Date Parsing, Source Survey)
 

@@ -512,6 +512,26 @@ def check_pulse():
                         % (ident, field, _script_name(cp), ch,
                            chunk[max(0, i - 18):i + 12].replace("\n", " ")))
                 check_khmer_clusters(p, chunk)
+    # Same cap as the articles, same reason. SIXTEEN of 29 pulse titles opened
+    # `សិល្បៈនៃកា` ("the art of the...") and two more opened `សិល្បៈធ្វើ` — 18 of 29 built
+    # from one phrase. The prompt in fetch_catering_pulse.py already asks the model to vary
+    # the opening, and entries 23+ obey it; the block that predates that instruction did
+    # not. A request in a prompt is not enforcement, so cap it here too.
+    # Summaries as well as titles: the summary is the SERP snippet, and seven of them
+    # opened `ការណែនាំអំ` ("a guide to...") with three more on `ស្វែងយល់ពី` — the same
+    # phrase the blog descriptions had to be cleared of.
+    for field, label in (("title_km", "titles"), ("summary_km", "summaries")):
+        openers = {}
+        for it in items:
+            t = it.get(field) or ""
+            if len(t) >= OPENER_PREFIX:
+                openers.setdefault(t[:OPENER_PREFIX], []).append(it.get("id", "?"))
+        for prefix, ids in sorted(openers.items()):
+            if len(ids) > OPENER_CAP:
+                err("repeated-opener", p, 1,
+                    "%d pulse %s open with %r (max %d) — %s"
+                    % (len(ids), label, prefix, OPENER_CAP, ", ".join(sorted(ids))))
+
     seen_slugs = {}
     for i, it in enumerate(items):
         where = "item %d (%s)" % (i, it.get("id", "?"))
@@ -553,15 +573,26 @@ def check_pulse():
         for field in ("title_km", "summary_km"):
             v = it.get(field) or ""
             for m in re.finditer(r"[A-Za-z]{3,}", v):
-                warn("pulse-english-word", p, 1,
-                     "%s.%s contains the English word %r — AGENTS.md 10 requires 100%% Khmer"
-                     % (pid, field, m.group(0)))
+                err("pulse-english-word", p, 1,
+                    "%s.%s contains the English word %r — AGENTS.md 10 requires 100%% Khmer"
+                    % (pid, field, m.group(0)))
 
         t_km = it.get("title_km") or ""
         if t_km and display_width(t_km) > SEO_TITLE_MAX:
-            warn("pulse-title-too-long", p, 1,
-                 "%s title_km is %.1f units (max %.0f); Google truncates it: %s"
-                 % (pid, display_width(t_km), SEO_TITLE_MAX, t_km))
+            err("pulse-title-too-long", p, 1,
+                "%s title_km is %.1f units (max %.0f); Google truncates it: %s"
+                % (pid, display_width(t_km), SEO_TITLE_MAX, t_km))
+
+        # pulse/[id].astro passes summary_km straight to the layout as the meta
+        # description. Layout's truncateKhmer is a cluster-safety net that counts
+        # CODEPOINTS, so a 153-codepoint summary measuring 172 units sails through it —
+        # the exact len()-vs-width error this file exists to prevent. The budget has to be
+        # enforced here, in units, at the source.
+        s_km = it.get("summary_km") or ""
+        if s_km and display_width(s_km) > DESCRIPTION_MAX:
+            err("pulse-summary-too-long", p, 1,
+                "%s summary_km is %.1f units (max %.0f); the SERP snippet is cut short"
+                % (pid, display_width(s_km), DESCRIPTION_MAX))
 
 
 # ---------------------------------------------------------------- rule 9

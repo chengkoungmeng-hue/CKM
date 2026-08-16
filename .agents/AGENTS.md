@@ -295,10 +295,19 @@ a meta description that renders in the Google result.
   - **[REGRESSION] Do not append a brand suffix to a pulse title.** `" - CKM"` cost 7.4
     units and pushed six entries past the budget by itself; Google cut the headline, not
     the suffix. Removed 2026-08-16.
-  - `pulse-title-too-long` and `pulse-english-word` are **advisory** until the back
-    catalogue is clear and `fetch_catering_pulse.py` enforces both in its existing
-    rejection loop. Promote them to `err()` in the same commit that reaches zero — never
-    before, or nothing can be committed.
+  - **[REGRESSION] `truncateKhmer` in Layout.astro is a cluster-safety net, NOT the budget.**
+    It counts codepoints, and a 153-codepoint Khmer summary measures 172 units — sixteen
+    pages passed the net and still shipped truncated by Google. Enforce length at source,
+    in units. Never cite "the 155-char slice" as the budget.
+  - Pulse rules (`pulse-title-too-long`, `pulse-summary-too-long`, `pulse-english-word`,
+    `repeated-opener`) are **blocking**, and `fetch_catering_pulse.py` rejects and retries
+    on all four so new entries cannot reintroduce them. It **imports** `display_width` from
+    `check_content.py` — one measured table, two consumers. Do not copy the table.
+  - **[REGRESSION] A retry must tell the model what actually failed.** The retry prompt was
+    hardcoded to say "it contained non-Khmer characters" for every rejection reason, so the
+    2026-08-16 run was rejected three times for missing subheadings and told three times to
+    fix characters that were correct. Every `reject_reason` now needs a `RETRY_GUIDANCE`
+    entry; add one whenever you add a reason.
 - **`revision:` is optional, hand-set, and drives `dateModified`.** Set it only when an
   article's substance changes, to the date that actually happened. **Never stamp it on
   deploy** — that is the same date-manipulation signal the `date:` fallback caused above.

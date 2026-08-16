@@ -84,10 +84,13 @@ const faqSchema = JSON.stringify({
   `ចុងភៅ` was dropped on purpose: 240 impressions and 0 clicks across the whole
   `ចុងភៅ` / `រូបចុងភៅ` / `logo ចុងភៅ` cluster — it is image-and-logo intent, not
   buying intent, and it collapsed to 5 impressions in the last 28 days.
-  The description is kept under the 155-char slice in Layout.astro so it ends on a
-  full sentence; the old one was 200+ chars and shipped cut mid-word ("ស៊ុ...").
+  The description is kept under 155 DISPLAY UNITS, not 155 characters. Layout.astro's
+  truncateKhmer is a cluster-safety net that counts codepoints, and a 150-codepoint
+  Khmer line measures ~156 units — it would sail through the net and still be cut by
+  Google. scripts/check_content.py measures the real thing; keep this line under it.
+  The old description was 200+ chars and shipped cut mid-word ("ស៊ុ...").
 -->
-<Layout title="សេវាកម្មម្ហូបការ ភ្នំពេញ | មុខម្ហូបការមង្គលការ | ចេង គួងម៉េង (CKM)" description="សេវាកម្មម្ហូបការ និងមុខម្ហូបការមង្គលការនៅភ្នំពេញ ដោយ ចេង គួងម៉េង (CKM)។ មានម៉ឺនុយ ៨ មុខប្រពៃណី កូនជ្រូកខ្វៃ និងស៊ុបប៉ាវហឺ ព្រមទាំងសេវាកម្មរៀបចំទីតាំង។" lang="km-KH">
+<Layout title="សេវាកម្មម្ហូបការ ភ្នំពេញ | ចេង គួងម៉េង (CKM)" description="សេវាកម្មម្ហូបការមង្គលការនៅភ្នំពេញ ដោយ ចេង គួងម៉េង។ មានម៉ឺនុយ ៨ មុខប្រពៃណី កូនជ្រូកខ្វៃ និងស៊ុបប៉ាវហឺ ព្រមទាំងសេវាកម្មរៀបចំទីតាំង។" lang="km-KH">
   <script type="application/ld+json" is:inline set:html={faqSchema}></script>
 
   <style>
