@@ -554,8 +554,22 @@ Audited 2026-08-14:
 
 ### Google Cloud project surface
 
-The project behind `gsc-and-ga4@just-turbine-503117-k9…` exists for one purpose. The whole
-repository calls exactly two Google endpoints — verified 2026-08-14:
+The project `just-turbine-503117-k9` exists for one purpose. The whole repository calls
+exactly two Google endpoints — verified 2026-08-14:
+
+**[REGRESSION] The account this paragraph used to name — `gsc-and-ga4@just-turbine-…` —
+no longer exists.** It was deleted on 2026-08-15 over a leak concern and replaced by two,
+split by privilege. A rule file that names a deleted account is the "confidently wrong
+rule" section 0 warns about, so the current pair is written down here instead:
+
+| Account | Scope | Used by |
+| :--- | :--- | :--- |
+| `ckm-indexing@just-turbine-503117-k9` | `auth/webmasters` (write) | CI only, via `SEARCH_CONSOLE_SA_JSON`, to resubmit the sitemap |
+| `ckm-analytics@just-turbine-503117-k9` | `webmasters.readonly` + `analytics.readonly` | local `google_service_account.json`, for `gsc_query_report.py` |
+
+This satisfies the split the table above asks for: the local key is read-only and cannot
+submit indexing. Verified 2026-08-16 — the local key resubmitting a sitemap returns 403,
+while `gsc_query_report.py` returns live data.
 
 ```bash
 grep -rhoE "https://[a-z0-9.-]*googleapis\.com/[a-zA-Z0-9/._-]*" --include=*.py --include=*.js scripts/ | sort -u
