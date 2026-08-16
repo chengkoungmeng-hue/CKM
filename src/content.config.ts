@@ -14,6 +14,11 @@ const blogCollection = defineCollection({
     
     // 出版時間戳記 (導入 optional 解除強制綁定，容許「長青化」無日期資產存在)
     date: z.coerce.date().optional(),
+
+    // 內容實質修訂日，手動填寫，供 blog/[slug].astro 輸出 dateModified。
+    // 只有在文章內容真的改變時才填，且填實際發生的日期 —— 絕不可在部署時自動蓋章，
+    // 那正是 AGENTS.md 已記錄過的日期操縱訊號。
+    revision: z.coerce.date().optional(),
     
     // 視覺證據 (強制綁定 VISION_ENGINE 產出的高畫質影像路徑)
     coverImage: image(),

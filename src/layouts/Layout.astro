@@ -27,9 +27,29 @@ let finalDescription = description || "";
 if (finalDescription.trim().length === 0) {
     finalDescription = 'ចេង គួងម៉េង (CKM) ផ្តល់ជូនសេវាកម្មម្ហូបការ សេវាកម្មទទួលរៀបចំកម្មវិធី និងចុងភៅរៀបចំម្ហូបការលំដាប់ខ្ពស់នៅភ្នំពេញ។';
 }
-if (finalDescription.length > 155) {
-    finalDescription = `${finalDescription.slice(0, 152).trim()}...`;
+// [REGRESSION] Truncating Khmer by codepoint index splits orthographic clusters.
+// `slice(0, 152)` can land between a base consonant and the COENG (U+17D2) that binds
+// its subscript, or between a base and its dependent vowel. The orphan renders as a
+// dotted circle -- the very defect `check_khmer_clusters` fails the build for when it
+// appears in source, silently reintroduced at render time in the meta description that
+// Google shows. Back off to a cluster boundary, and prefer a space if one is near.
+//
+// The real length budget is enforced upstream in units of rendered width by
+// scripts/check_content.py, which every blog description now passes. This is the
+// safety net for descriptions that do not come from the content collection.
+// Escapes, not literals: these are invisible combining marks and a copy-paste that
+// drops one is undetectable by eye.
+const KHMER_COMBINING = /[\u17B4-\u17D3\u17DD]/;
+const COENG = "\u17D2";
+function truncateKhmer(s: string, max: number) {
+    if (s.length <= max) return s;
+    let cut = max;
+    while (cut > 0 && (KHMER_COMBINING.test(s[cut]) || s[cut - 1] === COENG)) cut--;
+    const space = s.lastIndexOf(" ", cut);
+    if (space > cut - 20) cut = space;
+    return `${s.slice(0, cut).trim()}…`;
 }
+finalDescription = truncateKhmer(finalDescription, 155);
 // Ensure canonical path always ends with a slash (except for physical files)
 const ensureSlash = (path: string) => {
     if (path === '/') return path;
@@ -261,15 +281,19 @@ const breadcrumbSchemaData = generateBreadcrumbs();
             .tabular-nums {
               font-variant-numeric: tabular-nums;
             }
-            .reveal {
-              opacity: 0;
-              transform: translateY(16px);
-              transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            }
-            .reveal.active {
-              opacity: 1;
-              transform: translateY(0);
-            }
+            /* [REGRESSION] `.reveal { opacity: 0 }` used to live here, with `.active`
+               supplying the only path back to visible. NOTHING in this repository ever
+               added `.active` — there is no IntersectionObserver anywhere in src/ — while
+               eleven live elements still carry the class, including the entire <article>
+               body in blog/[slug].astro.
+               It was harmless only by accident: this block is component-scoped, so the
+               selector compiled to `.reveal[data-astro-cid-…]` and matched nothing in
+               slotted children. But section 5 of AGENTS.md correctly instructs that
+               styles which must reach slotted children belong in `<style is:global>` —
+               so following this project's own rule would have blanked every article body
+               on the site. Content must never depend on JS to become visible.
+               The rules are deleted rather than repaired: with no observer there is no
+               animation to preserve. */
             .prose {
               overflow-wrap: break-word;
               word-wrap: break-word;
@@ -348,6 +372,10 @@ const breadcrumbSchemaData = generateBreadcrumbs();
     
 </head>
     <body class="bg-pearl text-onyx selection:bg-champagne/30 selection:text-onyx">
+        <!-- WCAG 2.4.1 (Level A). Eleven focusable elements sat between the top of every
+             page and the article, so a keyboard or switch user tabbed through the whole
+             navigation on every single page before reaching the content. -->
+        <a href="#main-content" class="skip-link">រំលងទៅមាតិកាមេ</a>
         <nav
             class="fixed top-0 left-0 w-full bg-white/95 backdrop-blur-md z-50 border-b border-slate-100 shadow-sm"
         >
@@ -460,7 +488,7 @@ const breadcrumbSchemaData = generateBreadcrumbs();
             </div>
         </nav>
 
-        <main class="pt-16 md:pt-20 pb-0">
+        <main id="main-content" tabindex="-1" class="pt-16 md:pt-20 pb-0">
             <slot />
         </main>
 
@@ -522,9 +550,14 @@ const breadcrumbSchemaData = generateBreadcrumbs();
             class="fixed bottom-0 left-0 w-full z-50 md:hidden bg-white border-t border-slate-200 shadow-[0_-10px_30px_rgba(0,0,0,0.05)]"
         >
             <div class="flex h-14 pb-[env(safe-area-inset-bottom)] box-content">
+                <!-- WCAG 2.5.3 Label in Name (Level A). The visible label is the phone
+                     number, but the accessible name was "ហៅទូរស័ព្ទ" alone, so a
+                     voice-control user reading the button aloud could not activate the
+                     primary mobile CTA on a business that runs on phone calls. The
+                     accessible name must CONTAIN the visible text. -->
                 <a
                     href={`tel:${cleanPhone}`}
-                    aria-label={t.call}
+                    aria-label={`${t.call} ${mainPhone}`}
                     class="flex-1 flex items-center justify-center gap-2 bg-onyx text-white font-sans font-medium text-sm transition-colors active:bg-slate-800"
                 >
                     <Phone class="w-4 h-4 text-champagne" stroke-width={1.5} />
@@ -662,6 +695,27 @@ const breadcrumbSchemaData = generateBreadcrumbs();
         scroll-behavior: smooth;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
+        /* Reserve the scrollbar track always. Without this the page is ~15px wider on a
+           short page than on a long one, so every navigation between the two shifts the
+           whole layout sideways. */
+        scrollbar-gutter: stable;
+    }
+    /* Off-screen until focused, then visible. Never display:none — that would take it
+       out of the tab order and defeat the purpose. */
+    .skip-link {
+        position: absolute;
+        left: -9999px;
+        top: 0;
+        z-index: 100;
+        padding: 0.75rem 1.25rem;
+        background: #171717;
+        color: #fdfcf8;
+        font-weight: 600;
+    }
+    .skip-link:focus {
+        left: 0;
+        outline: 2px solid #c5a059;
+        outline-offset: 2px;
     }
     main > div:first-child {
         min-height: calc(100vh - 80px);

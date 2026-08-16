@@ -12,7 +12,14 @@
 - Rules marked **[REGRESSION]** exist because that exact bug shipped to production.
   Do not "simplify" them away.
 - Run `python scripts/check_content.py` before committing content. It enforces the
-  mechanical half of this file in under a second.
+  mechanical half of this file in under a second. `npm run build` runs it with `--strict`
+  and fails on any error, and `.github/workflows/content_gate.yml` runs it on every push
+  and PR touching content — Cloudflare Pages builds *after* merge, so CI is the real gate.
+- **Verify with a different mechanism than the one that made the change.** A checker that
+  shares an assumption with the code it checks is not a check: on Sunder a rename pass and
+  its verification script used the same regex, so the script reported real breakage as a
+  false positive. Confirm frontmatter budgets against rendered `dist/` HTML, `llms.txt`
+  against built routes, and UI behaviour in a real browser.
 - **This project has no skills.** `.agents/skills/` was removed on 2026-08-14. The five
   that existed either duplicated this file (`ckm_blog_writer`, `ckm_pulse_writer`),
   restated a spec that actually lives in code (`ckm_pulse_writer` again), or were generic
@@ -60,6 +67,26 @@
     The marker rides on a node ClientRouter swaps, so navigation re-binds and never stacks.
   - Listeners on `window` / `document` are **never** swapped. Bind those once at module
     scope behind a boolean, and resolve the element lazily inside the handler.
+- **[REGRESSION] Content must never depend on JavaScript to become visible.** `.reveal
+  { opacity: 0 }` lived in `Layout.astro` with `.active` as the only route back to visible,
+  and **nothing in this repository ever added `.active`** — there has never been an
+  `IntersectionObserver` in `src/`. Eleven live elements carried the class, including the
+  whole `<article>` body in `blog/[slug].astro`. It was harmless only because the rule was
+  component-scoped and matched nothing in slotted children — meaning **§5's own correct
+  advice, to move such styles into `<style is:global>`, would have blanked every article
+  on the site.** Removed 2026-08-16. If you add a reveal animation, start from `opacity: 1`
+  and let the script *enhance*, so a script that never loads costs an animation and not the
+  content. Sunder shipped exactly this bug and an audit dismissed it as unreachable
+  "because the observer always runs for JS-enabled visitors" — module loading fails
+  independently of JS being enabled.
+- **[REGRESSION] An accessible name must contain the visible label (WCAG 2.5.3).** The
+  sticky mobile call bar showed `011 827 782` and had the accessible name `ហៅទូរស័ព្ទ`, so
+  a voice-control user could not activate the primary CTA by saying what they saw. Note
+  Lighthouse weights `label-content-name-mismatch` at **0** — the category can score 100
+  while this fails. A 100 is not evidence.
+- **Keep the skip link.** `<a href="#main-content" class="skip-link">` is the first element
+  in `<body>`; `<main>` carries `id="main-content" tabindex="-1"`. Twelve focusable elements
+  precede the content on every page (WCAG 2.4.1, Level A).
 - No scroll-hijacking libraries. Lenis was removed: on touch devices it defaulted to
   `syncTouch: false` and intercepted nothing, while still shipping ~19 KB and leaking one
   immortal `requestAnimationFrame` loop per navigation. Native `scroll-behavior: smooth`
@@ -182,6 +209,17 @@ commitment to a direct conversation.
 - Reserve hard figures (temperatures, kVA, exact prices, minimum table counts, service
   areas) for the owner's own Telegram or phone consultation. `check_content.py` warns on
   Celsius and kVA specs in article bodies.
+  - **Absolutes are an ERROR, not a warning**, as of 2026-08-16 — the backlog reached zero
+    so the rule can block. `hard-spec` stays a warning: "prefer omitting" is a judgement,
+    an unconditional guarantee is not.
+  - **[REGRESSION] `check_hard_specs` used `re.search` and reported one hit per file.**
+    Article 04 showed one Celsius warning while carrying three. The true count was 15, not
+    5. Use `re.finditer` for any rule that can legitimately fire more than once — a silent
+    undercount reads as "nearly clean".
+  - Figures that are **general planning advice to the reader** (floor area per guest,
+    kitchen-to-table distance, height off the ground) are not commitments about what CKM
+    supplies and are deliberately kept. Do not write a blanket `ម៉ែត្រ` rule; it matches
+    `ទែម៉ូម៉ែត្រ` ("thermometer").
 - Forbidden topics: tipping, leftover packing, bargaining or cheapness framing. FAQs stay
   on elder care, service rhythm, ingredient freshness and venue coordination.
 
@@ -226,6 +264,45 @@ a meta description that renders in the Google result.
   to `new Date()`, so every deploy re-stamped 14 evergreen articles as published today —
   a textbook date-manipulation signal. The fallback now omits `datePublished` entirely;
   keep it that way.
+- **[REGRESSION] `seoTitle` ≤ 60 units, `description` ≤ 155 units — measured in rendered
+  width, never in `len()`.** `check_content.py` enforces both (`title-too-long`,
+  `description-too-long`). `blog/[slug].astro` passes `seoTitle || title` and the layout
+  appends no brand suffix, so the budget is the full 60.
+  **Do not "simplify" this to a character count.** Measured 2026-08-16: a Khmer base
+  consonant is 1.6–2.0× a Latin character, but 22 of the 128 Khmer codepoints have *zero*
+  advance width and a subscript after COENG costs 0.113 instead of 1.6–2.0. The errors
+  nearly cancel — mean ratio 1.03 — so `len()` looks right while being ±11% wrong per
+  article. It would have missed 4 of the 6 real violations found that day. The per-codepoint
+  table in `check_content.py` came from a browser (`scripts/build_width_table.cjs`) and
+  reproduces it within 2.6%.
+- **[REGRESSION] Truncate Khmer on cluster boundaries, never on a codepoint index.**
+  `Layout.astro` used `slice(0, 152)` for the meta description; 9.1% of cut points split a
+  base consonant from its COENG and shipped a dotted circle to the Google snippet — the
+  same defect `check_khmer_clusters` fails the build for in source. Use `truncateKhmer`.
+- **[REGRESSION] No opener may be shared by more than 2 articles.** Eleven of fifteen
+  descriptions once opened `ស្វែងយល់ពី` (articles 01–11) and four seoTitles opened
+  `របៀបជ្រើសរើស`. Each article reads fine alone — the failure is only visible on a search
+  results page. `check_content.py` caps the first 10 codepoints of `seoTitle`,
+  `description` and the first prose paragraph at 2 articles (`repeated-opener`).
+  Headings are exempt on purpose: this section *requires* the FAQ and conclusion headings
+  in every article.
+  **When fixing a batch, choose the opening per article, not per batch.** Sunder fixed this
+  exact defect with a batched rewrite and produced nine new templates of five articles each.
+- **The 60/155 budget applies to pulse and to page templates too, not just articles.**
+  `check_content.py` scans `src/content` and `pulseData.json`; it does **not** read
+  `.astro` page titles, which is how `- CKM Premium Catering` stayed live on the blog
+  listing pages. Verify budgets against rendered `dist/` HTML, not frontmatter.
+  - **[REGRESSION] Do not append a brand suffix to a pulse title.** `" - CKM"` cost 7.4
+    units and pushed six entries past the budget by itself; Google cut the headline, not
+    the suffix. Removed 2026-08-16.
+  - `pulse-title-too-long` and `pulse-english-word` are **advisory** until the back
+    catalogue is clear and `fetch_catering_pulse.py` enforces both in its existing
+    rejection loop. Promote them to `err()` in the same commit that reaches zero — never
+    before, or nothing can be committed.
+- **`revision:` is optional, hand-set, and drives `dateModified`.** Set it only when an
+  article's substance changes, to the date that actually happened. **Never stamp it on
+  deploy** — that is the same date-manipulation signal the `date:` fallback caused above.
+  Changing a title or a description is metadata, not substance; it does not earn a revision.
 - `authoritySignals` render as trust badges directly under the hero — the first thing a
   mobile reader sees. Make them carry a checkable fact and vary them per article; identical
   boilerplate across 15 posts trains readers to ignore the badge. Shipped placeholders to

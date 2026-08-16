@@ -1,5 +1,176 @@
 # Work Log
 
+## 2026-08-16 (SERP Length Budgets, Opener Variety, Build Gate, Ported Defect Audit)
+
+Ported the editorial gates from the sibling Sunder project. A port, not a copy: three of
+the nine defects the handoff listed do not exist here, and one that does was reachable
+only through this repo's own documented advice.
+
+- **Khmer rendered width measured, because both plausible assumptions are wrong.** Google
+  truncates a search result on rendered width; "60 characters" is a Latin proxy for a
+  pixel budget. Measured in headless Chromium (`scripts/build_width_table.cjs`): a Khmer
+  base consonant is **1.6–2.0×** a Latin character — nearly CJK-wide — but **22 of the 128**
+  Khmer codepoints have **zero** advance width (dependent vowels and diacritics stack above
+  or below), and a subscript consonant after COENG costs **0.113 units** rather than the
+  1.6–2.0 it costs standing alone. Those errors nearly cancel: the mean codepoint ratio came
+  out at **1.03**. That coincidence is a trap — `len(s)` *looks* correct while the per-article
+  ratio ranges **0.913 to 1.132**, ±11% on a budget whose whole job is to sit near a hard
+  cutoff. So per-codepoint widths are baked into `check_content.py` from a real browser
+  measurement (`scripts/build_width_table.cjs`), and `display_width()` reproduces the
+  browser to within **2.6% worst case, ~0.9% typical**.
+  - Concretely: `len(s)` would have **missed 4 of the 6 real violations** (09 and 14's
+    titles, 13 and 14's descriptions all measure over budget while counting under it) and
+    flagged nothing the width check does not.
+- **Baseline before any content changed.** seoTitle over 60 units: **04, 07, 09, 14**.
+  description over 155 units: **13, 14**. All fixed; verified in the rendered `dist/` HTML,
+  not in frontmatter — max title now **58.8**, max description **151.4**, zero duplicates.
+- **[REGRESSION] Eleven of fifteen descriptions opened with the same words.** `ស្វែងយល់ពី`
+  opened articles **01 through 11** — a contiguous block, the signature of one batch
+  generated from one instruction. Four of fifteen seoTitles opened `របៀបជ្រើសរើស`. Each
+  article reads fine alone; the failure is only visible on a results page where ten of them
+  sit in a column. Now capped at **2 articles per opener** (`repeated-opener`) across
+  seoTitle, description and the first prose paragraph.
+  - **A cap, not a cleanup.** Sunder fixed the identical defect with a batch rewrite and
+    produced *nine new templates of five articles each*, because the opening strategy was
+    assigned per batch instead of per article. The eleven rewrites here were each given an
+    opening chosen for that article's own subject.
+  - Headings are deliberately exempt: §14 *requires* `## សំណួរដែលសួរញឹកញាប់` and
+    `## សេចក្តីសន្និដ្ឋាន` in every article, so a cap over headings would fight the
+    structure rule and lose. Measuring first is what surfaced that — a naive site-wide
+    phrase cap would have flagged all 15 articles for obeying the rules.
+- **The gate caught its own author.** The first rewrite of article 04's description came out
+  at **165.2 units**, longer than the 146.1 it replaced. Advisory-then-blocking would have
+  let that through; it was blocking by then, so it did not ship.
+- **[REGRESSION] The layout could re-introduce broken Khmer clusters at render time.**
+  `Layout.astro` truncated the meta description with `slice(0, 152)`. A codepoint index
+  lands inside an orthographic cluster — between a base consonant and the COENG that binds
+  its subscript — and the orphan renders as a dotted circle. **Measured: 9.1% of 2,700 cut
+  points produced a broken cluster.** This is the exact defect `check_khmer_clusters` fails
+  the build for in source, silently recreated at render time in the text Google displays.
+  Replaced with a cluster-safe truncation; the same 2,700 cut points now yield **zero**.
+- **`revision` → `dateModified`.** Optional, hand-set, and only when an article's substance
+  changes, to the date that actually happened. Never stamped on deploy — that is the
+  date-manipulation signal the `datePublished` fallback already caused once (§14). **No
+  article carries one yet**: this session changed titles and descriptions, which is
+  metadata, not substance. Zero pages emit `dateModified`, by design.
+- **The checker now gates content reaching `main`, not just the pulse.** It ran only inside
+  `daily_catering_pulse.yml`, so a hand-edited article reached `main` unchecked. Added
+  `.github/workflows/content_gate.yml` (push + PR on content paths) and wired
+  `npm run check` into `npm run build`. Cloudflare Pages builds *after* merge, so CI is the
+  real gate and the build script is the local one. `build:deploy` exists for a build image
+  without Python 3 — **confirm which command Cloudflare Pages runs before relying on it.**
+- **`check_content.py` used to crash on Windows.** Every message it prints can contain
+  Khmer; a Windows console is cp1252, so it died with `UnicodeEncodeError` at the first
+  finding — locally, which is exactly where AGENTS.md tells you to run it. CI is Linux and
+  never saw it. stdout is now reconfigured to UTF-8.
+
+### Ported defect audit — which of Sunder's nine apply here
+
+Checked against this codebase rather than assumed. **Do not re-audit these from the Sunder
+notes; the notes describe Sunder.**
+
+| Sunder defect | CKM | Evidence |
+| :--- | :--- | :--- |
+| Content renders invisible (hide-then-reveal) | **Applied — latent** | see below |
+| `<title>`/description truncation by `.length` | **Applied — fixed** | 9.1% of cut points broke a cluster |
+| Client-side maths corrupting content | No | no KaTeX/MathJax/remark-math anywhere |
+| `llms.txt` URLs built from filenames | No | **85/85 URLs resolve** against built `dist/` |
+| `og:image` reading the wrong field | No | already fixed; `getImage` 1200×630 JPEG (§6) |
+| Duplicate element ids from a twice-rendered component | No | `404.astro` declares no ids |
+| No skip link | **Applied — fixed** | 11 focusable elements before `<main>` |
+| Inputs under 16px causing iOS zoom | No | the site has no form inputs |
+| `scrollbar-gutter: auto` layout jump | **Applied — fixed** | now `stable`, computed and verified |
+| Lighthouse 100 hiding `label-content-name-mismatch` | **Applied — fixed** | see below |
+
+- **[REGRESSION] `.reveal { opacity: 0 }` was a loaded gun.** Eleven live elements carried
+  the class — including the entire `<article>` body in `blog/[slug].astro` — and **nothing
+  in this repository has ever added `.active`**: there is no `IntersectionObserver` anywhere
+  in `src/`. It was harmless *only* because the rule sat in a component-scoped `<style>`
+  block and compiled to `.reveal[data-astro-cid-…]`, matching nothing in slotted children.
+  But §5 correctly instructs that styles which must reach slotted children belong in
+  `<style is:global>` — so **following this file's own advice would have blanked every
+  article body on the site**. Rules and all eleven class usages deleted; with no observer
+  there was no animation to preserve. Verified with **JavaScript fully disabled**: article
+  opacity 1, height 7,482px.
+- **[REGRESSION] WCAG 2.5.3 Label in Name on the primary mobile CTA.** The sticky mobile
+  call bar displayed the phone number `011 827 782` but its accessible name was
+  `ហៅទូរស័ព្ទ` alone. A voice-control user reading the button aloud could not activate it —
+  on a business that runs on phone calls. The accessible name now contains the visible text.
+  This is the audit Lighthouse weights **0**, so it can fail while the accessibility
+  category still scores 100.
+
+- **Verification used a different mechanism than the code under test**, per the handoff's
+  own warning about a checker that shares the assumption it is checking: budgets confirmed
+  by parsing rendered `dist/` HTML rather than frontmatter; `llms.txt` confirmed against
+  built routes rather than the generator's logic; the accessibility fixes driven in a real
+  browser with Playwright (`scripts/verify_a11y.cjs`) rather than grepped for.
+### Second pass — the remaining warnings, and what measuring them turned up
+
+- **[REGRESSION] `check_hard_specs` used `re.search`, so it reported one hit per pattern
+  per file.** Article 04 showed a single Celsius warning while carrying **three**; article
+  09 showed one while carrying **two plus a litre spec**. Fixing the reported line simply
+  promoted the next one into view. The real count was **15 instances, not 5** — an
+  undercount reads as "nearly clean" when it is not. Now `re.finditer`, like
+  `check_absolutes` always did.
+- **All §11 violations cleared.** Celsius specs in 04 (×3) and 09 (×1), the kVA spec and
+  litre spec in 09, and both absolutes in 05 (`ឯកជនភាព ១០០%`, the "no hidden costs" clause).
+  Temperature tables were converted to qualitative guidance rather than deleted, so the
+  tables still help the reader without committing the owner to a figure.
+- **`over-promise` promoted from warning to ERROR.** §11 marks both surviving phrasings as
+  claims that already shipped and were contradicted elsewhere on the same site; a warning
+  let them sit for months. The backlog is zero, so it can block now. **`hard-spec` stays a
+  warning on purpose** — §11 says "prefer omitting" there, which is a judgement, while an
+  absolute guarantee is simply forbidden.
+- **Deliberately NOT purged: reader-planning figures.** `៩ ទៅ ១០ ម៉ែត្រការ៉េ` per ten
+  guests, `១៥ ម៉ែត្រ` kitchen-to-table distance, `៨០ សង់ទីម៉ែត្រ` off the ground. These are
+  general planning and fire-safety advice, not commitments about what CKM supplies, and
+  removing them would gut the articles. A blanket `ម៉ែត្រ` rule would also be noisy —
+  it matches `ទែម៉ូម៉ែត្រ` ("thermometer") in article 10.
+- **English removed from every rendered `<title>`.** `- CKM Premium Catering` and
+  `| CKM Catering` were in `blog/index.astro`, `blog/page/[page].astro`, `privacy.astro`
+  and `404.astro` — template titles, so `check_content.py` never saw them (it scans
+  `src/content`, not `.astro`). Bare `CKM` is kept: §7 already treats brand marks as an
+  exception, and it is the mark, not an English word. **Known gap: the gate covers content,
+  not page templates.**
+
+### [REGRESSION] The pulse surface had no title budget at all — 25 of 81 pages truncated
+
+Found only because the budget was verified against *rendered* pages rather than against
+article frontmatter. Pulse is the surface with **no human review** — one Gemini-written
+entry lands every day.
+
+- **`pulse/[id].astro` appended `" - CKM"`, costing 7.4 units and pushing SIX entries past
+  the budget on its own** — buying brand recognition that Google then cut off along with
+  the end of the headline. Suffix removed; the brand is already in `og:site_name` and the
+  visible header. **25 → 17 over-budget pages.**
+- The remaining 17 are the data itself: 8 distinct `title_km` values run 60.3–70.2 units.
+  `fetch_catering_pulse.py` asks the model for 30–55 characters, and that file's own
+  comment says it best — *"an instruction in the prompt is a request"*, not a guarantee.
+- **English words are live in Khmer pulse copy**: `Five-Spice`, `(Miso)`, `Zucchini`,
+  `Dashi`, `Hiyayakko`, and `catering` in pulse-01's summary. They survive
+  `check_foreign_scripts` because it whitelists printable ASCII — legitimately, since
+  numerals and source titles need it — so an English word is invisible to a codepoint
+  whitelist in a way a Chinese word is not. New `pulse-english-word` rule closes that.
+- **Both new pulse rules are ADVISORY on purpose.** Turning them blocking today would stop
+  every build until the back catalogue is rewritten — the exact trap of flipping a gate
+  while violations exist. **30 warnings, 0 errors.**
+- **Not fixed here, and deliberately so.** Rewriting nine Gemini-written Khmer titles in one
+  pass is precisely the batch shape this same session documented as producing uniformity.
+  The durable fix is generator-side: `fetch_catering_pulse.py` already rejects a response
+  containing foreign script and retries, so title width and English words belong in that
+  same rejection loop. That needs to be exercised against live Gemini — if the rejection is
+  too aggressive the daily run publishes nothing — so it is its own task.
+  **Next session: add the rejection, clear the 8, then promote both rules to `err()`.**
+- **A bug in the new check, caught before commit**: the pulse rules were appended to the
+  second loop over `items`, where `ident` still holds the *first* loop's last value — so
+  every finding was labelled `pulse-27`. A report that names the wrong entry is worse than
+  no report. Now reads the id from its own loop.
+
+- **Validation**: `check_content.py --strict` → **0 errors, 30 advisory warnings** (all
+  pulse). `npx astro check` → 0 errors, 0 warnings. `npm run build` → **82 pages**.
+  All 15 articles within budget, widest rendered title **58.8/60**; zero English words and
+  zero duplicate titles across all 81 rendered pages; accessibility re-verified in-browser.
+
 ## 2026-08-15 (Pulse Pipeline: Crash Fix, Selection Order, Feed-Date Parsing, Source Survey)
 
 - **[REGRESSION] `added_at` Crashed Every Run That Found An Article**: `3ee3cff` introduced

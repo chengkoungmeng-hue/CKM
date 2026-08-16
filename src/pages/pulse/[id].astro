@@ -134,7 +134,11 @@ const relatedPosts = topByRelevance.some((p) => p.id === rotationPick.id)
   ? scoredPosts.slice(0, 3).map((e) => e.post)
   : [...topByRelevance, rotationPick];
 
-const pageTitle = `${item.title_km || 'បច្ចុប្បន្នភាពអន្តរជាតិ'} - CKM`;
+// No " - CKM" suffix. Pulse headlines are already long — the suffix cost 7.4 display
+// units and pushed SIX entries past the 60-unit SERP budget on its own, buying brand
+// recognition that Google then cut off along with the end of the headline. The brand is
+// already in og:site_name and the visible header.
+const pageTitle = item.title_km || 'បច្ចុប្បន្នភាពអន្តរជាតិ';
 const pageDesc = item.summary_km || '';
 const itemImage = item.image_url || '/images/blog_01_inline_khmer.webp';
 

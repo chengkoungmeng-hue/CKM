@@ -1,0 +1,43 @@
+name: Content gate
+
+# The content checks used to run in exactly one place: the daily pulse pipeline.
+# That covered machine-generated pulse entries and nothing else, so a hand-written
+# or hand-edited article could reach main completely unchecked and Cloudflare Pages
+# would build and publish it.
+#
+# Cloudflare Pages builds AFTER merge, so the build command is not the gate — this is.
+# `npm run build` runs the same check locally, which is where articles are edited.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/content/**'
+      - 'src/data/**'
+      - 'public/llms*.txt'
+      - 'scripts/check_content.py'
+  pull_request:
+    paths:
+      - 'src/content/**'
+      - 'src/data/**'
+      - 'public/llms*.txt'
+      - 'scripts/check_content.py'
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # No pip install: check_content.py is deliberately dependency-free so this
+      # job stays a few seconds and cannot fail for reasons unrelated to content.
+      - name: Check content
+        run: python scripts/check_content.py --strict

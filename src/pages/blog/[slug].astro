@@ -95,6 +95,11 @@ const articleSchema = JSON.stringify({
   // re-stamped every dateless post with the BUILD date on every deploy, which reads to
   // Google as a page republished daily.
   ...(entry.data.date ? { datePublished: entry.data.date.toISOString().split('T')[0] } : {}),
+  // `revision` is set BY HAND, only when an article's substance actually changed, to the
+  // date that change happened. It is deliberately not derived from git mtime or build
+  // time: auto-dating evergreen content is the same date-manipulation signal the
+  // datePublished fallback above already caused once. No revision, no dateModified.
+  ...(entry.data.revision ? { dateModified: entry.data.revision.toISOString().split('T')[0] } : {}),
   inLanguage: "km-KH",
   mainEntityOfPage: { "@type": "WebPage", "@id": `${currentUrl}/` }
 });
@@ -108,7 +113,7 @@ const articleSchema = JSON.stringify({
 
   <ReadingProgress />
   <div class="bg-slate-50 min-h-[calc(100vh-80px)] py-10 md:py-16 selection:bg-amber-200 selection:text-slate-900 typo-km">
-      <article class="max-w-4xl mx-auto px-5 sm:px-8 reveal">
+      <article class="max-w-4xl mx-auto px-5 sm:px-8">
         
         <header class="mb-10 text-center">
           <!-- Breadcrumb Navigation -->
