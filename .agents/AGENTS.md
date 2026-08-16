@@ -349,7 +349,8 @@ Every item below came out of an audit of the 15 live articles.
   destination; `scripts/apply_internal_links.py` wraps it. It is idempotent and refuses any
   anchor that is not unique or that sits in a heading, a table row or an existing link.
   **Do not port a keyword-regex injector.** Sunder's `apply_internal_links.cjs` corrupted
-  130 places across 53 files by replacing `（TCO）` with ` [TCO](…)`, and Khmer makes that
+  130 places across 53 files by replacing `（TCO）` with a space-prefixed `[TCO](…)`, and
+  Khmer makes that
   approach strictly worse: Khmer has no spaces between words, so there is no `\b` to
   anchor a pattern to and no way to tell a word from the middle of a longer one. Exact
   strings sidestep the whole problem.
@@ -548,7 +549,7 @@ Audited 2026-08-14:
 | `GEMINI_API_KEY` | `fetch_catering_pulse.py`, run by CI | GitHub Actions secrets |
 | `GSC_SERVICE_ACCOUNT_JSON` | CI, written transiently to `google_service_account.json` and deleted in the same step | GitHub Actions secrets |
 | `google_service_account.json` | Local: `gsc_query_report.py` | Local only. Should be a **read-only** (`webmasters.readonly`) service account, separate from the CI one that can submit indexing |
-| `GSC_GA4_SERVICE_ACCOUNT_EMAIL` | `generate_analytics_report.py`, `gsc_ga4_audit.js` | Not a secret — an email address |
+| `GSC_GA4_SERVICE_ACCOUNT_EMAIL` | **nothing** — re-audited 2026-08-17. Both readers (`generate_analytics_report.py`, `gsc_ga4_audit.js`) were deleted in `6292696`; `git grep` outside `*.md` returns zero hits | **Delete.** Not a secret — an email address — but a variable nothing reads is a variable nobody maintains |
 | `GSC_API_KEY` | **nothing** | **Delete.** GSC authenticates by service account, not API key |
 | `GITHUB_PAT` | **nothing** | **Never store.** CI uses `secrets.GITHUB_TOKEN`; local pushes use the OS credential manager |
 
@@ -650,11 +651,14 @@ python scripts/gsc_query_report.py --days 90
 - **`scripts/gsc_query_report.py` is the only trustworthy analytics script.** It exits
   non-zero on an API failure, so a caller can never mistake a placeholder for a
   measurement. Raw output lands in `scripts/reports/gsc_search_queries.json`.
-- **[REGRESSION] Do not trust `scripts/generate_analytics_report.py`.** It falls back to
-  hardcoded numbers (`35` clicks / `1369` impressions / `2.56%` / `6.43`) that are
-  indistinguishable from live output in the file it writes, and its "關鍵字亮點" section
-  is hardcoded prose that is **not** derived from the data it just fetched. It called
-  rank-1-with-zero-clicks a success.
+- **[REGRESSION] Never rebuild `scripts/generate_analytics_report.py`.** The script was
+  deleted in `6292696` ("delete the fabricated analytics scripts and their output") and
+  verified gone on 2026-08-17; this rule records *why*, so nobody writes it again. It fell
+  back to hardcoded numbers (`35` clicks / `1369` impressions / `2.56%` / `6.43`) that were
+  indistinguishable from live output in the file it wrote, and its "關鍵字亮點" section was
+  hardcoded prose **not** derived from the data it had just fetched. It called
+  rank-1-with-zero-clicks a success. Any replacement must exit non-zero on API failure
+  rather than degrade to a plausible-looking placeholder.
 - **Always filter to `country = khm`.** Taiwan and US rows are the owner's own team and
   crawlers. Unfiltered totals overstate reach by roughly 25%.
 
@@ -803,9 +807,15 @@ than resurrecting the deleted skill.
 
 ## 20. Communication
 
-- Professional, rigorous, objective, sincere. Ground every diagnosis in a file, a line, a
-  measurement or a log — not in plausibility.
-- State what was verified and what was assumed. If a check was not run, say so.
-- Report failures plainly, including your own.
+**Moved to the global rule file on 2026-08-17.** This section said: ground every diagnosis
+in a file, a line, a measurement or a log rather than in plausibility; state what was
+verified and what was assumed; say so when a check was not run; report failures plainly,
+including your own. All four are now in `~/.agents/GLOBAL.md` §2 (誠實) and §3 (驗證優先
+於推理), which every agent tool loads from its own global config path. Keeping a second
+copy here only creates a place for the two to drift apart.
+
+§0's "verify with a different mechanism than the one that made the change" was promoted
+to the global file in the same pass — it generalises beyond this project, and the incident
+it cites happened on Sunder.
 
 </RULE[project_scoped]>
