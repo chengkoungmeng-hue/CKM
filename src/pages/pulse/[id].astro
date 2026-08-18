@@ -16,13 +16,7 @@ export async function getStaticPaths() {
   
   for (const item of validItems) {
     const primarySlug = item.slug || item.id;
-    // Both routes stay reachable so older /pulse/pulse-NN/ links keep working,
-    // but both declare the slug URL as canonical.
     paths.push({ params: { id: primarySlug }, props: { item, canonicalId: primarySlug } });
-
-    if (item.slug && item.id && item.slug !== item.id) {
-      paths.push({ params: { id: item.id }, props: { item, canonicalId: primarySlug } });
-    }
   }
 
   if (paths.length === 0) {

@@ -1,5 +1,39 @@
 # Work Log
 
+## 2026-08-18 (Pulse Feed Hijack Mitigation, Candidate Fallback Loop, GA4 Job Retirement, 301 Redirect Consolidation)
+
+- **[REGRESSION] Dormant feed compromised with non-culinary spam.** `Cambodia Recipe`
+  (`https://cambodiarecipe.com/feed/`) had its WordPress instance injected on 2026-08-16 with
+  fake posts (English proverbs, Scottish football, Xbox Project Scorpio). Sorting by `pubDate`
+  placed these at the top of the processing queue, causing Gemini generation to fail the 4-section
+  Khmer banquet structure gate and stalling the Daily Catering Pulse workflow runs (31938298113,
+  32015064992, etc.).
+  - **Action**: Removed `Cambodia Recipe` from `FEEDS` in `scripts/fetch_catering_pulse.py`.
+  - Added non-culinary & foreign dish keywords to `_EXCLUDE_TERMS` (gaming, tech, football, pasta, etc.).
+  - Deleted the corrupted pulse entry `pulse-32` (`one-swallow-does-not-make-the-spring`) and its image.
+  - Regenerated `public/llms.txt` and `public/llms-full.txt` (30 clean notes).
+- **Candidate Fallback Loop implemented.** Previously, `fetch_catering_pulse.py` picked a single
+  live candidate item. If Gemini failed all 3 attempts on that single item, the pipeline failed
+  completely. The pipeline now verifies and buffers up to 3 candidate dishes; if the first fails
+  quality gates, it falls back to candidate 2 and 3 before giving up.
+  - Verified against the live feeds: 86 clean, on-brand Cantonese/Chinese candidate recipes are in queue.
+- **[REGRESSION] Duplicate 200 OK URLs for pulse alias routes resolved.** `src/pages/pulse/[id].astro`
+  previously emitted 200 OK pages for both `/pulse/[slug]/` and `/pulse/[id]/` (e.g. `/pulse/pulse-31/`).
+  Even with canonical tags, Google Search Console flagged these as "Duplicate, Google chose different
+  canonical than user".
+  - **Action**: `getStaticPaths()` now only renders canonical slug paths.
+  - `public/_redirects` now handles all `/pulse/pulse-NN/` -> `/pulse/:slug/` routes as explicit 301
+    permanent redirects, along with a cleanup 301 redirect for the deleted `pulse-32`.
+- **Retired legacy GA4 verify job.** The `analytics` job in `.github/workflows/verify_credentials.yml`
+  attempted to test `ANALYTICS_SA_JSON`. In accordance with §16, all GA4 data collection is handled
+  at the edge via Cloudflare Zaraz, and no backend service calls the GA4 Data API. Removed the
+  defunct job so credential verification focuses on active credentials (Gemini, Search Console, Cloudflare).
+- **Verification**:
+  - `python scripts/check_content.py --strict`: 15 articles, 0 errors, 0 warnings.
+  - `python scripts/check_pulse_health.py --max-age-days 3`: 30 clean entries, healthy.
+  - `npm run build`: 56 pages generated in 19s with 0 errors; verified 0 `pulse-NN` duplicate directories
+    in `dist/pulse/` and 73 active redirect rules in `dist/_redirects`.
+
 ## 2026-08-16 (SERP Length Budgets, Opener Variety, Build Gate, Ported Defect Audit)
 
 Ported the editorial gates from the sibling Sunder project. A port, not a copy: three of

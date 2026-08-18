@@ -33,12 +33,6 @@ print(f"Loaded Gemini API Key for Pulse Pipeline (len: {len(env_key)})", flush=T
 # a source occasionally strays.
 FEEDS = [
     {
-        "source_name": "Cambodia Recipe",
-        "category_en": "Khmer Heritage Home Cooking",
-        "category_km": "ម្ហូបខ្មែរប្រណីត",
-        "url": "https://cambodiarecipe.com/feed/"
-    },
-    {
         "source_name": "Auntie Emily's Kitchen",
         "category_en": "Cantonese Banquet & Home Classics",
         "category_km": "ម្ហូបចិននិងទាវជីវ",
@@ -154,10 +148,11 @@ _EXCLUDE_TERMS = (
     r'tech billionaire|cloud computing|leasing market|auction|stock market|movie|movies|'
     r'film|films|cinema|actor|actress|hollywood|netflix|trailer|tv show|celebrity|'
     r'director|oscar|entertainment|pub crawl|pub|bar crawl|'
+    r'xbox|project scorpio|football|soccer|fans on final|swallow does not make|persuasion is often|'
     # Western dishes that do not belong under a Khmer-Chinese banquet brand
     r'cobbler|mac and cheese|hot dog|taco|bourbon|viking|cherry cake|cherry cobbler|'
     r'cherry pie|casserole|pancakes|waffles|sandwich|edinburgh|western recipe|western food|'
-    r'tiramisu|croissant|brownie|cupcake|'
+    r'tiramisu|croissant|brownie|cupcake|pasta|spaghetti|lasagna|risotto|gnocchi|fettuccine|macaroni|'
     # Vietnamese — excluded on geopolitical grounds, not culinary ones
     r'vietnam|vietnamese|saigon|hanoi|da nang|hue|pho|com tam|goi cuon|banh mi|banh xeo|'
     r'banh cuon|bun bo|bun cha|cha gio|nuoc cham|nuoc mam|summer roll|rice paper roll|'
@@ -948,29 +943,25 @@ def update_pulse_daily():
     # sorted() is stable, so items sharing a timestamp keep their FEEDS order.
     unseen.sort(key=parse_feed_date, reverse=True)
 
-    # Liveness is checked HERE, on the one item about to be published, rather than on
-    # every candidate during the fetch. Walk down the queue until one resolves, so a
-    # single dead link costs the next-best article instead of the whole day.
-    item_to_process = None
+    # Liveness is checked HERE, on the candidates about to be processed, rather than on
+    # every candidate during the fetch. Collect up to 3 live candidates so that if one
+    # fails quality gates, the pipeline can fall back to the next dish.
+    valid_candidates = []
     for cand in unseen:
         if verify_live_url(cand["link"]):
-            item_to_process = cand
-            break
-        print(f"Candidate URL did not resolve, trying the next: {cand['link'][:70]}", flush=True)
-
-    if item_to_process is not None:
-        fallback_img = VALID_FALLBACKS[len(existing_pulse) % len(VALID_FALLBACKS)]
-        item_to_process["image_url"] = extract_image_multitier(
-            item_to_process.get("_xml_item"), fallback_img, item_to_process["link"])
+            fallback_img = VALID_FALLBACKS[len(existing_pulse) % len(VALID_FALLBACKS)]
+            cand["image_url"] = extract_image_multitier(
+                cand.get("_xml_item"), fallback_img, cand["link"])
+            valid_candidates.append(cand)
+            if len(valid_candidates) >= 3:
+                break
+        else:
+            print(f"Candidate URL did not resolve, trying the next: {cand['link'][:70]}", flush=True)
 
     print(f"\nQueue: {len(unseen)} unseen candidate(s) of {len(raw_items)} fetched, "
-          f"archive depth {depth_reached}.", flush=True)
+          f"archive depth {depth_reached}, {len(valid_candidates)} verified live.", flush=True)
 
-    if not item_to_process:
-        # Reaching here now means something much stronger than it used to. Selection
-        # walks every archive page of every feed before giving up, so this is not
-        # "nothing new today" — it is "there is nothing left anywhere", or "everything
-        # left is a dead link". Both need a human; neither should look like a quiet day.
+    if not valid_candidates:
         if not unseen:
             reason = "archive-exhausted"
             print("\nEVERY archive page of EVERY feed is exhausted — the current sources "
@@ -980,8 +971,6 @@ def update_pulse_daily():
             print(f"\n{len(unseen)} unseen candidate(s) exist but NONE resolved to a live "
                   "URL. That points at a network or user-agent problem, not at supply.",
                   flush=True)
-        # Do NOT renumber. Existing ids and slugs are live, indexed URLs.
-        # Only backfill an identifier if one is genuinely missing.
         taken = {p.get("slug") for p in existing_pulse if p.get("slug")}
         for entry in existing_pulse:
             if not entry.get("id"):
@@ -994,20 +983,21 @@ def update_pulse_daily():
         with open(out_file, "w", encoding="utf-8") as f:
             json.dump(existing_pulse, f, ensure_ascii=False, indent=2)
         print("Dataset unchanged — no deploy or indexing needed.", flush=True)
-        # len(unseen), not 0: in the all-candidates-dead case candidates DO exist and
-        # the distinction is the whole diagnostic value of this field.
         set_action_output(changed="false", reason=reason, queue_depth=len(unseen),
                           archive_depth=depth_reached)
-        # Exit non-zero. Every one of these three states needs a person: the sources are
-        # spent, the network is broken, or every candidate URL is dead. None of them
-        # resolves itself, and a green run for any of them is precisely how this pipeline
-        # would stop publishing without anyone noticing.
         print(f"::error::The pulse published nothing today (reason: {reason}).", flush=True)
         return 1
 
-    print(f"\nProcessing 1 NEW article with Rate Limiting & Anti-Fool Guard: {item_to_process['title_en']}", flush=True)
-    
-    prompt = f"""
+    successful_candidate = None
+    title_km = summary_km = content_km = image_alt = ""
+    key_points_km = []
+    item_to_process = None
+
+    for cand_idx, candidate in enumerate(valid_candidates, 1):
+        item_to_process = candidate
+        print(f"\nProcessing candidate {cand_idx}/{len(valid_candidates)} with Rate Limiting & Anti-Fool Guard: {item_to_process['title_en']}", flush=True)
+
+        prompt = f"""
 You are the senior Khmer culinary editor for CKM Catering (ចេង គួងម៉េង), a family
 banquet kitchen in Phnom Penh with 60 years behind it.
 
@@ -1047,7 +1037,7 @@ LANGUAGE — ABSOLUTE
 1. 100% Khmer script. ZERO Chinese characters. ZERO raw English words.
 2. ZERO Thai script (ก-๛), ZERO Japanese kana, ZERO Devanagari. Khmer and Thai share
    Indic vocabulary and your training data mixes them. Do NOT emit ช่วย, หัวใจ,
-   วัฒนธรรม, จากการ, รากผักชี or any other Thai word. If you are unsure of a Khmer word,
+   วัฒនธรรม, จากការ, ราកผักชี or any other Thai word. If you are unsure of a Khmer word,
    describe the idea in plain Khmer rather than borrowing a Thai one.
 3. Address the reader as 'លោកអ្នក'. Refer to the team as 'យើងខ្ញុំ'.
 4. Humble and specific. No hype: never '第一', 'ល្អបំផុតក្នុងពិភពលោក', 'គ្មានអ្នកណាប្រៀបបាន'.
@@ -1069,172 +1059,153 @@ OUTPUT — JSON ONLY, no commentary, no markdown fences:
 Source dish: {item_to_process['title_en']}
 Source notes: {item_to_process['desc_en']}
 """
-    # Roughly half of Gemini's responses splice a Thai fragment into the Khmer, and a
-    # single rejection used to cost the whole day's article. Retry within the run,
-    # feeding the exact offending characters back so the model can correct itself.
-    MAX_ATTEMPTS = 3
-    title_km = summary_km = content_km = image_alt = ""
-    key_points_km = []
-    reject_reason = "generation-failed"
-    # Bound before the loop because the retry prompt below reads it on attempt 2+.
-    # Every `continue` in the body assigns it first, so this is belt-and-braces — but
-    # that invariant is invisible at the point of use, and one new early `continue`
-    # would turn the retry path into a NameError.
-    reject_detail = []
-
-    for attempt in range(1, MAX_ATTEMPTS + 1):
-        attempt_prompt = prompt
-        if attempt > 1:
-            # [REGRESSION] This message used to say "because it contained non-Khmer
-            # characters" for EVERY rejection, whatever the real cause. The run on
-            # 2026-08-16 was rejected three times for `generation-unstructured` — missing
-            # subheadings — and was told all three times to fix its Khmer characters, which
-            # were fine. The retry loop was therefore blind for every reason except the one
-            # it happened to name, and the day's article was lost. Tell the model what
-            # actually failed. (The characters it was told to fix were already correct.)
-            attempt_prompt += (
-                "\n\nRETRY %d/%d. Your previous answer was REJECTED. %s\nSpecifics: %s\n"
-                "Rewrite the whole answer, keeping every other rule above."
-                % (attempt, MAX_ATTEMPTS,
-                   RETRY_GUIDANCE.get(reject_reason, RETRY_GUIDANCE["generation-failed"]),
-                   "; ".join(reject_detail[:5]) or "none recorded")
-            )
-
-        # Pacing delay keeps the free tier from rate-limiting us.
-        time.sleep(10)
-        khmer_json = call_gemini_api_robust(attempt_prompt,
-                                            min_content_len=MIN_CONTENT_CHARS,
-                                            start=attempt - 1)
-
+        MAX_ATTEMPTS = 3
         title_km = summary_km = content_km = image_alt = ""
         key_points_km = []
-        if khmer_json:
-            try:
-                clean_json = khmer_json.replace("```json", "").replace("```", "").strip()
-                parsed = json.loads(clean_json)
-                title_km = sanitize_text(parsed.get("title_km", ""))
-                summary_km = sanitize_text(parsed.get("summary_km", ""))
-                content_km = sanitize_text(parsed.get("content_km", ""))
-                image_alt = sanitize_text(parsed.get("image_alt", ""))
-                key_points_km = [sanitize_text(pt) for pt in parsed.get("key_points_km", []) if pt]
-            except Exception as e:
-                print(f"Attempt {attempt}: JSON parse error: {e}", flush=True)
+        reject_reason = "generation-failed"
+        reject_detail = []
+        candidate_succeeded = False
 
-        if not content_km or len(content_km) < MIN_CONTENT_CHARS:
-            print(f"Attempt {attempt}/{MAX_ATTEMPTS}: content too short — retrying.", flush=True)
-            reject_detail = ["response was truncated or unparseable"]
-            reject_reason = "generation-too-short"
-            continue
+        for attempt in range(1, MAX_ATTEMPTS + 1):
+            attempt_prompt = prompt
+            if attempt > 1:
+                attempt_prompt += (
+                    "\n\nRETRY %d/%d. Your previous answer was REJECTED. %s\nSpecifics: %s\n"
+                    "Rewrite the whole answer, keeping every other rule above."
+                    % (attempt, MAX_ATTEMPTS,
+                       RETRY_GUIDANCE.get(reject_reason, RETRY_GUIDANCE["generation-failed"]),
+                       "; ".join(reject_detail[:5]) or "none recorded")
+                )
 
-        sections = len(SECTION_HEADING.findall(content_km))
-        if sections < MIN_CONTENT_SECTIONS:
-            print(f"Attempt {attempt}/{MAX_ATTEMPTS}: only {sections} subheading(s), "
-                  f"need {MIN_CONTENT_SECTIONS} — retrying.", flush=True)
-            reject_detail = ["the piece had %d markdown subheadings; the four sections "
-                             "must each carry their own Khmer subheading" % sections]
-            reject_reason = "generation-unstructured"
-            continue
+            # Pacing delay keeps the free tier from rate-limiting us.
+            time.sleep(10)
+            khmer_json = call_gemini_api_robust(attempt_prompt,
+                                                min_content_len=MIN_CONTENT_CHARS,
+                                                start=attempt - 1)
 
-        # Deterministic repair pass before judging the output.
-        pre = find_foreign_scripts(title_km, summary_km, content_km, image_alt, key_points_km)
-        if pre:
-            title_km = repair_khmer(title_km)
-            summary_km = repair_khmer(summary_km)
-            content_km = repair_khmer(content_km)
-            image_alt = repair_khmer(image_alt)
-            key_points_km = repair_khmer_deep(key_points_km)
-            print(f"Attempt {attempt}: repaired {len(pre)} foreign character(s) via the "
-                  "Thai-to-Khmer map.", flush=True)
+            title_km = summary_km = content_km = image_alt = ""
+            key_points_km = []
+            if khmer_json:
+                try:
+                    clean_json = khmer_json.replace("```json", "").replace("```", "").strip()
+                    parsed = json.loads(clean_json)
+                    title_km = sanitize_text(parsed.get("title_km", ""))
+                    summary_km = sanitize_text(parsed.get("summary_km", ""))
+                    content_km = sanitize_text(parsed.get("content_km", ""))
+                    image_alt = sanitize_text(parsed.get("image_alt", ""))
+                    key_points_km = [sanitize_text(pt) for pt in parsed.get("key_points_km", []) if pt]
+                except Exception as e:
+                    print(f"Attempt {attempt}: JSON parse error: {e}", flush=True)
 
-        reject_detail = find_foreign_scripts(title_km, summary_km, content_km, image_alt, key_points_km)
-        if reject_detail:
-            print(f"Attempt {attempt}/{MAX_ATTEMPTS}: unmapped non-Khmer script remains — retrying.", flush=True)
-            for h in reject_detail[:4]:
-                print("   - %s" % h, flush=True)
-            print("   (add these to THAI_TO_KHMER if they recur)", flush=True)
-            reject_reason = "foreign-script-in-output"
-            continue
-
-        # [REGRESSION] The three rules below were prompt instructions only, and the prompt
-        # has asked for all three for a while. Measured 2026-08-16 against the 29 entries
-        # that had accumulated: EIGHT titles ran over the SERP budget (up to 70 units
-        # against a 60 limit), TWENTY-ONE English words sat in Khmer copy — mostly
-        # bracketed dish-name glosses like "(Black Sesame Ice Cream)" — and SIXTEEN of 29
-        # titles opened with the identical phrase `សិល្បៈនៃកា`. Same lesson as the length
-        # gate above: an instruction in the prompt is a request. Enforce it here.
-        title_w = display_width(title_km)
-        if title_w > PULSE_TITLE_MAX_UNITS:
-            print(f"Attempt {attempt}/{MAX_ATTEMPTS}: title is {title_w:.1f} display units "
-                  f"(max {PULSE_TITLE_MAX_UNITS}) — Google would truncate it. Retrying.",
-                  flush=True)
-            reject_detail = ["the title was too long for a search result; it must be at "
-                             "most %d display units, and Khmer consonants are wide"
-                             % PULSE_TITLE_MAX_UNITS]
-            reject_reason = "title-too-long"
-            continue
-
-        english = sorted(set(re.findall(r"[A-Za-z]{3,}", title_km + " " + summary_km)))
-        if english:
-            print(f"Attempt {attempt}/{MAX_ATTEMPTS}: English words in Khmer copy: "
-                  f"{', '.join(english[:6])} — retrying.", flush=True)
-            reject_detail = ["these English words appeared in the Khmer title or summary: "
-                             + ", ".join(english[:6])
-                             + ". A bracketed gloss of the dish name is still an English "
-                               "word. Write the dish name in Khmer script only."]
-            reject_reason = "english-in-output"
-            continue
-
-        # The summary IS the meta description: pulse/[id].astro passes summary_km straight
-        # through. Thirteen of 29 ran over the snippet budget.
-        summary_w = display_width(summary_km)
-        if summary_w > PULSE_SUMMARY_MAX_UNITS:
-            print(f"Attempt {attempt}/{MAX_ATTEMPTS}: summary is {summary_w:.1f} display "
-                  f"units (max {PULSE_SUMMARY_MAX_UNITS}) — retrying.", flush=True)
-            reject_detail = ["the summary was too long for a search snippet; keep it under "
-                             "%d display units and drop decorative adjectives before facts"
-                             % PULSE_SUMMARY_MAX_UNITS]
-            reject_reason = "summary-too-long"
-            continue
-
-        # Opener variety, checked against what is already published rather than against
-        # this run alone -- otherwise every day's entry is "varied" and the archive is not.
-        # A local flag, not `reject_reason`: that variable persists across attempts, so
-        # testing it after the loop would re-trigger on a later attempt whose opener was
-        # actually fine.
-        opener_clash = None
-        for field, key in (("title", "title_km"), ("summary", "summary_km")):
-            value = title_km if field == "title" else summary_km
-            opener = value[:PULSE_OPENER_PREFIX]
-            if len(opener) < PULSE_OPENER_PREFIX:
+            if not content_km or len(content_km) < MIN_CONTENT_CHARS:
+                print(f"Attempt {attempt}/{MAX_ATTEMPTS}: content too short — retrying.", flush=True)
+                reject_detail = ["response was truncated or unparseable"]
+                reject_reason = "generation-too-short"
                 continue
-            clash = [e.get("id", "?") for e in existing_pulse
-                     if (e.get(key) or "")[:PULSE_OPENER_PREFIX] == opener]
-            if len(clash) >= PULSE_OPENER_CAP:
-                opener_clash = (field, opener, clash)
-                break
-        if opener_clash:
-            field, opener, clash = opener_clash
-            print(f"Attempt {attempt}/{MAX_ATTEMPTS}: {field} opens with {opener!r}, already "
-                  f"used by {len(clash)} entries ({', '.join(sorted(clash)[:3])}) — retrying.",
-                  flush=True)
-            reject_detail = ["the %s opened with %r, which %d already-published entries also "
-                             "use. Open with a different construction — name the dish, lead "
-                             "with the ingredient, or state the technique."
-                             % (field, opener, len(clash))]
-            reject_reason = "repeated-opener"
-            continue
 
-        print(f"Attempt {attempt}/{MAX_ATTEMPTS}: clean Khmer output accepted.", flush=True)
-        break
-    else:
-        print(f"WARNING: {MAX_ATTEMPTS} attempts all rejected ({reject_reason}). "
+            sections = len(SECTION_HEADING.findall(content_km))
+            if sections < MIN_CONTENT_SECTIONS:
+                print(f"Attempt {attempt}/{MAX_ATTEMPTS}: only {sections} subheading(s), "
+                      f"need {MIN_CONTENT_SECTIONS} — retrying.", flush=True)
+                reject_detail = ["the piece had %d markdown subheadings; the four sections "
+                                 "must each carry their own Khmer subheading" % sections]
+                reject_reason = "generation-unstructured"
+                continue
+
+            # Deterministic repair pass before judging the output.
+            pre = find_foreign_scripts(title_km, summary_km, content_km, image_alt, key_points_km)
+            if pre:
+                title_km = repair_khmer(title_km)
+                summary_km = repair_khmer(summary_km)
+                content_km = repair_khmer(content_km)
+                image_alt = repair_khmer(image_alt)
+                key_points_km = repair_khmer_deep(key_points_km)
+                print(f"Attempt {attempt}: repaired {len(pre)} foreign character(s) via the "
+                      "Thai-to-Khmer map.", flush=True)
+
+            reject_detail = find_foreign_scripts(title_km, summary_km, content_km, image_alt, key_points_km)
+            if reject_detail:
+                print(f"Attempt {attempt}/{MAX_ATTEMPTS}: unmapped non-Khmer script remains — retrying.", flush=True)
+                for h in reject_detail[:4]:
+                    print("   - %s" % h, flush=True)
+                print("   (add these to THAI_TO_KHMER if they recur)", flush=True)
+                reject_reason = "foreign-script-in-output"
+                continue
+
+            title_w = display_width(title_km)
+            if title_w > PULSE_TITLE_MAX_UNITS:
+                print(f"Attempt {attempt}/{MAX_ATTEMPTS}: title is {title_w:.1f} display units "
+                      f"(max {PULSE_TITLE_MAX_UNITS}) — Google would truncate it. Retrying.",
+                      flush=True)
+                reject_detail = ["the title was too long for a search result; it must be at "
+                                 "most %d display units, and Khmer consonants are wide"
+                                 % PULSE_TITLE_MAX_UNITS]
+                reject_reason = "title-too-long"
+                continue
+
+            english = sorted(set(re.findall(r"[A-Za-z]{3,}", title_km + " " + summary_km)))
+            if english:
+                print(f"Attempt {attempt}/{MAX_ATTEMPTS}: English words in Khmer copy: "
+                      f"{', '.join(english[:6])} — retrying.", flush=True)
+                reject_detail = ["these English words appeared in the Khmer title or summary: "
+                                 + ", ".join(english[:6])
+                                 + ". A bracketed gloss of the dish name is still an English "
+                                   "word. Write the dish name in Khmer script only."]
+                reject_reason = "english-in-output"
+                continue
+
+            summary_w = display_width(summary_km)
+            if summary_w > PULSE_SUMMARY_MAX_UNITS:
+                print(f"Attempt {attempt}/{MAX_ATTEMPTS}: summary is {summary_w:.1f} display "
+                      f"units (max {PULSE_SUMMARY_MAX_UNITS}) — retrying.", flush=True)
+                reject_detail = ["the summary was too long for a search snippet; keep it under "
+                                 "%d display units and drop decorative adjectives before facts"
+                                 % PULSE_SUMMARY_MAX_UNITS]
+                reject_reason = "summary-too-long"
+                continue
+
+            opener_clash = None
+            for field, key in (("title", "title_km"), ("summary", "summary_km")):
+                value = title_km if field == "title" else summary_km
+                opener = value[:PULSE_OPENER_PREFIX]
+                if len(opener) < PULSE_OPENER_PREFIX:
+                    continue
+                clash = [e.get("id", "?") for e in existing_pulse
+                         if (e.get(key) or "")[:PULSE_OPENER_PREFIX] == opener]
+                if len(clash) >= PULSE_OPENER_CAP:
+                    opener_clash = (field, opener, clash)
+                    break
+            if opener_clash:
+                field, opener, clash = opener_clash
+                print(f"Attempt {attempt}/{MAX_ATTEMPTS}: {field} opens with {opener!r}, already "
+                      f"used by {len(clash)} entries ({', '.join(sorted(clash)[:3])}) — retrying.",
+                      flush=True)
+                reject_detail = ["the %s opened with %r, which %d already-published entries also "
+                                 "use. Open with a different construction — name the dish, lead "
+                                 "with the ingredient, or state the technique."
+                                 % (field, opener, len(clash))]
+                reject_reason = "repeated-opener"
+                continue
+
+            print(f"Attempt {attempt}/{MAX_ATTEMPTS}: clean Khmer output accepted.", flush=True)
+            candidate_succeeded = True
+            break
+
+        if candidate_succeeded:
+            successful_candidate = item_to_process
+            break
+        else:
+            print(f"WARNING: Candidate {cand_idx} ({item_to_process['title_en']}) rejected across all {MAX_ATTEMPTS} attempts ({reject_reason}). Trying next candidate in queue...", flush=True)
+
+    if not successful_candidate:
+        print(f"WARNING: All {len(valid_candidates)} candidates were rejected by the quality gate. "
               "Preserving existing dataset rather than publishing broken Khmer.", flush=True)
-        set_action_output(changed="false", reason=reject_reason,
+        set_action_output(changed="false", reason="all-candidates-rejected",
                           queue_depth=len(unseen), archive_depth=depth_reached)
-        print(f"::error::Generation failed {MAX_ATTEMPTS}/{MAX_ATTEMPTS} times "
-              f"({reject_reason}). Gemini is unavailable, rate-limited, or its Khmer has "
-              f"drifted below the quality gate.", flush=True)
+        print(f"::error::Generation failed for all {len(valid_candidates)} candidate dishes.", flush=True)
         return 1
+
+
 
     new_id = next_pulse_id(existing_pulse)
     taken = {p.get("slug") for p in existing_pulse if p.get("slug")}

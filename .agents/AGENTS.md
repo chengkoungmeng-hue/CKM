@@ -54,6 +54,10 @@
 - Canonical domain is exactly `https://ckmkh.com`. Never `www.`, never bare `http://`.
 - `trailingSlash: 'always'`. Every internal link must end in `/` or Cloudflare issues a
   301 and the link equity is spent on a redirect.
+- **[REGRESSION] Canonical pulse pages use descriptive slug paths only.** Emitting both
+  `/pulse/[slug]/` and `/pulse/[id]/` as 200 OK HTML pages causes Google Search Console to flag
+  "Duplicate, Google chose different canonical than user". Static generation in `pulse/[id].astro`
+  emits only `/pulse/[slug]/`, and `public/_redirects` 301-redirects `/pulse/pulse-NN/` to `/pulse/:slug/`.
 
 ## 4. Client-side scripts
 
@@ -472,6 +476,11 @@ Every item below came out of an audit of the 15 live articles.
   reached, 4 inbound links minimum, 168 total. Do not "fix" this by adding in-body links —
   the distribution is deliberate, and the rotating slot exists because pure relevance
   ranking gave one article 14 inbound links and another none.
+- **[REGRESSION] Candidate fallback loop prevents pipeline stalls.** If Gemini fails all
+  attempts on a single candidate dish (e.g. non-culinary anomaly, edge-case term collision),
+  `fetch_catering_pulse.py` buffers up to 3 live candidates and tries the next dish instead
+  of immediately failing the GitHub Actions workflow run. Dormant feeds must be pruned if
+  they are hijacked with non-culinary spam.
 
 ## 16. Secrets
 
