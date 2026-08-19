@@ -29,3 +29,6 @@ __pycache__/
 *.pyc
 
 
+
+# 本機工具設定與 junction(.claude/skills -> .agents/skills),入庫會造成 skill 雙路徑重複
+/.claude/
