@@ -1,5 +1,25 @@
 # Work Log
 
+## 2026-08-19 (Pulse Pipeline Fault-Tolerance Hardening, Lazy Key Loading, Candidate Pool Expansion)
+
+- **[REGRESSION] Module-level API key logging polluted CI steps.** `fetch_catering_pulse.py`
+  executed top-level environment variable resolution and `print(Loaded Gemini API Key...)`
+  on import. When `check_pulse_health.py` imported date parsing helpers in steps without
+  `GEMINI_API_KEY`, it emitted a misleading `len: 0` message into the CI logs.
+  - **Action**: Converted key resolution to lazy `get_gemini_api_key()` function and moved
+    the logging call into `update_pulse_daily()`.
+- **Candidate Pool & Fault-Tolerance Hardening**:
+  - Added non-banquet cold drinks/ice cream (`smoothie`, `milkshake`, `frappe`, `slushie`,
+    `parfait`, `ice cream`, `popsicle`) to `_EXCLUDE_TERMS` to keep candidate queue focused
+    on authentic Cantonese/Khmer banquet dishes.
+  - Increased verified live candidate buffer from 3 to 5 items (`len(valid_candidates) >= 5`).
+  - Increased single-run `API_CALL_BUDGET` from 10 to 15 calls to ensure fallback headroom.
+  - Clarified retry prompt instructions for 4-section `###` heading structure.
+- **Verification**:
+  - `python scripts/check_pulse_health.py --max-age-days 2`: 0 key log noise.
+  - `python scripts/check_content.py --strict`: 15 articles, 0 errors, 0 warnings.
+  - `npm run build`: 56 pages generated with 0 errors.
+
 ## 2026-08-18 (Pulse Feed Hijack Mitigation, Candidate Fallback Loop, GA4 Job Retirement, 301 Redirect Consolidation)
 
 - **[REGRESSION] Dormant feed compromised with non-culinary spam.** `Cambodia Recipe`

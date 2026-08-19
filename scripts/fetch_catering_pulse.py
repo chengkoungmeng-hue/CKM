@@ -12,15 +12,29 @@ from email.utils import format_datetime, parsedate_to_datetime
 
 sys.stdout.reconfigure(encoding='utf-8')
 
-# Load GEMINI_API_KEY from environment or .env file
-env_key = os.environ.get("GEMINI_API_KEY", "")
-if not env_key and os.path.exists(".env"):
-    with open(".env", "r", encoding="utf-8") as f:
-        for line in f:
-            if line.startswith("GEMINI_API_KEY="):
-                env_key = line.strip().split("=", 1)[1]
+_cached_gemini_key = None
 
-print(f"Loaded Gemini API Key for Pulse Pipeline (len: {len(env_key)})", flush=True)
+
+def get_gemini_api_key():
+    """Retrieve GEMINI_API_KEY lazily from environment or .env file.
+
+    Cached after the first resolution so subsequent calls avoid disk/env overhead.
+    Kept lazy so importing date/width utility functions from this script does not
+    emit misleading '(len: 0)' messages into CI logs in steps without API keys.
+    """
+    global _cached_gemini_key
+    if _cached_gemini_key is not None:
+        return _cached_gemini_key
+
+    key = os.environ.get("GEMINI_API_KEY", "").strip().strip("\"'").strip()
+    if not key and os.path.exists(".env"):
+        with open(".env", "r", encoding="utf-8") as f:
+            for line in f:
+                if line.startswith("GEMINI_API_KEY="):
+                    key = line.strip().split("=", 1)[1].strip().strip("\"'").strip()
+    _cached_gemini_key = key
+    return _cached_gemini_key
+
 
 # Sources are chosen to match what CKM actually cooks: Khmer heritage dishes and
 # Cantonese/Teochew banquet cuisine. The previous set (Just One Cookbook, Epicurious,
@@ -153,6 +167,7 @@ _EXCLUDE_TERMS = (
     r'cobbler|mac and cheese|hot dog|taco|bourbon|viking|cherry cake|cherry cobbler|'
     r'cherry pie|casserole|pancakes|waffles|sandwich|edinburgh|western recipe|western food|'
     r'tiramisu|croissant|brownie|cupcake|pasta|spaghetti|lasagna|risotto|gnocchi|fettuccine|macaroni|'
+    r'smoothie|milkshake|frappe|slushie|parfait|ice cream|popsicle|'
     # Vietnamese — excluded on geopolitical grounds, not culinary ones
     r'vietnam|vietnamese|saigon|hanoi|da nang|hue|pho|com tam|goi cuon|banh mi|banh xeo|'
     r'banh cuon|bun bo|bun cha|cha gio|nuoc cham|nuoc mam|summer roll|rice paper roll|'
@@ -532,7 +547,7 @@ MODEL_LADDER = [
     "gemini-3.5-flash",
     "gemini-3.5-flash-lite",
 ]
-API_CALL_BUDGET = 10          # hard ceiling for a single pipeline run
+API_CALL_BUDGET = 15          # hard ceiling for a single pipeline run
 
 # The old gate was 450 characters — far below anything the model has ever returned
 # (real output runs ~1,900), so it never rejected a single thin response. Set it where
@@ -571,8 +586,8 @@ RETRY_GUIDANCE = {
         "The content_km field was truncated or too short. Emit the full 450-600 Khmer "
         "words as valid JSON, and do not stop early.",
     "generation-unstructured":
-        "The content_km field did not contain four markdown subheadings. Give each of the "
-        "four sections its own '##' Khmer subheading.",
+        "The content_km field did not contain four markdown subheadings. Provide exactly four "
+        "sections, each preceded by its own descriptive '###' Khmer heading.",
     "foreign-script-in-output":
         "It contained non-Khmer characters. Every character of every Khmer field must be "
         "Khmer script. Check each word before you emit it.",
@@ -604,6 +619,7 @@ def _gemini_once(prompt, model, timeout=45):
         return None, "budget-exhausted"
     _api_calls_made += 1
 
+    api_key = get_gemini_api_key()
     # The key travels in the x-goog-api-key header, not `?key=`. Both authenticate, but a
     # key in the query string reaches proxy and access logs, and the `except` below turns
     # exceptions into strings — several urllib errors carry the request URL, which would
@@ -612,7 +628,7 @@ def _gemini_once(prompt, model, timeout=45):
     req = urllib.request.Request(
         url,
         data=json.dumps({"contents": [{"parts": [{"text": prompt}]}]}).encode("utf-8"),
-        headers={"Content-Type": "application/json", "x-goog-api-key": env_key},
+        headers={"Content-Type": "application/json", "x-goog-api-key": api_key},
         method="POST",
     )
     try:
@@ -638,7 +654,8 @@ def call_gemini_api_robust(prompt, min_content_len=300, start=0):
     attempts landed on the same model: a Khmer-quality regression in that one model was
     therefore permanent and unrecoverable, on a provider-side update with no warning.
     """
-    if not env_key:
+    api_key = get_gemini_api_key()
+    if not api_key:
         print("ERROR: GEMINI_API_KEY is missing!", flush=True)
         return None
 
@@ -944,7 +961,7 @@ def update_pulse_daily():
     unseen.sort(key=parse_feed_date, reverse=True)
 
     # Liveness is checked HERE, on the candidates about to be processed, rather than on
-    # every candidate during the fetch. Collect up to 3 live candidates so that if one
+    # every candidate during the fetch. Collect up to 5 live candidates so that if one
     # fails quality gates, the pipeline can fall back to the next dish.
     valid_candidates = []
     for cand in unseen:
@@ -953,7 +970,7 @@ def update_pulse_daily():
             cand["image_url"] = extract_image_multitier(
                 cand.get("_xml_item"), fallback_img, cand["link"])
             valid_candidates.append(cand)
-            if len(valid_candidates) >= 3:
+            if len(valid_candidates) >= 5:
                 break
         else:
             print(f"Candidate URL did not resolve, trying the next: {cand['link'][:70]}", flush=True)
@@ -987,6 +1004,9 @@ def update_pulse_daily():
                           archive_depth=depth_reached)
         print(f"::error::The pulse published nothing today (reason: {reason}).", flush=True)
         return 1
+
+    api_key = get_gemini_api_key()
+    print(f"Loaded Gemini API Key for Pulse Pipeline (len: {len(api_key)})", flush=True)
 
     successful_candidate = None
     title_km = summary_km = content_km = image_alt = ""
