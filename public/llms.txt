@@ -55,10 +55,11 @@ with the owner, not published. Please do not infer them from this file.
 - [អាថ៌កំបាំងស៊ុបប៉ាវហឺប្រណីត ក្នុងពិធីមង្គលការខ្មែរ-ចិន៖ គុណតម្លៃ និងសិល្បៈនៃការចម្អិន](https://ckmkh.com/blog/15-luxury-abalone-banquet-soup/)
   ការវិភាគជម្រៅអំពីស៊ុបប៉ាវហឺប្រណីតក្នុងពិធីមង្គលការខ្មែរ-ចិន គុណតម្លៃសិរីមង្គល និងបច្ចេកទេសរំងាស់ទឹកស៊ុបដ៏មានឱជារសសម្រាប់ទទួលភ្ញៀវកិត្តិយស។
 
-## Daily culinary notes (31)
+## Daily culinary notes (32)
 
 Short Khmer pieces on cooking technique, published daily and indexed at https://ckmkh.com/pulse/.
 
+- [គន្លឹះគ្រប់គ្រងកម្ដៅបំពងខ្ទឹមសឱ្យក្រអូបជ្រាបចូលសាច់ប្រេង](https://ckmkh.com/pulse/garlic-oil-suan-tou-you/)
 - [បច្ចេកទេសឆាគ្រឿងផ្អាប់តៅស៊ីជាមួយបង្គាស្រស់](https://ckmkh.com/pulse/cantonese-shrimp-with-black-bean-sauce/)
 - [គន្លឹះរក្សាសំណើមស៊ុតដោយប្រើកម្តៅបន្ទាប់បន្សំ](https://ckmkh.com/pulse/scrambled-eggs-with-shiso/)
 - [ការទាញជាតិសំណើមពីផ្លែម្នាស់សម្រាប់ស្នូលនំដុត](https://ckmkh.com/pulse/taiwanese-pineapple-cake/)
@@ -78,8 +79,7 @@ Short Khmer pieces on cooking technique, published daily and indexed at https://
 - [ជ្រូកខ្វៃស្បែកស្រួយ៖ បច្ចេកទេសអាំងសម្រាប់ពិធីការ](https://ckmkh.com/pulse/tender-crispy-roast-pork-chops-pulse-11/)
 - [អាមុកត្រីរាជវាំងខ្មែរ: សិល្បៈនៃគ្រឿងកែច្នៃ និងខ្ទិះដូងប្រណីត](https://ckmkh.com/pulse/mango-chicken-summer-rolls-pulse-12/)
 - [ម្ទេសផ្លោកញាត់សាច់ជ្រូកអាំង៖ រសជាតិអាស៊ីប្រពៃណី](https://ckmkh.com/pulse/korean-style-stuffed-peppers-pulse-13/)
-- [សាច់គោអាំង និងទឹកស៊ុបដាស៊ីបែបជប៉ុន](https://ckmkh.com/pulse/steak-with-dashi-greens-for-one-pulse-14/)
-- …and 11 more at https://ckmkh.com/pulse/
+- …and 12 more at https://ckmkh.com/pulse/
 
 ## Contact
 
