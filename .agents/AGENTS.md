@@ -828,8 +828,6 @@ copy here only creates a place for the two to drift apart.
 to the global file in the same pass — it generalises beyond this project, and the incident
 it cites happened on Sunder.
 
-</RULE[project_scoped]>
-
 ## 21. Facebook Page — zero-link Khmer image-and-copy programme
 
 Decision 2026-08-19 (owner directive): CKM's social channel is the Facebook Page
@@ -863,3 +861,5 @@ keeps its historical `scripts/` references on purpose.
   the GSC raw dump, the width table, screenshots).
 - Broader one-off exploration still lives in `scratch/`, which is ignored wholesale.
 - `devops/README.md` lists every tool, its purpose, and how it is invoked.
+
+</RULE[project_scoped]>

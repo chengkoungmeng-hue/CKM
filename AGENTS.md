@@ -1,7 +1,7 @@
 # CKM — Agent Entry Point
 
 **開始工作前,先完整讀取 [`.agents/AGENTS.md`](.agents/AGENTS.md)。** 那是本專案規則的唯一真本
-(20 個章節,涵蓋高棉文完整性、機密處理、Pulse 管線、實測搜尋需求與品牌語調)。
+(涵蓋高棉文完整性、機密處理、Pulse 管線、實測搜尋需求與品牌語調)。
 
 ## 規則層級
 
@@ -15,4 +15,5 @@
 - 標記 `[REGRESSION]` 的規則對應真實上線過的缺陷,不要簡化掉。
 - 提交內容前執行 `python devops/check_content.py`。`npm run build` 會以 `--strict` 再跑一次,
   CI 的 `.github/workflows/content_gate.yml` 才是真正的閘門(Cloudflare Pages 在 merge 之後才建置)。
-- 本專案沒有 skills。`.agents/skills/` 已於 2026-08-14 移除,不要重建。
+- 專案 skill 只有一個:`.agents/skills/ckm-seo/`(僅放執行層,不復述規則;衝突時以
+  `.agents/AGENTS.md` 為準)。邊界政策見 `.agents/AGENTS.md` §0,未依該政策記錄前勿另建 skills。
