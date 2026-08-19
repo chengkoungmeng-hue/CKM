@@ -58,7 +58,7 @@ jobs:
         id: pulse
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: python scripts/fetch_catering_pulse.py
+        run: python devops/fetch_catering_pulse.py
 
       # Gemini has previously returned Khmer text with Thai and Chinese fragments
       # spliced in. Those cannot render in Hanuman and shipped as tofu boxes.
@@ -69,11 +69,11 @@ jobs:
       # at all and had drifted to containing zero of the site's 42 URLs.
       - name: Regenerate llms.txt from the new content
         if: steps.pulse.outputs.changed == 'true'
-        run: python scripts/generate_llms_txt.py
+        run: python devops/generate_llms_txt.py
 
       - name: Validate content before publishing
         if: steps.pulse.outputs.changed == 'true'
-        run: python scripts/check_content.py --strict
+        run: python devops/check_content.py --strict
 
       - name: Commit & push (triggers Cloudflare Pages deployment)
         id: commit
@@ -141,4 +141,4 @@ jobs:
       # couple of bad Gemini days cannot cause a false alarm.
       - name: Stall detector
         if: always()
-        run: python scripts/check_pulse_health.py --max-age-days 2
+        run: python devops/check_pulse_health.py --max-age-days 2

@@ -1,4 +1,4 @@
-// scripts/cloudflare_audit.js
+// devops/cloudflare_audit.js
 import fs from 'fs';
 import path from 'path';
 
@@ -111,7 +111,7 @@ async function auditCloudflareDeep() {
     }
   };
 
-  const reportPath = path.join(process.cwd(), 'scripts', 'cloudflare_audit_summary.json');
+  const reportPath = path.join(process.cwd(), 'devops', 'reports', 'cloudflare_audit_summary.json');
   fs.writeFileSync(reportPath, JSON.stringify(auditReport, null, 2), 'utf-8');
   console.log(`\n✅ Deep Audit Complete! Report saved to ${reportPath}`);
 }

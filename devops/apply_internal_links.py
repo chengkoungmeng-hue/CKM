@@ -24,8 +24,8 @@ Safety rules, all enforced before any write:
   - the emitted URL always ends in "/" (AGENTS.md section 3: a missing slash costs a 301)
   - already-applied links are detected and skipped, so re-running changes nothing
 
-    python scripts/apply_internal_links.py            # apply
-    python scripts/apply_internal_links.py --check    # verify only, exit 1 on problems
+    python devops/apply_internal_links.py            # apply
+    python devops/apply_internal_links.py --check    # verify only, exit 1 on problems
 """
 import json
 import os

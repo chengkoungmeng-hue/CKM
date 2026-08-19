@@ -239,7 +239,7 @@ async function runAudit() {
   await browser.close();
 
   // Save audit results to JSON artifact
-  const reportPath = path.join(process.cwd(), 'scripts', 'audit_summary.json');
+  const reportPath = path.join(process.cwd(), 'devops', 'reports', 'audit_summary.json');
   fs.writeFileSync(reportPath, JSON.stringify(auditResults, null, 2), 'utf-8');
   console.log(`\n✅ Audit complete! Full data saved to ${reportPath}`);
 }

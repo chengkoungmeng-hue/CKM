@@ -8,8 +8,8 @@ Every rule here exists because the bug it catches was found in the live repo, no
 because it seemed like a good idea. Keep it that way: do not add speculative rules.
 
 Usage:
-    python scripts/check_content.py           # report only, exit 0
-    python scripts/check_content.py --strict  # exit 1 on any ERROR (use in CI)
+    python devops/check_content.py           # report only, exit 0
+    python devops/check_content.py --strict  # exit 1 on any ERROR (use in CI)
 
 Runs in well under a second over the whole content tree.
 """
@@ -258,7 +258,7 @@ def check_frontmatter(path, text):
 # familiar "60 characters for a title, 155 for a description" advice is a Latin proxy
 # for a pixel budget, so for Khmer it has to be converted back into one.
 #
-# Both obvious shortcuts are wrong, and measurably so (scripts/build_width_table.cjs,
+# Both obvious shortcuts are wrong, and measurably so (devops/build_width_table.cjs,
 # measured 2026-08-16 in headless Chromium):
 #
 #   len(s)              treats every codepoint as one Latin character
@@ -281,7 +281,7 @@ def check_frontmatter(path, text):
 #
 # So the widths are measured per codepoint and baked in below. Unit: 1.0 is the average
 # advance of a Latin character in the same font and size. Regenerate with
-# scripts/build_width_table.cjs if the budget ever looks wrong.
+# devops/build_width_table.cjs if the budget ever looks wrong.
 #
 # Caveat worth keeping in mind: this table is one font's metrics (Chromium's Khmer
 # fallback at 20px). Google renders the SERP in its own font, so the table is a much
@@ -633,7 +633,7 @@ def check_llms_txt():
         path = os.path.join(ROOT, rel)
         if not os.path.isfile(path):
             warn("llms-missing", rel, 1,
-                 "file is absent — run scripts/generate_llms_txt.py")
+                 "file is absent — run devops/generate_llms_txt.py")
             continue
         text = read(path)
         for pat, label in LLMS_FORBIDDEN:
@@ -674,7 +674,7 @@ def check_internal_links(path, text):
         err("too-few-internal-links", path, 1,
             "%d in-context /blog/ link(s); AGENTS.md 14 requires at least %d. "
             "Declare them in src/data/internalLinks.json and run "
-            "scripts/apply_internal_links.py" % (len(links), INTERNAL_LINK_FLOOR))
+            "devops/apply_internal_links.py" % (len(links), INTERNAL_LINK_FLOOR))
 
 
 # ---------------------------------------------------------------- rule 11

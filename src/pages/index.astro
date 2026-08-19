@@ -77,7 +77,7 @@ const faqSchema = JSON.stringify({
 ---
 <!--
   Title/description ordering is driven by measured GSC data (2026-05-15→08-12, see
-  scripts/gsc_query_report.py). The brand name used to lead the title; for the only
+  devops/gsc_query_report.py). The brand name used to lead the title; for the only
   query with real volume — `ម្ហូបការ`, 240 impressions / position 3.95 — that spent
   the most valuable characters in the SERP on a name nobody searched. Keyword first,
   brand last, so truncation eats the brand and not the term.
@@ -87,7 +87,7 @@ const faqSchema = JSON.stringify({
   The description is kept under 155 DISPLAY UNITS, not 155 characters. Layout.astro's
   truncateKhmer is a cluster-safety net that counts codepoints, and a 150-codepoint
   Khmer line measures ~156 units — it would sail through the net and still be cut by
-  Google. scripts/check_content.py measures the real thing; keep this line under it.
+  Google. devops/check_content.py measures the real thing; keep this line under it.
   The old description was 200+ chars and shipped cut mid-word ("ស៊ុ...").
 -->
 <Layout title="សេវាកម្មម្ហូបការ ភ្នំពេញ | ចេង គួងម៉េង (CKM)" description="សេវាកម្មម្ហូបការមង្គលការនៅភ្នំពេញ ដោយ ចេង គួងម៉េង។ មានម៉ឺនុយ ៨ មុខប្រពៃណី កូនជ្រូកខ្វៃ និងស៊ុបប៉ាវហឺ ព្រមទាំងសេវាកម្មរៀបចំទីតាំង។" lang="km-KH">

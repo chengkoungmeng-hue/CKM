@@ -87,7 +87,7 @@ const server = http.createServer((req, res) => {
   // Re-focus the skip link so the screenshot shows it.
   await page.goto(url); await page.keyboard.press('Tab');
   await page.screenshot({ path: path.join(__dirname, 'reports', 'skip_link.png'), clip: { x: 0, y: 0, width: 640, height: 160 } });
-  console.log('screenshot: scripts/reports/skip_link.png');
+  console.log('screenshot: devops/reports/skip_link.png');
 
   await browser.close();
   server.close();

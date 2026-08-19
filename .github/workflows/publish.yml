@@ -166,14 +166,14 @@ jobs:
           if [ -n "$slug" ]; then
             # A pulse publish: the new page, the listing it appears on, and the homepage
             # which shows the latest three.
-            python scripts/notify_indexing.py --urls \
+            python devops/notify_indexing.py --urls \
               "https://ckmkh.com/pulse/$slug/" \
               "https://ckmkh.com/pulse/" \
               "https://ckmkh.com/"
           else
             # A hand-written edit: derive the affected URLs from the commit itself,
             # falling back to the full inventory if the diff yields nothing recognisable.
-            python scripts/notify_indexing.py --changed
+            python devops/notify_indexing.py --changed
           fi
 
       - name: Remove credential file

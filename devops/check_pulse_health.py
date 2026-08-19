@@ -14,7 +14,7 @@ Exit 1 when the newest entry is older than the threshold. Intended to run as its
 workflow step with `if: always()`, AFTER the commit step, so it never blocks a publish
 that did succeed.
 
-    python scripts/check_pulse_health.py [--max-age-days N] [--quiet]
+    python devops/check_pulse_health.py [--max-age-days N] [--quiet]
 """
 import json
 import os

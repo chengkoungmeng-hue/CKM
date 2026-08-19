@@ -7,7 +7,7 @@
 
 ## About this file
 
-This index is generated from the site's own content by `scripts/generate_llms_txt.py`.
+This index is generated from the site's own content by `devops/generate_llms_txt.py`.
 Do not hand-edit it; edit the source and regenerate.
 
 Specific commitments — prices, table counts, service areas, equipment, exact timings —

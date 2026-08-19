@@ -223,7 +223,7 @@ async function runFullAudit() {
   await browser.close();
 
   // Save structured JSON audit report
-  const jsonReportPath = path.join(process.cwd(), 'scripts', 'astro_full_browser_audit_results.json');
+  const jsonReportPath = path.join(process.cwd(), 'devops', 'reports', 'astro_full_browser_audit_results.json');
   fs.writeFileSync(jsonReportPath, JSON.stringify(auditData, null, 2), 'utf-8');
   console.log(`\n✅ Full Audit complete! Saved structured report to ${jsonReportPath}`);
 }

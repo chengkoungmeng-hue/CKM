@@ -63,7 +63,7 @@ jobs:
           # The script exits non-zero on any API failure by design, so a broken
           # credential turns this run red instead of producing a plausible-looking
           # report full of nothing.
-          python scripts/gsc_query_report.py --days "$days" | tee report.txt
+          python devops/gsc_query_report.py --days "$days" | tee report.txt
 
       - name: Publish to the job summary
         if: always()
@@ -84,7 +84,7 @@ jobs:
           name: search-report
           path: |
             report.txt
-            scripts/reports/gsc_search_queries.json
+            devops/reports/gsc_search_queries.json
           if-no-files-found: warn
           retention-days: 90
 

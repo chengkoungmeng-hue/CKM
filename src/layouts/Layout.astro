@@ -35,7 +35,7 @@ if (finalDescription.trim().length === 0) {
 // Google shows. Back off to a cluster boundary, and prefer a space if one is near.
 //
 // The real length budget is enforced upstream in units of rendered width by
-// scripts/check_content.py, which every blog description now passes. This is the
+// devops/check_content.py, which every blog description now passes. This is the
 // safety net for descriptions that do not come from the content collection.
 // Escapes, not literals: these are invisible combining marks and a copy-paste that
 // drops one is undetectable by eye.

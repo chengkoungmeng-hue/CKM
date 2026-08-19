@@ -4,9 +4,9 @@ No fallbacks, no synthetic numbers: if the API call fails the script exits non-z
 so a caller can never mistake a placeholder for a measurement.
 
 Usage:
-    python scripts/gsc_query_report.py [--days 90] [--end YYYY-MM-DD]
+    python devops/gsc_query_report.py [--days 90] [--end YYYY-MM-DD]
 
-Writes scripts/reports/gsc_search_queries.json and prints a console summary.
+Writes devops/reports/gsc_search_queries.json and prints a console summary.
 """
 
 import argparse
@@ -146,7 +146,7 @@ def main():
         if "page" in rec:
             rec["path"] = rec["page"].replace("https://ckmkh.com", "") or "/"
 
-    out_path = os.path.join("scripts", "reports", "gsc_search_queries.json")
+    out_path = os.path.join("devops", "reports", "gsc_search_queries.json")
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as fh:
         json.dump(data, fh, ensure_ascii=False, indent=2)

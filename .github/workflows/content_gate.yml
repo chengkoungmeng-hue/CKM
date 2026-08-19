@@ -15,13 +15,13 @@ on:
       - 'src/content/**'
       - 'src/data/**'
       - 'public/llms*.txt'
-      - 'scripts/check_content.py'
+      - 'devops/check_content.py'
   pull_request:
     paths:
       - 'src/content/**'
       - 'src/data/**'
       - 'public/llms*.txt'
-      - 'scripts/check_content.py'
+      - 'devops/check_content.py'
   workflow_dispatch:
 
 jobs:
@@ -40,4 +40,4 @@ jobs:
       # No pip install: check_content.py is deliberately dependency-free so this
       # job stays a few seconds and cannot fail for reasons unrelated to content.
       - name: Check content
-        run: python scripts/check_content.py --strict
+        run: python devops/check_content.py --strict

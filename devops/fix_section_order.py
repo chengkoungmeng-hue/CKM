@@ -11,8 +11,8 @@ This is a pure block move. It rewrites no Khmer, so the safety property worth en
 is that the file's content is a permutation of itself: the script refuses to write
 unless the sorted multiset of lines is identical before and after.
 
-    python scripts/fix_section_order.py --check   # report only
-    python scripts/fix_section_order.py           # rewrite
+    python devops/fix_section_order.py --check   # report only
+    python devops/fix_section_order.py           # rewrite
 """
 import glob
 import os

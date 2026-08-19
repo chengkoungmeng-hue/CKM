@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "check": "node scripts/run_content_check.mjs",
+    "check": "node devops/run_content_check.mjs",
     "build": "npm run check && astro check && astro build",
     "//build:deploy": "For build environments without Python 3 (e.g. a Cloudflare Pages image that lacks it). Content is already gated by the content-gate CI workflow before anything reaches main, so this skips only a check that has already run — it is not a way to bypass the gate locally.",
     "build:deploy": "astro check && astro build",

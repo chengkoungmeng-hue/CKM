@@ -15,6 +15,6 @@
 
 - 規則描述的是程式碼**現在實際的行為**,不是理想狀態。改動行為時,在同一個 commit 內更新規則。
 - 標記 `[REGRESSION]` 的規則對應真實上線過的缺陷,不要簡化掉。
-- 提交內容前執行 `python scripts/check_content.py`。`npm run build` 會以 `--strict` 再跑一次,
+- 提交內容前執行 `python devops/check_content.py`。`npm run build` 會以 `--strict` 再跑一次,
   CI 的 `.github/workflows/content_gate.yml` 才是真正的閘門(Cloudflare Pages 在 merge 之後才建置)。
 - 本專案沒有 skills。`.agents/skills/` 已於 2026-08-14 移除,不要重建。

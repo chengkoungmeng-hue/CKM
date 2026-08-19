@@ -1,5 +1,25 @@
 # Work Log
 
+## 2026-08-20 (devops/ Consolidation, ckm-seo Skill Under Revised Skills Policy)
+
+- Renamed `scripts/` to `devops/` (22 tracked renames, 0 deletions); generated
+  artifacts now write to gitignored `devops/reports/`; one-off seeders moved to
+  gitignored `devops/local/`. All 5 workflows, package.json, AGENTS.md (15
+  references) and docs updated; every tool re-run from repo root, exit 0.
+- Reinstated ONE project skill, `.agents/skills/ckm-seo/` (Khmer FB playbook,
+  on-site SEO, platform mechanics dated 2026-08-19), under the revised §0 Skills
+  policy: AGENTS.md keeps all rules; the skill holds execution material only.
+  `.claude/skills` junction added.
+
+## 2026-08-19 (Facebook Page Zero-Link Content Programme, §21)
+
+- Owner directive: social presence runs on the Facebook Page as Khmer image+copy
+  posts optimizing reach and follows; zero links (consistent with §19). Each post
+  ships as Khmer copy + zh-TW review translation + English image prompt.
+- Added §21 to `.agents/AGENTS.md`; execution uses the shared user-level skill
+  `community-content-engine` (`~/.agents/skills/`, junctioned into
+  `~/.claude/skills` and `~/.gemini/config/skills/`).
+
 ## 2026-08-19 (Pulse Pipeline Fault-Tolerance Hardening, Lazy Key Loading, Candidate Pool Expansion)
 
 - **[REGRESSION] Module-level API key logging polluted CI steps.** `fetch_catering_pulse.py`

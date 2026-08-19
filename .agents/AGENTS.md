@@ -11,7 +11,7 @@
 - If you change behaviour that a rule describes, update the rule in the same commit.
 - Rules marked **[REGRESSION]** exist because that exact bug shipped to production.
   Do not "simplify" them away.
-- Run `python scripts/check_content.py` before committing content. It enforces the
+- Run `python devops/check_content.py` before committing content. It enforces the
   mechanical half of this file in under a second. `npm run build` runs it with `--strict`
   and fails on any error, and `.github/workflows/content_gate.yml` runs it on every push
   and PR touching content — Cloudflare Pages builds *after* merge, so CI is the real gate.
@@ -20,14 +20,15 @@
   its verification script used the same regex, so the script reported real breakage as a
   false positive. Confirm frontmatter budgets against rendered `dist/` HTML, `llms.txt`
   against built routes, and UI behaviour in a real browser.
-- **This project has no skills.** `.agents/skills/` was removed on 2026-08-14. The five
-  that existed either duplicated this file (`ckm_blog_writer`, `ckm_pulse_writer`),
-  restated a spec that actually lives in code (`ckm_pulse_writer` again), or were generic
-  audit checklists that would generate plausible findings untethered from the measured
-  data in §18 (`local_seo_analyzer`, `audience_analyzer`). `ckm_backlink_writer` described
-  a programme this project has decided not to run — see §19. Everything worth keeping was
-  merged into this file. **Do not recreate them.** A skill is instructions an agent
-  executes, so a stale one is more dangerous than a stale document.
+- **Skills policy (revised 2026-08-20).** `.agents/skills/` was removed on 2026-08-14:
+  the five skills either duplicated this file, restated specs that live in code, or were
+  generic audit checklists producing findings untethered from §18's measured data, and
+  `ckm_backlink_writer` described a programme §19 rejects. On 2026-08-20 the owner
+  reinstated ONE skill, `ckm-seo`, under a strict boundary: this file stays the only home
+  of RULES; the skill holds only execution material (Khmer FB voice, image prompts,
+  platform mechanics with research dates, expired after 6 months). The skill must never
+  restate a rule from this file; on conflict this file wins. Do not create further
+  skills without recording the same boundary here.
 - **Prefer measuring over reasoning.** Nearly every error found on 2026-08-14 — a
   fabricated audit script, a cache purge silently failing for want of a permission, a
   secret that reported success while still holding the old credential — was invisible to
@@ -251,7 +252,7 @@ reach Khmer readers as tofu boxes. `ដើមីបី` (for `ដើម្បី
 a meta description that renders in the Google result.
 
 - Khmer copy contains Khmer, Latin and Khmer numerals only.
-- `scripts/check_content.py` fails the build on any Thai / Devanagari / CJK / Kana
+- `devops/check_content.py` fails the build on any Thai / Devanagari / CJK / Kana
   codepoint in an article or in a Khmer pulse field.
 - The pulse generator rejects a Gemini response containing foreign script rather than
   publishing it. Do not downgrade that to silent stripping — removing a Chinese word from
@@ -277,7 +278,7 @@ a meta description that renders in the Google result.
   advance width and a subscript after COENG costs 0.113 instead of 1.6–2.0. The errors
   nearly cancel — mean ratio 1.03 — so `len()` looks right while being ±11% wrong per
   article. It would have missed 4 of the 6 real violations found that day. The per-codepoint
-  table in `check_content.py` came from a browser (`scripts/build_width_table.cjs`) and
+  table in `check_content.py` came from a browser (`devops/build_width_table.cjs`) and
   reproduces it within 2.6%.
 - **[REGRESSION] Truncate Khmer on cluster boundaries, never on a codepoint index.**
   `Layout.astro` used `slice(0, 152)` for the meta description; 9.1% of cut points split a
@@ -338,7 +339,7 @@ Every item below came out of an audit of the 15 live articles.
   before an administrative note. This rule previously named articles 02, 03, 04, 10, 11
   and 12. **Measured 2026-08-15, thirteen of fifteen were non-conforming** — 02–08 and
   10–12 and 14–15 had the conclusion first, and 13 had no conclusion at all. Only 01 and
-  09 were correct. All fixed; `scripts/fix_section_order.py --check` re-verifies in a
+  09 were correct. All fixed; `devops/fix_section_order.py --check` re-verifies in a
   second and refuses to write unless the file's content is a permutation of itself, so it
   can only ever move blocks, never alter Khmer.
   *A rule that names specific files goes stale silently. Prefer a checker.*
@@ -350,7 +351,7 @@ Every item below came out of an audit of the 15 live articles.
   article 16 cannot ship the same way.
 - **Internal links are declared, not pattern-matched.** `src/data/internalLinks.json` names
   the article, an EXACT anchor string that already exists in that article's prose, and the
-  destination; `scripts/apply_internal_links.py` wraps it. It is idempotent and refuses any
+  destination; `devops/apply_internal_links.py` wraps it. It is idempotent and refuses any
   anchor that is not unique or that sits in a heading, a table row or an existing link.
   **Do not port a keyword-regex injector.** Sunder's `apply_internal_links.cjs` corrupted
   130 places across 53 files by replacing `（TCO）` with a space-prefixed `[TCO](…)`, and
@@ -443,7 +444,7 @@ Every item below came out of an audit of the 15 live articles.
 - Nothing in the workflow runs JavaScript. Do not reintroduce `setup-node` / `npm ci`.
 - Feed sources currently produce Western and Japanese home recipes, which sit oddly under
   a Khmer-Chinese banquet brand. Prefer sources matching the brand's actual cuisine.
-- **The prompt and the category taxonomy live in `scripts/fetch_catering_pulse.py`, not in
+- **The prompt and the category taxonomy live in `devops/fetch_catering_pulse.py`, not in
   documentation.** The retired `ckm_pulse_writer` skill restated both, which meant two
   descriptions of one thing that could drift apart with nothing to catch it. Read the
   script. The four Khmer categories are defined around lines 35–48; the generation prompt
@@ -545,8 +546,8 @@ not parked in `.env` between uses.
 Run this before claiming any credential is needed:
 
 ```bash
-grep -rhoE "os\.(getenv|environ(\.get)?)\(\s*[\"'][A-Z_0-9]+[\"']" scripts/ src/
-grep -rhoE "(process\.env|import\.meta\.env)\.[A-Z_0-9]+" src/ scripts/
+grep -rhoE "os\.(getenv|environ(\.get)?)\(\s*[\"'][A-Z_0-9]+[\"']" devops/ src/
+grep -rhoE "(process\.env|import\.meta\.env)\.[A-Z_0-9]+" src/ devops/
 grep -rhoE "secrets\.[A-Z_0-9]+" .github/workflows/
 ```
 
@@ -582,7 +583,7 @@ submit indexing. Verified 2026-08-16 — the local key resubmitting a sitemap re
 while `gsc_query_report.py` returns live data.
 
 ```bash
-grep -rhoE "https://[a-z0-9.-]*googleapis\.com/[a-zA-Z0-9/._-]*" --include=*.py --include=*.js scripts/ | sort -u
+grep -rhoE "https://[a-z0-9.-]*googleapis\.com/[a-zA-Z0-9/._-]*" --include=*.py --include=*.js devops/ | sort -u
 #   https://www.googleapis.com/webmasters/v3/…          -> Search Console
 #   https://generativelanguage.googleapis.com/…         -> Gemini (AI Studio key, different project)
 ```
@@ -616,7 +617,7 @@ for the rest. Re-enabling is one click.
     -H "Authorization: Bearer $CF_TOKEN"
   ```
 
-- **[REGRESSION] `scripts/apply_cf_settings.py` replaces rulesets, it does not add to
+- **[REGRESSION] `devops/apply_cf_settings.py` replaces rulesets, it does not add to
   them.** Each `put_ruleset_phase()` is a `PUT` on the phase entrypoint, and each phase in
   that file holds exactly one rule. Running it silently deletes every rule added through
   the dashboard since it was last edited. Change Cloudflare settings in the dashboard;
@@ -631,7 +632,7 @@ for the rest. Re-enabling is one click.
 - Anyone who can push a workflow to this repo can exfiltrate every secret in it (masking
   only matches the raw string; base64 defeats it). Repo write access **is** secret access.
 - Never write a live token into `WORKLOG.md`, this file, or any tracked file.
-  `scripts/check_content.py` scans for common credential patterns and fails on a hit.
+  `devops/check_content.py` scans for common credential patterns and fails on a hit.
 
 ### If a secret is exposed anyway
 
@@ -654,13 +655,13 @@ credentials is the user's action — never do it for them, and never enter crede
 2026-08-14 and is reproducible:
 
 ```bash
-python scripts/gsc_query_report.py --days 90
+python devops/gsc_query_report.py --days 90
 ```
 
-- **`scripts/gsc_query_report.py` is the only trustworthy analytics script.** It exits
+- **`devops/gsc_query_report.py` is the only trustworthy analytics script.** It exits
   non-zero on an API failure, so a caller can never mistake a placeholder for a
-  measurement. Raw output lands in `scripts/reports/gsc_search_queries.json`.
-- **[REGRESSION] Never rebuild `scripts/generate_analytics_report.py`.** The script was
+  measurement. Raw output lands in `devops/reports/gsc_search_queries.json`.
+- **[REGRESSION] Never rebuild `devops/generate_analytics_report.py`.** The script was
   deleted in `6292696` ("delete the fabricated analytics scripts and their output") and
   verified gone on 2026-08-17; this rule records *why*, so nobody writes it again. It fell
   back to hardcoded numbers (`35` clicks / `1369` impressions / `2.56%` / `6.43`) that were
@@ -828,3 +829,37 @@ to the global file in the same pass — it generalises beyond this project, and 
 it cites happened on Sunder.
 
 </RULE[project_scoped]>
+
+## 21. Facebook Page — zero-link Khmer image-and-copy programme
+
+Decision 2026-08-19 (owner directive): CKM's social channel is the Facebook Page
+(粉絲團), run as image + copy posts in Khmer. Goals are reach and follower
+accumulation on-platform; no traffic funneling.
+
+- **Zero links in posts.** No URLs, no "search for X" hints; the Page name and
+  profile are the brand asset. Consistent with §19 (backlinks dropped).
+- **Every post ships as a triple**: (1) Khmer copy — native, colloquial,
+  pain-point or interest-first for wedding/banquet audiences; (2) zh-TW
+  line-by-line translation for owner review before publishing; (3) an English
+  image-generation prompt (luxury banquet food / table-setting close-ups).
+- **Engagement without bait**: invite comments through genuine questions or
+  useful specifics (menus, seasonal dishes, planning tips) — Meta demotes
+  explicit engagement bait. Khmer-only on the public side, per §2.
+- **Execution engine**: the project skill `.agents/skills/ckm-seo/`
+  (2026-08-20, moved in-project from the retired user-level engine). This file
+  overrides the skill where they conflict; see §0 Skills policy for the boundary.
+
+## 22. Tooling lives in `devops/`
+
+Renamed from `scripts/` on 2026-08-20. Every workflow, `package.json`, this file, `Docs/`
+and the two `public/llms*.txt` generator lines were updated in the same pass; `WORKLOG.md`
+keeps its historical `scripts/` references on purpose.
+
+- **Every tool in `devops/` is tracked, and `devops/` is never gitignored wholesale.** CI
+  invokes them out of the checkout, from the repo root — no workflow step sets
+  `working-directory`, so CWD-relative constants inside the scripts survive the rename.
+- **Exactly two subfolders are ignored**: `devops/local/` (one-off scratch — the three
+  retired pulse seeders moved there) and `devops/reports/` (generated output: audit JSON,
+  the GSC raw dump, the width table, screenshots).
+- Broader one-off exploration still lives in `scratch/`, which is ignored wholesale.
+- `devops/README.md` lists every tool, its purpose, and how it is invoked.

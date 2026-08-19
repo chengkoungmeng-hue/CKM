@@ -19,8 +19,8 @@ Facts are derived from the source of truth rather than retyped:
 If any of those cannot be parsed the script exits non-zero rather than emitting a file
 that looks fine and is quietly wrong.
 
-    python scripts/generate_llms_txt.py           # write
-    python scripts/generate_llms_txt.py --check   # exit 1 if the files are out of date
+    python devops/generate_llms_txt.py           # write
+    python devops/generate_llms_txt.py --check   # exit 1 if the files are out of date
 """
 import glob
 import json
@@ -122,7 +122,7 @@ PREAMBLE = """# CKM Catering (ចេង គួងម៉េង) — Sino-Khmer Ba
 
 ## About this file
 
-This index is generated from the site's own content by `scripts/generate_llms_txt.py`.
+This index is generated from the site's own content by `devops/generate_llms_txt.py`.
 Do not hand-edit it; edit the source and regenerate.
 
 Specific commitments — prices, table counts, service areas, equipment, exact timings —
@@ -213,7 +213,7 @@ def main(argv):
                   f"({len(content):,} bytes, {len(articles)} articles, {len(pulse)} notes)")
 
     if check_only and stale:
-        print("::error::llms.txt files are out of date — run scripts/generate_llms_txt.py")
+        print("::error::llms.txt files are out of date — run devops/generate_llms_txt.py")
         return 1
     return 0
 

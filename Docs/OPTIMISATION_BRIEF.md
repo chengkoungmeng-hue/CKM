@@ -51,7 +51,7 @@ Publish               輪詢新頁面直到 200 → 清 Cloudflare 快取 → In
 2026-08-14 那天所有候選都被過濾掉，整天沒有產出。
 
 解法是**增加中文來源**，不是放寬 `EXCLUDE_REGEX`。那些排除規則存在的原因寫在
-`scripts/fetch_catering_pulse.py` 的註解裡：先前的來源組合在高棉─中式宴席品牌底下
+`devops/fetch_catering_pulse.py` 的註解裡：先前的來源組合在高棉─中式宴席品牌底下
 產出了 Palm Springs 椰棗奶昔和波蘭奶油蛋糕。
 
 現有 5 個來源與各自產量記錄在同一個檔案的註解中。
@@ -108,7 +108,7 @@ remote 走 SSH：`git@github.com-chengkoungmeng:chengkoungmeng-hue/CKM.git`
 ```bash
 npx astro check      # 必須 0 errors
 npx astro build      # 必須成功，約 80 頁
-python scripts/check_content.py --strict
+python devops/check_content.py --strict
 ```
 
 ---

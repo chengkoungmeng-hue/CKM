@@ -67,6 +67,6 @@ const { chromium } = require('playwright');
     require('path').join(__dirname, 'reports', 'khmer_width_table.json'),
     JSON.stringify(table, null, 1)
   );
-  console.log('wrote scripts/reports/khmer_width_table.json');
+  console.log('wrote devops/reports/khmer_width_table.json');
   await browser.close();
 })();
