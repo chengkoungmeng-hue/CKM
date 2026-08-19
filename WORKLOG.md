@@ -15,8 +15,9 @@
   - Increased verified live candidate buffer from 3 to 5 items (`len(valid_candidates) >= 5`).
   - Increased single-run `API_CALL_BUDGET` from 10 to 15 calls to ensure fallback headroom.
   - Clarified retry prompt instructions for 4-section `###` heading structure.
+  - Promoted `gemini-3.7-flash` to the #1 position in `MODEL_LADDER` (ahead of `gemini-3.6-flash`) for superior instruction following, deeper Khmer culinary reasoning, and stricter schema adherence.
 - **Verification**:
-  - `python scripts/check_pulse_health.py --max-age-days 2`: 0 key log noise.
+  - `python scripts/check_pulse_health.py --max-age-days 2`: 0 key log noise, healthy.
   - `python scripts/check_content.py --strict`: 15 articles, 0 errors, 0 warnings.
   - `npm run build`: 56 pages generated with 0 errors.
 

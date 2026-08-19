@@ -542,8 +542,8 @@ def verify_live_url(url):
 # that a model going soft is absorbed rather than fatal, and that is exactly what these
 # logs show it doing. Change the order only on a measured, sustained shift.
 MODEL_LADDER = [
-    "gemini-3.6-flash",
     "gemini-3.7-flash",
+    "gemini-3.6-flash",
     "gemini-3.5-flash",
     "gemini-3.5-flash-lite",
 ]
