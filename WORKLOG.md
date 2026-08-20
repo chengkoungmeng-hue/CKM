@@ -16,6 +16,10 @@
   - **Root Cause**: `API_CALL_BUDGET` set to 15 was exhausted after 2 candidates (7 + 8 calls), starving subsequent candidates in the fallback queue.
   - **Action**: Synced `ALLOWED_RANGES` in `fetch_catering_pulse.py` to match `check_content.py` with `(0x00A0, 0x00FF)` Latin-1 supplement (supporting «, », é, ñ) and arrow/box drawing ranges. Updated prompt and `RETRY_GUIDANCE` to explicitly instruct `### ` prefix on section headings. Increased `API_CALL_BUDGET` to 25.
   - **Verification**: `npm run build` passed with 0 errors (58 static pages compiled).
+- **Facebook Founder/Admin Account Initialization (`KoungMeng Cheng`) & Anti-Ban Warm-up SOP**:
+  - Registered natural person Profile (`KoungMeng Cheng`, ID: `61593746811233`, born 1979) using authentic Cambodian on-site photos (landscape cover and garden Buddha avatar).
+  - Configured profile metadata: Living in Phnom Penh, Khmer/Chinese/English language tags, natural Khmer bio (`រស់នៅរាជធានីភ្នំពេញ ចូលចិត្តធ្វើម្ហូប`).
+  - Established 5-7 day warm-up protocol before creating Page assets (2FA security enforcement, 0 stranger friend requests, browsing/following local verified media `Fresh News` / `FoodBuzz Cambodia`, dedicated Chrome profile isolation).
 
 ## 2026-08-19 (Facebook Page Zero-Link Content Programme, §21)
 
