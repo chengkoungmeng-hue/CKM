@@ -372,8 +372,10 @@ ALLOWED_RANGES = [
     (0x1780, 0x17FF),   # Khmer
     (0x19E0, 0x19FF),   # Khmer symbols
     (0x0020, 0x007E),   # printable ASCII
-    (0x00A0, 0x00A0),   # nbsp
+    (0x00A0, 0x00FF),   # latin-1 supplement (é, ñ in source titles, « » quotes)
     (0x2000, 0x206F),   # general punctuation (…, —, quotes)
+    (0x2190, 0x21FF),   # arrows (used in markdown tables)
+    (0x2500, 0x25FF),   # box drawing / geometric (■ bullets in prose)
 ]
 ALLOWED_CHARS = set("\n\r\t")
 
@@ -547,7 +549,7 @@ MODEL_LADDER = [
     "gemini-3.5-flash",
     "gemini-3.5-flash-lite",
 ]
-API_CALL_BUDGET = 15          # hard ceiling for a single pipeline run
+API_CALL_BUDGET = 25          # hard ceiling for a single pipeline run
 
 # The old gate was 450 characters — far below anything the model has ever returned
 # (real output runs ~1,900), so it never rejected a single thin response. Set it where
@@ -586,8 +588,8 @@ RETRY_GUIDANCE = {
         "The content_km field was truncated or too short. Emit the full 450-600 Khmer "
         "words as valid JSON, and do not stop early.",
     "generation-unstructured":
-        "The content_km field did not contain four markdown subheadings. Provide exactly four "
-        "sections, each preceded by its own descriptive '###' Khmer heading.",
+        "The content_km field did not contain four markdown subheadings. Format each of the "
+        "four sections with a line starting with '### ' followed by a descriptive Khmer title.",
     "foreign-script-in-output":
         "It contained non-Khmer characters. Every character of every Khmer field must be "
         "Khmer script. Check each word before you emit it.",
@@ -1068,9 +1070,10 @@ OUTPUT — JSON ONLY, no commentary, no markdown fences:
      dish name. Vary the opening across articles — do not start every title with 'សិល្បៈនៃ'.
    - "summary_km": 150-200 characters. State the actual insight, so a reader who reads only
      this line still learns something.
-   - "content_km": 450-600 Khmer words, in exactly 4 sections, each with its own descriptive
-     Khmer subheading, following the four points above in order. Each section must contain at
-     least one concrete, checkable statement.
+   - "content_km": 450-600 Khmer words, in exactly 4 sections. Each section MUST begin with
+     its own descriptive markdown subheading starting with '### ' in Khmer (for example:
+     '### ១. ឈ្មោះបច្ចេកទេស...'), following the four points above in order. Each section must
+     contain at least one concrete, checkable statement.
    - "key_points_km": exactly 3 items. Each must state a specific technique or judgement a
      cook could act on. Not summaries of the article, and not slogans.
    - "image_alt": 15-25 Khmer words describing what is visible in the photograph — the dish,

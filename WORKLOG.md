@@ -10,6 +10,12 @@
   on-site SEO, platform mechanics dated 2026-08-19), under the revised §0 Skills
   policy: AGENTS.md keeps all rules; the skill holds execution material only.
   `.claude/skills` junction added.
+- **[REGRESSION] `ALLOWED_RANGES` in `fetch_catering_pulse.py` rejected valid French/Khmer quotes (`«` and `»`).**
+  - **Root Cause**: `fetch_catering_pulse.py` had `ALLOWED_RANGES` set to only `(0x00A0, 0x00A0)` instead of `(0x00A0, 0x00FF)` (which `check_content.py` already had). When Gemini generated authentic Khmer dish titles wrapped in standard Khmer/French quotation marks `«...»` (U+00AB / U+00BB), the generator rejected the response as unmapped foreign script (`foreign-script-in-output`).
+  - **Root Cause**: Prompt and `RETRY_GUIDANCE` for `content_km` were underspecified on markdown heading syntax, causing model responses lacking `###` headings to fail the 4-section gate (`generation-unstructured`).
+  - **Root Cause**: `API_CALL_BUDGET` set to 15 was exhausted after 2 candidates (7 + 8 calls), starving subsequent candidates in the fallback queue.
+  - **Action**: Synced `ALLOWED_RANGES` in `fetch_catering_pulse.py` to match `check_content.py` with `(0x00A0, 0x00FF)` Latin-1 supplement (supporting «, », é, ñ) and arrow/box drawing ranges. Updated prompt and `RETRY_GUIDANCE` to explicitly instruct `### ` prefix on section headings. Increased `API_CALL_BUDGET` to 25.
+  - **Verification**: `npm run build` passed with 0 errors (58 static pages compiled).
 
 ## 2026-08-19 (Facebook Page Zero-Link Content Programme, §21)
 
