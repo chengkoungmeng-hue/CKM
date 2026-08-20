@@ -55,10 +55,11 @@ with the owner, not published. Please do not infer them from this file.
 - [អាថ៌កំបាំងស៊ុបប៉ាវហឺប្រណីត ក្នុងពិធីមង្គលការខ្មែរ-ចិន៖ គុណតម្លៃ និងសិល្បៈនៃការចម្អិន](https://ckmkh.com/blog/15-luxury-abalone-banquet-soup/)
   ការវិភាគជម្រៅអំពីស៊ុបប៉ាវហឺប្រណីតក្នុងពិធីមង្គលការខ្មែរ-ចិន គុណតម្លៃសិរីមង្គល និងបច្ចេកទេសរំងាស់ទឹកស៊ុបដ៏មានឱជារសសម្រាប់ទទួលភ្ញៀវកិត្តិយស។
 
-## Daily culinary notes (33)
+## Daily culinary notes (34)
 
 Short Khmer pieces on cooking technique, published daily and indexed at https://ckmkh.com/pulse/.
 
+- [ការគ្រប់គ្រងកម្ដៅស្ងួតលើផ្កាខាត់ណាដើម្បីរក្សារសជាតិ](https://ckmkh.com/pulse/chinese-spiced-air-fryer-cauliflower/)
 - [បច្ចេកទេសឆាក្តៅរក្សាភាពស្រួយនៃគ្រាប់ស្វាយចន្ទី](https://ckmkh.com/pulse/cashew-chicken-stir-fry-video/)
 - [គន្លឹះគ្រប់គ្រងកម្ដៅបំពងខ្ទឹមសឱ្យក្រអូបជ្រាបចូលសាច់ប្រេង](https://ckmkh.com/pulse/garlic-oil-suan-tou-you/)
 - [បច្ចេកទេសឆាគ្រឿងផ្អាប់តៅស៊ីជាមួយបង្គាស្រស់](https://ckmkh.com/pulse/cantonese-shrimp-with-black-bean-sauce/)
@@ -78,8 +79,7 @@ Short Khmer pieces on cooking technique, published daily and indexed at https://
 - [ការ៉េមល្ងខ្មៅ៖ បង្អែមប្រណីតសម្រាប់ពិធីមង្គលការ](https://ckmkh.com/pulse/black-sesame-ice-cream-pulse-09/)
 - [សាច់ជ្រូកបីជាន់ខគ្រឿងទេសប្រាំមុខ៖ រសជាតិមង្គលការ](https://ckmkh.com/pulse/exclusive-august-seasonal-recipes-pulse-10/)
 - [ជ្រូកខ្វៃស្បែកស្រួយ៖ បច្ចេកទេសអាំងសម្រាប់ពិធីការ](https://ckmkh.com/pulse/tender-crispy-roast-pork-chops-pulse-11/)
-- [អាមុកត្រីរាជវាំងខ្មែរ: សិល្បៈនៃគ្រឿងកែច្នៃ និងខ្ទិះដូងប្រណីត](https://ckmkh.com/pulse/mango-chicken-summer-rolls-pulse-12/)
-- …and 13 more at https://ckmkh.com/pulse/
+- …and 14 more at https://ckmkh.com/pulse/
 
 ## Contact
 
