@@ -142,13 +142,13 @@ const faqSchema = JSON.stringify({
          Content sits above centre on mobile (justify-start + padding) — centring it
          left 214px of dead space above the logo before anything readable appeared. -->
     <header class="relative min-h-[calc(100svh-4rem)] md:min-h-[calc(100svh-5rem)] flex flex-col items-center justify-start md:justify-center overflow-hidden pt-10 pb-14 md:py-20">
-      <Image src={heroImageRelative} format="avif" quality={45} alt="ទិដ្ឋភាពរៀបចំម្ហូបការដោយក្រុមចុងភៅ CKM" width={1920} height={1080} widths={[400, 768, 1200, 1920]} sizes="100vw" class="absolute inset-0 w-full h-full object-cover object-center" fetchpriority="high" loading="eager" decoding="sync" />
-      <div class="absolute inset-0 bg-gradient-to-b from-black/85 via-black/65 to-onyx"></div>
+      <Image src={heroImageRelative} format="avif" quality={80} alt="ទិដ្ឋភាពរៀបចំម្ហូបការដោយក្រុមចុងភៅ CKM" width={1920} height={1080} widths={[400, 768, 1200, 1920]} sizes="100vw" class="absolute inset-0 w-full h-full object-cover object-center" fetchpriority="high" loading="eager" decoding="sync" />
+      <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-onyx"></div>
 
       <div class="relative z-10 text-center px-5 max-w-3xl mx-auto">
-        <Image src={logo} format="avif" quality={70} alt="និមិត្តសញ្ញាក្រុមចុងភៅ ចេង គួងម៉េង" width={128} height={128} widths={[80, 96, 128]} sizes="(max-width: 768px) 80px, 112px" class="w-20 h-20 md:w-28 md:h-28 rounded-full border border-champagne/60 mx-auto mb-6 md:mb-8" fetchpriority="high" loading="eager" decoding="sync" />
+        <Image src={logo} format="avif" quality={85} alt="និមិត្តសញ្ញាក្រុមចុងភៅ ចេង គួងម៉េង" width={128} height={128} widths={[80, 96, 128]} sizes="(max-width: 768px) 80px, 96px" class="w-16 h-16 md:w-20 md:h-20 object-contain mx-auto mb-4 md:mb-6 drop-shadow-[0_4px_20px_rgba(197,160,89,0.35)]" fetchpriority="high" loading="eager" decoding="sync" />
 
-        <p class="eyebrow text-champagne font-km-sans mb-4">ភ្នំពេញ · បទពិសោធន៍ ៦០ ឆ្នាំ</p>
+        <p class="eyebrow text-[#E5C378] font-km-sans font-medium tracking-wide mb-3 md:mb-4 text-xs md:text-sm uppercase">ភ្នំពេញ · បទពិសោធន៍ ៦០ ឆ្នាំ</p>
 
         <h1 class="text-[1.75rem] leading-[1.5] md:text-5xl md:leading-[1.35] font-km-serif font-bold text-white mb-5">
           ក្រុមចុងភៅ <span class="text-champagne">ចេង គួងម៉េង</span>

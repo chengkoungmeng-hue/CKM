@@ -1,5 +1,26 @@
 # Work Log
 
+## 2026-08-21 (Brand Identity & Favicon Upgrade, Authentic Banquet Hero, Tang Huot Dedicated Header & Entity SEO)
+
+- **Brand Visual System Upgrade (Quiet Luxury)**:
+  - Replaced outdated chef hat clipart with **Champagne Gold Royal Lotus Monogram** (`#C5A059`, pure alpha transparency WebP & vector SVG) embodying authentic Cambodian ornamental symmetry (Kbach Phni Tes).
+  - Regenerated all favicon and PWA assets: `public/favicon.svg`, `public/favicon.ico`, `public/icon-192x192.png`, `public/icon-512x512.png`, and `public/open-graph.png`.
+- **Authentic Hero Visual**:
+  - Replaced ostentatious Western ballroom with **Grounded Phnom Penh Outdoor Wedding Banquet Marquee** (`hero-luxury-banquet-setup.webp`) featuring ivory & champagne silk ceiling canopies, warm hanging lanterns, authentic lotus & jasmine floral arrangements, and traditional porcelain soup terrines.
+- **Scroll-to-Top Button RWD & Zoom Resilience**:
+  - Fixed desktop positioning to `md:bottom-6 md:right-6 lg:bottom-8 lg:right-8` and mobile to `bottom-[calc(4.25rem+env(safe-area-inset-bottom,0px))] right-4` above sticky CTA bar; enforced fixed dimensions to prevent distortion on browser zoom.
+- **Tang Huot Bakery (`/tanghuot/`) Dedicated Header & Outranking SEO**:
+  - Configured conditional brand header with Tang Huot circular emblem (`logo-tanghout.webp`), dedicated title (`ហាងនំ តាំង ហួត`), bakery navigation, and direct contact numbers (`012 677 710`).
+  - Front-loaded exact brand term in `seoTitle` within 59/60 units budget; injected `FAQPage` structured data to capture large SERP Rich Snippets and outrank external Facebook duplicate listings.
+  - Upgraded sitewide footer links to exact anchor `ហាងនំ តាំង ហួត` across all 58 pages to channel internal link equity.
+
+## 2026-08-21 (Day 2 Anti-Ban Persona Warm-up & Zero-Exposure 2FA Protocol)
+
+- **Facebook Admin Persona (`KoungMeng Cheng`) Day 2 Warm-up Execution**:
+  - Owner completed natural human browsing session (scrolled Phnom Penh media feeds, watched Cambodian culinary Reels, simulated native user dwell time).
+  - Enforced client-isolation OpSec: Skipped personal mobile phone SMS binding to prevent personal identity graph leakage / cross-account linking in Meta's backend; account preserved in clean dedicated browser environment with strong credential auth.
+  - Scheduled Fan Page creation holding window: Safe page initialization targeted for **2026-08-25 ~ 2026-08-27** (Day 5–7 post-registration) to completely clear Meta automated fraud / new-account risk heuristics.
+
 ## 2026-08-20 (devops/ Consolidation, ckm-seo Skill Under Revised Skills Policy)
 
 - Renamed `scripts/` to `devops/` (22 tracked renames, 0 deletions); generated
