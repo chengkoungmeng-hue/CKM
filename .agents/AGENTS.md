@@ -862,4 +862,27 @@ keeps its historical `scripts/` references on purpose.
 - Broader one-off exploration still lives in `scratch/`, which is ignored wholesale.
 - `devops/README.md` lists every tool, its purpose, and how it is invoked.
 
+## 23. Multi-Account Git & GitHub Deployment Protocol
+
+This machine manages four isolated client identities (`CKM`, `Sunder`, `TWProbe`, `PressaGen`).
+To prevent identity graph cross-contamination, all Git operations enforce strict per-account
+isolation.
+
+### Identity Mapping
+
+| Project | GitHub Account | SSH Host Alias | Key Path |
+| :--- | :--- | :--- | :--- |
+| **CKM** | `chengkoungmeng-hue` | `github.com-chengkoungmeng` | `~/.ssh/id_ed25519_chengkoungmeng` |
+| **Sunder** | `sundermou-ship-it` | `github.com-sundermou` | `~/.ssh/id_ed25519_sundermou` |
+| **TWProbe** | `TWProbe` | `github.com-twprobe` | `~/.ssh/id_ed25519_twprobe` |
+| **PressaGen** | `pressagencom-svg` / `PressaGen-me` | `github.com-pressagen` | `~/.ssh/id_ed25519_pressagen` |
+
+### Non-Interactive Shell Rules for AI Agents
+
+1. **Git Remote & Push**: Remote URL is `git@github.com-chengkoungmeng:chengkoungmeng-hue/CKM.git`.
+   In non-interactive background subshells on Windows, pass `BatchMode=yes` to avoid SSH prompt hangs:
+   `git -c core.sshCommand="ssh -o BatchMode=yes" push origin <branch>`
+2. **GitHub CLI (`gh`) Operations**: Before creating/merging PRs or calling GitHub APIs:
+   `gh auth switch --hostname github.com --user chengkoungmeng-hue`
+
 </RULE[project_scoped]>
