@@ -20,6 +20,7 @@ CI 一律從 repo 根目錄(`$GITHUB_WORKSPACE`)呼叫這些工具,沒有任何 
 | `generate_llms_txt.py` | 由站內既有內容產生 `public/llms.txt` 與 `public/llms-full.txt`;`--check` 於檔案過期時非零退出 | 同上 workflow:`python devops/generate_llms_txt.py` |
 | `check_pulse_health.py` | 停擺偵測器。不逐一檢查各種失敗成因,而是量測「資料集最新一筆有多舊」,涵蓋所有已知與未知的靜默失敗路徑 | 同上 workflow(`if: always()`,在 commit 步驟之後):`python devops/check_pulse_health.py --max-age-days 2` |
 | `notify_indexing.py` | Cloudflare 邊緣快取清除、IndexNow 提交、Search Console sitemap 重送;可由 git diff 推導受影響 URL | workflow `Publish`(push / `workflow_run` / 手動):`python devops/notify_indexing.py --urls …` 或 `--changed` |
+| `ckm_facebook_ledger.json` | Facebook 貼文發布與選題去重帳本，記錄已產出之主題、Hook、圖檔與高棉文/中文內文 | 手動維護或由社群發文工作流程讀寫，防止主題重複發布 |
 | `gsc_query_report.py` | 拉取 Search Console 即時搜尋數據。無任何 fallback 值,API 失敗即非零退出;原始輸出寫入 `devops/reports/gsc_search_queries.json` | workflow `Search Report`,cron `0 6 * * 1`:`python devops/gsc_query_report.py --days "$days"` |
 
 `Verify Credentials`(cron `0 19 * * 0`)以 inline 指令驗證三組憑證,不呼叫本目錄任何檔案;

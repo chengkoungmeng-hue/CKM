@@ -18,11 +18,9 @@ import { Phone, Award, Flame, Sunrise, Send, MapPin } from "@lucide/astro";
 // The site ships Khmer only — /zh and /en are 301-redirected at the edge.
 // The English and Chinese dictionaries that used to live here were unreachable:
 // nothing ever passed lang="en" or lang="zh" to this component.
-const t = {
-  // Search intent leads, brand follows. Nobody types the shop's name — they type
-  // the pastry and the city. The old title opened with "ហាងនំ តាំង ហួត" and buried
-  // both, and "ភ្នំពេញ" appeared only twice in the whole page.
-  seoTitle: "នំព្រះខែ នំពងទា ភ្នំពេញ | ហាងនំ តាំង ហួត បោះដុំ និងលក់រាយ",
+const t = {  // Front-load the exact brand name so Google ranks this official page above Facebook
+  // for "ហាងនំ តាំង ហួត", while keeping city and wholesale/retail intent within the 60-unit budget.
+  seoTitle: "ហាងនំ តាំង ហួត | នំព្រះខែ នំពងទា ភ្នំពេញ បោះដុំ និងលក់រាយ",
   seoDesc: "ហាងនំគ្រួសារនៅភ្នំពេញ ធ្វើនំព្រះខែ នំពងទា និងនំហ្វាកាវ ដុតក្នុងរោងនំផ្ទាល់ខ្លួន។ ទទួលទាំងបោះដុំសម្រាប់ហាង និងលក់រាយសម្រាប់គ្រួសារ។ ទូរស័ព្ទ ០១២ ៦៧៧ ៧១០។",
   h1: "ហាងនំ តាំង ហួត",
   heroSub: "នំព្រះខែ នំពងទា និងនំប្រពៃណី",
@@ -57,8 +55,12 @@ const t = {
       type="application/ld+json"
       set:html={JSON.stringify({
         "@context": "https://schema.org",
-        "@type": ["WholesaleStore", "Bakery"],
+        "@type": ["WholesaleStore", "Bakery", "FoodEstablishment"],
+        "@id": "https://ckmkh.com/tanghuot/#bakery",
         "name": t.h1,
+        "legalName": "ហាងនំ តាំង ហួត (陳發)",
+        "alternateName": ["តាំង ហួត", "陳發", "陳發餅家", "Tang Huot Bakery", "Hang Nom Tang Huot"],
+        "mainEntityOfPage": "https://ckmkh.com/tanghuot/",
         // "image" is declared once, further down, as the product shot plus the
         // logo. A second declaration lived here and was silently overridden by
         // that one -- JavaScript keeps the last, so the logo-only value never
@@ -96,8 +98,39 @@ const t = {
         ]
       })}
     />
-
-
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "តើហាងនំ តាំង ហួត មានលក់នំអ្វីខ្លះ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "ហាងនំ តាំង ហួត (陈發) ផលិត និងផ្គត់ផ្គង់នំព្រះខែ នំពងទា និងនំហ្វាកាវ ទាំងបោះដុំ និងលក់រាយ ជាមួយបទពិសោធន៍ដុតនំប្រពៃណីរសជាតិដើមនៅរាជធានីភ្នំពេញ។"
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "តើអាចបញ្ជាទិញ ឬកក់នំបោះដុំពីហាងនំ តាំង ហួត តាមរបៀបណា?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "លោកអ្នកអាចទាក់ទងមកកាន់ហាងនំ តាំង ហួត ផ្ទាល់តាមរយៈលេខទូរស័ព្ទ ០១២ ៦៧៧ ៧១០ ឬ ០៧០ ៦៧៧ ៧១០ ឬផ្ញើសារតាមតេឡេក្រាម ដើម្បីកក់ការបញ្ជាទិញ។"
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "តើហាងនំ តាំង ហួត មានទីតាំងនៅឯណា?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "ហាងនំ តាំង ហួត មានទីតាំងនៅផ្ទះលេខ៤៥៤ ផ្លូវលំភូមិត្រពាំងថ្លឹង១ សង្កាត់ចោមចៅ ខណ្ឌពោធិ៍សែនជ័យ រាជធានីភ្នំពេញ។"
+            }
+          }
+        ]
+      })}
+    />
 
     <style is:global>
       :root {

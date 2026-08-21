@@ -4,6 +4,7 @@ import { Image } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
 import { Phone, Send, Menu, X, ChevronUp } from "@lucide/astro";
 import brandCkmLogoGold from "../assets/images/home/brand-ckm-logo-gold.webp";
+import imgLogoTanghout from "../assets/images/tanghuot/logo-tanghout.webp";
 // Khmer-only layout. The multi-language dictionaries and the baseLang switch that
 // used to live here were unreachable and have been removed.
 const {
@@ -64,14 +65,23 @@ const ogImageAbsolute = image.startsWith("http")
     ? image
     : `${siteDomain}${image}`;
 
-// Global contact variables for mobile sticky CTA
+const isMooncakePage = Astro.url.pathname.includes("tanghuot");
+
+// Global contact variables for mobile sticky CTA & brand identity
 const mainPhone = "011 827 782";
 const telegramLink = "https://t.me/CKMSam06";
 const cleanPhone = `+855${mainPhone.replace(/\s/g, "").substring(1)}`;
 
-// The site ships Khmer only. The zh/en entries that used to sit here were dead:
-// baseLang is hardcoded to "km", so no other branch was ever reachable.
+// Dynamic brand representation (CKM Catering vs Tang Huot Bakery)
 const brand = { title: "ចេង គួងម៉េង", subtitle: "សេវាកម្មម្ហូបការលំដាប់ខ្ពស់" };
+const activeLogo = isMooncakePage ? imgLogoTanghout : brandCkmLogoGold;
+const activeLogoAlt = isMooncakePage ? "ហាងនំ តាំង ហួត (Tang Huot Logo)" : "CKM Logo";
+const activeTitle = isMooncakePage ? "ហាងនំ តាំង ហួត" : brand.title;
+const activeSubtitle = isMooncakePage ? "នំព្រះខែ និងនំពងទា" : brand.subtitle;
+const activeHomeUrl = isMooncakePage ? `${homeUrl}tanghuot/` : homeUrl;
+const activePhone = isMooncakePage ? "012 677 710" : mainPhone;
+const activeCleanPhone = isMooncakePage ? "+85512677710" : cleanPhone;
+const activeTelegram = isMooncakePage ? "https://t.me/+85512677710" : telegramLink;
 
 const t = {
     service: "ស្តង់ដារប្រតិបត្តិការ",
@@ -166,8 +176,6 @@ const schemaData = {
     menu: `${siteDomain}${homeUrl}#gallery`,
     // email: "contact@ckmkh.com" // 若有官方信箱可取消註解補上 (NAP+E)
 };
-
-const isMooncakePage = Astro.url.pathname.includes("tanghuot");
 
 // SEO Enhancement: Dynamic BreadcrumbList Schema Generation
 const homeName = "ទំព័រដើម";
@@ -383,29 +391,29 @@ const breadcrumbSchemaData = generateBreadcrumbs();
                 class="max-w-7xl mx-auto px-4 md:px-6 py-2 md:py-4 flex items-center justify-between h-16 md:h-20"
             >
                 <a
-                    href={homeUrl}
-                    aria-label="Home"
+                    href={activeHomeUrl}
+                    aria-label={isMooncakePage ? "ហាងនំ តាំង ហួត" : "Home"}
                     class="flex items-center gap-2 md:gap-3 relative z-50 shrink-0"
                 >
                     <Image
-                        src={brandCkmLogoGold}
-                        alt="CKM Logo"
+                        src={activeLogo}
+                        alt={activeLogoAlt}
                         width={96}
                         height={96}
                         format="avif"
-                        quality={75}
+                        quality={80}
                         decoding="async"
                         fetchpriority="high"
-                        class="w-10 h-10 md:w-12 md:h-12 rounded-full border border-amber-500 shadow-md"
+                        class={`w-10 h-10 md:w-12 md:h-12 rounded-full border border-champagne/40 shadow-sm ${isMooncakePage ? 'object-cover' : ''}`}
                     />
                     <div class="flex flex-col">
                         <span
                             class="text-onyx font-serif font-semibold tracking-wide text-lg md:text-xl"
-                            >{brand.title}</span
+                            >{activeTitle}</span
                         >
                         <span
                             class="text-slate-500 text-[9px] md:text-xs font-sans tracking-widest uppercase mt-[1px]"
-                            >{brand.subtitle}</span
+                            >{activeSubtitle}</span
                         >
                     </div>
                 </a>
@@ -414,33 +422,53 @@ const breadcrumbSchemaData = generateBreadcrumbs();
                     <div
                         class="hidden md:flex items-center gap-8 text-onyx font-bold text-sm tracking-wide"
                     >
-                        <a
-                            href={`${homeUrl}#services`}
-                            class="hover:text-champagne-dark transition-colors"
-                            >{t.service}</a
-                        >
-                        <a
-                            href={`${homeUrl}#gallery`}
-                            class="hover:text-champagne-dark transition-colors"
-                            >{t.portfolio}</a
-                        >
-                        <a
-                            href={`${homeUrl}#blog`}
-                            class="hover:text-champagne-dark transition-colors"
-                            >{t.insights}</a
-                        >
-                        <a
-                            href={`${homeUrl}tanghuot/`}
-                            class="text-champagne-dark hover:text-onyx font-bold border border-champagne/30 px-4 py-1.5 rounded-full bg-champagne/5 hover:bg-champagne/10 transition-all shadow-glow"
-                            >{t.mooncake}</a
-                        >
+                        {isMooncakePage ? (
+                            <>
+                                <a
+                                    href={`${homeUrl}tanghuot/#products`}
+                                    class="hover:text-champagne-dark transition-colors"
+                                    >នំប្រចាំហាង</a
+                                >
+                                <a
+                                    href={`${homeUrl}tanghuot/#contact`}
+                                    class="hover:text-champagne-dark transition-colors"
+                                    >{t.contact}</a
+                                >
+                                <a
+                                    href={homeUrl}
+                                    class="text-champagne-dark hover:text-onyx font-bold border border-champagne/30 px-4 py-1.5 rounded-full bg-champagne/5 hover:bg-champagne/10 transition-all shadow-glow"
+                                    >សេវាកម្មម្ហូបការ CKM</a
+                                >
+                            </>
+                        ) : (
+                            <>
+                                <a
+                                    href={`${homeUrl}#services`}
+                                    class="hover:text-champagne-dark transition-colors"
+                                    >{t.service}</a
+                                >
+                                <a
+                                    href={`${homeUrl}#gallery`}
+                                    class="hover:text-champagne-dark transition-colors"
+                                    >{t.portfolio}</a
+                                >
+                                <a
+                                    href={`${homeUrl}#blog`}
+                                    class="hover:text-champagne-dark transition-colors"
+                                    >{t.insights}</a
+                                >
+                                <a
+                                    href={`${homeUrl}tanghuot/`}
+                                    class="text-champagne-dark hover:text-onyx font-bold border border-champagne/30 px-4 py-1.5 rounded-full bg-champagne/5 hover:bg-champagne/10 transition-all shadow-glow"
+                                    >{t.mooncake}</a
+                                >
+                            </>
+                        )}
                     </div>
 
-
-
                     <a
-                        href={`${homeUrl}#contact`}
-                        aria-label={t.contact}
+                        href={isMooncakePage ? `${homeUrl}tanghuot/#contact` : `${homeUrl}#contact`}
+                        aria-label={isMooncakePage ? "ទំនាក់ទំនង ហាងនំ តាំង ហួត" : t.contact}
                         class="hidden md:inline-flex relative z-50 items-center gap-2 bg-onyx hover:bg-slate-800 text-white px-6 min-h-[44px] rounded-sm font-sans font-medium text-sm transition-all shadow-lg hover:shadow-xl"
                     >
                         <Phone class="w-4 h-4 text-champagne" stroke-width={1.5} />
@@ -464,26 +492,48 @@ const breadcrumbSchemaData = generateBreadcrumbs();
                 <div
                     class="flex flex-col items-center gap-8 text-onyx font-serif text-2xl w-full px-6"
                 >
-                    <a
-                        href={`${homeUrl}#services`}
-                        class="mobile-link hover:text-champagne-dark transition-colors"
-                        >{t.service}</a
-                    >
-                    <a
-                        href={`${homeUrl}#gallery`}
-                        class="mobile-link hover:text-champagne-dark transition-colors"
-                        >{t.portfolio}</a
-                    >
-                    <a
-                        href={`${homeUrl}#blog`}
-                        class="mobile-link hover:text-champagne-dark transition-colors"
-                        >{t.insights}</a
-                    >
-                    <a
-                        href={`${homeUrl}tanghuot/`}
-                        class="mobile-link text-champagne-dark hover:text-onyx font-bold border border-champagne/40 px-8 py-2.5 rounded-full bg-champagne/10 hover:bg-champagne/20 transition-all shadow-md"
-                        >{t.mooncake}</a
-                    >
+                    {isMooncakePage ? (
+                        <>
+                            <a
+                                href={`${homeUrl}tanghuot/#products`}
+                                class="mobile-link hover:text-champagne-dark transition-colors"
+                                >នំប្រចាំហាង</a
+                            >
+                            <a
+                                href={`${homeUrl}tanghuot/#contact`}
+                                class="mobile-link hover:text-champagne-dark transition-colors"
+                                >{t.contact}</a
+                            >
+                            <a
+                                href={homeUrl}
+                                class="mobile-link text-champagne-dark hover:text-onyx font-bold border border-champagne/40 px-8 py-2.5 rounded-full bg-champagne/10 hover:bg-champagne/20 transition-all shadow-md"
+                                >សេវាកម្មម្ហូបការ CKM</a
+                            >
+                        </>
+                    ) : (
+                        <>
+                            <a
+                                href={`${homeUrl}#services`}
+                                class="mobile-link hover:text-champagne-dark transition-colors"
+                                >{t.service}</a
+                            >
+                            <a
+                                href={`${homeUrl}#gallery`}
+                                class="mobile-link hover:text-champagne-dark transition-colors"
+                                >{t.portfolio}</a
+                            >
+                            <a
+                                href={`${homeUrl}#blog`}
+                                class="mobile-link hover:text-champagne-dark transition-colors"
+                                >{t.insights}</a
+                            >
+                            <a
+                                href={`${homeUrl}tanghuot/`}
+                                class="mobile-link text-champagne-dark hover:text-onyx font-bold border border-champagne/40 px-8 py-2.5 rounded-full bg-champagne/10 hover:bg-champagne/20 transition-all shadow-md"
+                                >{t.mooncake}</a
+                            >
+                        </>
+                    )}
                 </div>
             </div>
         </nav>
@@ -504,7 +554,7 @@ const breadcrumbSchemaData = generateBreadcrumbs();
                 <a
                     href={`${homeUrl}tanghuot/`}
                     class="text-champagne hover:text-white text-xs tracking-wider transition-all font-km-sans"
-                    >{t.mooncake}</a
+                    >ហាងនំ តាំង ហួត</a
                 >
                 <a
                     href={`${homeUrl}privacy/`}
@@ -515,7 +565,7 @@ const breadcrumbSchemaData = generateBreadcrumbs();
             <p
                 class="text-slate-400 text-xs tracking-widest uppercase font-km-sans"
             >
-                &copy; 2026 <a href={homeUrl} class="hover:text-champagne-dark transition-colors">ចេង គួងម៉េង</a>. រក្សាសិទ្ធិគ្រប់យ៉ាង
+                &copy; 2026 <a href={activeHomeUrl} class="hover:text-champagne-dark transition-colors">{activeTitle}</a>. {t.copyright}
             </p>
         </footer>
 
@@ -531,7 +581,7 @@ const breadcrumbSchemaData = generateBreadcrumbs();
                 <a
                     href={`${homeUrl}tanghuot/`}
                     class="text-champagne hover:text-white text-[11px] tracking-wider transition-all font-km-sans"
-                    >{t.mooncake}</a
+                    >ហាងនំ តាំង ហួត</a
                 >
                 <a
                     href={`${homeUrl}privacy/`}
@@ -542,7 +592,7 @@ const breadcrumbSchemaData = generateBreadcrumbs();
             <p
                 class="text-slate-400 text-[10px] tracking-widest uppercase font-km-sans"
             >
-                &copy; 2026 <a href={homeUrl} class="hover:text-champagne-dark transition-colors">ចេង គួងម៉េង</a>. រក្សាសិទ្ធិគ្រប់យ៉ាង
+                &copy; 2026 <a href={activeHomeUrl} class="hover:text-champagne-dark transition-colors">{activeTitle}</a>. {t.copyright}
             </p>
         </footer>
 
@@ -556,15 +606,15 @@ const breadcrumbSchemaData = generateBreadcrumbs();
                      primary mobile CTA on a business that runs on phone calls. The
                      accessible name must CONTAIN the visible text. -->
                 <a
-                    href={`tel:${cleanPhone}`}
-                    aria-label={`${t.call} ${mainPhone}`}
+                    href={`tel:${activeCleanPhone}`}
+                    aria-label={`${t.call} ${activePhone}`}
                     class="flex-1 flex items-center justify-center gap-2 bg-onyx text-white font-sans font-medium text-sm transition-colors active:bg-slate-800"
                 >
                     <Phone class="w-4 h-4 text-champagne" stroke-width={1.5} />
-                    <span class="font-medium tracking-wider">{mainPhone}</span>
+                    <span class="font-medium tracking-wider">{activePhone}</span>
                 </a>
                 <a
-                    href={telegramLink}
+                    href={activeTelegram}
                     target="_blank"
                     rel="noopener noreferrer"
                     class="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-sky-500 hover:from-blue-500 hover:to-sky-400 text-white font-medium py-3 px-4 rounded-xl shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all duration-300 text-sm"
@@ -575,13 +625,13 @@ const breadcrumbSchemaData = generateBreadcrumbs();
             </div>
         </div>
 
-        <!-- Scroll to Top Button -->
+        <!-- Scroll to Top Button (RWD: positioned above mobile CTA bar on mobile, and cleanly anchored at bottom-right on desktop) -->
         <button
             id="scroll-to-top"
-            class="fixed bottom-24 right-6 z-50 p-3.5 rounded-full bg-onyx/90 border border-champagne/40 text-champagne hover:bg-slate-800 hover:text-white hover:border-champagne hover:scale-110 active:scale-95 transition-all duration-300 shadow-xl opacity-0 pointer-events-none focus:outline-none focus:ring-2 focus:ring-champagne"
+            class="fixed bottom-[calc(4.25rem+env(safe-area-inset-bottom,0px))] right-4 md:bottom-6 md:right-6 lg:bottom-8 lg:right-8 z-40 w-11 h-11 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-onyx/90 backdrop-blur-sm border border-champagne/50 text-champagne hover:bg-onyx hover:text-white hover:border-champagne hover:scale-105 active:scale-95 transition-all duration-300 shadow-lg hover:shadow-glow opacity-0 pointer-events-none translate-y-3 focus:outline-none focus:ring-2 focus:ring-champagne"
             aria-label="ត្រឡប់ទៅខាងលើ (Scroll to Top)"
         >
-            <ChevronUp class="w-5 h-5" stroke-width={2} />
+            <ChevronUp class="w-5 h-5 md:w-6 md:h-6" stroke-width={2} />
         </button>
     </body>
 </html>
@@ -652,11 +702,13 @@ const breadcrumbSchemaData = generateBreadcrumbs();
             window.requestAnimationFrame(() => {
                 const btn = document.getElementById("scroll-to-top");
                 if (btn) {
-                    const show = window.scrollY > 400;
+                    const show = window.scrollY > 350;
                     btn.classList.toggle("opacity-0", !show);
                     btn.classList.toggle("pointer-events-none", !show);
+                    btn.classList.toggle("translate-y-3", !show);
                     btn.classList.toggle("opacity-100", show);
                     btn.classList.toggle("pointer-events-auto", show);
+                    btn.classList.toggle("translate-y-0", show);
                 }
                 isTicking = false;
             });
