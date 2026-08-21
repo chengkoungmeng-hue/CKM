@@ -35,7 +35,7 @@
   - **Root Cause**: `fetch_catering_pulse.py` had `ALLOWED_RANGES` set to only `(0x00A0, 0x00A0)` instead of `(0x00A0, 0x00FF)` (which `check_content.py` already had). When Gemini generated authentic Khmer dish titles wrapped in standard Khmer/French quotation marks `«...»` (U+00AB / U+00BB), the generator rejected the response as unmapped foreign script (`foreign-script-in-output`).
   - **Root Cause**: Prompt and `RETRY_GUIDANCE` for `content_km` were underspecified on markdown heading syntax, causing model responses lacking `###` headings to fail the 4-section gate (`generation-unstructured`).
   - **Root Cause**: `API_CALL_BUDGET` set to 15 was exhausted after 2 candidates (7 + 8 calls), starving subsequent candidates in the fallback queue.
-  - **Action**: Synced `ALLOWED_RANGES` in `fetch_catering_pulse.py` to match `check_content.py` with `(0x00A0, 0x00FF)` Latin-1 supplement (supporting «, », é, ñ) and arrow/box drawing ranges. Updated prompt and `RETRY_GUIDANCE` to explicitly instruct `### ` prefix on section headings. Increased `API_CALL_BUDGET` to 25.
+  - **Action**: Synced `ALLOWED_RANGES` in `fetch_catering_pulse.py` to match `check_content.py` with `(0x00A0, 0x00FF)` Latin-1 supplement (supporting «, », é, ñ) and arrow/box drawing ranges. Updated prompt and `RETRY_GUIDANCE` to explicitly instruct `###` prefix on section headings. Increased `API_CALL_BUDGET` to 25.
   - **Verification**: `npm run build` passed with 0 errors (58 static pages compiled).
 - **Facebook Founder/Admin Account Initialization (`KoungMeng Cheng`) & Anti-Ban Warm-up SOP**:
   - Registered natural person Profile (`KoungMeng Cheng`, ID: `61593746811233`, born 1979) using authentic Cambodian on-site photos (landscape cover and garden Buddha avatar).
@@ -210,6 +210,7 @@ notes; the notes describe Sunder.**
   by parsing rendered `dist/` HTML rather than frontmatter; `llms.txt` confirmed against
   built routes rather than the generator's logic; the accessibility fixes driven in a real
   browser with Playwright (`scripts/verify_a11y.cjs`) rather than grepped for.
+
 ### Second pass — the remaining warnings, and what measuring them turned up
 
 - **[REGRESSION] `check_hard_specs` used `re.search`, so it reported one hit per pattern
@@ -260,6 +261,7 @@ entry lands every day.
 - The two new pulse rules landed ADVISORY, the back catalogue was then cleared, and they
   were promoted to blocking in the same pass that reached zero — never before, or nothing
   could be committed.
+
 ### Third pass — pulse cleared, and the generator taught to enforce it
 
 The advisory backlog above is now zero and every rule is blocking. Doing it turned up more
