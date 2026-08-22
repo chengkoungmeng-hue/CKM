@@ -17,7 +17,6 @@ import { Image } from 'astro:assets';
 import { Phone, Send, Utensils, Building2, Zap, Award, Clock, Sparkles, ChevronRight, ArrowDown } from '@lucide/astro';
 
 import { getCollection } from 'astro:content';
-import CateringPulse from '../components/CateringPulse.astro';
 
 import {
   telegramLink,
@@ -332,15 +331,10 @@ const faqSchema = JSON.stringify({
       </div>
     </section>
 
-    <!-- ── Pulse ────────────────────────────────────────────────────────────
-         Previously nested inside #services, between the section heading and the
-         service cards, which is why the cards ended up under a heading about
-         articles. It is its own thing and now sits on its own. -->
-    <section class="py-16 md:py-24 bg-pearl">
-      <div class="max-w-7xl mx-auto px-5 md:px-6">
-        <CateringPulse />
-      </div>
-    </section>
+    <!-- The /pulse/ block was removed from the homepage on 2026-08-23. Generation is
+         frozen (see .github/workflows/daily_catering_pulse.yml) and the section was
+         showing three generated text cards on the one page that earns real Cambodian
+         impressions. /pulse/ itself stays live and reachable from the navigation. -->
 
     <!-- ── Journal ─────────────────────────────────────────────────────────── -->
     <section id="blog" class="py-16 md:py-28 bg-white">

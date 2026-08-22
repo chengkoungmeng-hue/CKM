@@ -106,10 +106,14 @@
   `index.astro`. It compiled to `.reveal[data-astro-cid-…]` and matched nothing, so the
   animation was dead the entire time — and the `.prose` table-overflow guards in the same
   block died with it. Styles that must reach slotted children go in `<style is:global>`.
-- `inlineStylesheets: 'always'` + `_headers` setting HTML to `max-age=0, must-revalidate`
-  means the CSS is re-downloaded on every page view and can never be cached across pages.
-  This is a deliberate trade (one less round trip on first paint). Do not change it
-  casually, and measure both sides if you do.
+- **[REGRESSION] This rule described the opposite of the config for as long as anyone
+  can tell.** It read "`inlineStylesheets: 'always'` … the CSS is re-downloaded on every
+  page view and can never be cached across pages", and built a trade-off argument on
+  that. Measured 2026-08-23: `astro.config.mjs` line 45 is `inlineStylesheets: 'auto'`,
+  and `public/_headers` line 26 gives `/_astro/*` `max-age=31536000, immutable`. So
+  Astro inlines only small sheets, the rest are files, and those files ARE cached across
+  pages for a year. Anyone acting on the old wording would have optimised a cost that
+  does not exist. If you change the setting, change this line in the same commit.
 
 ## 6. Images
 
@@ -334,9 +338,15 @@ a meta description that renders in the Google result.
 
 ## 14. Frontmatter & schema
 
-- `src/content.config.ts` is the source of truth. Zod **strips unknown keys**:
-  `target_keyword` and `slug` are in almost every article's frontmatter and are read by
-  nothing. `schemaType` is declared but `blog/[slug].astro` hardcodes `"@type": "Article"`.
+- `src/content.config.ts` is the source of truth. Zod **strips unknown keys**, so a key
+  that is not declared there cannot be read through the collection API — but it can
+  still be read off the raw entry, and one is.
+  - **[REGRESSION] This rule used to say `target_keyword` "is read by nothing" and to
+    invite deleting it. It is load-bearing.** `pulse/[id].astro` matches it against pulse
+    text to choose which blog articles a pulse page links to (line ~98, and the comments
+    at ~58 explain why category matching was replaced by it). Deleting the field on that
+    rule's authority would have silently degraded every pulse page's internal links to
+    the rotation fallback. `slug` is still inert. `schemaType` is declared but `blog/[slug].astro` hardcodes `"@type": "Article"`.
   Either wire them up or delete them — do not add more inert fields.
 - **[REGRESSION] `date:` is required.** When it was missing, `blog/[slug].astro` fell back
   to `new Date()`, so every deploy re-stamped 14 evergreen articles as published today —
@@ -647,6 +657,17 @@ Every item below came out of an audit of the 15 live articles.
   purity were gated and are honoured; structure was not gated and was not. `MIN_CONTENT_SECTIONS`
   now rejects and retries, feeding the specific reason back to the model. Anything the
   output MUST have needs a gate, or it holds only when the model feels like it.
+- **[FROZEN 2026-08-23, owner decision.] Generation is stopped; the 37 published pages
+  stay live.** The cron in `daily_catering_pulse.yml` is commented out, not deleted, and
+  `workflow_dispatch` still works, so this is one line to reverse. The reason is a
+  ceiling, not a defect in the pipeline: measured over 90 days inside Cambodia the pulse
+  pages took 2 impressions and 0 clicks, and the whole addressable Khmer commercial
+  demand is roughly 78 impressions a month (`ម្ហូបការ` plus `មុខម្ហូបការ`, §18). No number
+  of pages raises a ceiling set by how many people search. The same mechanism earns
+  3,833 impressions on the sister project because that market has the demand; this one
+  does not. `/pulse/` was also removed from the homepage the same day — it was putting
+  generated cards on the only page with real Cambodian impressions. Everything below
+  still describes the pipeline accurately for the day it is switched back on.
 - **Pulse quality is now the site's quality.** The blog is frozen at 15 articles; pulse
   grows by one a day (`47 20 * * *`, a single daily run since 2026-08-22 — the second run
   published a second article rather than retrying the first, which would have given 14 a week

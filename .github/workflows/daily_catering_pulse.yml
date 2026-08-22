@@ -22,7 +22,12 @@ on:
     # fetch or seed, generate, validate, commit, then publish.yml waits for the page to
     # be live before purging and indexing. The `concurrency` group below still
     # serialises a scheduled run against a manual dispatch.
-    - cron: '47 20 * * *'
+    # FROZEN 2026-08-23 by owner decision. Measured over 90 days inside Cambodia the
+    # 36 pulse pages earned 2 impressions and 0 clicks, while the whole addressable
+    # Khmer commercial demand is about 78 impressions a month -- a ceiling no number
+    # of pages can raise. Generation is stopped; the 37 published pages stay live.
+    # Uncomment the line below to resume. workflow_dispatch still runs it by hand.
+    # - cron: '47 20 * * *'
   workflow_dispatch:
 
 # A scheduled run and a manual dispatch overlapping would produce two commits

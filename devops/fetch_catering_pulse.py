@@ -983,7 +983,7 @@ RETRY_GUIDANCE = {
         "table serves it. Do not restate the source's method.",
     "title-missing-demand-root":
         "The title did not contain any of the Khmer words Cambodian readers actually "
-        "search for. Rewrite title_km so it contains one of ម្ហូបការ, មុខម្ហូប or ពិធី "
+        "search for. Rewrite title_km so it contains ម្ហូបការ or មុខម្ហូប. ពិធី on its own is NOT enough -- it counts only when the title also contains ម្ហូប. Write the word "
         "written exactly that way. Keep the whole title short, and do NOT put that word "
         "at the very start -- the opening of the title is checked against every "
         "already-published entry as well.",

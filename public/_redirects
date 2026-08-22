@@ -66,8 +66,23 @@
 /pulse/pulse-27/  /pulse/pork-and-vegetable-soup/  301
 /pulse/pulse-27   /pulse/pork-and-vegetable-soup/  301
 
-# Cleanup redirect for deleted corrupted pulse-32 entry
-/pulse/pulse-32/  /pulse/  301
-/pulse/pulse-32   /pulse/  301
+# pulse-32 was reassigned to a live entry after the corrupted one was deleted, so the
+# old catch-all 301 to the listing was sending readers away from a page that exists.
+# pulse-33..38 had no alias at all. Section 3 requires every /pulse/pulse-NN/ to 301
+# to its descriptive slug.
+/pulse/pulse-32/  /pulse/cantonese-shrimp-with-black-bean-sauce/  301
+/pulse/pulse-32   /pulse/cantonese-shrimp-with-black-bean-sauce/  301
+/pulse/pulse-33/  /pulse/garlic-oil-suan-tou-you/  301
+/pulse/pulse-33   /pulse/garlic-oil-suan-tou-you/  301
+/pulse/pulse-34/  /pulse/cashew-chicken-stir-fry-video/  301
+/pulse/pulse-34   /pulse/cashew-chicken-stir-fry-video/  301
+/pulse/pulse-35/  /pulse/chinese-spiced-air-fryer-cauliflower/  301
+/pulse/pulse-35   /pulse/chinese-spiced-air-fryer-cauliflower/  301
+/pulse/pulse-36/  /pulse/milk-pudding/  301
+/pulse/pulse-36   /pulse/milk-pudding/  301
+/pulse/pulse-37/  /pulse/summer-farm-update-our-new-barn-kitchen/  301
+/pulse/pulse-37   /pulse/summer-farm-update-our-new-barn-kitchen/  301
+/pulse/pulse-38/  /pulse/nepalese-dumplings/  301
+/pulse/pulse-38   /pulse/nepalese-dumplings/  301
 /pulse/one-swallow-does-not-make-the-spring/  /pulse/  301
 /pulse/one-swallow-does-not-make-the-spring   /pulse/  301
