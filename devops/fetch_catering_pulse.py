@@ -1759,10 +1759,21 @@ def update_pulse_daily():
     valid_candidates = list(seed_candidates)
     for cand in unseen:
         if verify_live_url(cand["link"]):
-            # "" rather than a stand-in image: no photograph is a legitimate outcome and
-            # the card covers it. A borrowed CKM photograph would misrepresent the dish.
-            cand["image_url"] = extract_image_multitier(
-                cand.get("_xml_item"), "", cand["link"])
+            # Rehosting is OFF for CKM (owner decision, 2026-08-22). Measured that day:
+            # all 36 pulse pages together took 2 impressions in 90 days inside Cambodia,
+            # the Facebook programme in AGENTS.md section 21 posts images with copy and no
+            # link so og:image is not the channel, and Khmer recipe-image search is
+            # negligible. A borrowed photograph therefore bought almost nothing while
+            # carrying the whole copyright exposure and a takedown obligation to manage.
+            # Every entry is illustrated by the card render_pulse_cards() draws from its
+            # own Khmer text.
+            #
+            # extract_image_multitier() and the whole credit path are deliberately KEPT,
+            # not deleted: the sister project Sunder runs the same shape profitably, and
+            # re-enabling here is one line plus a value for image_source_link. Deleting
+            # them would mean rebuilding the credit surface, the two gates and the
+            # takedown script from scratch. See PhotoCredit.astro and devops/takedown.py.
+            cand["image_url"] = ""
             valid_candidates.append(cand)
             if len(valid_candidates) >= 5:
                 break
