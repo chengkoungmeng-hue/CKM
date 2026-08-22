@@ -1,5 +1,120 @@
 # Work Log
 
+## 2026-08-23 (Measured the Ceiling, Froze Pulse, Closed the Site Out)
+
+A full day of measurement ended in a decision to stop growing this site rather than to
+grow it differently. The measurements are the durable part of this entry; the code
+changes follow from them.
+
+### What was measured, and by what mechanism
+
+Four independent instruments were asked whether there are Khmer keywords worth targeting
+that the site does not cover. All four said no.
+
+| Instrument | Result |
+| :--- | :--- |
+| Search Console, Cambodia | ~100 commercial impressions a month, on terms already ranked 2.4-5.2 |
+| Google Ads Keyword Planner | **Khmer is not an available language.** It cannot measure this market at all |
+| Google autocomplete, 490 prefixes over 14 seeds | `ម្ហូបការ` and `មុខម្ហូប` return **zero** suggestions -- below Google's own volume threshold. Controls (`ម្ហូប`, `ការ`, `catering`) return 5-10 |
+| Competitor survey | Of eight Khmer banquet caterers, **one** has a working website; it has no HTTPS, no meta description, a 2018 footer |
+
+Of the 61 adjacent suggestions autocomplete did surface, **not one carries commercial
+intent**: song lyrics (`រៀបការ ថ្ងៃ ណា chord/lyrics/karaoke`), "in english" translation
+queries, TV drama titles, png and logo hunts, recipe PDFs. The same shape §18 already
+records for the `ចុងភៅ` cluster.
+
+**Brand searches: 0 of 112 impressions.** Nobody searches `CKM` or `ចេង គួងម៉េង`. Since
+the site would certainly rank first for its own name, that zero is real and not a ranking
+artefact. So the site is neither how customers discover this business nor how they verify
+it. Combined with the owner's own account of the market -- Cambodian catering runs on
+referral, and Facebook engagement is substantially family and friends helping out -- the
+conclusion is that **organic search plays essentially no role in customer acquisition
+here**, and no amount of site work changes that.
+
+### Facebook, measured and not started
+
+| Page | Followers | 7-day engagement |
+| :--- | ---: | ---: |
+| CKM (`/CKMFOODS`) | 10,556 | **1** |
+| ចុងភៅ លីសេង Ly Seng | 48,328 | 1,148 |
+| Mr. Mab | 44,931 | 59 |
+
+CKM's page is dormant, not dead: its last post (28 February) took **168 reactions and 28
+shares**. The page category is set to **"Advertising Agency"**, which is wrong for a
+caterer and suppresses discovery; rating shows "Not yet rated (3 reviews)".
+
+A content system was built for this channel and is ready but **unused**: 137 posts
+assembled from material the repo already owns (66 banquet seeds, 16 dishes, 40 FAQ pairs,
+15 quick answers) plus 121 batch image prompts. `devops/make_fb_posts.py` calls no model:
+every Khmer sentence is either already live on the site or one of twenty reviewed
+HOOKS/QUESTIONS strings.
+
+**It was not started.** Posting to the existing page needs access from its owner, and the
+operator chose not to ask -- the concern was never the permission but the role and the
+expectation that comes with it. A second page under the same business name was rejected:
+it splits the brand, breaches Meta's duplicate-page policy, discards the 10,556-follower
+family network that IS the referral channel in this market, and would be visible to the
+owner anyway. That analysis is recorded here so it is not re-derived.
+
+### Changes shipped
+
+- **Pulse frozen** (cron commented out, `workflow_dispatch` kept, 37 pages left live).
+  90 days, Cambodia: 2 impressions, 0 clicks. Note the seed rotation had **never run** --
+  `SEED_ROTATION_EPOCH = 2026-08-24` and 0 of 37 entries carry `ckm-seed`.
+- **Legal pages** stopped describing a photo-credit mechanism that no entry uses.
+- **`check_page_budgets()`** added: `check_content.py` now reads `.astro` page titles and
+  descriptions, closing the gap §14 names. Proved by poison test.
+- **Khmer dates**: 42 of 66 pages rendered an English month abbreviation. Now 0.
+- **FAQPage**: 2 pages -> 16, exposing 40 Q&A pairs that had no markup.
+- **Menu schema**: the 16 dish descriptions in `homeData.ts` had never rendered anywhere.
+- **Homepage**: pulse block removed; a typographic `#process` section replaced it, built
+  to stand without photography; title gained `៦០ ឆ្នាំ` (52.7/60), description gained
+  `និងខេត្ត` (142.9/155).
+- **`font-km-sans`** named `'Kantumruy Pro'` in 7 files with no `@font-face` anywhere,
+  including the prose of every article. Removed; behaviour is unchanged because it always
+  fell through to `sans-serif`.
+- **`devops/migrate_pulse_images.py` deleted.** Running it would have rebuilt uncredited
+  rehosting from `source_link` without setting `image_source_link`.
+- Rule corrections in `.agents/AGENTS.md`: §5 claimed `inlineStylesheets: 'always'` (it is
+  `'auto'`); §14 said `target_keyword` "is read by nothing" and invited deleting it, while
+  `pulse/[id].astro` uses it to choose every pulse page's blog links; §18 recorded a
+  homepage title that measures **66.4 units against a 60 budget** and was quoted from the
+  rule file during this session as if it were live; §12 gained the dish-name rule below.
+
+### Two mistakes worth keeping
+
+**A translation model is not a source for a Khmer dish name.** Google Translate and Gemini
+both render `ត្រីតុកកែ` as marble goby and their agreement was taken as confirmation; two
+seeds were deleted on it and had to be restored. Overlapping training corpora make one
+shared error read as two. Google **Images** settled it in one search: grouper. Recorded in
+§12.
+
+**A subagent workflow wrote to the working tree.** The design workflow's proposal and build
+phases were not told the task was read-only -- only the audit and review phases were -- and
+they modified seven files and created five. Caught by `git status`, stashed, not committed.
+Scope the constraint on every phase, not the ones that look dangerous.
+
+### If this is ever picked up again
+
+1. **The one action with the best return per minute** is a single sentence to the page
+   owner: the Facebook category is set to Advertising Agency and should be a caterer
+   category. It is not an access request and not a programme.
+2. **Reviews** are the local-pack currency. The page shows 3.
+3. **Google Business Profile is the one unresolved unknown.** `Layout.astro`'s `hasMap`
+   resolves to `maps/search/11.563369,+104.895965` -- a coordinate search URL, not a
+   `/maps/place/` entity -- and no `place_id` or CID exists anywhere in the repo. That
+   proves the site does not link to a place entity; it does **not** prove no profile
+   exists. Check `business.google.com` before assuming either.
+4. **Pulse restarts by uncommenting one line** in `daily_catering_pulse.yml`.
+5. **The Facebook queue** is at `C:\Projects\DevOps\Marketing\CKM\Facebook\` and does
+   not expire. Its zh-TW column is empty and must be filled before it is usable by an
+   operator who does not read Khmer.
+6. **Do not write article 16.** Expected value is ~10 impressions a quarter (§18), and
+   there is no instrument that can find a Khmer keyword worth targeting.
+7. `.github/workflows/verify_credentials.yml` purges the whole Cloudflare zone weekly with
+   no change gate. Harmless, but pointless. Left alone deliberately rather than risk a
+   credential workflow nobody will be maintaining.
+
 ## 2026-08-23 (Dish-Name Correction: ត្រីតុកកែ Is Grouper, Not Marble Goby)
 
 - **Two pulse seeds were removed yesterday for a reason that was wrong, and are restored.**

@@ -227,7 +227,12 @@ const articleSchema = JSON.stringify({
     font-family: 'Hanuman', serif; 
   }
   .typo-km .ckm-prose p, .typo-km .ckm-prose li { 
-    font-family: 'Kantumruy Pro', sans-serif; 
+    /* Article body. Section 8: Khmer body text uses the system fallback on purpose,
+       for 0 CLS and instant LCP, and only Hanuman is self-hosted. 'Kantumruy Pro'
+       had no @font-face anywhere in the repository, so this already resolved to
+       sans-serif -- on the prose of every article. Naming it changed nothing except
+       to make the stylesheet claim a font the site does not ship. */
+    font-family: sans-serif;
     font-weight: 300; 
     line-height: 2.2; 
   }

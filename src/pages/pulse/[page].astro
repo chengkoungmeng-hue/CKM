@@ -51,7 +51,13 @@ const breadcrumbSchema = JSON.stringify({
   <script type="application/ld+json" is:inline set:html={breadcrumbSchema}></script>
   <style is:global>
     .font-km-serif { font-family: 'Hanuman', serif; }
-    .font-km-sans { font-family: 'Kantumruy Pro', sans-serif; }
+    /* Khmer body text uses the system fallback on purpose -- section 8: it costs 0 CLS
+       and gives instant LCP, and only Hanuman is self-hosted. This rule used to name
+       'Kantumruy Pro', which has no @font-face anywhere in the repository, so it
+       silently fell through to sans-serif exactly as written below. Removing the
+       phantom name changes nothing a visitor sees and stops the declaration from
+       claiming a font the site does not ship. */
+    .font-km-sans { font-family: sans-serif; }
   </style>
 
   <div class="w-full bg-pearl min-h-screen pt-24 pb-20 typo-km">

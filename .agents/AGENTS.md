@@ -500,7 +500,18 @@ Every item below came out of an audit of the 15 live articles.
   resolves, so one dead link costs the next-best article rather than the whole day.
   The image extractor runs there too, on the selected candidate only, for the same
   reason; see the bullet below and §6.
-- **The pipeline rehosts the source photograph, and it may only do so credited.** This
+- **[HISTORICAL, since 2026-08-22] The pipeline no longer rehosts anything.** The
+  call site sets `cand["image_url"] = ""` unconditionally, `rehost_source_image()`
+  therefore only ever receives an empty string, and `extract_image_multitier()` has
+  no live caller. Verified 2026-08-23 against the data: 37 of 37 entries point at a
+  generated `-card.png`, zero `.webp` files remain in `public/images/pulse/`, and
+  zero entries carry `image_source_link`, so `PhotoCredit` renders nothing on any of
+  the four surfaces that mount it. Generation itself was frozen the same day (see
+  above). Everything in the rest of this bullet describes the machinery accurately
+  for the day it is switched back on, and is kept for that reason -- but it is not
+  what the code does now, and §0 is explicit that a rule in the present tense about
+  behaviour that has stopped is worse than no rule.
+- **How it worked, and would work again.** This
   bullet said the opposite for a few hours on 2026-08-22 — see §6 for the incident, the
   four conditions and the gate. Here the pipeline's own half:
   `extract_image_multitier()` finds a candidate (media:content or enclosure, then an
