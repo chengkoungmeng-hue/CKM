@@ -7,7 +7,7 @@ import xml.etree.ElementTree as ET
 import unicodedata
 import hashlib
 import sys
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from email.utils import format_datetime, parsedate_to_datetime
 
 sys.stdout.reconfigure(encoding='utf-8')
@@ -261,6 +261,227 @@ _BANQUET_TERMS = (
     r'髮菜|伊麵|荷葉|糯米飯|盆菜|喜宴|團年|燉湯|糖水|雲吞|餛飩|釀豆腐'
 )
 BANQUET_REGEX = re.compile(_BANQUET_TERMS, re.IGNORECASE)
+
+
+# --- Banquet seeds: the 5:2 rotation ---------------------------------------------
+#
+# MEASURED 2026-08-22, Search Console, 90 days (2026-05-23 -> 2026-08-20,
+# sc-domain:ckmkh.com). Site totals 1,574 impressions / 36 clicks over 61 pages:
+#
+#     section                pages w/ impressions   impressions   clicks
+#     home                                     2         1,069       29
+#     blog (15 posts)                         28           282        4
+#     pulse (36 posts)                        23            63        1
+#
+# Filtered to Cambodia — the actual market — the whole of pulse produced TWO
+# impressions in ninety days (/pulse/pulse-19/ and /pulse/zucchini-garlic-sauce-pulse-03/,
+# one each) and zero clicks. Only two Khmer queries carry real volume: ម្ហូបការ
+# (254 impressions, 11 clicks, position 3.8) and មុខម្ហូបការ (59 / 1 / 5.2).
+#
+# The diagnosis is NOT that the pulse body is bad — the prompt already forces a link to
+# Khmer-Chinese banquet practice, and that half works. It is that the SEED is a foreign
+# home-cooking dish pulled from an RSS feed, so the TITLE is about wok technique or a
+# Hong Kong pastry. The title is what ranks, and the seed decides the title. Nobody in
+# Cambodia searches those strings, so the page cannot be found however well it is written.
+#
+# So the seed itself has to change for most of the week. Owner directive 2026-08-22:
+# five banquet-topic articles and two food articles per week, one article a day.
+#
+# The RSS machinery below is untouched and still runs on food days: archive walking,
+# parse_any_date, EXCLUDE/ALLOW_REGEX, the banquet-fit bonus and the candidate fallback
+# loop all remain. What changes is that on five days out of seven the pipeline does not
+# consult the network at all to choose a subject — it takes the next unused entry from
+# devops/pulse_seeds.json.
+
+# The four Khmer categories a pulse entry may carry. Three are still attached to a live
+# feed above; ម្ហូបខ្មែរប្រណីត belonged to the Cambodia Recipe feed, which was pruned when
+# it went dormant, and is still the category on 7 published entries. Written out here
+# because the seed file has no feed to inherit a category from, and because a typo in a
+# seed's category would otherwise reach the page as a new, one-off hashtag.
+PULSE_CATEGORIES = (
+    "ម្ហូបខ្មែរប្រណីត",
+    "ម្ហូបចិននិងទាវជីវ",
+    "គ្រឿងផ្សំនិងរសជាតិ",
+    "សិល្បៈអាហារអាស៊ី",
+)
+
+SEED_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pulse_seeds.json")
+
+# A seed has no source URL, but source_link is the de-duplication key the whole pipeline
+# matches on (and check_content.py requires the field to be non-empty). Give each seed a
+# stable synthetic key in the same namespace. It is never rendered — pulse/[id].astro
+# stopped rendering source_link on 2026-08-22 — and it is deliberately not http:// so that
+# nothing can mistake it for a page to fetch.
+SEED_LINK_PREFIX = "ckm-seed:"
+
+# Monday. The rotation is anchored to a fixed Monday so that banquet_slot_index() is a
+# pure function of the calendar and a re-run on the same day lands on the same seed.
+SEED_ROTATION_EPOCH = date(2026, 8, 24)
+BANQUET_DAYS_PER_WEEK = 5          # Monday-Friday banquet, Saturday-Sunday food = 5:2
+
+# The cron fires at 20:47 UTC, which is 03:47 the NEXT day in Phnom Penh. The slot has to
+# be decided on the date the article is published locally, not on the UTC date, or the
+# rotation would be one day out of step with the calendar the owner reads.
+PHNOM_PENH_TZ = timezone(timedelta(hours=7))
+
+# At most three seeds are buffered per run, mirroring the candidate fallback loop the RSS
+# path uses: if Gemini rejects one topic across all its attempts, the next topic is tried
+# rather than the run failing. Three is what the API budget affords — see API_CALL_BUDGET.
+SEED_CANDIDATE_LIMIT = 3
+
+
+def publication_date(now=None):
+    """The Phnom Penh calendar date this run publishes on."""
+    return (now or datetime.now(timezone.utc)).astimezone(PHNOM_PENH_TZ).date()
+
+
+def is_banquet_slot(day):
+    """True on the five banquet days of the week (Monday-Friday)."""
+    return day.weekday() < BANQUET_DAYS_PER_WEEK
+
+
+def banquet_slot_index(day):
+    """How many banquet slots have elapsed since the epoch, counting `day` itself.
+
+    Total for every date, including weekends and dates before the epoch — divmod floors,
+    so a date in the past yields a negative index and the caller's modulo still lands
+    inside the seed list. Deterministic: the same date always returns the same index, so
+    re-running a day picks the same seed.
+    """
+    weeks, rem = divmod(day.toordinal() - SEED_ROTATION_EPOCH.toordinal(), 7)
+    return weeks * BANQUET_DAYS_PER_WEEK + min(rem, BANQUET_DAYS_PER_WEEK)
+
+
+def seed_link(seed):
+    """The de-duplication key for a seed. Stable for the life of the seed's id."""
+    return SEED_LINK_PREFIX + seed["id"]
+
+
+_SEED_SLUG = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+
+
+def load_pulse_seeds(path=SEED_FILE):
+    """Read and VALIDATE devops/pulse_seeds.json. Raises on anything malformed.
+
+    Validation is a gate, not a courtesy. The whole point of this change is that the seed
+    decides the title, so a seed carrying a typo'd category, an English word or a broken
+    Khmer cluster propagates straight into a published page — and pulse grows by one page
+    a day, so it would keep doing so. Raising here turns the run red, which is the only
+    signal that reaches a person (section 15: a failure that cannot turn a run red will
+    not be noticed).
+
+    What is checked, and why each one:
+      - id / slug unique          two seeds sharing an id share a de-duplication key, so
+                                  the second would be silently treated as already used.
+      - slug shape                it becomes the permanent URL path segment. Section 3
+                                  requires descriptive slugs; generate_seo_slug keeps only
+                                  the first 7 segments, so a longer slug would be
+                                  truncated into something the file does not say.
+      - category in PULSE_CATEGORIES  it is rendered as a hashtag on three page types.
+      - Khmer fields non-empty, free of Latin letters, and free of any script that is not
+        Khmer/ASCII (find_foreign_scripts). Sections 10 and 13.
+
+    `slug` is the one field that is deliberately Latin: it is a URL path, exactly like
+    every existing pulse and blog slug, and Khmer cannot produce one.
+    """
+    with open(path, "r", encoding="utf-8") as fh:
+        doc = json.load(fh)
+
+    seeds = doc.get("seeds")
+    if not isinstance(seeds, list) or not seeds:
+        raise ValueError("%s carries no seeds" % path)
+
+    seen_ids, seen_slugs, problems = set(), set(), []
+    for i, seed in enumerate(seeds):
+        where = "seed %d (%s)" % (i, seed.get("id", "no id"))
+        sid, slug = seed.get("id"), seed.get("slug")
+
+        if not sid:
+            problems.append("%s has no id" % where)
+        elif sid in seen_ids:
+            problems.append("%s repeats id %r" % (where, sid))
+        else:
+            seen_ids.add(sid)
+
+        if not slug or not _SEED_SLUG.match(slug):
+            problems.append("%s slug %r is not a lowercase hyphenated path segment"
+                            % (where, slug))
+        elif len(slug.split("-")) > 7:
+            problems.append("%s slug %r has more than 7 segments; generate_seo_slug "
+                            "would truncate it" % (where, slug))
+        elif slug in seen_slugs:
+            problems.append("%s repeats slug %r" % (where, slug))
+        else:
+            seen_slugs.add(slug)
+
+        if seed.get("category_km") not in PULSE_CATEGORIES:
+            problems.append("%s category_km %r is not one of the four published "
+                            "categories" % (where, seed.get("category_km")))
+
+        for field in ("topic_km", "angle_km"):
+            value = seed.get(field)
+            if not value or not isinstance(value, str):
+                problems.append("%s is missing %s" % (where, field))
+                continue
+            if re.search(r"[A-Za-z]", value):
+                problems.append("%s.%s contains a Latin letter; section 10 allows none "
+                                "in Khmer copy" % (where, field))
+            for hit in find_foreign_scripts(value):
+                problems.append("%s.%s: %s" % (where, field, hit))
+
+    if problems:
+        raise ValueError("%s failed validation:\n  - %s"
+                         % (path, "\n  - ".join(problems)))
+    return seeds
+
+
+def seed_candidate(seed):
+    """Shape a seed like a feed candidate so one code path handles both downstream.
+
+    `title_en` exists only for logging and for generate_seo_slug's collision handling;
+    nothing English reaches the page. `pubDate` is None because a seed has no upstream
+    publication date — the caller stamps the run's own timestamp.
+    """
+    return {
+        "kind": "seed",
+        "seed_id": seed["id"],
+        "slug_en": seed["slug"],
+        "topic_km": seed["topic_km"],
+        "angle_km": seed["angle_km"],
+        "title_en": seed["slug"].replace("-", " "),
+        "desc_en": "",
+        "link": seed_link(seed),
+        "category_km": seed["category_km"],
+        "pubDate": None,
+    }
+
+
+def select_seed_candidates(seeds, existing_links, day, limit=SEED_CANDIDATE_LIMIT):
+    """The day's banquet topics, in rotation order, skipping ones already published.
+
+    Deterministic in the date: the same date starts at the same index. Walking forward
+    from there (rather than picking at random, or always taking the first unused) is what
+    keeps 66 seeds from repeating inside a quarter while still tolerating a seed being
+    consumed out of order by a re-run.
+
+    Returns [] when every seed has been published, which the caller treats as a reason to
+    fall through to the food path rather than as a failure.
+    """
+    start = banquet_slot_index(day) % len(seeds)
+    out = []
+    for k in range(len(seeds)):
+        seed = seeds[(start + k) % len(seeds)]
+        if seed_link(seed) in existing_links:
+            continue
+        out.append(seed_candidate(seed))
+        if len(out) >= limit:
+            break
+    return out
+
+
+def unused_seed_count(seeds, existing_links):
+    """Runway signal for banquet days, the counterpart of the RSS path's queue depth."""
+    return sum(1 for s in seeds if seed_link(s) not in existing_links)
 
 
 def sanitize_text(text):
@@ -550,11 +771,33 @@ def verify_live_url(url):
 # The order is deliberately NOT changed on three samples. The ladder exists precisely so
 # that a model going soft is absorbed rather than fatal, and that is exactly what these
 # logs show it doing. Change the order only on a measured, sustained shift.
+#
+# Trimmed to two rungs on 2026-08-22 (owner directive). The arithmetic that follows is
+# the part worth keeping straight, because the ladder's length and API_CALL_BUDGET are
+# the same knob seen from two ends:
+#
+#   worst case per candidate = sum over quality-attempts of (rungs remaining x 2 subcalls)
+#     4 rungs: attempt1 4x2 + attempt2 3x2 + attempt3 2x2 = 18 calls
+#     2 rungs: attempt1 2x2 + attempt2 1x2 + attempt3 1x2 =  8 calls
+#
+# So under the unchanged budget of 25 the shorter ladder covers THREE candidates fully
+# where the longer one covered one and a fraction. That is why SEED_CANDIDATE_LIMIT is 3:
+# on a banquet day the fallback loop can genuinely try all three topics without the budget
+# cutting it off mid-way. The RSS path still buffers 5 candidates and can still be stopped
+# by the budget at the fourth — unchanged behaviour, and acceptable, because a food-day
+# candidate that fails is followed by another one tomorrow.
+#
+# Typical cost is still 1 call. The budget bites only on a day when the model is refusing
+# everything, which is exactly when it should.
+#
+# The down-walking retry still holds with two rungs. call_gemini_api_robust slices
+# MODEL_LADDER[min(start, len-1):], so attempt 1 starts at 3.7, attempt 2 at 3.6, and
+# attempt 3 clamps to 3.6 — the floor, not a restart at the top. The property the rule
+# protects is that a rejection never sends the same prompt back to the model that just
+# got it wrong while a lower rung is still untried; that is intact.
 MODEL_LADDER = [
     "gemini-3.7-flash",
     "gemini-3.6-flash",
-    "gemini-3.5-flash",
-    "gemini-3.5-flash-lite",
 ]
 API_CALL_BUDGET = 25          # hard ceiling for a single pipeline run
 
@@ -612,7 +855,57 @@ RETRY_GUIDANCE = {
     "repeated-opener":
         "The title or summary opened with the same phrase as other published entries. Start "
         "it a different way -- name the dish, lead with the ingredient, or ask a question.",
+    "title-missing-demand-root":
+        "The title did not contain any of the Khmer words Cambodian readers actually "
+        "search for. Rewrite title_km so it contains one of ម្ហូបការ, មុខម្ហូប or ពិធី "
+        "written exactly that way. Keep the whole title short, and do NOT put that word "
+        "at the very start -- the opening of the title is checked against every "
+        "already-published entry as well.",
 }
+
+# --- The title gate --------------------------------------------------------------
+#
+# Section 15: an instruction in the prompt is a request; only a gate is a standard. The
+# prompt below asks for a title carrying a term Cambodian readers search for, and asking
+# is what the four-subheading requirement did for six entries before MIN_CONTENT_SECTIONS
+# existed — honoured once out of six.
+#
+# These three roots are the ones MEASURED to carry volume in Cambodia over the 90 days to
+# 2026-08-20 (the block above FEEDS has the numbers): ម្ហូបការ at 254 impressions and
+# ម្ហូបការ's parent forms, មុខម្ហូបការ at 59, and ពិធី as the head of the occasion terms the
+# banquet seeds are built around. Note ម្ហូបការ is a substring of មុខម្ហូបការ and មុខម្ហូប of
+# មុខម្ហូបការ, so a title naming the full phrase satisfies the gate several times over —
+# that is intended, not a bug.
+#
+# Cost against the 60-unit title budget, measured with display_width: ម្ហូបការ is 7.1
+# units, មុខម្ហូប 7.5, ពិធី 3.6. A real 50-unit Khmer title has room for any of them.
+#
+# FOOD-SLOT DAYS ARE EXEMPT. A recipe piece about a braise is not about ម្ហូបការ, and
+# forcing the word in would produce a title that misdescribes its own page — the intent
+# mismatch section 18 records for /blog/01-…, where an exactly-matching title took 0
+# clicks from 48 impressions. A dishonest title is worse than an unfound one.
+# Measured in Search Console over 90 days to 2026-08-20, Cambodia only:
+#   ម្ហូបការ    254 impressions, 11 clicks, position 3.8
+#   មុខម្ហូបការ   59 impressions,  1 click,  position 5.2
+# Those two are the only Khmer strings on this site with demonstrated volume, and
+# both contain ម្ហូប. ពិធី is NOT in that class -- it appears only inside
+# ពិធីឡើងផ្ទះ and ពិធីឡើងគេហដ្ឋានថ្មី at one impression each -- so it is accepted
+# only alongside a food term. Twenty-eight of the 66 seeds are occasion topics
+# whose natural title carries ពិធី and nothing else; letting that alone satisfy
+# the gate would pass titles with no catering term at all, which is the intent
+# mismatch section 18 records for /blog/01- (exact keyword match, 48 impressions,
+# zero clicks).
+TITLE_FOOD_ROOT = "ម្ហូប"
+TITLE_STRONG_ROOTS = ("ម្ហូបការ", "មុខម្ហូប")
+TITLE_OCCASION_ROOT = "ពិធី"
+
+
+def title_carries_demand(title):
+    """A banquet-day title must be findable: either a measured catering term, or
+    an occasion term paired with a food term. An occasion alone is not enough."""
+    if any(root in title for root in TITLE_STRONG_ROOTS):
+        return True
+    return TITLE_OCCASION_ROOT in title and TITLE_FOOD_ROOT in title
 
 PULSE_TITLE_MAX_UNITS = 60
 PULSE_SUMMARY_MAX_UNITS = 155
@@ -916,6 +1209,189 @@ def card_site_url(path):
     return "/" + os.path.relpath(path, "public").replace(os.sep, "/")
 
 
+# --- The generation prompt -------------------------------------------------------
+#
+# Two subjects, one set of rules. The banquet-seed brief and the recipe brief differ only
+# in what they point the writer at; the language rules, the promotional limits, the
+# thin-content bans and the output contract are SHARED CONSTANTS so that hardening one
+# hardens both. They were a single f-string before 2026-08-22; splitting the subject out
+# rather than copying the whole prompt is what stops the two drifting apart, which is the
+# same reasoning that keeps display_width in one file with two consumers.
+
+PROMPT_IDENTITY = """
+You are the senior Khmer culinary editor for CKM Catering (ចេង គួងម៉េង), a family
+banquet kitchen in Phnom Penh with 60 years behind it. You are writing for readers in
+Cambodia who are planning a wedding, a family ceremony or a company gathering.
+"""
+
+# Exactly as spelled in src/data/homeData.ts. Section 12: dish names must match that file
+# character for character. បាយខ្ចប់ស្លឹកឈូក in particular — ខ្ចប់ is "to wrap"; ខ្ទប់ is not
+# the word and was live on the homepage.
+PROMPT_MENU_DISHES = (
+    "ជ្រូកខ្វៃនិងនំប៉័ង, ស៊ុបប៉ាវហឺ១០មុខ, ត្រីតុកកែចំហ៊ុយទឹកស៊ីអ៊ីវ, បាយខ្ចប់ស្លឹកឈូក, "
+    "ញាំជើងទាបង្គោរមិក, តុងយាំបង្កងទន្លេ, កូនជ្រូកខ្វៃទាំងមូល, ទាខ្វៃហុងកុង, "
+    "បង្អែមខ្មែរបុរាណ"
+)
+
+PROMPT_PROMOTIONAL_LIMITS = """
+PROMOTIONAL LIMITS — THE HARDEST RULE HERE
+We market this business on the owner's behalf and we CANNOT VERIFY HIS OPERATIONS, so the
+article must never commit him to anything. Nothing you write may promise, on CKM's behalf:
+ - a price, a deposit, a discount, or any figure of money;
+ - a capacity: a number of tables, a number of guests, a minimum or a maximum booking;
+ - a service area, a district, a travel radius, or a delivery promise;
+ - equipment or technology: no modern or automated kitchen, no digital temperature
+   monitoring, no refrigerated transport, no named machine;
+ - a certification, an inspection, an award or a licence;
+ - unlimited or fully customised menus, international fusion on request, or any form of
+   "we can make any dish you want";
+ - online booking, online payment, online plan selection, or an invoice guarantee;
+ - any unconditional guarantee. NEVER write the Khmer for "one hundred percent" of
+   anything, and never "no hidden costs". An absolute is rejected outright.
+Never state a profit margin or a cost breakdown. Do not write about tipping, about packing
+leftovers home, about bargaining, or about anything being cheap.
+
+Instead: state what is GENERALLY TRUE of a Khmer-Chinese banquet kitchen and of careful
+practice, and route every specific commitment to a direct conversation — invite the reader
+to speak with CKM on Telegram or by telephone to settle the details of their own event.
+That invitation is the correct ending for any question the reader would otherwise expect a
+number for.
+
+The ONE scheduling figure you may state is the booking lead time, and it is exactly
+'២ ទៅ ៤ សប្តាហ៍' before the event. Never any other span, and always followed by an
+invitation to contact CKM and confirm the date.
+
+Figures that are planning advice TO THE READER — how much floor space a guest needs, how
+far the kitchen should sit from the tables — are not commitments about what CKM supplies
+and are welcome.
+"""
+
+PROMPT_THIN_CONTENT_BANS = """
+BANNED, BECAUSE THEY MAKE CONTENT THIN
+- Filler adjectives standing in for information: "ឆ្ងាញ់ណាស់", "ល្អឥតខ្ចោះ",
+  "ប្រណីតបំផុត" with nothing concrete attached.
+- Sentences that would be equally true of any dish or any event on earth.
+- Hard technical specifications: no temperatures in degrees, no electrical ratings, no
+  exact hold times. Describe judgement and craft in words instead.
+- Inventing a fixed number where practice varies. Simmer times and where a course sits in
+  a meal depend on the size of the ingredient and on family custom — say so rather than
+  making one up.
+"""
+
+PROMPT_LANGUAGE_RULES = """
+LANGUAGE — ABSOLUTE
+1. 100% Khmer script. ZERO Chinese characters. ZERO raw English words — and a bracketed
+   English gloss beside the Khmer is still an English word. Do not write one.
+2. ZERO Thai script (ก-๛), ZERO Japanese kana, ZERO Devanagari. Khmer and Thai share
+   Indic vocabulary and your training data mixes them. Do NOT emit ช่วย, หัวใจ,
+   วัฒนธรรม, จากการ, รากผักชี or any other Thai word. If you are unsure of a Khmer word,
+   describe the idea in plain Khmer rather than borrowing a Thai one.
+3. Address the reader as 'លោកអ្នក' — never bare 'អ្នក'. Refer to the team as 'យើងខ្ញុំ'.
+4. Humble and specific. No hype: never '第一', 'ល្អបំផុតក្នុងពិភពលោក', 'គ្មានអ្នកណាប្រៀបបាន'.
+5. Watch for doubled words: 'លោកលោកអ្នក' has shipped before.
+"""
+
+PROMPT_OUTPUT_CONTRACT = """
+OUTPUT — JSON ONLY, no commentary, no markdown fences:
+   - "title_km": 30-55 characters. %(title_rule)s
+     Vary the opening across articles — do not start every title the same way. The first
+     ten characters of the title and of the summary are checked against every entry
+     already published, and a third repeat is rejected.
+   - "summary_km": 150-200 characters. State the actual insight, so a reader who reads only
+     this line still learns something.
+   - "content_km": 450-600 Khmer words, in exactly 4 sections. Each section MUST begin with
+     its own descriptive markdown subheading starting with '### ' in Khmer (for example:
+     '### ១. ...'), following the four points above in order. Each section must contain at
+     least one concrete, checkable statement.
+   - "key_points_km": exactly 3 items. Each must state a specific technique or judgement a
+     reader could act on. Not summaries of the article, and not slogans.
+"""
+
+SEED_TITLE_RULE = (
+    "The title MUST contain at least one of these Khmer terms, written exactly so: "
+    "ម្ហូបការ, មុខម្ហូប, ពិធី. This is checked in code and the answer is rejected without "
+    "it — these are the terms Cambodian readers actually type into a search box. Put it "
+    "where it reads naturally, NOT necessarily at the start."
+)
+
+FOOD_TITLE_RULE = (
+    "Lead with the technique or the insight, not the foreign dish name."
+)
+
+SEED_BRIEF = """
+TODAY'S SUBJECT IS A BANQUET TOPIC, NOT A RECIPE.
+
+Topic: %(topic)s
+The question a reader planning a banquet is actually asking: %(angle)s
+
+WHAT MAKES THE PIECE WORTH PUBLISHING
+Every article must do all four of these, in this order:
+1. ANSWER THE QUESTION. Open by answering the reader's question plainly, in a way they
+   could act on today. Do not warm up first.
+2. EXPLAIN WHY THE ANSWER IS WHAT IT IS. Give the reasoning a banquet kitchen works from:
+   how a dish behaves across many tables, why a course sits where it sits, what changes
+   when the guest count rises. Explain the principle, not just the instruction.
+3. MAKE IT USEFUL IN CAMBODIA. Honour ចាស់ទុំ in any advice about the menu. Address dry
+   season heat and wet season rain for anything outdoors. Answer real Phnom Penh
+   logistics where they apply: approval inside a បុរី, parking, narrow access lanes.
+   Where a dish is relevant, name a real one from CKM's own menu: %(dishes)s.
+4. TELL THE READER WHAT TO DO NEXT, and route anything specific to their own event —
+   dates, counts, budgets — to a direct conversation on Telegram or by telephone.
+"""
+
+FOOD_BRIEF = """
+A recipe blog has published the article below. Do NOT translate it. Translation of a
+foreign recipe is thin content and will be treated as such by search engines and by
+readers. Your job is to write an ORIGINAL Khmer feature that uses this dish only as a
+starting point, and whose value comes from something the source article does not have:
+the perspective of a Khmer-Chinese banquet kitchen.
+
+WHAT MAKES THE PIECE WORTH PUBLISHING
+Every article must do all four of these, in this order:
+1. NAME THE TECHNIQUE. Identify the one transferable cooking principle at work — control
+   of heat, the order ingredients enter the wok, how a broth is clarified, how a protein
+   is kept from drying, how a sauce is balanced. Explain WHY it works, not just what to do.
+2. CONNECT IT TO KHMER-CHINESE BANQUET COOKING. Which dish already on a Cambodian
+   wedding table uses this same principle? Name real dishes: %(dishes)s. Draw a real
+   parallel or a real contrast — never a vague "this is similar to Khmer cooking".
+3. MAKE IT USEFUL TO A CAMBODIAN READER. What changes when you cook this in Phnom Penh —
+   which ingredient is easy to find at a local market and which needs a substitute, how
+   the humidity or heat affects it, what to do differently when cooking for many guests
+   rather than for one family.
+4. SAY WHERE IT FITS IN A MEAL. Opening, main, palate-cleanser, or closing — and why.
+
+ALSO BANNED for this piece: restating the source recipe step by step — never produce an
+ingredient list or a numbered method — and mentioning the source blog, the source
+country, or that this is adapted at all.
+
+Source dish: %(title_en)s
+Source notes: %(desc_en)s
+"""
+
+
+def build_prompt(candidate):
+    """The full prompt for one candidate. Shared rules, subject-specific brief."""
+    if candidate.get("kind") == "seed":
+        brief = SEED_BRIEF % {"topic": candidate["topic_km"],
+                              "angle": candidate["angle_km"],
+                              "dishes": PROMPT_MENU_DISHES}
+        title_rule = SEED_TITLE_RULE
+    else:
+        brief = FOOD_BRIEF % {"dishes": PROMPT_MENU_DISHES,
+                              "title_en": candidate["title_en"],
+                              "desc_en": candidate["desc_en"]}
+        title_rule = FOOD_TITLE_RULE
+
+    return "".join([
+        PROMPT_IDENTITY,
+        brief,
+        PROMPT_THIN_CONTENT_BANS,
+        PROMPT_PROMOTIONAL_LIMITS,
+        PROMPT_LANGUAGE_RULES,
+        PROMPT_OUTPUT_CONTRACT % {"title_rule": title_rule},
+    ])
+
+
 def update_pulse_daily():
     out_file = "src/data/pulseData.json"
     existing_pulse = []
@@ -924,7 +1400,44 @@ def update_pulse_daily():
             existing_pulse = json.load(f)
 
     existing_links = set(p.get("source_link", "").strip() for p in existing_pulse if p.get("source_link"))
-    raw_items, depth_reached, feeds_healthy = fetch_verified_gourmet_rss_items(existing_links)
+
+    # --- Which slot is today? ------------------------------------------------------
+    #
+    # Five banquet-seed days then two RSS food days per seven-day cycle (owner directive
+    # 2026-08-22), decided from the PHNOM PENH calendar date. Deciding from the date and
+    # not from a counter is what makes a re-run idempotent: the same day always resolves
+    # to the same slot and starts at the same seed.
+    #
+    # load_pulse_seeds() raises on a malformed seed file, which turns the run red. That is
+    # deliberate — section 15: a failure that cannot turn a run red will not be noticed,
+    # and a bad seed would otherwise publish a bad title.
+    seeds = load_pulse_seeds()
+    pub_day = publication_date()
+    slot = "banquet" if is_banquet_slot(pub_day) else "food"
+    seed_candidates = []
+
+    if slot == "banquet":
+        seed_candidates = select_seed_candidates(seeds, existing_links, pub_day)
+        if not seed_candidates:
+            # 66 seeds at five a week is roughly three months. Running out is a
+            # content-planning problem, not an outage, so fall through to the food path —
+            # something still publishes — but say so loudly enough that it gets actioned.
+            print("::warning::Every banquet seed in devops/pulse_seeds.json has already "
+                  "been published. Falling back to the food slot today; add more seeds.",
+                  flush=True)
+            slot = "food"
+
+    seeds_remaining = unused_seed_count(seeds, existing_links)
+    print("\nSlot for %s (%s): %s. %d of %d banquet seeds unused."
+          % (pub_day.isoformat(), pub_day.strftime("%A"), slot,
+             seeds_remaining, len(seeds)), flush=True)
+
+    # A banquet-seed day needs NO network to choose its subject: the feeds are not
+    # fetched, and verify_live_url is never reached because `unseen` stays empty below.
+    if slot == "banquet":
+        raw_items, depth_reached, feeds_healthy = [], 0, True
+    else:
+        raw_items, depth_reached, feeds_healthy = fetch_verified_gourmet_rss_items(existing_links)
 
     # [REGRESSION] Take the NEWEST unseen item, not the first one in FEEDS order.
     #
@@ -988,6 +1501,10 @@ def update_pulse_daily():
     # sorted() is stable, so items sharing a rank keep their FEEDS order.
     unseen.sort(key=selection_rank, reverse=True)
 
+    # The runway signal reported to the workflow summary. On a banquet day the analogous
+    # number is how many seed topics are left, not how many feed items are queued.
+    queue_depth = seeds_remaining if slot == "banquet" else len(unseen)
+
     # Liveness is checked HERE, on the candidates about to be processed, rather than on
     # every candidate during the fetch. Collect up to 5 live candidates so that if one
     # fails quality gates, the pipeline can fall back to the next dish.
@@ -995,7 +1512,10 @@ def update_pulse_daily():
     # No image is resolved here any more. The share card is drawn from the generated
     # Khmer text, so it cannot exist until after generation; render_pulse_cards() writes
     # it at the end of this function.
-    valid_candidates = []
+    #
+    # On a banquet day this already holds today's seed topics and `unseen` is empty, so
+    # the loop runs zero times: no HTTP request is made to choose a subject.
+    valid_candidates = list(seed_candidates)
     for cand in unseen:
         if verify_live_url(cand["link"]):
             valid_candidates.append(cand)
@@ -1033,8 +1553,8 @@ def update_pulse_daily():
         with open(out_file, "w", encoding="utf-8") as f:
             json.dump(existing_pulse, f, ensure_ascii=False, indent=2)
         print("Dataset unchanged — no deploy or indexing needed.", flush=True)
-        set_action_output(changed="false", reason=reason, queue_depth=len(unseen),
-                          archive_depth=depth_reached)
+        set_action_output(changed="false", reason=reason, slot=slot,
+                          queue_depth=queue_depth, archive_depth=depth_reached)
         print(f"::error::The pulse published nothing today (reason: {reason}).", flush=True)
         return 1
 
@@ -1048,69 +1568,13 @@ def update_pulse_daily():
 
     for cand_idx, candidate in enumerate(valid_candidates, 1):
         item_to_process = candidate
-        print(f"\nProcessing candidate {cand_idx}/{len(valid_candidates)} with Rate Limiting & Anti-Fool Guard: {item_to_process['title_en']}", flush=True)
+        label = (item_to_process["topic_km"] if item_to_process.get("kind") == "seed"
+                 else item_to_process["title_en"])
+        print(f"\nProcessing candidate {cand_idx}/{len(valid_candidates)} "
+              f"({slot} slot): {label}", flush=True)
 
-        prompt = f"""
-You are the senior Khmer culinary editor for CKM Catering (ចេង គួងម៉េង), a family
-banquet kitchen in Phnom Penh with 60 years behind it.
+        prompt = build_prompt(item_to_process)
 
-A recipe blog has published the article below. Do NOT translate it. Translation of a
-foreign recipe is thin content and will be treated as such by search engines and by
-readers. Your job is to write an ORIGINAL Khmer feature that uses this dish only as a
-starting point, and whose value comes from something the source article does not have:
-the perspective of a Khmer-Chinese banquet kitchen.
-
-WHAT MAKES THE PIECE WORTH PUBLISHING
-Every article must do all four of these, in this order:
-1. NAME THE TECHNIQUE. Identify the one transferable cooking principle at work — control
-   of heat, the order ingredients enter the wok, how a broth is clarified, how a protein
-   is kept from drying, how a sauce is balanced. Explain WHY it works, not just what to do.
-2. CONNECT IT TO KHMER-CHINESE BANQUET COOKING. Which dish already on a Cambodian
-   wedding table uses this same principle? Name real dishes: ជ្រូកខ្វៃ, ស៊ុបប៉ាវហឺ,
-   ត្រីចំហុយទឹកស៊ីអ៊ីវ, បាយខ្ចប់ស្លឹកឈូក, ញាំជើងទា, តុងយាំបង្កងទន្លេ. Draw a real parallel
-   or a real contrast — never a vague "this is similar to Khmer cooking".
-3. MAKE IT USEFUL TO A CAMBODIAN READER. What changes when you cook this in Phnom Penh —
-   which ingredient is easy to find at a local market and which needs a substitute, how
-   the humidity or heat affects it, what to do differently when cooking for many guests
-   rather than for one family.
-4. SAY WHERE IT FITS IN A MEAL. Opening, main, palate-cleanser, or closing — and why.
-
-BANNED, BECAUSE THEY MAKE CONTENT THIN
-- Restating the source recipe step by step. Never produce an ingredient list or a
-  numbered method.
-- Filler adjectives standing in for information: "ឆ្ងាញ់ណាស់", "ល្អឥតខ្ចោះ",
-  "ប្រណីតបំផុត" with nothing concrete attached.
-- Sentences that would be equally true of any dish on earth.
-- Promising anything on the owner's behalf: no prices, no guarantees, no claims about
-  CKM's equipment, no "we can make any dish you want".
-- Hard technical specifications: no temperatures in degrees, no electrical ratings, no
-  exact hold times. Describe judgement and craft in words instead.
-
-LANGUAGE — ABSOLUTE
-1. 100% Khmer script. ZERO Chinese characters. ZERO raw English words.
-2. ZERO Thai script (ก-๛), ZERO Japanese kana, ZERO Devanagari. Khmer and Thai share
-   Indic vocabulary and your training data mixes them. Do NOT emit ช่วย, หัวใจ,
-   วัฒនธรรม, จากការ, ราកผักชี or any other Thai word. If you are unsure of a Khmer word,
-   describe the idea in plain Khmer rather than borrowing a Thai one.
-3. Address the reader as 'លោកអ្នក'. Refer to the team as 'យើងខ្ញុំ'.
-4. Humble and specific. No hype: never '第一', 'ល្អបំផុតក្នុងពិភពលោក', 'គ្មានអ្នកណាប្រៀបបាន'.
-5. Do not mention the source blog, the source country, or that this is adapted.
-
-OUTPUT — JSON ONLY, no commentary, no markdown fences:
-   - "title_km": 30-55 characters. Lead with the technique or the insight, not the foreign
-     dish name. Vary the opening across articles — do not start every title with 'សិល្បៈនៃ'.
-   - "summary_km": 150-200 characters. State the actual insight, so a reader who reads only
-     this line still learns something.
-   - "content_km": 450-600 Khmer words, in exactly 4 sections. Each section MUST begin with
-     its own descriptive markdown subheading starting with '### ' in Khmer (for example:
-     '### ១. ឈ្មោះបច្ចេកទេស...'), following the four points above in order. Each section must
-     contain at least one concrete, checkable statement.
-   - "key_points_km": exactly 3 items. Each must state a specific technique or judgement a
-     cook could act on. Not summaries of the article, and not slogans.
-
-Source dish: {item_to_process['title_en']}
-Source notes: {item_to_process['desc_en']}
-"""
         MAX_ATTEMPTS = 3
         title_km = summary_km = content_km = ""
         key_points_km = []
@@ -1184,6 +1648,28 @@ Source notes: {item_to_process['desc_en']}
                 reject_reason = "foreign-script-in-output"
                 continue
 
+            # The title gate. Banquet-seed days only — see title_carries_demand for why a
+            # food-slot recipe piece is exempt rather than forced into a title that
+            # misdescribes it.
+            #
+            # Checked BEFORE the length gate on purpose. Both gates push the title in
+            # opposite directions, and a title that is missing the term has to be
+            # rewritten anyway, whereas a title that is merely too long is trimmed. Asking
+            # for the rewrite first means the trim happens once, against the final wording.
+            if (item_to_process.get("kind") == "seed"
+                    and not title_carries_demand(title_km)):
+                print(f"Attempt {attempt}/{MAX_ATTEMPTS}: the title carries no term "
+                      f"Cambodian readers search for — needs ម្ហូបការ or មុខម្ហូប, or "
+                      f"ពិធី together with ម្ហូប. Retrying. Title was: {title_km}",
+                      flush=True)
+                reject_detail = ["the title %r contained no term Cambodian readers "
+                                 "search for. It needs ម្ហូបការ or មុខម្ហូប, or ពិធី "
+                                 "together with ម្ហូប; an occasion word on its own is "
+                                 "not enough, because the page then cannot be found "
+                                 "however well it is written" % title_km]
+                reject_reason = "title-missing-demand-root"
+                continue
+
             title_w = display_width(title_km)
             if title_w > PULSE_TITLE_MAX_UNITS:
                 print(f"Attempt {attempt}/{MAX_ATTEMPTS}: title is {title_w:.1f} display units "
@@ -1252,8 +1738,8 @@ Source notes: {item_to_process['desc_en']}
     if not successful_candidate:
         print(f"WARNING: All {len(valid_candidates)} candidates were rejected by the quality gate. "
               "Preserving existing dataset rather than publishing broken Khmer.", flush=True)
-        set_action_output(changed="false", reason="all-candidates-rejected",
-                          queue_depth=len(unseen), archive_depth=depth_reached)
+        set_action_output(changed="false", reason="all-candidates-rejected", slot=slot,
+                          queue_depth=queue_depth, archive_depth=depth_reached)
         print(f"::error::Generation failed for all {len(valid_candidates)} candidate dishes.", flush=True)
         return 1
 
@@ -1261,9 +1747,19 @@ Source notes: {item_to_process['desc_en']}
 
     new_id = next_pulse_id(existing_pulse)
     taken = {p.get("slug") for p in existing_pulse if p.get("slug")}
+    is_seed = item_to_process.get("kind") == "seed"
+
+    # A banquet seed brings its own slug (a Latin URL path segment, like every other pulse
+    # and blog slug). It still goes through generate_seo_slug so that collision handling
+    # stays in ONE place: the seed file cannot know which slugs are already taken, and a
+    # duplicate slug would generate two pages at one URL.
+    slug_source = item_to_process["slug_en"] if is_seed else item_to_process["title_en"]
+
+    now_rfc2822 = format_datetime(datetime.now(timezone.utc))
+
     new_entry = {
         "id": new_id,
-        "slug": generate_seo_slug(item_to_process["title_en"], new_id, taken),
+        "slug": generate_seo_slug(slug_source, new_id, taken),
         "title_km": title_km,
         "summary_km": summary_km,
         "content_km": content_km,
@@ -1276,15 +1772,26 @@ Source notes: {item_to_process['desc_en']}
         # text is the title, which is true of the card and short enough to be read aloud;
         # the model is no longer asked to describe a photograph that does not exist.
         "image_alt": title_km,
+        # For a feed item this is the source URL; for a banquet seed it is the synthetic
+        # ckm-seed: key. Either way it is the de-duplication key and nothing else — it has
+        # not been rendered on the page since 2026-08-22.
         "source_link": item_to_process["link"],
-        # Rendered on the page, so it must contain only what Hanuman can draw.
-        "source_title_en": sanitize_source_title(item_to_process["title_en"]),
-        "pub_date": item_to_process["pubDate"],
+        # A banquet seed has no upstream article, so there is no source to name. Empty
+        # rather than the seed's own slug: inventing an English "source" for a piece
+        # written from a Khmer topic would be a false statement about where it came from.
+        # The field is kept so every entry in pulseData.json has the same shape, which is
+        # what CateringPulse.astro's PulseItem interface expects.
+        #
+        # For a feed item it is rendered nowhere now but is still sanitised: it is stored
+        # for the record and section 13 applies to anything that could be displayed later.
+        "source_title_en": "" if is_seed else sanitize_source_title(item_to_process["title_en"]),
+        # A seed has no upstream publication date; this run IS its publication.
+        "pub_date": item_to_process["pubDate"] or now_rfc2822,
         # When this reached the site, as distinct from when the source blog
         # published it. Sorting on pub_date alone buried today's article at
         # position 26 of 27, on page 3 of the listing: the source post was from
         # February. A recipe's age is not news, but its arrival here is.
-        "added_at": format_datetime(datetime.now(timezone.utc)),
+        "added_at": now_rfc2822,
     }
 
     def parse_item_date(item):
@@ -1313,19 +1820,20 @@ Source notes: {item_to_process['desc_en']}
         # will recur every run until a person fixes it.
         print("::error::The share card for the new entry could not be rendered; "
               "publishing it would ship a 404 og:image.", flush=True)
-        set_action_output(changed="false", reason="card-render-failed",
-                          queue_depth=len(unseen), archive_depth=depth_reached)
+        set_action_output(changed="false", reason="card-render-failed", slot=slot,
+                          queue_depth=queue_depth, archive_depth=depth_reached)
         return 1
 
     with open(out_file, "w", encoding="utf-8") as f:
         json.dump(updated_list, f, ensure_ascii=False, indent=2)
         
-    print(f"SUCCESS: Added 1 new verified Khmer gourmet article to {out_file}!", flush=True)
-    # queue_depth is the runway signal: how many unseen candidates were available today.
-    # A steady figure means the machine is fed; a figure trending toward zero is the
-    # only early warning that the sources are drying up.
+    print(f"SUCCESS: Added 1 new Khmer {slot}-slot article to {out_file}!", flush=True)
+    # queue_depth is the runway signal: on a food day, how many unseen feed candidates
+    # were available; on a banquet day, how many seed topics remain unpublished. A steady
+    # figure means the machine is fed; a figure trending toward zero is the only early
+    # warning that the supply is drying up.
     set_action_output(changed="true", new_slug=new_entry["slug"], new_id=new_entry["id"],
-                      reason="published", queue_depth=len(unseen),
+                      reason="published", slot=slot, queue_depth=queue_depth,
                       archive_depth=depth_reached)
     return 0
 

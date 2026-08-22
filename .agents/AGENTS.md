@@ -430,6 +430,39 @@ Every item below came out of an audit of the 15 live articles.
   authority these pages carry to a competitor's recipe site. Do not restore the link, and
   keep any wording elsewhere on the site (the disclaimer page in particular) consistent
   with this: the feed takes a dish name as a starting point, nothing more.
+- **Subjects come from a seed list five days a week, from the feeds two (owner directive
+  2026-08-22).** Measured that day over 90 days in Search Console, filtered to Cambodia: the
+  36 pulse pages had earned **2 impressions and 0 clicks**, against 282 impressions for the 15
+  blog articles and 1,069 for the homepage. The bodies were fine — the prompt already forced a
+  link to Khmer-Chinese banquet practice — but the **seed decided the title**, and a title
+  about wok technique or a Hong Kong pastry is a string nobody in Cambodia searches. Only two
+  Khmer queries carry volume: `ម្ហូបការ` (254 impressions, 11 clicks, position 3.8) and
+  `មុខម្ហូបការ` (59, 1, 5.2).
+  - `devops/pulse_seeds.json` holds 66 Cambodian banquet topics — dishes, occasions, planning
+    questions. Dish names are copied verbatim from `src/data/homeData.ts`; §12 records one that
+    shipped misspelled. Rotation is Monday–Friday seed, Saturday–Sunday feed, derived from the
+    **Phnom Penh** date, not UTC: the cron fires at 20:47 UTC, which is 03:47 ICT the next day,
+    so a UTC-based rotation would sit one day out of step. Measured over a simulated year: 5
+    banquet days every week, 66 seeds consumed with no repeat inside 91 days.
+  - On a seed day nothing is fetched to choose the subject, so `verify_live_url` is never
+    reached and the run makes zero network calls for selection. The feed machinery below is
+    untouched and still runs on the two food days.
+  - **[REGRESSION] A title that carries no demand term cannot be found however well it is
+    written.** `title_carries_demand()` rejects and retries a seed-day title unless it carries
+    `ម្ហូបការ` or `មុខម្ហូប`, or `ពិធី` **together with** `ម្ហូប`. An occasion word alone is
+    not enough — 28 of the 66 seeds are occasion topics whose natural title carries only
+    `ពិធី`, which measured 1 impression, so accepting it alone would have passed titles with
+    no catering term at all. Food-slot days are exempt: forcing the term onto a braise piece
+    produces a title that misdescribes its own page, which is the intent mismatch §18 records
+    for `/blog/01-…` (exact keyword match, 48 impressions, 0 clicks).
+- **[REGRESSION] §11 was enforced on the pulse path as prompt prose only.** Proved 2026-08-22:
+  a pulse entry reading `យើងខ្ញុំធានា១០០% … ៥០ គីឡូវ៉ាត់ … ៦០ អង្សាសេ` passed
+  `check_content.py` with **zero findings**, because `check_absolutes` and `check_hard_specs`
+  were called only inside the article loop. `check_pulse()` now calls both over `title_km`,
+  `summary_km`, `content_km` and every `key_points_km` entry. Same probe after the fix: 2
+  errors, 2 warnings. This is the §15 rule in its own words — an instruction in the prompt is
+  a request, only a gate is a standard — and the seed list makes it matter more, because every
+  article now points at the business instead of at someone else's recipe.
 - **[REGRESSION] The daily item is the NEWEST unseen one, not the first in `FEEDS` order.**
   Selection used to take the first unseen item while walking `FEEDS` in order, so the queue
   followed the source list rather than the calendar. Measured 2026-08-15 with 88 unseen
@@ -527,7 +560,9 @@ Every item below came out of an audit of the 15 live articles.
   now rejects and retries, feeding the specific reason back to the model. Anything the
   output MUST have needs a gate, or it holds only when the model feels like it.
 - **Pulse quality is now the site's quality.** The blog is frozen at 15 articles; pulse
-  grows by one a day, so it passes 90% of the site's pages within a year. Judge a change
+  grows by one a day (`47 20 * * *`, a single daily run since 2026-08-22 — the second run
+  published a second article rather than retrying the first, which would have given 14 a week
+  against a directive of 7 and skewed the 5:2 rotation inside every week), so it passes 90% of the site's pages within a year. Judge a change
   to the generator by what 400 entries of it will look like, not by the next one.
 - Every pulse page already links to three blog articles, chosen by real term overlap with
   two slots and a rotating third (`pulse/[id].astro`). Measured: all 15 blog articles are

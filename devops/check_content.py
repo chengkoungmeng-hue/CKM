@@ -477,6 +477,22 @@ def check_pulse():
     for it in items:
         ident = it.get("id", "?")
 
+        # Section 11 applies to pulse exactly as it applies to articles, and until
+        # 2026-08-22 nothing enforced it here: an entry promising ធានា១០០% while
+        # quoting a kVA rating and a Celsius figure passed with zero findings. The
+        # article loop already had these two checks; the pulse loop simply never
+        # called them. Same functions, same severities -- over-promise is an error,
+        # hard-spec stays a warning, per section 11.
+        for _field in ("title_km", "summary_km", "content_km"):
+            _text = it.get(_field) or ""
+            if _text:
+                check_absolutes("%s#%s.%s" % (p, ident, _field), _text)
+                check_hard_specs("%s#%s.%s" % (p, ident, _field), _text)
+        for _i, _pt in enumerate(it.get("key_points_km") or []):
+            if isinstance(_pt, str) and _pt:
+                check_absolutes("%s#%s.key_points[%d]" % (p, ident, _i), _pt)
+                check_hard_specs("%s#%s.key_points[%d]" % (p, ident, _i), _pt)
+
         # [REGRESSION] source_title_en is NOT a Khmer field, so it is rightly absent from
         # PULSE_KHMER_FIELDS — but pulse/[id].astro renders it verbatim on the page under
         # ប្រភពដើមអន្តរជាតិ. Feeds title posts bilingually, so "Pickled Daikon 大根の漬物"

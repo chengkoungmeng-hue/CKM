@@ -58,6 +58,18 @@ jobs:
           io.open("devops/reports/gsc_raw_keys.txt", "w", encoding="utf-8").write(repr(list(d))[:2000])
           PY
 
+      # The pipeline submits a sitemap and stops; nothing ever checked whether a
+      # published pulse page went on to earn an impression. This reports that, and it
+      # belongs here rather than in the daily publishing workflow -- section 15: a
+      # reporting failure must never block a publish that did succeed.
+      #
+      # The window is deliberately the script's own default (480 days, roughly Search
+      # Console's retention) rather than the `days` input above: each page is measured
+      # from its own live date, so a 90-day window would clip the older entries and
+      # report a partial zero as a lifetime one.
+      - name: Check whether published pulse pages earn impressions
+        run: python devops/check_pulse_indexation.py
+
       - name: Remove the key before anything else runs
         if: always()
         run: rm -f google_service_account.json

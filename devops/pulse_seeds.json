@@ -1,0 +1,469 @@
+{
+  "version": 1,
+  "updated": "2026-08-22",
+  "note": "Curated banquet topics for the 5:2 pulse rotation. Read devops/fetch_catering_pulse.py (load_pulse_seeds) for the schema, the validation gate and the rotation. category_km must be one of PULSE_CATEGORIES. topic_km and angle_km are Khmer-only and are gated on that; slug is a Latin URL path segment, exactly like every existing pulse and blog slug, and is the one field that is deliberately not Khmer.",
+  "seeds": [
+    {
+      "id": "seed-001",
+      "slug": "cold-appetiser-platter-banquet-opening",
+      "category_km": "ម្ហូបចិននិងទាវជីវ",
+      "topic_km": "ម្ហូបក្លែម៦មុខ នៅដើមម៉ឺនុយម្ហូបការ",
+      "angle_km": "តើម្ហូបក្លែម៦មុខមានតួនាទីអ្វីនៅដើមពិធី ហើយគួររៀបចំយ៉ាងណាឱ្យសមនឹងភ្ញៀវ?"
+    },
+    {
+      "id": "seed-002",
+      "slug": "crispy-fried-whole-fish-banquet",
+      "category_km": "ម្ហូបខ្មែរប្រណីត",
+      "topic_km": "ត្រីដប៊ុនបំពងស្រួយ សម្រាប់តុពិធីមង្គលការ",
+      "angle_km": "តើត្រីទាំងមូលមានន័យបែបណាក្នុងពិធី ហើយធ្វើយ៉ាងណាឱ្យនៅតែស្រួយពេលដល់តុ?"
+    },
+    {
+      "id": "seed-003",
+      "slug": "grilled-beef-salad-banquet-course",
+      "category_km": "ម្ហូបខ្មែរប្រណីត",
+      "topic_km": "ភាសាច់គោក្រៅអង្គារ ក្នុងលំដាប់មុខម្ហូបការ",
+      "angle_km": "តើមុខម្ហូបជូរហឹរបែបនេះគួរដាក់ចន្លោះមុខម្ហូបណា ដើម្បីកុំឱ្យភ្ញៀវទ្រាន់?"
+    },
+    {
+      "id": "seed-004",
+      "slug": "river-prawn-with-nuts-banquet",
+      "category_km": "ម្ហូបខ្មែរប្រណីត",
+      "topic_km": "បង្កងបំពងគ្រាប់ធញ្ញជាតិ សម្រាប់តុភ្ញៀវកិត្តិយស",
+      "angle_km": "តើបង្កងទន្លេសមនឹងតុភ្ញៀវកិត្តិយសដែរឬទេ ហើយគួរបម្រើនៅពេលណា?"
+    },
+    {
+      "id": "seed-005",
+      "slug": "roast-suckling-pig-with-bread",
+      "category_km": "ម្ហូបចិននិងទាវជីវ",
+      "topic_km": "ជ្រូកខ្វៃនិងនំប៉័ង ក្នុងពិធីមង្គលការខ្មែរចិន",
+      "angle_km": "តើជ្រូកខ្វៃមានន័យសិរីមង្គលបែបណា ហើយហេតុអ្វីបានជាបម្រើជាមួយនំប៉័ង?"
+    },
+    {
+      "id": "seed-006",
+      "slug": "sweet-and-sour-fish-course",
+      "category_km": "ម្ហូបចិននិងទាវជីវ",
+      "topic_km": "ត្រីតុកកែជូរអែម សម្រាប់ភ្ញៀវគ្រប់វ័យ",
+      "angle_km": "តើមុខម្ហូបជូរអែមស័ក្តិសមនឹងចាស់ទុំនិងក្មេងៗយ៉ាងណាក្នុងពិធីតែមួយ?"
+    },
+    {
+      "id": "seed-007",
+      "slug": "spicy-fish-with-egg-course",
+      "category_km": "ម្ហូបខ្មែរប្រណីត",
+      "topic_km": "ត្រីហឹរឡប់ពង ក្នុងម៉ឺនុយម្ហូបការ",
+      "angle_km": "តើគួរដាក់មុខម្ហូបហឹរប៉ុន្មានក្នុងម៉ឺនុយមួយ ដើម្បីកុំឱ្យលើសសម្រាប់ភ្ញៀវខ្លះ?"
+    },
+    {
+      "id": "seed-008",
+      "slug": "ten-treasure-abalone-soup-banquet",
+      "category_km": "ម្ហូបចិននិងទាវជីវ",
+      "topic_km": "ស៊ុបប៉ាវហឺ១០មុខ ជាមុខម្ហូបលើកមុខមាត់",
+      "angle_km": "តើហេតុអ្វីស៊ុបប៉ាវហឺចាត់ទុកជាមុខម្ហូបកិត្តិយសក្នុងពិធីមង្គលការ?"
+    },
+    {
+      "id": "seed-009",
+      "slug": "duck-feet-salad-banquet-course",
+      "category_km": "ម្ហូបខ្មែរប្រណីត",
+      "topic_km": "ញាំជើងទាបង្គោរមិក ក្នុងតុពិធីជប់លៀង",
+      "angle_km": "តើមុខម្ហូបញាំជួយកាត់បន្ថយភាពទ្រាន់នៅចំណុចណានៃម៉ឺនុយ?"
+    },
+    {
+      "id": "seed-010",
+      "slug": "steamed-fish-soy-sauce-banquet",
+      "category_km": "ម្ហូបចិននិងទាវជីវ",
+      "topic_km": "ត្រីតុកកែចំហ៊ុយទឹកស៊ីអ៊ីវ សម្រាប់តុភ្ញៀវច្រើន",
+      "angle_km": "តើត្រីចំហុយត្រូវរៀបចំយ៉ាងណា ដើម្បីឱ្យទាន់ក្តៅនៅពេលចេញដល់តុរាប់សិប?"
+    },
+    {
+      "id": "seed-011",
+      "slug": "lotus-leaf-rice-banquet-course",
+      "category_km": "ម្ហូបចិននិងទាវជីវ",
+      "topic_km": "បាយខ្ចប់ស្លឹកឈូក នៅជិតចុងម៉ឺនុយម្ហូបការ",
+      "angle_km": "តើហេតុអ្វីបាយខ្ចប់ស្លឹកឈូកតែងតែចេញនៅជិតចុងពិធី?"
+    },
+    {
+      "id": "seed-012",
+      "slug": "hong-kong-roast-duck-banquet",
+      "category_km": "ម្ហូបចិននិងទាវជីវ",
+      "topic_km": "ទាខ្វៃហុងកុង ក្នុងម៉ឺនុយម្ហូបការខ្មែរចិន",
+      "angle_km": "តើទាខ្វៃខុសពីជ្រូកខ្វៃយ៉ាងណា ហើយគួរជ្រើសមួយណាសម្រាប់ពិធីរបស់លោកអ្នក?"
+    },
+    {
+      "id": "seed-013",
+      "slug": "traditional-khmer-dessert-closing",
+      "category_km": "ម្ហូបខ្មែរប្រណីត",
+      "topic_km": "បង្អែមខ្មែរបុរាណ សម្រាប់បិទបញ្ចប់ពិធី",
+      "angle_km": "តើបង្អែមណាដែលសមនឹងបិទបញ្ចប់ពិធីជប់លៀងធំ ដោយមិនធ្ងន់ពេក?"
+    },
+    {
+      "id": "seed-014",
+      "slug": "sour-spicy-river-prawn-soup-course",
+      "category_km": "ម្ហូបខ្មែរប្រណីត",
+      "topic_km": "តុងយាំបង្កងទន្លេ ក្នុងម៉ឺនុយម្ហូបការ",
+      "angle_km": "តើស៊ុបជូរហឹរគួរចេញមុន ឬក្រោយមុខម្ហូបសាច់ធ្ងន់?"
+    },
+    {
+      "id": "seed-015",
+      "slug": "whole-suckling-pig-centrepiece",
+      "category_km": "ម្ហូបចិននិងទាវជីវ",
+      "topic_km": "កូនជ្រូកខ្វៃទាំងមូល ជាមុខម្ហូបលើកមុខមាត់",
+      "angle_km": "តើមុខម្ហូបលើកមុខមាត់គួរចេញនៅពេលណា ដើម្បីឱ្យភ្ញៀវទាំងអស់បានឃើញ?"
+    },
+    {
+      "id": "seed-016",
+      "slug": "lok-lak-beef-banquet-course",
+      "category_km": "ម្ហូបខ្មែរប្រណីត",
+      "topic_km": "សាច់គោឡុកឡាក់ ក្នុងម៉ឺនុយពិធីជប់លៀង",
+      "angle_km": "តើមុខម្ហូបដែលភ្ញៀវគ្រប់រូបស្គាល់ គួរដាក់ក្នុងម៉ឺនុយពិធីធំដែរឬទេ?"
+    },
+    {
+      "id": "seed-017",
+      "slug": "engagement-ceremony-catering-menu",
+      "category_km": "ម្ហូបខ្មែរប្រណីត",
+      "topic_km": "ម្ហូបសម្រាប់ពិធីភ្ជាប់ពាក្យ",
+      "angle_km": "តើម្ហូបក្នុងពិធីភ្ជាប់ពាក្យខុសពីម្ហូបថ្ងៃមង្គលការយ៉ាងណា?"
+    },
+    {
+      "id": "seed-018",
+      "slug": "gift-procession-morning-refreshments",
+      "category_km": "សិល្បៈអាហារអាស៊ី",
+      "topic_km": "ការរៀបចំអាហារក្នុងពិធីហែជំនូន",
+      "angle_km": "តើគួររៀបចំអាហារនិងភេសជ្ជៈយ៉ាងណាសម្រាប់ក្រុមហែជំនូននៅពេលព្រឹក?"
+    },
+    {
+      "id": "seed-019",
+      "slug": "morning-wedding-rites-meal-planning",
+      "category_km": "សិល្បៈអាហារអាស៊ី",
+      "topic_km": "អាហារពេលព្រឹកនៃពិធីមង្គលការ",
+      "angle_km": "តើគ្រួសារគួររៀបចំអាហារពេលព្រឹកសម្រាប់សាច់ញាតិយ៉ាងណា មុនពិធីល្ងាច?"
+    },
+    {
+      "id": "seed-020",
+      "slug": "evening-reception-service-plan",
+      "category_km": "សិល្បៈអាហារអាស៊ី",
+      "topic_km": "ពិធីជប់លៀងពេលល្ងាចនៃមង្គលការ",
+      "angle_km": "តើពិធីល្ងាចត្រូវការការរៀបចំខុសពីពេលព្រឹកត្រង់ចំណុចណា?"
+    },
+    {
+      "id": "seed-021",
+      "slug": "housewarming-ceremony-catering",
+      "category_km": "សិល្បៈអាហារអាស៊ី",
+      "topic_km": "ម្ហូបសម្រាប់ពិធីឡើងផ្ទះថ្មី",
+      "angle_km": "តើពិធីឡើងផ្ទះថ្មីគួរជ្រើសម៉ឺនុយបែបណា ពេលទីតាំងមានកន្លែងតិច?"
+    },
+    {
+      "id": "seed-022",
+      "slug": "khmer-new-year-family-feast",
+      "category_km": "ម្ហូបខ្មែរប្រណីត",
+      "topic_km": "ម្ហូបក្នុងបុណ្យចូលឆ្នាំខ្មែរ",
+      "angle_km": "តើគ្រួសារគួររៀបចំម្ហូបយ៉ាងណា ពេលភ្ញៀវមកមិនទៀងទាត់ពេញមួយថ្ងៃ?"
+    },
+    {
+      "id": "seed-023",
+      "slug": "pchum-ben-offering-meal-planning",
+      "category_km": "ម្ហូបខ្មែរប្រណីត",
+      "topic_km": "ការរៀបចំម្ហូបក្នុងបុណ្យភ្ជុំបិណ្ឌ",
+      "angle_km": "តើគួររៀបចំចង្ហាន់និងម្ហូបសម្រាប់ភ្ញៀវយ៉ាងណាក្នុងបុណ្យភ្ជុំបិណ្ឌ?"
+    },
+    {
+      "id": "seed-024",
+      "slug": "kathina-ceremony-catering-plan",
+      "category_km": "សិល្បៈអាហារអាស៊ី",
+      "topic_km": "ការរៀបចំម្ហូបក្នុងបុណ្យកឋិន",
+      "angle_km": "តើបុណ្យកឋិនត្រូវការការរៀបចំម្ហូបបែបណាសម្រាប់ភ្ញៀវច្រើន?"
+    },
+    {
+      "id": "seed-025",
+      "slug": "water-festival-gathering-menu",
+      "category_km": "សិល្បៈអាហារអាស៊ី",
+      "topic_km": "ម្ហូបសម្រាប់ការជួបជុំក្នុងបុណ្យអុំទូក",
+      "angle_km": "តើគួរជ្រើសម្ហូបបែបណាសម្រាប់ការជួបជុំក្នុងរដូវបុណ្យអុំទូក?"
+    },
+    {
+      "id": "seed-026",
+      "slug": "chinese-new-year-reunion-banquet",
+      "category_km": "ម្ហូបចិននិងទាវជីវ",
+      "topic_km": "ម៉ឺនុយពិធីជួបជុំបុណ្យចូលឆ្នាំចិន",
+      "angle_km": "តើម៉ឺនុយបុណ្យចូលឆ្នាំចិនរបស់គ្រួសារខ្មែរចិនគួរមានមុខម្ហូបអ្វីខ្លះ?"
+    },
+    {
+      "id": "seed-027",
+      "slug": "ancestor-offering-ceremony-menu",
+      "category_km": "ម្ហូបចិននិងទាវជីវ",
+      "topic_km": "ម្ហូបក្នុងពិធីសែនបុព្វបុរស",
+      "angle_km": "តើម្ហូបសម្រាប់ពិធីសែនបុព្វបុរសគួររៀបចំតាមលំដាប់បែបណា?"
+    },
+    {
+      "id": "seed-028",
+      "slug": "company-year-end-party-catering",
+      "category_km": "សិល្បៈអាហារអាស៊ី",
+      "topic_km": "ពិធីជប់លៀងចុងឆ្នាំរបស់ក្រុមហ៊ុន",
+      "angle_km": "តើពិធីចុងឆ្នាំរបស់ក្រុមហ៊ុនគួររៀបចំម្ហូបខុសពីពិធីគ្រួសារយ៉ាងណា?"
+    },
+    {
+      "id": "seed-029",
+      "slug": "birthday-and-anniversary-banquet",
+      "category_km": "សិល្បៈអាហារអាស៊ី",
+      "topic_km": "ម្ហូបសម្រាប់ពិធីខួបកំណើតនិងខួបអាពាហ៍ពិពាហ៍",
+      "angle_km": "តើពិធីខួបគួររៀបចំម៉ឺនុយប៉ុន្មានមុខ ពេលភ្ញៀវជាសាច់ញាតិជិតស្និទ្ធ?"
+    },
+    {
+      "id": "seed-030",
+      "slug": "monk-alms-offering-meal-service",
+      "category_km": "សិល្បៈអាហារអាស៊ី",
+      "topic_km": "ការរៀបចំចង្ហាន់ថ្វាយព្រះសង្ឃក្នុងពិធី",
+      "angle_km": "តើត្រូវរៀបចំចង្ហាន់ថ្វាយព្រះសង្ឃឱ្យទាន់ពេលវេលាក្នុងពិធីយ៉ាងណា?"
+    },
+    {
+      "id": "seed-031",
+      "slug": "estimating-banquet-table-count",
+      "category_km": "សិល្បៈអាហារអាស៊ី",
+      "topic_km": "ការប៉ាន់ស្មានចំនួនតុសម្រាប់ពិធី",
+      "angle_km": "តើគួរប៉ាន់ស្មានចំនួនតុយ៉ាងណា ពេលមិនទាន់ដឹងចំនួនភ្ញៀវច្បាស់?"
+    },
+    {
+      "id": "seed-032",
+      "slug": "when-fewer-guests-arrive-than-planned",
+      "category_km": "សិល្បៈអាហារអាស៊ី",
+      "topic_km": "ការរៀបចំពេលភ្ញៀវមកមិនគ្រប់ចំនួន",
+      "angle_km": "តើគួរធ្វើយ៉ាងណា ពេលភ្ញៀវមកតិចជាង ឬច្រើនជាងការគ្រោងទុក?"
+    },
+    {
+      "id": "seed-033",
+      "slug": "menu-choices-for-elder-guests",
+      "category_km": "ម្ហូបខ្មែរប្រណីត",
+      "topic_km": "ម៉ឺនុយសម្រាប់ភ្ញៀវចាស់ទុំ",
+      "angle_km": "តើមុខម្ហូបណាដែលចាស់ទុំទទួលទានបានស្រួល ក្នុងពិធីមង្គលការ?"
+    },
+    {
+      "id": "seed-034",
+      "slug": "vegetarian-guests-banquet-menu",
+      "category_km": "សិល្បៈអាហារអាស៊ី",
+      "topic_km": "មុខម្ហូបសម្រាប់ភ្ញៀវបួស",
+      "angle_km": "តើគួររៀបចំមុខម្ហូបបួសយ៉ាងណា ដើម្បីកុំឱ្យភ្ញៀវបួសអង្គុយមើលគេ?"
+    },
+    {
+      "id": "seed-035",
+      "slug": "young-guests-at-a-banquet-table",
+      "category_km": "សិល្បៈអាហារអាស៊ី",
+      "topic_km": "មុខម្ហូបសម្រាប់ភ្ញៀវក្មេងៗ",
+      "angle_km": "តើក្មេងៗក្នុងពិធីគួរមានមុខម្ហូបដាច់ដោយឡែកដែរឬទេ?"
+    },
+    {
+      "id": "seed-036",
+      "slug": "spice-level-across-guest-groups",
+      "category_km": "គ្រឿងផ្សំនិងរសជាតិ",
+      "topic_km": "កម្រិតហឹរនៃមុខម្ហូបក្នុងពិធី",
+      "angle_km": "តើគួរកំណត់កម្រិតហឹរយ៉ាងណា ពេលភ្ញៀវមកពីតំបន់ផ្សេងគ្នា?"
+    },
+    {
+      "id": "seed-037",
+      "slug": "outdoor-reception-in-the-rainy-season",
+      "category_km": "សិល្បៈអាហារអាស៊ី",
+      "topic_km": "ពិធីក្រៅកន្លែងក្នុងរដូវវស្សា",
+      "angle_km": "តើត្រូវរៀបចំយ៉ាងណា ពេលភ្លៀងធ្លាក់នៅថ្ងៃពិធីក្រៅកន្លែង?"
+    },
+    {
+      "id": "seed-038",
+      "slug": "dry-season-heat-and-holding-food",
+      "category_km": "សិល្បៈអាហារអាស៊ី",
+      "topic_km": "កម្តៅរដូវប្រាំងនិងការរក្សាម្ហូបលើតុ",
+      "angle_km": "តើកម្តៅរដូវប្រាំងប៉ះពាល់ដល់ម្ហូបនៅលើតុភ្ញៀវយ៉ាងណា?"
+    },
+    {
+      "id": "seed-039",
+      "slug": "borey-access-and-parking-planning",
+      "category_km": "សិល្បៈអាហារអាស៊ី",
+      "topic_km": "ផ្លូវចូលនិងចំណតរថយន្តសម្រាប់ពិធីក្នុងបុរី",
+      "angle_km": "តើគួររៀបចំផ្លូវចូលនិងកន្លែងចតរថយន្តយ៉ាងណា ពេលពិធីធ្វើក្នុងបុរី?"
+    },
+    {
+      "id": "seed-040",
+      "slug": "borey-permission-and-neighbours",
+      "category_km": "សិល្បៈអាហារអាស៊ី",
+      "topic_km": "ការសុំការអនុញ្ញាតរៀបចំពិធីក្នុងបុរី",
+      "angle_km": "តើត្រូវរៀបចំអ្វីខ្លះជាមួយអ្នកគ្រប់គ្រងបុរីនិងអ្នកជិតខាង មុនថ្ងៃពិធី?"
+    },
+    {
+      "id": "seed-041",
+      "slug": "mobile-kitchen-space-requirements",
+      "category_km": "សិល្បៈអាហារអាស៊ី",
+      "topic_km": "ការរៀបចំផ្ទះបាយចល័តនៅទីតាំងពិធី",
+      "angle_km": "តើទីតាំងពិធីត្រូវការកន្លែងបែបណាសម្រាប់ផ្ទះបាយចល័ត?"
+    },
+    {
+      "id": "seed-042",
+      "slug": "lighting-and-backup-power-planning",
+      "category_km": "សិល្បៈអាហារអាស៊ី",
+      "topic_km": "ភ្លើងបំភ្លឺនិងម៉ាស៊ីនភ្លើងបម្រុងក្នុងពិធី",
+      "angle_km": "តើត្រូវរៀបចំប្រព័ន្ធភ្លើងយ៉ាងណា ដើម្បីកុំឱ្យពិធីរអាក់រអួល?"
+    },
+    {
+      "id": "seed-043",
+      "slug": "service-rhythm-across-a-long-reception",
+      "category_km": "សិល្បៈអាហារអាស៊ី",
+      "topic_km": "ខ្សែចង្វាក់បម្រើអាហារពេញពិធី",
+      "angle_km": "តើមុខម្ហូបគួរចេញញឹកយ៉ាងណា ដើម្បីកុំឱ្យភ្ញៀវរង់ចាំយូរពេក?"
+    },
+    {
+      "id": "seed-044",
+      "slug": "course-order-in-a-banquet-menu",
+      "category_km": "សិល្បៈអាហារអាស៊ី",
+      "topic_km": "លំដាប់មុខម្ហូបក្នុងម៉ឺនុយម្ហូបការ",
+      "angle_km": "តើលំដាប់មុខម្ហូបគួររៀបតាមគោលការណ៍អ្វី?"
+    },
+    {
+      "id": "seed-045",
+      "slug": "table-and-seating-arrangement",
+      "category_km": "សិល្បៈអាហារអាស៊ី",
+      "topic_km": "ការរៀបចំតុនិងកន្លែងអង្គុយរបស់ភ្ញៀវ",
+      "angle_km": "តើគួររៀបតុយ៉ាងណា ដើម្បីឱ្យអ្នកបម្រើដើរបានស្រួលពេលភ្ញៀវពេញ?"
+    },
+    {
+      "id": "seed-046",
+      "slug": "waitstaff-roles-in-a-large-event",
+      "category_km": "សិល្បៈអាហារអាស៊ី",
+      "topic_km": "សេវាកម្មរត់តុនៅក្នុងពិធីធំ",
+      "angle_km": "តើក្រុមរត់តុមានតួនាទីអ្វីខ្លះក្រៅពីលើកម្ហូបដាក់តុ?"
+    },
+    {
+      "id": "seed-047",
+      "slug": "food-tasting-before-booking",
+      "category_km": "សិល្បៈអាហារអាស៊ី",
+      "topic_km": "ការភ្លក្សរសជាតិមុនពេលកក់សេវាកម្ម",
+      "angle_km": "តើគួរពិនិត្យអ្វីខ្លះនៅពេលភ្លក្សរសជាតិមុខម្ហូបការ?"
+    },
+    {
+      "id": "seed-048",
+      "slug": "booking-lead-time-and-holding-a-date",
+      "category_km": "សិល្បៈអាហារអាស៊ី",
+      "topic_km": "ការកក់សេវាកម្មម្ហូបការជាមុន",
+      "angle_km": "តើគួរកក់សេវាកម្មម្ហូបការមុនថ្ងៃពិធីរយៈពេលប៉ុន្មាន?"
+    },
+    {
+      "id": "seed-049",
+      "slug": "coordinating-food-with-the-programme",
+      "category_km": "សិល្បៈអាហារអាស៊ី",
+      "topic_km": "ការសម្របម្ហូបតាមកម្មវិធីនៃពិធី",
+      "angle_km": "តើម្ហូបត្រូវសម្របតាមកម្មវិធីនិងអ្នកដឹកនាំកម្មវិធីយ៉ាងណា?"
+    },
+    {
+      "id": "seed-050",
+      "slug": "drinks-and-ice-logistics-planning",
+      "category_km": "សិល្បៈអាហារអាស៊ី",
+      "topic_km": "ការរៀបចំភេសជ្ជៈនិងទឹកកកក្នុងពិធី",
+      "angle_km": "តើគួររៀបចំភេសជ្ជៈនិងទឹកកកយ៉ាងណា ពេលពិធីមានរយៈពេលវែង?"
+    },
+    {
+      "id": "seed-051",
+      "slug": "choosing-fresh-river-fish",
+      "category_km": "គ្រឿងផ្សំនិងរសជាតិ",
+      "topic_km": "ការជ្រើសរើសត្រីស្រស់សម្រាប់ពិធី",
+      "angle_km": "តើត្រីស្រស់សម្រាប់មុខម្ហូបការ ត្រូវពិនិត្យតាមចំណុចណាខ្លះ?"
+    },
+    {
+      "id": "seed-052",
+      "slug": "river-prawn-quality-and-season",
+      "category_km": "គ្រឿងផ្សំនិងរសជាតិ",
+      "topic_km": "បង្កងទន្លេនិងរដូវកាលរបស់វា",
+      "angle_km": "តើបង្កងទន្លេមានគុណភាពល្អនៅរដូវណា ហើយត្រូវជ្រើសយ៉ាងណា?"
+    },
+    {
+      "id": "seed-053",
+      "slug": "handling-seafood-for-large-events",
+      "category_km": "គ្រឿងផ្សំនិងរសជាតិ",
+      "topic_km": "ការគ្រប់គ្រងគ្រឿងសមុទ្រក្នុងពិធីធំ",
+      "angle_km": "តើគ្រឿងសមុទ្រត្រូវរៀបចំយ៉ាងណា ឱ្យនៅស្រស់ដល់ពេលចម្អិន?"
+    },
+    {
+      "id": "seed-054",
+      "slug": "coconut-cream-in-banquet-cooking",
+      "category_km": "គ្រឿងផ្សំនិងរសជាតិ",
+      "topic_km": "ខ្ទិះដូងក្នុងមុខម្ហូបការ",
+      "angle_km": "តើខ្ទិះដូងផ្លាស់ប្តូររសជាតិមុខម្ហូបយ៉ាងណា?"
+    },
+    {
+      "id": "seed-055",
+      "slug": "lotus-leaf-as-a-cooking-wrapper",
+      "category_km": "គ្រឿងផ្សំនិងរសជាតិ",
+      "topic_km": "ស្លឹកឈូកជាគ្រឿងផ្សំក្នុងការចម្អិន",
+      "angle_km": "តើស្លឹកឈូកបន្ថែមអ្វីដល់មុខម្ហូប ក្រៅពីរូបរាង?"
+    },
+    {
+      "id": "seed-056",
+      "slug": "pandan-leaf-aroma-in-desserts",
+      "category_km": "គ្រឿងផ្សំនិងរសជាតិ",
+      "topic_km": "ស្លឹកតើយក្នុងបង្អែមខ្មែរ",
+      "angle_km": "តើស្លឹកតើយត្រូវប្រើយ៉ាងណា ដើម្បីឱ្យក្លិនឈ្ងុយល្មម?"
+    },
+    {
+      "id": "seed-057",
+      "slug": "palm-sugar-and-flavour-balance",
+      "category_km": "គ្រឿងផ្សំនិងរសជាតិ",
+      "topic_km": "ស្ករត្នោតនិងតុល្យភាពរសជាតិ",
+      "angle_km": "តើស្ករត្នោតខុសពីស្ករសយ៉ាងណានៅក្នុងម្ហូបខ្មែរ?"
+    },
+    {
+      "id": "seed-058",
+      "slug": "kampot-pepper-in-banquet-dishes",
+      "category_km": "គ្រឿងផ្សំនិងរសជាតិ",
+      "topic_km": "ម្រេចកំពតក្នុងមុខម្ហូបការ",
+      "angle_km": "តើម្រេចកំពតគួរដាក់នៅដំណាក់កាលណានៃការចម្អិន?"
+    },
+    {
+      "id": "seed-059",
+      "slug": "soy-sauce-for-steamed-dishes",
+      "category_km": "គ្រឿងផ្សំនិងរសជាតិ",
+      "topic_km": "ទឹកស៊ីអ៊ីវសម្រាប់មុខម្ហូបចំហុយ",
+      "angle_km": "តើទឹកស៊ីអ៊ីវបែបណាសមនឹងត្រីចំហុយក្នុងពិធី?"
+    },
+    {
+      "id": "seed-060",
+      "slug": "chinese-herbs-in-banquet-soups",
+      "category_km": "គ្រឿងផ្សំនិងរសជាតិ",
+      "topic_km": "ថ្នាំចិនក្នុងស៊ុបប្រណីត",
+      "angle_km": "តើថ្នាំចិនក្នុងស៊ុបមានតួនាទីអ្វីក្រៅពីរសជាតិ?"
+    },
+    {
+      "id": "seed-061",
+      "slug": "lime-and-sourness-in-khmer-salads",
+      "category_km": "គ្រឿងផ្សំនិងរសជាតិ",
+      "topic_km": "ក្រូចឆ្មារនិងរសជាតិជូរក្នុងមុខម្ហូបញាំ",
+      "angle_km": "តើរសជាតិជូរគួរខ្លាំងកម្រិតណាក្នុងមុខម្ហូបញាំសម្រាប់ពិធី?"
+    },
+    {
+      "id": "seed-062",
+      "slug": "ginger-and-aromatics-in-broth",
+      "category_km": "គ្រឿងផ្សំនិងរសជាតិ",
+      "topic_km": "ខ្ញីនិងគ្រឿងក្រអូបក្នុងទឹកស៊ុប",
+      "angle_km": "តើគ្រឿងក្រអូបគួរដាក់នៅដំណាក់កាលណានៃការរំងាស់ស៊ុប?"
+    },
+    {
+      "id": "seed-063",
+      "slug": "seasonal-vegetables-for-banquets",
+      "category_km": "គ្រឿងផ្សំនិងរសជាតិ",
+      "topic_km": "បន្លែតាមរដូវសម្រាប់ពិធីធំ",
+      "angle_km": "តើបន្លែតាមរដូវជួយឱ្យម៉ឺនុយប្រសើរជាងយ៉ាងណា?"
+    },
+    {
+      "id": "seed-064",
+      "slug": "dipping-sauces-across-the-menu",
+      "category_km": "គ្រឿងផ្សំនិងរសជាតិ",
+      "topic_km": "ទឹកជ្រលក់សម្រាប់មុខម្ហូបការ",
+      "angle_km": "តើទឹកជ្រលក់គួរផ្គូផ្គងជាមួយមុខម្ហូបណាខ្លះ?"
+    },
+    {
+      "id": "seed-065",
+      "slug": "balancing-flavours-across-courses",
+      "category_km": "គ្រឿងផ្សំនិងរសជាតិ",
+      "topic_km": "តុល្យភាពរសជាតិពេញម៉ឺនុយម្ហូបការ",
+      "angle_km": "តើម៉ឺនុយមួយគួរមានរសជាតិខុសគ្នាប៉ុន្មានបែប?"
+    },
+    {
+      "id": "seed-066",
+      "slug": "aroma-and-presentation-at-the-table",
+      "category_km": "សិល្បៈអាហារអាស៊ី",
+      "topic_km": "ក្លិននិងរូបរាងម្ហូបនៅពេលដល់តុ",
+      "angle_km": "តើរូបរាងនិងក្លិនម្ហូបប៉ះពាល់ដល់ចំណាប់អារម្មណ៍ភ្ញៀវយ៉ាងណា?"
+    }
+  ]
+}
