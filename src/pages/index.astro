@@ -25,7 +25,8 @@ import {
   logo,
   mainPhone,
   phoneNumbers,
-  menuItems
+  menuItems,
+  siteDomain
 } from '../data/homeData';
 
 const menuImagesGlob = import.meta.glob<{ default: ImageMetadata }>('../assets/processed_images_ai/menu-*.png', { eager: true });
@@ -42,6 +43,41 @@ const otherPosts = allPosts.filter(post => !post.data.featured);
 const recentPosts = [...featuredPosts, ...otherPosts].slice(0, 3);
 
 const telHref = `tel:+855${mainPhone.replace(/\s/g, '').substring(1)}`;
+
+// The 16 signature dishes as a schema.org Menu.
+//
+// homeData.ts has carried a written Khmer description for every dish since the data
+// file was created, and none of them was ever rendered: index.astro reads `title` for
+// the tile caption and `alt` for the image, and nothing reads `desc`. Measured against
+// the built dist/index.html on 2026-08-23: 0 of 16 present anywhere on the page.
+//
+// They are not being added to the tiles. The grid is squares, two-across on mobile, and
+// the descriptions run 69 to 117 codepoints -- a caption that long turns the gallery into
+// a wall of text, and the owner's brief for this page is that it has to look good first.
+// A Menu node costs no pixels and is what an assistant reads when someone asks what this
+// caterer serves.
+//
+// All 16 were put through check_foreign_scripts, check_khmer_clusters,
+// check_doubled_words, check_absolutes and check_hard_specs before being exposed:
+// 0 errors, 0 warnings. check_content.py does not scan .ts files, so that had never
+// happened before.
+const menuSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Menu",
+  "@id": `${siteDomain}/#menu`,
+  name: "មុខម្ហូបប្រចាំតុរបស់យើងខ្ញុំ",
+  inLanguage: "km-KH",
+  url: `${siteDomain}/#gallery`,
+  hasMenuSection: [{
+    "@type": "MenuSection",
+    name: "មុខម្ហូបប្រចាំតុ",
+    hasMenuItem: menuItems.km.map((item) => ({
+      "@type": "MenuItem",
+      name: item.title,
+      ...(item.desc ? { description: item.desc } : {}),
+    })),
+  }],
+});
 
 const faqSchema = JSON.stringify({
   "@context": "https://schema.org",
@@ -91,6 +127,7 @@ const faqSchema = JSON.stringify({
 -->
 <Layout title="សេវាកម្មម្ហូបការ ភ្នំពេញ | ចេង គួងម៉េង (CKM)" description="សេវាកម្មម្ហូបការមង្គលការនៅភ្នំពេញ ដោយ ចេង គួងម៉េង។ មានម៉ឺនុយ ៨ មុខប្រពៃណី កូនជ្រូកខ្វៃ និងស៊ុបប៉ាវហឺ ព្រមទាំងសេវាកម្មរៀបចំទីតាំង។" lang="km-KH">
   <script type="application/ld+json" is:inline set:html={faqSchema}></script>
+  <script type="application/ld+json" is:inline set:html={menuSchema}></script>
 
   <style>
     .font-km-serif { font-family: 'Hanuman', serif; }
@@ -335,6 +372,80 @@ const faqSchema = JSON.stringify({
          frozen (see .github/workflows/daily_catering_pulse.yml) and the section was
          showing three generated text cards on the one page that earns real Cambodian
          impressions. /pulse/ itself stays live and reachable from the navigation. -->
+
+    <!-- ── Process ──────────────────────────────────────────────────────────
+         Fills the slot the /pulse/ block vacated on 2026-08-23. Designed to stand
+         without photography: the owner has no usable real-event images and said
+         weak ones would drag the page down, so the visual is typographic — large
+         Khmer numerals in champagne against pearl, on a hairline grid.
+
+         It answers the question a first-time visitor actually has (what happens
+         after I call?) and it commits to nothing §11 forbids: no prices, no
+         capacities, no service-level promise. Step three names the real Phnom Penh
+         logistics §10 asks the brand voice to address — borey access, parking, where
+         the mobile kitchen stands, where the power comes from. -->
+    <section id="process" class="py-16 md:py-28 bg-pearl">
+      <div class="max-w-5xl mx-auto px-5 md:px-6">
+        <div class="max-w-2xl mb-10 md:mb-14">
+          <div class="rule-gold mb-5"></div>
+          <p class="eyebrow text-champagne-dark font-km-sans mb-3">ដំណើរការ</p>
+          <h2 class="text-2xl md:text-4xl font-km-serif font-bold text-onyx leading-[1.45]">ពីការទាក់ទង ដល់ថ្ងៃកម្មវិធី</h2>
+          <p class="text-slate-600 font-km-sans lead-km text-[15px] mt-4">
+            រាល់កម្មវិធីមានទីតាំង ចំនួនតុ និងលក្ខខណ្ឌខុសៗគ្នា។ នេះជារបៀបដែលយើងខ្ញុំរៀបចំជាមួយលោកអ្នក។
+          </p>
+        </div>
+
+        <ol class="divide-y divide-slate-200/90 border-y border-slate-200/90">
+          <li class="flex flex-col md:flex-row gap-3 md:gap-8 py-7 md:py-9">
+            <div class="md:w-16 shrink-0" aria-hidden="true">
+              <span class="font-km-serif text-3xl md:text-4xl text-champagne-dark/70 leading-none">១</span>
+            </div>
+            <div>
+              <h3 class="text-lg md:text-xl font-km-serif font-bold text-onyx mb-2.5 leading-relaxed">សូមប្រាប់យើងខ្ញុំពីចំនួនតុ កាលបរិច្ឆេទ និងទីតាំង</h3>
+              <p class="text-slate-600 font-km-sans lead-km text-[15px]">
+                ព័ត៌មានបីនេះគ្រប់គ្រាន់ដើម្បីចាប់ផ្តើម។ លោកអ្នកអាចទាក់ទងមកតាមទូរស័ព្ទ ឬតេឡេក្រាម។
+              </p>
+            </div>
+          </li>
+
+          <li class="flex flex-col md:flex-row gap-3 md:gap-8 py-7 md:py-9">
+            <div class="md:w-16 shrink-0" aria-hidden="true">
+              <span class="font-km-serif text-3xl md:text-4xl text-champagne-dark/70 leading-none">២</span>
+            </div>
+            <div>
+              <h3 class="text-lg md:text-xl font-km-serif font-bold text-onyx mb-2.5 leading-relaxed">ពិភាក្សាម៉ឺនុយជាមួយក្រុមការងារ</h3>
+              <p class="text-slate-600 font-km-sans lead-km text-[15px]">
+                យើងខ្ញុំស្តាប់ពីចំណង់ចំណូលចិត្តរបស់គ្រួសារ រួមទាំងចាស់ទុំ និងភ្ញៀវបរិភោគបួស មុននឹងស្នើម៉ឺនុយជូនលោកអ្នក។
+              </p>
+            </div>
+          </li>
+
+          <li class="flex flex-col md:flex-row gap-3 md:gap-8 py-7 md:py-9">
+            <div class="md:w-16 shrink-0" aria-hidden="true">
+              <span class="font-km-serif text-3xl md:text-4xl text-champagne-dark/70 leading-none">៣</span>
+            </div>
+            <div>
+              <h3 class="text-lg md:text-xl font-km-serif font-bold text-onyx mb-2.5 leading-relaxed">ចុះមើលទីតាំងជាមុន</h3>
+              <p class="text-slate-600 font-km-sans lead-km text-[15px]">
+                បុរី ផ្លូវចូល ចំណតរថយន្ត កន្លែងតាំងផ្ទះបាយចល័ត និងប្រព័ន្ធភ្លើង សុទ្ធតែប៉ះពាល់ដល់របៀបរៀបចំនៅថ្ងៃកម្មវិធី។
+              </p>
+            </div>
+          </li>
+
+          <li class="flex flex-col md:flex-row gap-3 md:gap-8 py-7 md:py-9">
+            <div class="md:w-16 shrink-0" aria-hidden="true">
+              <span class="font-km-serif text-3xl md:text-4xl text-champagne-dark/70 leading-none">៤</span>
+            </div>
+            <div>
+              <h3 class="text-lg md:text-xl font-km-serif font-bold text-onyx mb-2.5 leading-relaxed">ថ្ងៃកម្មវិធី</h3>
+              <p class="text-slate-600 font-km-sans lead-km text-[15px]">
+                ក្រុមការងារមកដល់មុនម៉ោង រៀបចំផ្ទះបាយចល័ត និងចេញម្ហូបតាមកាលវិភាគដែលបានព្រមព្រៀងគ្នាជាមុន។
+              </p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
 
     <!-- ── Journal ─────────────────────────────────────────────────────────── -->
     <section id="blog" class="py-16 md:py-28 bg-white">

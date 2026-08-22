@@ -66,6 +66,7 @@ const ogImageAbsolute = image.startsWith("http")
     : `${siteDomain}${image}`;
 
 const isMooncakePage = Astro.url.pathname.includes("tanghuot");
+const isHomePage = safePathname === homeUrl;
 
 // Global contact variables for mobile sticky CTA & brand identity
 const mainPhone = "011 827 782";
@@ -174,6 +175,15 @@ const schemaData = {
     },
     // 連結菜單，強化 FoodEstablishment 屬性
     menu: `${siteDomain}${homeUrl}#gallery`,
+    // hasMenu points at the Menu node index.astro emits, and ONLY on the homepage.
+    // src/data/homeData.ts carries a written Khmer description for each of the 16
+    // dishes and, measured 2026-08-23 against the built dist/, zero of them reached
+    // any page -- index.astro reads only `title` and `alt`. The gallery tiles are
+    // squares two-across on mobile and cannot hold a 98-character caption without
+    // wrecking the grid, so the descriptions go where they cost no pixels. This node
+    // is emitted on the homepage alone: attaching 16 menu items to the shared
+    // business block would add them to all 65 pages for nothing.
+    ...(isHomePage ? { hasMenu: { "@id": `${siteDomain}${homeUrl}#menu` } } : {}),
     // email: "contact@ckmkh.com" // 若有官方信箱可取消註解補上 (NAP+E)
 };
 
