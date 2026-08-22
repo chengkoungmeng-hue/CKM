@@ -1,67 +1,45 @@
-name: Probe Pillow Khmer shaping
+name: Probe pulse card rendering
 
-# TEMPORARY probe. Answers one question: does the Linux runner's Pillow have the
-# raqm complex-text-shaping backend that Khmer needs? Delete once answered.
+# TEMPORARY probe. Renders sample /pulse/ cards on the Linux runner, where Pillow
+# has the raqm backend Khmer shaping needs (measured 2026-08-22: raqm 0.10.5,
+# shaped/naive advance ratio 0.556 -- subscripts stack). Windows wheels report
+# raqm=False, so a local render proves nothing and this is the only way to look
+# at the real output. Delete once the card style is signed off.
 
 on:
   workflow_dispatch:
 
 jobs:
-  probe:
+  render:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install Pillow only
+      - name: Install Pillow
         run: pip install --upgrade pip Pillow
 
-      - name: Report raqm support out of the box
+      - name: Confirm shaping is active before trusting the render
         run: |
-          python - <<'PY'
-          from PIL import features, Image
-          import PIL
-          print("pillow:", PIL.__version__)
-          print("raqm:", features.check("raqm"))
-          print("freetype2:", features.version("freetype2"))
-          try:
-              print("raqm version:", features.version("raqm"))
-          except Exception as e:
-              print("raqm version: unavailable", e)
-          PY
-
-      - name: Install system libraqm and re-check
-        run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq libraqm0 fonts-noto-core >/dev/null
           python - <<'PY'
           from PIL import features
-          print("after apt libraqm0 -> raqm:", features.check("raqm"))
+          import PIL, sys
+          ok = features.check("raqm")
+          print("pillow:", PIL.__version__, "raqm:", ok)
+          if not ok:
+              sys.exit("raqm unavailable on this runner; cards would render unshaped")
           PY
 
-      - name: Render a Khmer sample and report cluster metrics
-        run: |
-          python - <<'PY'
-          from PIL import Image, ImageDraw, ImageFont, features
-          import glob, os
+      - name: Render sample cards
+        run: python devops/render_pulse_card.py --sample --out probe_out
 
-          # A Khmer string with subscript consonants (COENG) that MUST stack.
-          text = "សម្លម្ជូរគ្រើងសាច់គោ"
-          cands = sorted(glob.glob("/usr/share/fonts/**/NotoSerifKhmer*.ttf", recursive=True)) \
-               or sorted(glob.glob("/usr/share/fonts/**/*Khmer*.ttf", recursive=True))
-          print("khmer fonts found:", cands[:3])
-          if not cands:
-              print("NO KHMER FONT ON RUNNER -- would need to ship one from public/fonts/")
-              raise SystemExit(0)
-          f = ImageFont.truetype(cands[0], 64)
-          img = Image.new("RGB", (1200, 200), "black")
-          d = ImageDraw.Draw(img)
-          # With shaping, the rendered advance width is SHORTER than the naive
-          # per-codepoint sum, because subscripts stack instead of sitting inline.
-          shaped = d.textlength(text, font=f)
-          naive = sum(d.textlength(ch, font=f) for ch in text)
-          print(f"raqm={features.check('raqm')}  shaped_width={shaped:.1f}  naive_sum={naive:.1f}  ratio={shaped/naive:.3f}")
-          print("VERDICT:", "shaping ACTIVE" if shaped < naive * 0.92 else "shaping INACTIVE (glyphs laid out inline)")
-          PY
+      - name: Upload cards
+        uses: actions/upload-artifact@v4
+        with:
+          name: pulse-cards-sample
+          path: probe_out/*.png
+          retention-days: 3
