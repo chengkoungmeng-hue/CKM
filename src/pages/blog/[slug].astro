@@ -1,6 +1,7 @@
 ---
 // src/pages/blog/[slug].astro
 import { getCollection, render } from 'astro:content';
+import { faqPageSchema } from '../../data/faqSchema';
 import { Image, getImage } from 'astro:assets';
 import Layout from '../../layouts/Layout.astro';
 import ReadingProgress from '../../components/ReadingProgress.astro';
@@ -21,6 +22,7 @@ const { slug } = Astro.params;
 const { entry } = Astro.props as { entry: any };
 const { Content } = await render(entry);
 
+
 const allPostsRaw = await getCollection('blog', ({id}) => !id.includes('/'));
 const allPosts = allPostsRaw.map(p => ({ ...p, _slug: p.id.replace(/\.mdx?$/, '') }))
                             .sort((a, b) => a._slug.localeCompare(b._slug));
@@ -37,6 +39,12 @@ const nextSlug = nextPost?._slug;
 const { title, seoTitle, description, coverImage, targetGeo, authoritySignals } = entry.data;
 const baseUrl = "https://ckmkh.com";
 const currentUrl = `${baseUrl}/blog/${slug}`;
+// Section 14 requires every article to carry a FAQ section and all 15 do, but only
+// the homepage and /tanghuot/ were describing their questions to a machine.
+// Measured 2026-08-23: 40 Khmer question-and-answer pairs across 14 articles with no
+// markup at all. faqPageSchema returns null when it cannot find any, so an article
+// without a real FAQ emits nothing rather than an empty FAQPage.
+const faqSchema = faqPageSchema((entry as any).body, `${currentUrl}/`);
 
 // OG image: previously pointed at /blog/og/{slug}.png, a route that does not exist —
 // every post shipped a 404 og:image. Derive a real 1200x630 share card from the cover instead.
@@ -109,6 +117,7 @@ const articleSchema = JSON.stringify({
   <Fragment slot="head">
     <meta name="geo.placename" content={targetGeo} />
     <script type="application/ld+json" set:html={articleSchema}></script>
+    {faqSchema && <script type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>}
   </Fragment>
 
   <ReadingProgress />

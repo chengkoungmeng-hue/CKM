@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { khmerDate } from '../../data/khmerDate';
 import pulseData from '../../data/pulseData.json';
 import PhotoCredit from '../../components/PhotoCredit.astro';
 import { Globe, ArrowRight, ChevronLeft, ChevronRight } from '@lucide/astro';
@@ -117,7 +118,7 @@ const breadcrumbSchema = JSON.stringify({
 
                 <!-- Meta Info -->
                 <div class="text-xs text-slate-400 font-mono mb-3 flex items-center gap-2">
-                  <span>{(item.added_at || item.pub_date) ? (item.added_at || item.pub_date).split(' ').slice(1, 4).join('.') : '2026.08.08'}</span>
+                  <span>{khmerDate(item.added_at || item.pub_date)}</span>
                   <span>|</span>
                   <span class="text-champagne-dark font-sans font-bold">#{item.category}</span>
                 </div>

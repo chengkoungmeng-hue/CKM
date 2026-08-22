@@ -2,6 +2,7 @@
 // 實體路徑: src/pages/pulse/[id].astro
 // 狀態: 終極高棉語美食動態詳情頁 - 支援真實圖片、雙重 Slug 與快取刷新
 import Layout from '../../layouts/Layout.astro';
+import { khmerDate } from '../../data/khmerDate';
 import pulseData from '../../data/pulseData.json';
 import ReadingProgress from '../../components/ReadingProgress.astro';
 import PhotoCredit from '../../components/PhotoCredit.astro';
@@ -202,7 +203,7 @@ const articleSchema = JSON.stringify({
       <div class="flex flex-wrap items-center justify-start md:justify-center gap-3 text-xs text-slate-500 font-km-sans mb-6 border-b border-slate-200/80 pb-4">
         <div class="flex items-center gap-1.5 font-mono">
           <Calendar class="w-3.5 h-3.5 text-champagne-dark" />
-          <span>{(item.added_at || item.pub_date) ? (item.added_at || item.pub_date).split(' ').slice(1, 4).join('.') : '2026.08.08'}</span>
+          <span>{khmerDate(item.added_at || item.pub_date)}</span>
         </div>
         <span>|</span>
         <div class="flex items-center gap-1.5">
