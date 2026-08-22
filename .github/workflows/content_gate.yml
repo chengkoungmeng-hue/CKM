@@ -14,12 +14,14 @@ on:
     paths:
       - 'src/content/**'
       - 'src/data/**'
+      - 'src/pages/**'
       - 'public/llms*.txt'
       - 'devops/check_content.py'
   pull_request:
     paths:
       - 'src/content/**'
       - 'src/data/**'
+      - 'src/pages/**'
       - 'public/llms*.txt'
       - 'devops/check_content.py'
   workflow_dispatch:

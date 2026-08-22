@@ -387,6 +387,48 @@ def check_length_budget(path, text):
                 % (w, DESCRIPTION_MAX))
 
 
+# ---------------------------------------------------------------- rule 7b
+
+# Astro page templates declare their own SERP strings as module-scope consts:
+#     const title = "..."
+#     const description = "..."
+# Those never passed through check_length_budget, which only reads markdown
+# frontmatter. Section 14 names this exact gap -- it is how "- CKM Premium
+# Catering" stayed live on the blog listing pages. Measured 2026-08-23 the hole
+# was still open and two legal pages were over budget: /terms/ at 160.7 units and
+# /disclaimer/ at 176.6, the second already truncated with an ellipsis in the
+# rendered snippet. Adding src/pages/** to the CI workflow's paths would have
+# changed nothing on its own, because nothing here read .astro at all.
+#
+# Matching is deliberately narrow -- a module-scope const holding a plain string
+# literal. A template that computes its title is skipped rather than mis-measured:
+# a confidently wrong number is worse than a skip, and section 0 requires the
+# rendered dist/ HTML to be the final check either way.
+PAGE_CONST = re.compile(
+    r"""^const\s+(title|description)\s*=\s*(['"])(.*?)\2\s*;?\s*$""", re.M)
+
+
+def check_page_budgets():
+    pages = sorted(glob.glob(os.path.join(ROOT, "src", "pages", "**", "*.astro"),
+                             recursive=True))
+    for path in pages:
+        text = read(path)
+        # Only the frontmatter fence carries module scope; the template below it
+        # can contain the same words inside prose.
+        head = text.split("---")[1] if text.startswith("---") else text
+        for m in PAGE_CONST.finditer(head):
+            kind, value = m.group(1), m.group(3)
+            if not value.strip():
+                continue
+            width = display_width(value)
+            cap = SEO_TITLE_MAX if kind == "title" else DESCRIPTION_MAX
+            if width > cap:
+                err("page-%s-too-long" % kind, path, lineno(text, m.start()),
+                    "%s is %.1f units (max %.0f); Google truncates it: %s"
+                    % (kind, width, cap, value[:60]))
+            check_foreign_scripts(path, value)
+
+
 # ---------------------------------------------------------------- rule 8
 
 # Pulse data is machine-generated and auto-committed daily with no human review,
@@ -900,6 +942,7 @@ def main():
         check_internal_links(path, text)
 
     check_opener_variety(loaded)
+    check_page_budgets()
     check_pulse()
     check_photo_credit_source()
     check_llms_txt()
