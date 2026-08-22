@@ -982,7 +982,14 @@ weigh it against the cookieless, banner-free position just gained.
 
 - **Keyword first, brand last.** The title used to open with `ចេង គួងម៉េង (CKM)`, spending
   the most valuable characters in the SERP on a name nobody searches. Ordering is now
-  `សេវាកម្មម្ហូបការ ភ្នំពេញ | មុខម្ហូបការមង្គលការ | ចេង គួងម៉េង (CKM)` so that truncation
+  `សេវាកម្មម្ហូបការ ភ្នំពេញ | ៦០ ឆ្នាំ | ចេង គួងម៉េង (CKM)`
+  **[REGRESSION] This line recorded a title that was not live and could not be.**
+  It read `… | មុខម្ហូបការមង្គលការ | …`, which measures **66.4 units against a
+  60-unit budget**; the middle segment was added in `134e4cb` and removed again in
+  `c7207f2` while this rule kept describing it. Anyone restoring the documented
+  title would have shipped one Google truncates. Measured and corrected 2026-08-23,
+  when `៦០ ឆ្នាំ` replaced it at 52.7 units. §0 calls this the confidently wrong
+  rule; it cost a real mistake in the session that found it. so that truncation
   eats the brand, not the term.
 - **`ចុងភៅ` was removed from the title on purpose.** See the cluster note above.
 - **[REGRESSION] Keep any `description` at or under 155 characters.** `Layout.astro`
