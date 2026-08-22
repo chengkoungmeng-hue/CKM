@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import pulseData from '../../data/pulseData.json';
+import PhotoCredit from '../../components/PhotoCredit.astro';
 import { Globe, ArrowRight, ChevronLeft, ChevronRight } from '@lucide/astro';
 
 export const prerender = true;
@@ -108,6 +109,12 @@ const breadcrumbSchema = JSON.stringify({
 
               <!-- Body -->
               <div class="p-6 flex flex-col flex-grow">
+                <!-- Photograph attribution, compact form. image_source_link is set only when
+                     image_url is a rehosted source photograph, so this renders nothing at
+                     all under one of CKM's own generated cards.
+                     No anchor inside: the whole card is already one. -->
+                <PhotoCredit sourceUrl={item.image_source_link} variant="compact" class="mb-2" />
+
                 <!-- Meta Info -->
                 <div class="text-xs text-slate-400 font-mono mb-3 flex items-center gap-2">
                   <span>{(item.added_at || item.pub_date) ? (item.added_at || item.pub_date).split(' ').slice(1, 4).join('.') : '2026.08.08'}</span>

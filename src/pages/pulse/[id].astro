@@ -4,6 +4,7 @@
 import Layout from '../../layouts/Layout.astro';
 import pulseData from '../../data/pulseData.json';
 import ReadingProgress from '../../components/ReadingProgress.astro';
+import PhotoCredit from '../../components/PhotoCredit.astro';
 import { getCollection } from 'astro:content';
 import { ArrowLeft, ArrowRight, Calendar, Tag, User, Quote, BookOpen, Clock, Send } from '@lucide/astro';
 
@@ -221,17 +222,44 @@ const articleSchema = JSON.stringify({
       </div>
 
       <!-- Main Title -->
-      <!-- The cover banner that used to sit between this heading and the article body was
-           removed 2026-08-22 along with the rehosted source photographs. The card that
-           replaces them is a SHARE image (og:image / JSON-LD) — its text is one of the key
-           points printed further down this same page, so showing it here would repeat the
-           page's own content — and the banner requested the identical file twice, once more
-           as a blurred backdrop, the duplicate-fetch pattern section 6 records against
-           CateringPulse.astro, here on the LCP path rather than below the fold.
-           The heading now carries the full gap to the article card. -->
-      <h1 class="text-3xl md:text-5xl font-km-serif font-bold text-onyx mb-12 leading-relaxed text-left md:text-center max-w-3xl mx-auto py-1">
+      <h1 class="text-3xl md:text-5xl font-km-serif font-bold text-onyx mb-8 leading-relaxed text-left md:text-center max-w-3xl mx-auto py-1">
         {item.title_km}
       </h1>
+
+      <!-- Cover image.
+           ONE image element, deliberately. The banner that stood here until 2026-08-22 requested
+           the identical file twice — once more as a blurred backdrop — which is the
+           duplicate-fetch defect section 6 records against CateringPulse.astro, and here
+           it sat on the LCP path rather than below the fold. The backdrop is not coming
+           back; a single object-contain image on a neutral field reads the same.
+           No loading="lazy": this is above the fold and is the LCP element, so deferring
+           it would delay the largest paint. Everything further down the page stays lazy.
+           itemImage is the one variable behind this image, og:image and the JSON-LD image
+           array — see its definition above. Do not fork it. -->
+      {itemImage && (
+        <figure class="max-w-3xl mx-auto mb-12">
+          <div class="w-full aspect-[16/9] overflow-hidden bg-onyx/90 rounded-sm border border-slate-200/90">
+            <img
+              src={itemImage}
+              alt={item.image_alt || item.title_km}
+              decoding="async"
+              onerror="this.onerror=null; this.src='/images/blog_01_inline_khmer.webp';"
+              class="w-full h-full object-contain"
+            />
+          </div>
+          <!-- Attribution sits directly beneath the photograph it describes. It keys on
+               image_source_link, which exists only when image_url is a rehosted source
+               photograph, so it renders nothing at all under one of CKM's own generated
+               cards. Do not switch it to source_link — that is present on every entry and
+               would credit a publication for a picture this site drew itself.
+               The <figcaption> is deliberately unconditional: gating it here too would put
+               a second copy of "does this entry have a credit" outside the component, free
+               to drift from the one inside it. An empty figcaption is inert markup. -->
+          <figcaption class="mt-3">
+            <PhotoCredit sourceUrl={item.image_source_link} variant="full" />
+          </figcaption>
+        </figure>
+      )}
 
       <!-- ELEGANT EDITORIAL ARTICLE CARD CONTAINER (Matching user screenshot) -->
       <article class="bg-white rounded-sm border border-slate-200/90 p-8 md:p-14 shadow-sm relative overflow-hidden">

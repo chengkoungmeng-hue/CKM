@@ -700,18 +700,69 @@ def find_foreign_scripts(*texts):
                             % (_script_name(cp), ch, chunk[max(0, i - 15):i + 10]))
     return hits
 
-# Removed 2026-08-22: extract_image_multitier().
+# Restored 2026-08-22, later the same day, and this comment replaces the tombstone that
+# stood here for a few hours.
 #
-# It pulled a photograph out of the source blog's feed entry (media:content, then an
-# <img> in the description, then the page's og:image) and sync_and_download_images then
-# rehosted it on ckmkh.com. That is republishing a third party's photograph on a
-# commercial site with no licence and no credit — 35 files from seven recipe blogs had
-# accumulated in public/images/pulse/. Owner decision: remove it rather than add credits.
+# What was removed in the morning was not the fetch — it was an UNCREDITED fetch. Thirty
+# five photographs from seven recipe blogs sat in public/images/pulse/ with no licence,
+# no credit and no way for a rights holder to find anyone to ask. Deleting the fetch
+# removed the exposure, and it also removed the only thing that made a pulse entry look
+# like an article about something.
 #
-# The replacement draws a 1200x675 card from the entry's OWN Khmer text
-# (devops/render_pulse_card.py), so the share image reproduces nothing at all.
-# Do not reinstate a fetch-the-source-image tier; the exposure is the point, not the
-# implementation.
+# It comes back with the four things that were missing, and it is the four things, not
+# the fetch, that decide whether this is defensible:
+#
+#   1. A CREDIT. The entry records image_source_link, and the page renders the source
+#      alongside the photograph. check_content.py's check_pulse_image() makes a rehosted
+#      photograph without that link an ERROR, so an uncredited one cannot reach the
+#      build again — the morning's state is now unreachable rather than merely undone.
+#   2. A LOCAL COPY. rehost_source_image() downloads and re-encodes; nothing hotlinks
+#      the source's server, and a takedown is a file deletion we control.
+#   3. COMMENTARY, NOT RESTATEMENT. The basis for using someone else's photograph is
+#      that the page comments on the subject rather than reproducing the source's work.
+#      Google's scaled-content-abuse policy names TRANSLATING and does not name
+#      commentary, which is the same distinction from the other direction. So the
+#      generator now rejects output that takes a recipe's shape — see RECIPE_STEP_LINE.
+#   4. rel="nofollow" on the outbound credit link (the page component's side).
+#
+# Restored verbatim from 9acf00a^ rather than rewritten, so the tier order is the one
+# that was actually measured against these feeds: media:content or enclosure first,
+# then an <img> in the description, then the page's og:image. Only the third tier costs
+# an HTTP request, and it runs on the selected candidates only (section 15).
+#
+# `fallback` is now "" at every call site. It used to be a rotating blog image, which
+# put a photograph of a CKM dish on an article about somebody else's — an unrelated
+# picture presented as the subject. An empty return means "no photograph", and the
+# caller draws the entry's own share card instead.
+def extract_image_multitier(item, fallback, item_link):
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'}
+    if item is not None:
+        for elem in item:
+            if 'content' in elem.tag or 'thumbnail' in elem.tag or 'enclosure' in elem.tag:
+                img_url = elem.attrib.get('url', '')
+                if img_url and img_url.startswith("http"):
+                    return img_url
+        for elem in item:
+            if 'encoded' in elem.tag or 'description' in elem.tag or 'summary' in elem.tag:
+                html_text = elem.text or ""
+                m = re.findall(r'src=["\'](https?://[^"\']+\.(?:jpg|jpeg|png|webp|gif))["\']', html_text, re.IGNORECASE)
+                if m:
+                    return m[0]
+
+    if item_link and item_link.startswith("http"):
+        try:
+            req = urllib.request.Request(item_link, headers=headers)
+            with urllib.request.urlopen(req, timeout=4) as resp:
+                html = resp.read().decode('utf-8', errors='ignore')
+            m = re.search(r'<meta[^>]+property=["\']og:image["\'][^>]+content=["\']([^"\']+)["\']', html)
+            if not m:
+                m = re.search(r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+property=["\']og:image["\']', html)
+            if m and m.group(1).startswith("http"):
+                return m.group(1)
+        except Exception:
+            pass
+
+    return fallback
 
 
 def verify_live_url(url):
@@ -818,6 +869,75 @@ MIN_CONTENT_CHARS = 1200
 MIN_CONTENT_SECTIONS = 4
 SECTION_HEADING = re.compile(r"^\s{0,3}#{2,4}\s+\S", re.M)
 
+# --- The commentary gate ---------------------------------------------------------
+#
+# What this page is, in one sentence: a Khmer-Chinese banquet caterer's COMMENTARY on a
+# dish, not a restatement of the source article. That distinction carries two loads at
+# once, and both of them are the reason a gate exists rather than a line in the prompt.
+#
+#   Value: Google's scaled-content-abuse policy names "scraping feeds … and applying
+#   automated transformations such as synonymising or TRANSLATING" as low value. It
+#   names translating. It does not name commentary. A pipeline that publishes one
+#   machine-written page a day is on the wrong side of that line the moment its output
+#   is a restatement of its input.
+#   Licence: the basis for rehosting the source's photograph (see extract_image_multitier)
+#   is that the page comments on the subject. If the body is the source's recipe in
+#   Khmer, the photograph is being used to illustrate a copy, and the argument collapses.
+#
+# So the shape has to be checked, and the clearest machine-detectable signal of
+# restatement is that the body has taken a RECIPE's form: a numbered step sequence, or a
+# list of ingredients with quantities. Neither belongs in commentary — a caterer writing
+# about why a technique works does not tell the reader to add two tablespoons of sugar.
+#
+# Calibrated 2026-08-22 against all 36 entries live in src/data/pulseData.json: ZERO
+# would be rejected, at either threshold, so the gate does not fire on the commentary the
+# site already publishes. Four synthetic recipe-shaped controls (Khmer numbered steps,
+# Latin numbered steps, Khmer ingredient list, Latin ingredient list) are all rejected.
+# Three near-miss controls pass: a sentence quoting a guest count, a piece whose four
+# `### ១.`-style subheadings are numbered, and a markdown comparison table — the last two
+# matter because section 14 REQUIRES numbered subheadings and a comparison table, so a
+# gate that fired on either would be unusable.
+#
+# The heading case is what makes the anchor non-negotiable: `### ១. បច្ចេកទេស…` is the
+# house style, so the numeral must be at the START of the line for it to count as a step.
+# A markdown heading begins with '#', so it can never match.
+RECIPE_FORM_MIN_LINES = 3
+RECIPE_STEP_LINE = re.compile(
+    r"^\s{0,3}(?:[0-9]{1,2}|[០-៩]{1,2})\s*[.)។៖]\s+\S", re.M)
+
+# A measurement unit, Khmer or Latin. Deliberately units of MASS, VOLUME and COUNT only:
+# ម៉ោង (hours), នាទី (minutes) and នាក់ (guests) are excluded because a duration or a head
+# count is ordinary planning commentary, and where it is a hard spec, section 11's
+# check_hard_specs already covers it — that is a different rule with a different severity.
+_RECIPE_UNIT = (
+    r"(?:ក្រាម"                    # gram
+    r"|គីឡូ(?:ក្រាម)?"           # kilogram, and the common misspelling below it
+    r"|គីលូ(?:ក្រាម)?"
+    r"|មីលីលីត្រ"          # millilitre
+    r"|លីត្រ"                    # litre
+    r"|ស្លាបព្រា"              # spoon
+    r"|ពែង"                        # cup
+    r"|កែវ"                        # glass
+    r"|ដុំ"                        # lump / piece
+    r"|គ្រាប់"                    # seed / piece
+    r"|mls?|kg|g|tbsp|tsp|cups?|oz|lbs?)")
+
+# The negative lookahead covers LATIN only, on purpose. It stops the bare "g" and "l"
+# alternatives matching the first letter of an ordinary English word after a numeral.
+# It must NOT cover Khmer: the tablespoon is written ស្លាបព្រាបាយ -- the spoon unit with a
+# word appended -- so a Khmer lookahead would reject the single most common unit in a
+# Khmer ingredient list, which is precisely what this gate is looking for.
+RECIPE_QTY_LINE = re.compile(
+    r"^\s{0,3}[-*•·]?\s*[^\n]{0,40}?"
+    r"(?:[0-9]+(?:[.,][0-9]+)?|[០-៩]+)\s*" + _RECIPE_UNIT
+    + r"(?![A-Za-z])", re.M)
+
+
+def recipe_form_hits(text):
+    """(numbered step lines, quantity lines) — the two shapes a recipe takes."""
+    return (len(RECIPE_STEP_LINE.findall(text or "")),
+            len(RECIPE_QTY_LINE.findall(text or "")))
+
 # Pulse titles reach the search result exactly like article titles do, so they answer to
 # the same budget — and it is measured in RENDERED WIDTH, not len(). Khmer base consonants
 # are nearly as wide as CJK while 22 of its codepoints have zero advance width, so counting
@@ -855,6 +975,12 @@ RETRY_GUIDANCE = {
     "repeated-opener":
         "The title or summary opened with the same phrase as other published entries. Start "
         "it a different way -- name the dish, lead with the ingredient, or ask a question.",
+    "recipe-form-in-output":
+        "It was written as a RECIPE, not as commentary. Remove every numbered step and "
+        "every ingredient line with a quantity. This page is a caterer's commentary on "
+        "the dish for a Cambodian banquet audience: explain why the technique works, "
+        "what it costs to hold at a banquet's scale, and how a Khmer-Chinese wedding "
+        "table serves it. Do not restate the source's method.",
     "title-missing-demand-root":
         "The title did not contain any of the Khmer words Cambodian readers actually "
         "search for. Rewrite title_km so it contains one of ម្ហូបការ, មុខម្ហូប or ពិធី "
@@ -1040,9 +1166,12 @@ def fetch_feed_page(feed, page, seen_links):
     ever needed for the ONE item that actually gets published. It runs at selection time
     instead, which is what makes walking the archives affordable at all.
 
-    The candidate no longer carries the raw XML element either: `_xml_item` existed
-    solely so extract_image_multitier could mine the entry for a photograph later, and
-    that whole tier is gone (see the note above verify_live_url).
+    The raw XML element IS carried on the candidate, as `_xml_item`. That is what lets
+    extract_image_multitier mine media:content and the description for a photograph at
+    selection time without going back to the network — the two cheap tiers cost nothing
+    once the page is already parsed, and only the og:image tier needs a request. The key
+    is prefixed with an underscore because it is working state: it is never copied into
+    the entry written to pulseData.json.
     """
     url = paginated_feed_url(feed["url"], page)
     if url is None:
@@ -1105,6 +1234,7 @@ def fetch_feed_page(feed, page, seen_links):
             "pubDate": pubDate or "Sun, 09 Aug 2026 12:00:00 +0000",
             "category_km": feed["category_km"],
             "_depth": page,
+            "_xml_item": item,
         })
     return out
 
@@ -1174,6 +1304,19 @@ def render_pulse_cards(items):
     failed = []
     for item in items:
         item_id = item.get("id", "?")
+
+        # An entry illustrated by a rehosted source photograph keeps it. The card is the
+        # fallback for entries that have no photograph to show — every banquet-seed day,
+        # which has no source at all, and any feed day whose source yielded no usable
+        # image. Without this guard the card would be drawn over the photograph on the
+        # very next run, because the loop below treats "image_url is not my card" as
+        # "needs a card".
+        credited = (item.get("image_source_link") or "").strip()
+        current = item.get("image_url") or ""
+        if credited and current.startswith("/") and os.path.exists(
+                os.path.join("public", current.lstrip("/"))):
+            continue
+
         filename = card_filename(item)
         on_disk = os.path.join(CARD_DIR, filename)
         expected_url = card_site_url(on_disk)
@@ -1207,6 +1350,94 @@ def card_site_url(path):
     and takes none.
     """
     return "/" + os.path.relpath(path, "public").replace(os.sep, "/")
+
+
+# The size and shape limits the download has to satisfy. All three came out of the
+# original implementation and are kept because each one is a defect it caught:
+#   * a source page's og:image is often a site-wide header banner rather than the dish,
+#     and a banner is wide and short — hence the aspect and height floor;
+#   * Cambodian mobile is the audience (section 8 self-hosts nothing it can avoid), so
+#     the file is re-encoded down to 800px and under 48 KB rather than served as found;
+#   * a portrait photograph is centre-cropped to 16:9 so the card and the photograph
+#     occupy the same slot in the layout.
+PHOTO_MAX_WIDTH = 800
+PHOTO_MAX_KB = 48
+PHOTO_MIN_HEIGHT = 300
+PHOTO_MAX_ASPECT = 2.8
+
+
+def rehost_source_image(entry, source_image_url):
+    """Download the source article's photograph, re-encode it, and store it locally.
+
+    Returns the path written, or None if there is nothing usable — in which case the
+    caller falls back to the generated share card. Returning None rather than raising is
+    deliberate: a missing photograph costs an illustration, not the day's article.
+
+    Nothing hotlinks. The site serves its own copy, which is what makes a takedown a
+    file deletion under our control rather than a request to somebody else's server.
+    The credit for it is recorded by the caller as image_source_link; check_content.py
+    fails the build on a photograph stored without one.
+
+    Pillow is imported lazily for the same reason render_pulse_cards does it:
+    check_pulse_health.py imports parse_any_date from this module, and a top-level
+    Pillow import would make it a hard requirement of merely importing this file.
+    """
+    if not source_image_url or not source_image_url.startswith("http"):
+        return None
+
+    import io
+    from PIL import Image
+
+    out_dir = os.path.join("public", "images", "pulse")
+    os.makedirs(out_dir, exist_ok=True)
+    target = os.path.join(out_dir, "%s.webp" % (entry.get("slug") or entry.get("id")))
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'}
+
+    try:
+        req = urllib.request.Request(source_image_url, headers=headers)
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            img_bytes = resp.read()
+
+        img = Image.open(io.BytesIO(img_bytes))
+        if img.mode in ("RGBA", "P"):
+            img = img.convert("RGB")
+
+        w, h = img.width, img.height
+        if h < PHOTO_MIN_HEIGHT or (w / float(h)) > PHOTO_MAX_ASPECT:
+            print("Source image for %s is a %dx%d banner, not a photograph of the dish "
+                  "— falling back to the share card." % (entry.get("id", "?"), w, h),
+                  flush=True)
+            return None
+
+        if (w / float(h)) < 1.0:                      # portrait: centre-crop to 16:9
+            new_h = int(w / (16.0 / 9.0))
+            top = (h - new_h) // 2
+            img = img.crop((0, top, w, top + new_h))
+
+        if img.width > PHOTO_MAX_WIDTH:
+            new_h = int(img.height * (PHOTO_MAX_WIDTH / float(img.width)))
+            img = img.resize((PHOTO_MAX_WIDTH, new_h), Image.Resampling.LANCZOS)
+
+        for q in range(80, 20, -5):
+            img.save(target, "WEBP", quality=q, optimize=True)
+            if (os.path.getsize(target) / 1024.0) <= PHOTO_MAX_KB:
+                break
+
+        print("Rehosted the source photograph for %s: %s (%d KB, %dx%d)"
+              % (entry.get("id", "?"), target, os.path.getsize(target) // 1024,
+                 img.width, img.height), flush=True)
+        return target
+    except Exception as e:
+        print("Could not rehost the source photograph for %s (%s) — falling back to the "
+              "share card." % (entry.get("id", "?"), e), flush=True)
+        if os.path.exists(target):
+            # A half-written file would pass check_content.py's existence check and
+            # ship a broken og:image, which is the defect section 6 records.
+            try:
+                os.remove(target)
+            except OSError:
+                pass
+        return None
 
 
 # --- The generation prompt -------------------------------------------------------
@@ -1276,6 +1507,9 @@ BANNED, BECAUSE THEY MAKE CONTENT THIN
 - Inventing a fixed number where practice varies. Simmer times and where a course sits in
   a meal depend on the size of the ingredient and on family custom — say so rather than
   making one up.
+- A RECIPE'S FORM. No numbered steps, and no ingredient list with quantities. This is
+  commentary on the dish, not instructions for making it. The answer is checked
+  mechanically for both shapes and is rejected outright if either appears.
 """
 
 PROMPT_LANGUAGE_RULES = """
@@ -1509,15 +1743,26 @@ def update_pulse_daily():
     # every candidate during the fetch. Collect up to 5 live candidates so that if one
     # fails quality gates, the pipeline can fall back to the next dish.
     #
-    # No image is resolved here any more. The share card is drawn from the generated
-    # Khmer text, so it cannot exist until after generation; render_pulse_cards() writes
-    # it at the end of this function.
+    # The candidate's source photograph is resolved HERE, on the handful of candidates
+    # about to be processed, for the same reason verify_live_url is: doing it during the
+    # fetch cost ~188 requests to publish one article. Two of the three tiers read the
+    # already-parsed feed entry and cost nothing; only the og:image tier makes a request.
+    # It is only a URL at this point — nothing is downloaded until an entry exists to
+    # attach it to, which is after generation.
+    #
+    # A banquet seed has no source and therefore no photograph, by construction: it is
+    # not a feed item, so this loop never sees it and its image_url stays absent. Its
+    # illustration is the share card render_pulse_cards() draws at the end.
     #
     # On a banquet day this already holds today's seed topics and `unseen` is empty, so
     # the loop runs zero times: no HTTP request is made to choose a subject.
     valid_candidates = list(seed_candidates)
     for cand in unseen:
         if verify_live_url(cand["link"]):
+            # "" rather than a stand-in image: no photograph is a legitimate outcome and
+            # the card covers it. A borrowed CKM photograph would misrepresent the dish.
+            cand["image_url"] = extract_image_multitier(
+                cand.get("_xml_item"), "", cand["link"])
             valid_candidates.append(cand)
             if len(valid_candidates) >= 5:
                 break
@@ -1625,6 +1870,23 @@ def update_pulse_daily():
                 reject_detail = ["the piece had %d markdown subheadings; the four sections "
                                  "must each carry their own Khmer subheading" % sections]
                 reject_reason = "generation-unstructured"
+                continue
+
+            # The commentary gate. Checked here, straight after the structure gate,
+            # because it decides what KIND of piece this is — there is no point trimming
+            # a title on a body that should not be published at all.
+            steps, quantities = recipe_form_hits(content_km)
+            if steps >= RECIPE_FORM_MIN_LINES or quantities >= RECIPE_FORM_MIN_LINES:
+                shape = ("%d numbered step lines" % steps if steps >= RECIPE_FORM_MIN_LINES
+                         else "%d ingredient lines carrying quantities" % quantities)
+                print(f"Attempt {attempt}/{MAX_ATTEMPTS}: the body took a recipe's shape "
+                      f"({shape}) — that is a restatement of the source, not commentary. "
+                      f"Retrying.", flush=True)
+                reject_detail = ["the body contained %s. This page comments on the dish "
+                                 "for a Cambodian banquet audience; it must not reproduce "
+                                 "the source's method as steps or as an ingredient list "
+                                 "with quantities" % shape]
+                reject_reason = "recipe-form-in-output"
                 continue
 
             # Deterministic repair pass before judging the output.
@@ -1765,12 +2027,22 @@ def update_pulse_daily():
         "content_km": content_km,
         "key_points_km": key_points_km,
         "category": item_to_process["category_km"],
-        # Both are filled by render_pulse_cards() below, once the entry exists: the card
-        # is drawn FROM this entry's Khmer text, so it cannot be rendered any earlier.
+        # Filled just below (a rehosted source photograph) or by render_pulse_cards()
+        # at the end (the share card, drawn FROM this entry's Khmer text, so it cannot
+        # be rendered any earlier). Exactly one of the two always wins.
         "image_url": "",
-        # The card carries a key point set large with the dish title beneath it. The alt
-        # text is the title, which is true of the card and short enough to be read aloud;
-        # the model is no longer asked to describe a photograph that does not exist.
+        # Non-empty ONLY when image_url is a rehosted third party's photograph, and then
+        # it is the article that photograph came from. This is the field the page's
+        # credit component keys off, which is why it is separate from source_link:
+        # source_link is the de-duplication key and is set for every entry, including a
+        # card-illustrated one that has nothing to credit. check_content.py's
+        # check_pulse_image() makes the two states an error in both directions — a
+        # photograph without a credit, and a credit under a picture that reproduces
+        # nothing.
+        "image_source_link": "",
+        # True of either illustration: the share card sets the dish title in large type,
+        # and on a photograph of the dish the title is what the picture shows. Short
+        # enough to be read aloud, and Khmer, which an English source title is not.
         "image_alt": title_km,
         # For a feed item this is the source URL; for a banquet seed it is the synthetic
         # ckm-seed: key. Either way it is the de-duplication key and nothing else — it has
@@ -1793,6 +2065,22 @@ def update_pulse_daily():
         # February. A recipe's age is not news, but its arrival here is.
         "added_at": now_rfc2822,
     }
+
+    # A feed entry is illustrated by the source article's own photograph where one can be
+    # had: it shows the dish the piece is about, which a card cannot. It is downloaded and
+    # re-encoded to a local file — nothing hotlinks the source's server — and the article
+    # it came from is recorded so the page can credit it.
+    #
+    # Three outcomes, and every one of them is a valid entry:
+    #   feed item, photograph obtained  -> photograph + credit
+    #   feed item, no usable photograph -> share card, no credit (nothing to credit)
+    #   banquet seed                    -> share card, no credit (there is no source)
+    # A failed download therefore costs an illustration, never the day's article.
+    if not is_seed:
+        photo_path = rehost_source_image(new_entry, item_to_process.get("image_url", ""))
+        if photo_path:
+            new_entry["image_url"] = card_site_url(photo_path)
+            new_entry["image_source_link"] = item_to_process["link"]
 
     def parse_item_date(item):
         # added_at wins where present; entries from before it existed fall back

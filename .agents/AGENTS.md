@@ -124,17 +124,44 @@
   `CateringPulse.astro` had no `loading` attribute, so it eagerly fetched the same URL as
   the lazy foreground image. That put 122 KB of below-the-fold pulse imagery on the
   homepage critical path — 66% of the initial payload, each image larger than the LCP hero.
-- **[REGRESSION] Pulse illustrations are rendered from our own text, never rehosted.**
-  Until 2026-08-22 the pulse pipeline downloaded the source recipe blog's photograph and
-  served it from `ckmkh.com`: **35 files in `public/images/pulse/` taken from seven
-  third-party blogs, with no credit anywhere on the page.** Re-encoding to WebP and
-  renaming the file changes nothing about who owns the photograph — that was copyright
-  exposure with no defence, on the pages that grow by one a day. Removed 2026-08-22 and
-  replaced by `devops/render_pulse_card.py`, which draws a `1200×675` PNG from the entry's
-  **own Khmer text** — the shortest `key_points_km` entry set large, with `title_km` as a
-  small attribution line — so nothing from a third party is reproduced. The pipeline must
-  never again download and rehost an image from a source feed. If a future entry needs a
-  photograph, it must be one the owner supplies or one this project holds a licence to.
+- **[REGRESSION] A rehosted photograph carries a credit on EVERY surface that displays
+  it, not only on the article page.** Until the morning of 2026-08-22 the pulse pipeline
+  downloaded the source blog's photograph and served it from `ckmkh.com`: **35 files in
+  `public/images/pulse/` taken from seven third-party blogs, with no credit anywhere on
+  the page.** Those files were deleted and the fetch was removed. The owner restored
+  quotation the same day, with the four things that had actually been missing — a local
+  copy, a credit, a rights notice carrying a takedown route, and `rel="nofollow"` on the
+  outbound link. Re-encoding to WebP and renaming the file still changes nothing about
+  who owns the photograph; the credit is what changes the position, not the encoding.
+  - The credit is `src/components/PhotoCredit.astro`, and it renders on **all four**
+    surfaces that show pulse imagery: the article page (`pulse/[id].astro`, `full`
+    variant, which carries the rights notice and the takedown route) and the three card
+    surfaces (`CateringPulse.astro` on the homepage, `pulse/index.astro`,
+    `pulse/[page].astro`, `compact` variant, publication host only — a card is already
+    wrapped in an `<a>` and a nested anchor is invalid HTML).
+  - **The sister project shipped the credit on the article page only.** Sunder's
+    `news/[slug].astro` carried the full block while its news listing, the paginated
+    pages and the homepage displayed the same third-party photographs bare. A credit that
+    is absent from the surface a reader actually lands on does not credit anyone. Check
+    every surface that renders the image, not the one that renders the article.
+  - `check_pulse_image()` in `check_content.py` is the gate, and all four findings are
+    errors: `pulse-image-missing`, `pulse-image-external` (an `image_url` that is not a
+    local path — the previous check read `startswith("/")` and let an external URL pass
+    silently into `og:image` and the JSON-LD, which is hotlinking a third party's server
+    from every share), `pulse-photo-without-credit` (a rehosted photograph with no
+    `image_source_link`), and `pulse-credit-without-photo`.
+  - A generated share card (`devops/render_pulse_card.py`, `<slug>-card.png`, drawn from
+    the entry's **own Khmer text**) carries no credit and must not carry one: a credit
+    line under it would be a false statement about the picture. A rehosted photograph is
+    `<slug>.webp`. The filename is the discriminator the gate uses; if that convention
+    changes, change it in `check_content.py` in the same commit.
+  - **The takedown route has to work in five minutes, and it is `devops/takedown.py`.**
+    A rights holder's email gives a slug or a hostname; the script removes the entries
+    from `pulseData.json`, deletes the image files, appends the 301 to `/pulse/` in
+    `public/_redirects` (retargeting the `/pulse/pulse-NN/` aliases so they do not
+    redirect into a 404), and prints a reply the owner can paste. It changes nothing
+    without confirmation, never commits or deploys, and refuses to submit a removed URL
+    to IndexNow while that URL still returns 200.
 - **The card renderer needs Pillow built against raqm, and a local render is not
   evidence.** Khmer requires complex shaping: a COENG subscript stacks below its base
   consonant, and without shaping it lands beside it as a separate glyph. Pillow only
@@ -145,14 +172,22 @@
   run. FreeType cannot read woff2, so `devops/fonts/` holds a ttf converted from the same
   Hanuman the site self-hosts; it is a build input, not a site asset, and does not belong
   in `public/`.
-- **The card is a SHARE image, not an in-article hero.** It feeds `og:image` and the
-  JSON-LD `image`, and it fills the image slot on the listing pages. The pulse article's
-  own top image block was removed 2026-08-22 for two independent reasons: a card whose
-  text is a key point, sitting directly above the article that contains that key point,
-  tells the reader nothing twice; and that block rendered the same file **twice**, once
-  blurred as a backdrop behind itself — the defect the bullet above records for
-  `CateringPulse.astro`, shipped again on every pulse page. Do not reinstate it. The
-  listing layouts were deliberately left alone.
+- **[REGRESSION] The pulse cover block renders ONE `<img>`.** It was removed on the
+  morning of 2026-08-22 for two independent reasons and restored the same day with the
+  first of them fixed and the second still worth watching:
+  - The block rendered the same file **twice**, once blurred as a backdrop behind
+    itself — the duplicate-fetch defect the bullet above records for
+    `CateringPulse.astro`, shipped again on every pulse page and on the LCP path rather
+    than below the fold. **The backdrop is not coming back.** The single image is
+    deliberately not `loading="lazy"`: it is the LCP element.
+  - A share card whose text is one of the entry's own key points, sitting directly above
+    the article that prints that key point, tells the reader nothing twice. That still
+    applies on a seed day, when the illustration is the card rather than a photograph.
+    It is a content-quality judgement, not a defect, and it is the reason the photograph
+    is the better illustration where one exists.
+  - `itemImage` is the single variable behind that `<img>`, `og:image` and the JSON-LD
+    `image`. Do not fork it: §6 already records what a share image pointing somewhere the
+    page does not cost this business.
 - Blog inline images are `1600×900` (16:9) WebP in `public/images/`, named
   `blog_NN_inline_khmer.webp`. Article `NN` references image `NN` — nothing else.
   `check_content.py` enforces this.
@@ -395,6 +430,35 @@ Every item below came out of an audit of the 15 live articles.
 
 ## 15. Pulse pipeline
 
+- **Pulse is COMMENTARY. It is not a translation, a summary or a restatement of the
+  source (owner directive 2026-08-22), and it is gated as such.** Two independent
+  reasons, either one sufficient on its own:
+  1. **Search.** Google's scaled content abuse policy gives as its own example of low
+     value produced at scale the practice of taking feeds and generating pages from
+     them "through synonymizing, translating or other obfuscation techniques".
+     **Translating is named there; commentary is not.** A Khmer rendering of somebody's
+     recipe is precisely the thing described. A piece that identifies why a technique
+     works and what it means for a Khmer-Chinese banquet is not.
+  2. **The photograph.** The basis for displaying a rights holder's photograph is that
+     the page comments on the subject — not that reproducing it saved us taking our own.
+     §6's credit block states that in its own words, so the commentary has to be real
+     for the sentence under the picture to be true.
+  The output must therefore contain what the source does not: our own reading of the
+  technique, local conditions, an operable judgement, a comparison. Banned outright:
+  restating the source step by step, producing an ingredient list or a numbered method,
+  and rewording.
+  - **This is a gate, because §15's own rule is that a prompt is only a request.**
+    `MIN_CONTENT_SECTIONS` rejects a flat wall of text, and `recipe_form_hits()` rejects
+    output that takes a recipe's SHAPE — numbered step lines, or quantity-plus-unit
+    lines, at or above `RECIPE_FORM_MIN_LINES`, rejected as `recipe-form-in-output`.
+    Both live in `devops/fetch_catering_pulse.py`, and every rejection must name what
+    was actually wrong (see the `RETRY_GUIDANCE` rule further down; a retry told the
+    wrong reason fixes the wrong thing).
+  - The shape gate was calibrated against real data, not guessed: all 36 live entries
+    pass at either threshold, four synthetic recipe-shaped controls are rejected, and
+    the near-miss controls that §14 *requires* — numbered `### ១.` subheadings and a
+    markdown comparison table — pass. The step pattern is anchored to the start of the
+    line for exactly that reason.
 - **[REGRESSION] URLs are permanent.** `id` and `slug` used to be reassigned from list
   position on every run, so adding one article rewrote all 20 URLs; the previous day's
   pages 404'd while `notify_indexing.py` submitted the new ones to Google and Bing.
@@ -415,21 +479,36 @@ Every item below came out of an audit of the 15 live articles.
   for the one item that gets published. Moving that work to selection time is what makes
   walking the archives affordable. Selection walks down the sorted queue until a URL
   resolves, so one dead link costs the next-best article rather than the whole day.
-  The image extractor is gone entirely as of 2026-08-22; the reason is in §6.
-- **[REGRESSION] The pipeline never downloads an image from a source feed.** See §6 for
-  the incident and for what replaced it. Here the consequence is narrower and absolute:
-  no step of this pipeline may fetch, re-encode or write a byte of third-party media into
-  `public/`. The entry's illustration is generated from the entry's own Khmer text by
-  `devops/render_pulse_card.py`, which runs in the same job — Python only, so the
-  no-JavaScript rule further down this section is unaffected.
-- **The outbound link to the source recipe blog was removed 2026-08-22.** The Khmer text
-  is written from a dish name and a short feed description; it is never a translation of
-  the source article, so no attribution is owed. The generation prompt already instructs
-  the model not to mention the source blog — the template then named and linked it on
-  every page, contradicting the pipeline's own instruction and sending what little
-  authority these pages carry to a competitor's recipe site. Do not restore the link, and
-  keep any wording elsewhere on the site (the disclaimer page in particular) consistent
-  with this: the feed takes a dish name as a starting point, nothing more.
+  The image extractor runs there too, on the selected candidate only, for the same
+  reason; see the bullet below and §6.
+- **The pipeline rehosts the source photograph, and it may only do so credited.** This
+  bullet said the opposite for a few hours on 2026-08-22 — see §6 for the incident, the
+  four conditions and the gate. Here the pipeline's own half:
+  `extract_image_multitier()` finds a candidate (media:content or enclosure, then an
+  `<img>` in the description, then the page's `og:image` — only the third costs a
+  request, and it runs at selection time on the selected candidates only);
+  `rehost_source_image()` downloads it, rejects a wide short banner, centre-crops
+  portrait to 16:9, re-encodes to `<slug>.webp` under 48 KB, and returns `None` on
+  anything unusable so the day's article costs an illustration rather than the run. It
+  stores a local copy on purpose: **nothing hotlinks**, which is what makes a takedown a
+  file deletion under our own control. The caller records `image_source_link`, and
+  `check_content.py` fails the build on a photograph stored without one, so the
+  uncredited state is unreachable rather than merely undone. No photograph means the
+  entry's own share card (`devops/render_pulse_card.py`), never an unrelated CKM dish
+  photo presented as the subject.
+- **The outbound link to the source is attribution, and it carries `rel="nofollow"`.**
+  It was removed on the morning of 2026-08-22, on the reasoning that the Khmer text is
+  written from a dish name and a short feed description and is never a translation, so
+  nothing was owed. That reasoning holds for the TEXT and does not reach the
+  PHOTOGRAPH: once the page displays a photograph somebody else owns, a credit is owed
+  regardless of how the prose was written. The link came back the same day inside
+  `PhotoCredit.astro` — `nofollow` because it is attribution, not an endorsement we want
+  counted, which also answers the original objection about sending what little authority
+  these pages carry to a competitor's recipe site. The generation prompt still forbids
+  the model from mentioning the source blog **in the prose**; the credit block is the
+  one place the source is named. Keep the wording elsewhere on the site consistent:
+  `src/pages/terms.astro` must not claim that everything under `/pulse/` is CKM's, and
+  `src/pages/disclaimer.astro` must carry the takedown route.
 - **Subjects come from a seed list five days a week, from the feeds two (owner directive
   2026-08-22).** Measured that day over 90 days in Search Console, filtered to Cambodia: the
   36 pulse pages had earned **2 impressions and 0 clicks**, against 282 impressions for the 15

@@ -1,0 +1,95 @@
+---
+// 實體路徑: src/components/PhotoCredit.astro
+//
+// Attribution surface for /pulse/ imagery. Modelled on Sunder's news article
+// credit block (src/pages/news/[slug].astro), adapted to Khmer and to CKM's
+// palette tokens (AGENTS.md section 9) and reader honorific (section 10).
+//
+// WHY THIS EXISTS: a pulse entry sourced from a feed illustrates itself with a
+// photograph the publication owns, not one CKM took. The legal footing for
+// showing it is that the Khmer piece COMMENTS on the dish — it is not a
+// translation or a summary of the source — so the credit has to say both
+// things: who holds the rights, and that the reproduction is for commentary.
+// The same wording is what makes the takedown route findable.
+//
+// TWO VARIANTS:
+//   full    — article page. Publication name links out with rel="nofollow"
+//             (the link is attribution, not an endorsement we want counted),
+//             plus the rights notice and the takedown route.
+//   compact — card surfaces. Publication host only, and deliberately WITHOUT
+//             an anchor: every pulse card is already wrapped in an <a>, and a
+//             nested anchor is invalid HTML that browsers silently unnest.
+//
+// FEED IT `image_source_link`, NEVER `source_link`. The two fields answer
+// different questions: `source_link` is "what dish is this entry about" and is
+// the de-duplication key, present on EVERY entry including banquet seed days
+// (as "ckm-seed:<id>"); `image_source_link` is "whose photograph is this" and
+// exists only when a source photograph was actually rehosted. Measured
+// 2026-08-22: all 36 live entries are illustrated by CKM's own generated card
+// and every one carries an http source_link, so a component keyed on
+// source_link prints a photo credit naming a publication that did not take
+// that picture — a false statement about an image, which is the exact opposite
+// of what a credit is for. devops/check_content.py `photo-credit-wrong-field`
+// watches the call sites for this.
+//
+// NO CREDIT AT ALL is therefore the correct output whenever the entry is
+// illustrated by a generated card. The protocol check below is a second layer
+// for the same outcome: "ckm-seed:pulse-38" is a URL only in the loosest sense
+// — it parses (scheme + opaque path) rather than throwing, so a bare try/catch
+// would let it through with an empty hostname.
+
+interface Props {
+  /** pulseData.json `image_source_link` — the page a rehosted photograph came
+   *  from. Absent on every card-illustrated entry, which is the common case. */
+  sourceUrl?: string | null;
+  variant?: 'full' | 'compact';
+  class?: string;
+}
+
+const { sourceUrl = '', variant = 'full', class: extraClass = '' } = Astro.props;
+
+/**
+ * Publication hostname without a leading "www.", or null when the input is not
+ * a real web address. Returning null is what suppresses the whole block.
+ */
+function publicationHost(raw?: string | null): string | null {
+  if (!raw || typeof raw !== 'string') return null;
+  let parsed: URL;
+  try {
+    parsed = new URL(raw.trim());
+  } catch {
+    return null;
+  }
+  // "ckm-seed:pulse-38" parses cleanly and yields an empty hostname; so does a
+  // mailto: or data: URL. Only http(s) describes a publication we can credit.
+  if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return null;
+  const host = parsed.hostname.replace(/^www\./i, '');
+  return host || null;
+}
+
+const host = publicationHost(sourceUrl);
+---
+
+{host && variant === 'compact' && (
+  <p class:list={['text-[10px] text-slate-400 leading-relaxed', extraClass]}>
+    រូបភាព៖ {host}
+  </p>
+)}
+
+{host && variant === 'full' && (
+  <p class:list={['text-[11px] md:text-xs text-slate-500 leading-relaxed', extraClass]}>
+    <span>រូបភាព៖ </span>
+    <a
+      href={sourceUrl}
+      target="_blank"
+      rel="noopener noreferrer nofollow"
+      class="text-champagne-dark hover:text-onyx underline underline-offset-2 decoration-champagne/50 hover:decoration-onyx transition-colors"
+    >{host}</a>
+    <span>។ សិទ្ធិលើរូបភាពនេះនៅតែជាកម្មសិទ្ធិរបស់អ្នកបោះពុម្ពផ្សាយដើម ឬអ្នកថតរូប។ យើងខ្ញុំដកស្រង់វាមកបង្ហាញនៅទីនេះ ដើម្បីអត្ថាធិប្បាយលើមុខម្ហូបនោះតែប៉ុណ្ណោះ។ ប្រសិនបើលោកអ្នកជាម្ចាស់សិទ្ធិ ហើយចង់ឱ្យដកចេញ សូមមើលរបៀបទាក់ទងនៅទំព័រ </span>
+    <a
+      href="/disclaimer/"
+      class="text-champagne-dark hover:text-onyx underline underline-offset-2 decoration-champagne/50 hover:decoration-onyx transition-colors"
+    >ការបដិសេធការទទួលខុសត្រូវ</a>
+    <span>។</span>
+  </p>
+)}

@@ -15,8 +15,8 @@ CI 一律從 repo 根目錄(`$GITHUB_WORKSPACE`)呼叫這些工具,沒有任何 
 
 | 檔案 | 用途 | 呼叫方式 |
 | :--- | :--- | :--- |
-| `check_content.py` | 內容閘門:高棉文字元完整性、`seoTitle` / `description` 渲染寬度預算、內鏈下限、開頭語重複上限、密鑰樣式掃描。無外部相依,全樹掃描一秒內完成 | workflow `Content gate`(push / PR 觸及 `src/content/**`、`src/data/**`、`public/llms*.txt`、`devops/check_content.py` 時)與 `Daily Catering Pulse & Auto-Indexing Pipeline`,兩者皆執行 `python devops/check_content.py --strict` |
-| `fetch_catering_pulse.py` | 每日 RSS 擷取、Gemini 高棉文改寫、分享圖卡生成（`render_pulse_card.py`）,寫入 `src/data/pulseData.json` | workflow `Daily Catering Pulse & Auto-Indexing Pipeline`,cron `47 20 * * *`（每日一篇）:`python devops/fetch_catering_pulse.py` |
+| `check_content.py` | 內容閘門:高棉文字元完整性、`seoTitle` / `description` 渲染寬度預算、內鏈下限、開頭語重複上限、密鑰樣式掃描,以及 pulse 圖片與出處配對(`image_url` 必須是本站實際存在的檔案;轉存的第三方照片必須有 `image_source_link`,自製文字圖卡則不得有)。無外部相依,全樹掃描一秒內完成 | workflow `Content gate`(push / PR 觸及 `src/content/**`、`src/data/**`、`public/llms*.txt`、`devops/check_content.py` 時)與 `Daily Catering Pulse & Auto-Indexing Pipeline`,兩者皆執行 `python devops/check_content.py --strict` |
+| `fetch_catering_pulse.py` | 每日一篇高棉文短評。週一至週五題目取自 `pulse_seeds.json`(宴席種子,不觸網選題),週六日取自 RSS;Gemini 改寫後過閘門(章節數、食譜形態、需求詞、長度、外文字元),外部來源篇取回原圖轉存本地並記錄 `image_source_link`,無圖時退回 `render_pulse_card.py` 生成的文字圖卡。寫入 `src/data/pulseData.json` | workflow `Daily Catering Pulse & Auto-Indexing Pipeline`,cron `47 20 * * *`(每日一次):`python devops/fetch_catering_pulse.py` |
 | `generate_llms_txt.py` | 由站內既有內容產生 `public/llms.txt` 與 `public/llms-full.txt`;`--check` 於檔案過期時非零退出 | 同上 workflow:`python devops/generate_llms_txt.py` |
 | `check_pulse_health.py` | 停擺偵測器。不逐一檢查各種失敗成因,而是量測「資料集最新一筆有多舊」,涵蓋所有已知與未知的靜默失敗路徑 | 同上 workflow(`if: always()`,在 commit 步驟之後):`python devops/check_pulse_health.py --max-age-days 2` |
 | `notify_indexing.py` | Cloudflare 邊緣快取清除、IndexNow 提交、Search Console sitemap 重送;可由 git diff 推導受影響 URL | workflow `Publish`(push / `workflow_run` / 手動):`python devops/notify_indexing.py --urls …` 或 `--changed` |
@@ -49,6 +49,7 @@ CI 一律從 repo 根目錄(`$GITHUB_WORKSPACE`)呼叫這些工具,沒有任何 
 | `compress_images.py` | 把 `public/images` 內的 blog inline PNG 轉為 WebP 並同步更新 markdown 引用 | `python devops/compress_images.py`(需 Pillow) |
 | `migrate_pulse_images.py` | 一次性遷移:把舊 `pulse-XX` 圖檔改名為 slug 命名、補 `image_alt`、重抓缺圖 | `python devops/migrate_pulse_images.py`(需 Pillow) |
 | `fix_h1_tags.py` | 移除 blog markdown 內文的第一個 H1 | 一次性腳本。內含硬編碼絕對路徑 `c:\Projects\CKM\src\content\blog`,換機器需先改 |
+| `takedown.py` | 權利人要求撤下時的整套處理:依 slug 或來源網域找出 pulse 項目、自 `pulseData.json` 移除、刪除圖檔、於 `public/_redirects` 追加 301 至 `/pulse/`(並把指向該 slug 的 `/pulse/pulse-NN/` 別名一併改指列表頁),最後印出可直接貼回覆的處理摘要。不 commit、不 push、不部署,後續指令一律只印出來 | 未加 `--yes` 時一律乾跑:`python devops/takedown.py --slug <slug>` 或 `--source <hostname>`;確認後 `--yes` 實跑。部署上線後再跑 `python devops/takedown.py --notify <url>`,該模式先確認該網址已不再回傳 200,才透過 `notify_indexing.py` 送出 IndexNow(Cloudflare 清快取與 sitemap 重送由 `Publish` workflow 負責,本機無該憑證) |
 
 ## 版控規則:哪些追蹤、哪些忽略
 

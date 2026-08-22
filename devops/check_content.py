@@ -463,6 +463,123 @@ def check_secrets():
                     "%s appears in a git-tracked file — rotate it, then remove it" % label)
 
 
+# ---------------------------------------------------------------- rule 8b
+#
+# What a pulse entry's image is, and what has to accompany it.
+#
+# Two kinds of image can sit in public/images/pulse/, and they carry opposite
+# obligations:
+#
+#   * a SHARE CARD, drawn by devops/render_pulse_card.py from the entry's own Khmer
+#     text. It reproduces nothing of anybody else's, so there is nothing to credit,
+#     and a credit line under it would be a false statement about the picture.
+#   * a REHOSTED PHOTOGRAPH, downloaded from the source article and re-encoded by
+#     fetch_catering_pulse.py. It is a third party's work used for commentary, so it
+#     MUST carry the link the credit component renders. An uncredited rehosted
+#     photograph on a commercial site is the exposure that had all 35 of them deleted
+#     on 2026-08-22; restoring the fetch without restoring the credit would restore
+#     the exposure exactly.
+#
+# The discriminator is the filename, because that is what the generator actually
+# controls: render_pulse_card.card_filename() writes "<slug>-card.png" and the rehost
+# path writes "<slug>.webp". This file deliberately does NOT import render_pulse_card
+# to read the convention from source — that module imports Pillow at module scope, and
+# this checker must stay dependency-free so it can run in under a second on any machine
+# and inside `npm run build`. The constant below is the second copy of that convention;
+# if the card filename ever changes, change it here in the same commit.
+PULSE_IMAGE_DIR = "/images/pulse/"
+PULSE_CARD_SUFFIX = "-card.png"
+HTTP_URL = re.compile(r"^https?://[^\s\"'<>]+$")
+
+
+def check_pulse_image(p, where, it):
+    """image_url must be a local file that exists, and its credit must match its kind.
+
+    [REGRESSION] The existence check used to read `if img.startswith("/")`, so an
+    external `https://…` value was not checked at all — it silently passed, and
+    pulse/[id].astro feeds image_url straight into og:image and the JSON-LD. That is
+    hotlinking a third party's server from every Facebook and Telegram share of the
+    page, with no local copy to take down if they object. External is now an error, and
+    it is checked BEFORE the pairing rules so the message names the real defect.
+    """
+    img = (it.get("image_url") or "").strip()
+    credit = (it.get("image_source_link") or "").strip()
+
+    if not img:
+        # AGENTS.md section 6: og:image must resolve. An entry with no image ships a
+        # blank preview to the two channels this business runs on.
+        err("pulse-image-missing", p, 1, "%s has no image_url" % where)
+        return
+
+    if not img.startswith("/") or img.startswith("//"):
+        err("pulse-image-external", p, 1,
+            "%s image_url is not a local path: %s — it reaches og:image and the JSON-LD, "
+            "so it must be a file this site actually hosts" % (where, img))
+        return
+
+    if not os.path.exists(os.path.join(ROOT, "public", img.lstrip("/"))):
+        err("pulse", p, 1, "%s image_url not found: %s" % (where, img))
+
+    # A file outside the pulse image directory is one of the site's own assets (a blog
+    # inline image was once used as a fallback). It is neither a card nor a rehosted
+    # photograph: nothing to credit, and nothing may claim otherwise.
+    is_photo = img.startswith(PULSE_IMAGE_DIR) and not img.endswith(PULSE_CARD_SUFFIX)
+
+    if is_photo:
+        if not HTTP_URL.match(credit):
+            err("pulse-photo-without-credit", p, 1,
+                "%s rehosts a source photograph (%s) but image_source_link is %r — a "
+                "third party's photograph must carry the link the credit renders"
+                % (where, img, credit))
+        src = (it.get("source_link") or "").strip()
+        if not HTTP_URL.match(src):
+            err("pulse-photo-without-credit", p, 1,
+                "%s rehosts a source photograph (%s) but source_link is %r, not a real "
+                "http(s) URL — there is nothing to point the credit at"
+                % (where, img, src))
+    elif credit:
+        err("pulse-credit-without-photo", p, 1,
+            "%s is illustrated by a generated card (%s) yet carries image_source_link "
+            "%r — the credit component keys off that field and would print a photo "
+            "credit for a picture that reproduces nothing" % (where, img, credit))
+
+
+def check_photo_credit_source():
+    """The credit component must read image_source_link, not source_link.
+
+    BLOCKING since 2026-08-22. It shipped as a warning only while the four call sites
+    still read the wrong field; they were corrected the same day, so the backlog is zero
+    and the gate can block — the same staging this file uses for every rule of its kind.
+    It nearly shipped a false statement on every page: keyed on source_link, the credit
+    rendered "រូបភាព៖ thewoksoflife.com" underneath a card CKM had drawn itself.
+
+    The two fields answer different questions. `source_link` answers "what dish is this
+    entry about", is set on EVERY entry including a banquet seed, and is the
+    de-duplication key. `image_source_link` answers "whose photograph is this", and is
+    set only when one was actually rehosted. A credit component keyed on source_link
+    prints a photo credit under CKM's own generated share card whenever a feed-day entry
+    yielded no usable photograph — naming a publication that did not take that picture,
+    which is a false statement about a picture and the opposite of what the credit is
+    for. Measured 2026-08-22: all 36 live entries are card-illustrated with an http
+    source_link, so keying on source_link credits a publication under every one of them.
+    """
+    for path in sorted(glob.glob(os.path.join(ROOT, "src", "**", "*.astro"),
+                                 recursive=True)):
+        try:
+            text = read(path)
+        except Exception:
+            continue
+        for m in re.finditer(r"<PhotoCredit[^>]*?sourceUrl=\{([^}]*)\}", text, re.S):
+            expr = m.group(1).strip()
+            if "image_source_link" in expr:
+                continue
+            err("photo-credit-wrong-field", path, lineno(text, m.start()),
+                 "PhotoCredit reads %s; it must read the entry's image_source_link, "
+                 "which is set only when a source photograph was actually rehosted. "
+                 "source_link is present on every entry, so this credits a publication "
+                 "under CKM's own generated cards too." % expr)
+
+
 def check_pulse():
     p = os.path.join(ROOT, "src", "data", "pulseData.json")
     if not os.path.exists(p):
@@ -559,10 +676,7 @@ def check_pulse():
             if slug in seen_slugs:
                 err("pulse", p, 1, "duplicate slug %r (also item %d)" % (slug, seen_slugs[slug]))
             seen_slugs[slug] = i
-        img = it.get("image_url")
-        if img and img.startswith("/"):
-            if not os.path.exists(os.path.join(ROOT, "public", img.lstrip("/"))):
-                err("pulse", p, 1, "%s image_url not found: %s" % (where, img))
+        check_pulse_image(p, where, it)
         if not it.get("image_alt"):
             warn("pulse", p, 1, "%s missing image_alt" % where)
 
@@ -787,6 +901,7 @@ def main():
 
     check_opener_variety(loaded)
     check_pulse()
+    check_photo_credit_source()
     check_llms_txt()
     check_secrets()
 

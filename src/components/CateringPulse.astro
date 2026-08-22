@@ -1,5 +1,6 @@
 ---
 import pulseData from '../data/pulseData.json';
+import PhotoCredit from './PhotoCredit.astro';
 import { Globe, ArrowRight } from '@lucide/astro';
 
 interface PulseItem {
@@ -12,6 +13,9 @@ interface PulseItem {
   category: string;
   image_url?: string;
   image_alt?: string;
+  /** Set only when image_url is a REHOSTED source photograph, never for a generated
+   *  card. This — not source_link — is what PhotoCredit keys on. */
+  image_source_link?: string;
   source_link: string;
   source_title_en: string;
   pub_date: string;
@@ -93,6 +97,12 @@ const items: PulseItem[] = pulseData || [];
 
           <!-- Body -->
           <div class="p-5 flex flex-col flex-grow">
+            <!-- Photograph attribution, compact form. image_source_link is set only when
+                 image_url is a rehosted source photograph, so this renders nothing at all
+                 under one of CKM's own generated cards.
+                 No anchor inside: the whole card is already one. -->
+            <PhotoCredit sourceUrl={item.image_source_link} variant="compact" class="mb-2" />
+
             <!-- Date / Tag bar -->
             <div class="text-[11px] text-slate-400 font-mono mb-2 flex items-center gap-2">
               <span>{(item.added_at || item.pub_date) ? (item.added_at || item.pub_date).split(' ').slice(1, 4).join('.') : '2026.08.08'}</span>
