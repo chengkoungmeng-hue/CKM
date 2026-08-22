@@ -1,5 +1,75 @@
 # Work Log
 
+## 2026-08-22 (GA4 Retirement Across Four Sites, Legal Page Corrections, Pulse Share Cards Replace Rehosted Photographs)
+
+- **Analytics: Zaraz + GA4 switched off, Cloudflare Web Analytics only**:
+  - Owner disabled Cloudflare Zaraz and its GA4 tool in the dashboard across all four
+    client sites. Measurement on `ckmkh.com` is now the cookieless Cloudflare Web
+    Analytics beacon alone.
+  - Verified the same day in a real browser (not `curl` — Cloudflare skips edge injection
+    for non-browser user agents, which is exactly how the old GA4 tag stayed invisible to
+    both `git grep` and a scripted fetch): `window.zaraz` undefined, `window.dataLayer`
+    undefined, `document.cookie` empty, and `static.cloudflareinsights.com/beacon.min.js`
+    the only third-party script.
+  - Rewrote `.agents/AGENTS.md` §18 to describe the current state, keeping the
+    transferable lesson that front-end injection must be verified in a real browser.
+    Marked the 90-day GA4 traffic table as a frozen GA4-era baseline: collection stopped
+    2026-08-22, the series cannot be extended, and Cloudflare Web Analytics does not model
+    sessions and users the same way, so later figures are not a continuation of it.
+- **[REGRESSION] The privacy page described tracking the site does not do.**
+  - **Root Cause**: `src/pages/privacy.astro` told visitors a cookie consent banner was
+    shown and that accepting it enabled tracking (no banner component has ever existed in
+    this repo or the rendered DOM), that the site sets cookies (a real-browser check
+    recorded none), and that Google Analytics may be used. §1 also claimed the visitor IP
+    was processed solely for delivery and security while §3 reported country-level
+    analytics derived from that same IP.
+  - **Impact**: every visitor to `ckmkh.com`.
+  - **Action**: page now describes cookieless aggregate measurement, states that no
+    consent banner is needed because nothing is stored on the visitor's device, and
+    resolves the IP contradiction. An unbacked superlative about confidentiality practice
+    was removed rather than reworded (`ab1470d`).
+  - **Verification**: `npm run build` (`devops/run_content_check.mjs`, `astro check`,
+    `astro build`) — all pass; page re-read against the repo by an independent auditor.
+- **Terms of Use and Disclaimer pages added** (`17c590e`):
+  - The site had only a privacy policy. Terms states that the site is informational, takes
+    no orders or payments, and that menus, photos and figures are reference only and not a
+    binding quotation; booking, payment and cancellation terms stay between the customer
+    and the team. Disclaimer covers changing information, allergens raised at booking, and
+    the automated `/pulse/` pipeline publishing without human review.
+  - No deposit, refund, lead-time, minimum-order, delivery-radius or price-validity figure
+    appears on either page: those are operational terms between the business and its
+    customers, not something a website should fix (§11).
+  - **Verification**: `npm run build` — 64 pages, 0 errors; `dist/terms/index.html` and
+    `dist/disclaimer/index.html` exist; both footers link to them.
+- **[REGRESSION] The pulse pipeline rehosted third-party photographs with no credit.**
+  - **Root Cause**: `fetch_catering_pulse.py` downloaded the source recipe blog's
+    photograph, re-encoded it to WebP and served it from `ckmkh.com`. Re-encoding and
+    renaming changes nothing about who owns the image.
+  - **Impact**: **35 files in `public/images/pulse/` taken from seven third-party recipe
+    blogs**, with no image credit anywhere on the page — on the one page type that grows
+    by one entry a day. Copyright exposure with no defence.
+  - **Action**: image download removed. `devops/render_pulse_card.py` (`5da3af2`) draws a
+    1200×675 PNG from the entry's **own** Khmer text — shortest `key_points_km` set large,
+    `title_km` as a small attribution line — so nothing from a third party is reproduced.
+    The card is a share image (`og:image` / JSON-LD) and fills the listing image slot; the
+    pulse article's top image block was removed, being both redundant beside the article
+    containing the same key point and a second instance of the §6 defect where the same
+    file renders twice, once blurred as its own backdrop. Listing layouts untouched.
+  - **Verification**: Khmer needs complex shaping and Pillow only shapes when built
+    against raqm. Probe workflow `probe_raqm.yml` (`6885c66`) measured `ubuntu-latest` at
+    Pillow 12.3.0 / raqm 0.10.5 with a shaped-to-naive advance ratio of 0.556 — shaping
+    active. Windows wheels report `raqm=False`, so a local render is not evidence; card
+    output is verified from a CI run. `devops/fonts/` holds a ttf converted with fontTools
+    from the site's own Hanuman woff2, because FreeType cannot read woff2 and a ttf in
+    `public/` would be 112 KB of site assets nothing requests.
+- **Outbound source link removed from the pulse template**: the Khmer text is written from
+  a dish name and a short feed description and is never a translation of the source
+  article, so no attribution is owed. The generation prompt already instructs the model
+  not to mention the source blog; the template contradicted it by naming and linking that
+  blog on every page, spending what authority these pages carry on a competitor's site.
+- Recorded all of the above in `.agents/AGENTS.md` §6, §15 and §18 in the same change, per
+  §0 (a rule describing behaviour is updated when the behaviour changes).
+
 ## 2026-08-21 (Brand Identity & Favicon Upgrade, Authentic Banquet Hero, Tang Huot Dedicated Header & Entity SEO)
 
 - **Brand Visual System Upgrade (Quiet Luxury)**:

@@ -7,7 +7,7 @@ import xml.etree.ElementTree as ET
 import unicodedata
 import hashlib
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from email.utils import format_datetime, parsedate_to_datetime
 
 sys.stdout.reconfigure(encoding='utf-8')
@@ -236,9 +236,32 @@ _ALLOW_TERMS = (
 )
 ALLOW_REGEX = re.compile(_ALLOW_TERMS, re.IGNORECASE)
 
-VALID_FALLBACKS = [
-    f"/images/blog_{i:02d}_inline_khmer.webp" for i in range(1, 13)
-]
+# Dishes that plausibly appear on a Khmer-Chinese banquet table, as opposed to a
+# weeknight home-cooking post. Matched against the SOURCE TITLE only, which the feeds
+# write bilingually, so both the English and the Chinese name are listed. This is a
+# ranking hint, never a filter — see BANQUET_FIT_BONUS_DAYS at the selection site for
+# why it must stay bounded.
+_BANQUET_TERMS = (
+    # Banquet proteins and the dried/luxury goods a wedding menu is built around
+    r'abalone|sea cucumber|fish maw|scallop|lobster|crab|prawn|shrimp|'
+    r'whole fish|steamed fish|garoupa|grouper|squab|pigeon|'
+    r'roast pork|roast duck|roast goose|crispy pork|suckling pig|char siu|'
+    r'soy sauce chicken|white cut chicken|braised|red braised|clay pot|claypot|'
+    r'shark.?fin|bird.?s nest|dried scallop|conpoy|black moss|'
+    # Banquet formats and courses
+    r'banquet|wedding|new year|reunion dinner|double.?boiled|poon choi|'
+    r'longevity noodle|e.?fu noodle|yee mein|lotus leaf|glutinous rice|'
+    r'dim sum|tong sui|sweet soup|herbal soup|stuffed tofu|wonton|'
+    # The brand's own cuisine. A Cambodian dish is the most banquet-fit thing the feeds
+    # can produce, and the sources do carry them; measured against the 36 published
+    # source titles, four Cambodian/Khmer dishes scored no bonus at all until this line.
+    r'khmer|cambodian|phnom penh|amok|'
+    # Chinese names, for the bilingual feeds
+    r'鮑魚|海參|花膠|瑤柱|乳豬|燒肉|叉燒|燒鵝|燒鴨|白切雞|豉油雞|紅燒|清蒸|'
+    r'髮菜|伊麵|荷葉|糯米飯|盆菜|喜宴|團年|燉湯|糖水|雲吞|餛飩|釀豆腐'
+)
+BANQUET_REGEX = re.compile(_BANQUET_TERMS, re.IGNORECASE)
+
 
 def sanitize_text(text):
     if not text:
@@ -456,35 +479,19 @@ def find_foreign_scripts(*texts):
                             % (_script_name(cp), ch, chunk[max(0, i - 15):i + 10]))
     return hits
 
-def extract_image_multitier(item, fallback, item_link):
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'}
-    if item is not None:
-        for elem in item:
-            if 'content' in elem.tag or 'thumbnail' in elem.tag or 'enclosure' in elem.tag:
-                img_url = elem.attrib.get('url', '')
-                if img_url and img_url.startswith("http"):
-                    return img_url
-        for elem in item:
-            if 'encoded' in elem.tag or 'description' in elem.tag or 'summary' in elem.tag:
-                html_text = elem.text or ""
-                m = re.findall(r'src=["\'](https?://[^"\']+\.(?:jpg|jpeg|png|webp|gif))["\']', html_text, re.IGNORECASE)
-                if m:
-                    return m[0]
-                    
-    if item_link and item_link.startswith("http"):
-        try:
-            req = urllib.request.Request(item_link, headers=headers)
-            with urllib.request.urlopen(req, timeout=4) as resp:
-                html = resp.read().decode('utf-8', errors='ignore')
-            m = re.search(r'<meta[^>]+property=["\']og:image["\'][^>]+content=["\']([^"\']+)["\']', html)
-            if not m:
-                m = re.search(r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+property=["\']og:image["\']', html)
-            if m and m.group(1).startswith("http"):
-                return m.group(1)
-        except Exception:
-            pass
+# Removed 2026-08-22: extract_image_multitier().
+#
+# It pulled a photograph out of the source blog's feed entry (media:content, then an
+# <img> in the description, then the page's og:image) and sync_and_download_images then
+# rehosted it on ckmkh.com. That is republishing a third party's photograph on a
+# commercial site with no licence and no credit — 35 files from seven recipe blogs had
+# accumulated in public/images/pulse/. Owner decision: remove it rather than add credits.
+#
+# The replacement draws a 1200x675 card from the entry's OWN Khmer text
+# (devops/render_pulse_card.py), so the share image reproduces nothing at all.
+# Do not reinstate a fetch-the-source-image tier; the exposure is the point, not the
+# implementation.
 
-    return fallback
 
 def verify_live_url(url):
     if not url or not url.startswith("http"):
@@ -735,14 +742,14 @@ def paginated_feed_url(base, page):
 def fetch_feed_page(feed, page, seen_links):
     """Parse one page of one feed. Exactly one HTTP request, and no per-item requests.
 
-    Neither verify_live_url nor extract_image_multitier is called here. Both used to
-    run for every candidate — up to two extra HTTP requests each, ~188 per run to
-    publish a single article — and both are only ever needed for the ONE item that
-    actually gets published. They now run at selection time instead, which is what
-    makes walking the archives affordable at all.
+    verify_live_url is not called here. It used to run for every candidate — up to two
+    extra HTTP requests each, ~188 per run to publish a single article — and it is only
+    ever needed for the ONE item that actually gets published. It runs at selection time
+    instead, which is what makes walking the archives affordable at all.
 
-    The raw XML element is carried on the candidate as `_xml_item` so the image can
-    still be extracted from it later without refetching.
+    The candidate no longer carries the raw XML element either: `_xml_item` existed
+    solely so extract_image_multitier could mine the entry for a photograph later, and
+    that whole tier is gone (see the note above verify_live_url).
     """
     url = paginated_feed_url(feed["url"], page)
     if url is None:
@@ -804,8 +811,6 @@ def fetch_feed_page(feed, page, seen_links):
             "link": link,
             "pubDate": pubDate or "Sun, 09 Aug 2026 12:00:00 +0000",
             "category_km": feed["category_km"],
-            "image_url": "",          # resolved at selection time
-            "_xml_item": item,
             "_depth": page,
         })
     return out
@@ -846,82 +851,70 @@ def fetch_verified_gourmet_rss_items(existing_links=frozenset(), max_depth=MAX_F
           f"unseen. The back catalogue is exhausted.", flush=True)
     return collected, max_depth, True
 
-def sync_and_download_images(items):
-    output_dir = "public/images/pulse"
-    os.makedirs(output_dir, exist_ok=True)
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-    }
+def render_pulse_cards(items):
+    """Draw each entry's share card and point its image_url at the result.
 
-    # This function used to slurp every file in the directory into memory (25 MB of
-    # WebP) so it could copy image bytes to a new filename whenever an item's slug
-    # changed. Slugs no longer change, so that machinery is gone — it existed only to
-    # paper over the URL churn, and it is what produced 33 orphaned image files.
+    Renamed 2026-08-22 from sync_and_download_images, which no longer described
+    anything it did: nothing is downloaded any more. The old body fetched the source
+    blog's photograph over HTTP, re-encoded it to WebP and rehosted it under
+    public/images/pulse/ — an unlicensed, uncredited copy of a third party's photograph
+    on a commercial site. devops/render_pulse_card.py draws a 1200x675 PNG from the
+    entry's own Khmer text instead, so nothing external is reproduced.
 
+    write_card() and card_filename() are imported rather than reimplemented: the card's
+    layout, its palette and its cluster-safe Khmer wrapping live in exactly one place,
+    and a second copy here would drift from the one the --all rebuild uses.
+
+    The import is deliberately LAZY. check_pulse_health.py imports parse_any_date from
+    this module, and render_pulse_card.py pulls in Pillow at its own module scope; a
+    top-level import here would make Pillow a hard requirement of merely importing this
+    file. That is the same reasoning as get_gemini_api_key's lazy key lookup.
+
+    Idempotent: an entry whose card already exists on disk and is already referenced is
+    left alone, so a run does not rewrite forty PNGs and churn their mtimes into the
+    commit. Returns the list of entries whose card could NOT be written, so the caller
+    can refuse to publish an entry that would ship a 404 og:image (AGENTS.md section 6).
+    """
+    from render_pulse_card import OUT_DIR as CARD_DIR, card_filename, write_card
+
+    os.makedirs(CARD_DIR, exist_ok=True)
+    failed = []
     for item in items:
-        item_id = item.get("id", "pulse-01")
-        slug = item.get("slug", item_id)
-        img_url = item.get("image_url", "")
-        
-        ext = ".jpg"
-        if ".webp" in img_url.lower():
-            ext = ".webp"
-        elif ".png" in img_url.lower():
-            ext = ".png"
+        item_id = item.get("id", "?")
+        filename = card_filename(item)
+        on_disk = os.path.join(CARD_DIR, filename)
+        expected_url = card_site_url(on_disk)
 
-        target_filename = f"{slug}{ext}"
-        target_filepath = os.path.join(output_dir, target_filename)
+        if item.get("image_url") == expected_url and os.path.exists(on_disk):
+            continue
 
-        if img_url.startswith("http"):
-            try:
-                req = urllib.request.Request(img_url, headers=headers)
-                with urllib.request.urlopen(req, timeout=10) as resp:
-                    img_bytes = resp.read()
-                
-                target_webp = f"{slug}.webp"
-                target_webp_path = os.path.join(output_dir, target_webp)
-                
-                # Aspect ratio & height anti-fool check (reject thin website header banners)
-                from PIL import Image
-                import io
-                img_obj = Image.open(io.BytesIO(img_bytes))
-                if img_obj.mode in ("RGBA", "P"):
-                    img_obj = img_obj.convert("RGB")
-                    
-                w, h = img_obj.width, img_obj.height
-                aspect = w / float(h)
-                
-                if h < 300 or aspect > 2.8:
-                    print(f"Downloaded image for {item_id} is thin banner ({w}x{h}). Using fallback image.", flush=True)
-                    item["image_url"] = "/images/blog_01_inline_khmer.webp"
-                else:
-                    # Crop to 16:9 if vertical image
-                    if aspect < 1.0:
-                        new_h = int(w / (16.0 / 9.0))
-                        top = (h - new_h) // 2
-                        img_obj = img_obj.crop((0, top, w, top + new_h))
-                    
-                    # Resize max_width to 800px for ultra-fast Cambodian 3G/4G loading (<50KB)
-                    if img_obj.width > 800:
-                        new_h = int(img_obj.height * (800 / float(img_obj.width)))
-                        img_obj = img_obj.resize((800, new_h), Image.Resampling.LANCZOS)
-                        
-                    for q in range(80, 20, -5):
-                        img_obj.save(target_webp_path, "WEBP", quality=q, optimize=True)
-                        if (os.path.getsize(target_webp_path) / 1024.0) <= 48:
-                            break
-                            
-                    item["image_url"] = f"/images/pulse/{target_webp}"
-            except Exception as e:
-                print(f"Image download fallback for {item_id}: {e}", flush=True)
-                if not os.path.exists(target_filepath):
-                    item["image_url"] = "/images/blog_01_inline_khmer.webp"
-        elif img_url.startswith("/images/pulse/"):
-            # Already downloaded and already correctly named — nothing to do.
-            # Rewriting it with identical bytes on every run only churned mtimes.
-            existing = os.path.join(output_dir, os.path.basename(img_url))
-            if not os.path.exists(existing):
-                print(f"Missing local image for {item_id}: {img_url}", flush=True)
+        try:
+            written = write_card(item, CARD_DIR)
+        except Exception as e:
+            # Not fatal here — an old entry failing must not cost today's article. The
+            # caller decides, because only it knows which entry is the new one.
+            print(f"::error::Could not render the share card for {item_id}: {e}",
+                  flush=True)
+            failed.append(item)
+            continue
+
+        item["image_url"] = card_site_url(written)
+        print(f"Rendered share card for {item_id}: {item['image_url']} "
+              f"({os.path.getsize(written) // 1024} KB)", flush=True)
+
+    return failed
+
+
+def card_site_url(path):
+    """Site-absolute URL for a file written under public/.
+
+    Derived from the path write_card actually returns rather than from a second copy of
+    the directory constant, so the two can never disagree about where cards live.
+    AGENTS.md section 3's trailing-slash rule governs page links; an asset URL is a file
+    and takes none.
+    """
+    return "/" + os.path.relpath(path, "public").replace(os.sep, "/")
+
 
 def update_pulse_daily():
     out_file = "src/data/pulseData.json"
@@ -955,22 +948,56 @@ def update_pulse_daily():
     # This is display-independent. Identity (id + slug) is still assigned once at insert,
     # and the listing still orders on added_at.
     # Undated or unrecognised timestamps sort last rather than jumping the queue.
-    def parse_feed_date(item):
-        return parse_any_date(item.get("pubDate", ""))
+    # Banquet fit is a TIE-BREAK WITH A BOUND, not a filter, and the bound is what keeps
+    # the perishability argument above intact.
+    #
+    # The feeds are home-cooking blogs, so a fair share of what arrives is a weeknight
+    # dish that reads oddly under a wedding-banquet brand. Preferring the banquet-shaped
+    # ones raises the average without writing a new rule about supply. But a HARD filter
+    # would break the paragraph above: banquet dishes are a minority of an active feed's
+    # output, so filtering would leave the perishable items unspent, they would scroll out
+    # of the 10-item RSS window unread, and the pipeline would end up living off the
+    # dormant archive — the exact failure mode the date sort was introduced to fix.
+    #
+    # So the bonus is expressed in the same unit as the sort key: a banquet-fit item is
+    # treated as if it were BANQUET_FIT_BONUS_DAYS newer than it is. It can therefore
+    # overtake a home-cooking post published up to that many days earlier and nothing
+    # older. Measured shelf life of an item in Omnivore's Cookbook's window is ~17 days
+    # (10 items at ~0.6/day), so 21 days keeps the reordering inside roughly one window:
+    # a fresh perishable item is never held back long enough to be lost, and no item from
+    # the dormant archive can ever jump ahead of a fresh one.
+    #
+    # Matching is on the source title only, which is what EXCLUDE_REGEX already reads;
+    # no extra request, and no new failure mode. A miss costs nothing — an unmatched
+    # dish simply sorts on its date, exactly as every item did before.
+    BANQUET_FIT_BONUS_DAYS = 21
+    UNDATED = datetime.min.replace(tzinfo=timezone.utc)
+
+    def selection_rank(item):
+        d = parse_any_date(item.get("pubDate", ""))
+        if d == UNDATED:
+            # parse_any_date returns datetime.min for a timestamp it cannot read. The
+            # bonus must not lift it off that floor: the sentinel exists so an item with
+            # no usable date sorts behind every item that has one, banquet dish or not.
+            return d
+        if BANQUET_REGEX.search(item.get("title_en", "") or ""):
+            return d + timedelta(days=BANQUET_FIT_BONUS_DAYS)
+        return d
 
     unseen = [it for it in raw_items if it["link"].strip() not in existing_links]
-    # sorted() is stable, so items sharing a timestamp keep their FEEDS order.
-    unseen.sort(key=parse_feed_date, reverse=True)
+    # sorted() is stable, so items sharing a rank keep their FEEDS order.
+    unseen.sort(key=selection_rank, reverse=True)
 
     # Liveness is checked HERE, on the candidates about to be processed, rather than on
     # every candidate during the fetch. Collect up to 5 live candidates so that if one
     # fails quality gates, the pipeline can fall back to the next dish.
+    #
+    # No image is resolved here any more. The share card is drawn from the generated
+    # Khmer text, so it cannot exist until after generation; render_pulse_cards() writes
+    # it at the end of this function.
     valid_candidates = []
     for cand in unseen:
         if verify_live_url(cand["link"]):
-            fallback_img = VALID_FALLBACKS[len(existing_pulse) % len(VALID_FALLBACKS)]
-            cand["image_url"] = extract_image_multitier(
-                cand.get("_xml_item"), fallback_img, cand["link"])
             valid_candidates.append(cand)
             if len(valid_candidates) >= 5:
                 break
@@ -998,7 +1025,11 @@ def update_pulse_daily():
                 entry["slug"] = generate_seo_slug(
                     entry.get("source_title_en", ""), entry["id"], taken)
                 taken.add(entry["slug"])
-        sync_and_download_images(existing_pulse)
+        # Nothing new today, but any entry still pointing at a rehosted photograph gets
+        # its card drawn here, so the migration completes without a separate backfill.
+        # A failure is reported and tolerated: this path publishes nothing, so there is
+        # no new entry to protect, and the run already exits non-zero below.
+        render_pulse_cards(existing_pulse)
         with open(out_file, "w", encoding="utf-8") as f:
             json.dump(existing_pulse, f, ensure_ascii=False, indent=2)
         print("Dataset unchanged — no deploy or indexing needed.", flush=True)
@@ -1011,7 +1042,7 @@ def update_pulse_daily():
     print(f"Loaded Gemini API Key for Pulse Pipeline (len: {len(api_key)})", flush=True)
 
     successful_candidate = None
-    title_km = summary_km = content_km = image_alt = ""
+    title_km = summary_km = content_km = ""
     key_points_km = []
     item_to_process = None
 
@@ -1076,14 +1107,12 @@ OUTPUT — JSON ONLY, no commentary, no markdown fences:
      contain at least one concrete, checkable statement.
    - "key_points_km": exactly 3 items. Each must state a specific technique or judgement a
      cook could act on. Not summaries of the article, and not slogans.
-   - "image_alt": 15-25 Khmer words describing what is visible in the photograph — the dish,
-     its main ingredients, its presentation. Not keywords.
 
 Source dish: {item_to_process['title_en']}
 Source notes: {item_to_process['desc_en']}
 """
         MAX_ATTEMPTS = 3
-        title_km = summary_km = content_km = image_alt = ""
+        title_km = summary_km = content_km = ""
         key_points_km = []
         reject_reason = "generation-failed"
         reject_detail = []
@@ -1106,7 +1135,7 @@ Source notes: {item_to_process['desc_en']}
                                                 min_content_len=MIN_CONTENT_CHARS,
                                                 start=attempt - 1)
 
-            title_km = summary_km = content_km = image_alt = ""
+            title_km = summary_km = content_km = ""
             key_points_km = []
             if khmer_json:
                 try:
@@ -1115,7 +1144,6 @@ Source notes: {item_to_process['desc_en']}
                     title_km = sanitize_text(parsed.get("title_km", ""))
                     summary_km = sanitize_text(parsed.get("summary_km", ""))
                     content_km = sanitize_text(parsed.get("content_km", ""))
-                    image_alt = sanitize_text(parsed.get("image_alt", ""))
                     key_points_km = [sanitize_text(pt) for pt in parsed.get("key_points_km", []) if pt]
                 except Exception as e:
                     print(f"Attempt {attempt}: JSON parse error: {e}", flush=True)
@@ -1136,17 +1164,18 @@ Source notes: {item_to_process['desc_en']}
                 continue
 
             # Deterministic repair pass before judging the output.
-            pre = find_foreign_scripts(title_km, summary_km, content_km, image_alt, key_points_km)
+            # image_alt is no longer generated (there is no photograph to describe); it
+            # is set to title_km at insert, so it is covered by the title's own check.
+            pre = find_foreign_scripts(title_km, summary_km, content_km, key_points_km)
             if pre:
                 title_km = repair_khmer(title_km)
                 summary_km = repair_khmer(summary_km)
                 content_km = repair_khmer(content_km)
-                image_alt = repair_khmer(image_alt)
                 key_points_km = repair_khmer_deep(key_points_km)
                 print(f"Attempt {attempt}: repaired {len(pre)} foreign character(s) via the "
                       "Thai-to-Khmer map.", flush=True)
 
-            reject_detail = find_foreign_scripts(title_km, summary_km, content_km, image_alt, key_points_km)
+            reject_detail = find_foreign_scripts(title_km, summary_km, content_km, key_points_km)
             if reject_detail:
                 print(f"Attempt {attempt}/{MAX_ATTEMPTS}: unmapped non-Khmer script remains — retrying.", flush=True)
                 for h in reject_detail[:4]:
@@ -1240,8 +1269,13 @@ Source notes: {item_to_process['desc_en']}
         "content_km": content_km,
         "key_points_km": key_points_km,
         "category": item_to_process["category_km"],
-        "image_url": item_to_process["image_url"],
-        "image_alt": image_alt or title_km,
+        # Both are filled by render_pulse_cards() below, once the entry exists: the card
+        # is drawn FROM this entry's Khmer text, so it cannot be rendered any earlier.
+        "image_url": "",
+        # The card carries a key point set large with the dish title beneath it. The alt
+        # text is the title, which is true of the card and short enough to be read aloud;
+        # the model is no longer asked to describe a photograph that does not exist.
+        "image_alt": title_km,
         "source_link": item_to_process["link"],
         # Rendered on the page, so it must contain only what Hanuman can draw.
         "source_title_en": sanitize_source_title(item_to_process["title_en"]),
@@ -1267,8 +1301,22 @@ Source notes: {item_to_process['desc_en']}
     # insert and is never recomputed — reordering must not move any URL.
     updated_list = sorted([new_entry] + existing_pulse, key=parse_item_date, reverse=True)
 
-    sync_and_download_images(updated_list)
-    
+    failed_cards = render_pulse_cards(updated_list)
+    # Identity, not equality: `in` would compare dicts by value.
+    if any(e is new_entry for e in failed_cards):
+        # An entry with no card has no og:image. AGENTS.md section 6 records what that
+        # costs: all 15 blog posts once shipped a 404 preview to Facebook and Telegram,
+        # the two channels this business actually runs on. Refuse to publish rather than
+        # commit an entry that would do it again — and refuse LOUDLY, because section 15
+        # is explicit that a failure which cannot turn a run red will not be noticed.
+        # A card failure is local and deterministic (missing font, missing Pillow), so it
+        # will recur every run until a person fixes it.
+        print("::error::The share card for the new entry could not be rendered; "
+              "publishing it would ship a 404 og:image.", flush=True)
+        set_action_output(changed="false", reason="card-render-failed",
+                          queue_depth=len(unseen), archive_depth=depth_reached)
+        return 1
+
     with open(out_file, "w", encoding="utf-8") as f:
         json.dump(updated_list, f, ensure_ascii=False, indent=2)
         

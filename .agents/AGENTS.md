@@ -124,6 +124,35 @@
   `CateringPulse.astro` had no `loading` attribute, so it eagerly fetched the same URL as
   the lazy foreground image. That put 122 KB of below-the-fold pulse imagery on the
   homepage critical path — 66% of the initial payload, each image larger than the LCP hero.
+- **[REGRESSION] Pulse illustrations are rendered from our own text, never rehosted.**
+  Until 2026-08-22 the pulse pipeline downloaded the source recipe blog's photograph and
+  served it from `ckmkh.com`: **35 files in `public/images/pulse/` taken from seven
+  third-party blogs, with no credit anywhere on the page.** Re-encoding to WebP and
+  renaming the file changes nothing about who owns the photograph — that was copyright
+  exposure with no defence, on the pages that grow by one a day. Removed 2026-08-22 and
+  replaced by `devops/render_pulse_card.py`, which draws a `1200×675` PNG from the entry's
+  **own Khmer text** — the shortest `key_points_km` entry set large, with `title_km` as a
+  small attribution line — so nothing from a third party is reproduced. The pipeline must
+  never again download and rehost an image from a source feed. If a future entry needs a
+  photograph, it must be one the owner supplies or one this project holds a licence to.
+- **The card renderer needs Pillow built against raqm, and a local render is not
+  evidence.** Khmer requires complex shaping: a COENG subscript stacks below its base
+  consonant, and without shaping it lands beside it as a separate glyph. Pillow only
+  shapes when built against raqm. Measured 2026-08-22 — `ubuntu-latest` reports Pillow
+  12.3.0 with raqm 0.10.5 and a shaped-to-naive advance ratio of `0.556`, i.e. shaping is
+  active; **Windows wheels report `raqm=False`**, so anything rendered on the owner's
+  machine proves nothing about the artefact CI will publish. Verify card output from a CI
+  run. FreeType cannot read woff2, so `devops/fonts/` holds a ttf converted from the same
+  Hanuman the site self-hosts; it is a build input, not a site asset, and does not belong
+  in `public/`.
+- **The card is a SHARE image, not an in-article hero.** It feeds `og:image` and the
+  JSON-LD `image`, and it fills the image slot on the listing pages. The pulse article's
+  own top image block was removed 2026-08-22 for two independent reasons: a card whose
+  text is a key point, sitting directly above the article that contains that key point,
+  tells the reader nothing twice; and that block rendered the same file **twice**, once
+  blurred as a backdrop behind itself — the defect the bullet above records for
+  `CateringPulse.astro`, shipped again on every pulse page. Do not reinstate it. The
+  listing layouts were deliberately left alone.
 - Blog inline images are `1600×900` (16:9) WebP in `public/images/`, named
   `blog_NN_inline_khmer.webp`. Article `NN` references image `NN` — nothing else.
   `check_content.py` enforces this.
@@ -380,12 +409,27 @@ Every item below came out of an audit of the 15 live articles.
   enough on an ordinary day; `fetch_verified_gourmet_rss_items` only goes deeper when a
   shallower pass turned up nothing unseen, so a healthy run still costs one request per
   feed. This is why losing a source is survivable rather than fatal.
-- **`verify_live_url` and `extract_image_multitier` run on the SELECTED item only.** Both
-  used to run for every candidate during the fetch — up to two extra HTTP requests each,
-  ~188 per run to publish one article — and both are only ever needed for the one item
-  that gets published. Moving them to selection time is what makes walking the archives
-  affordable. Selection walks down the sorted queue until a URL resolves, so one dead link
-  costs the next-best article rather than the whole day.
+- **`verify_live_url` runs on the SELECTED item only.** It, and the image extractor that
+  used to sit beside it, once ran for every candidate during the fetch — up to two extra
+  HTTP requests each, ~188 per run to publish one article — while only ever being needed
+  for the one item that gets published. Moving that work to selection time is what makes
+  walking the archives affordable. Selection walks down the sorted queue until a URL
+  resolves, so one dead link costs the next-best article rather than the whole day.
+  The image extractor is gone entirely as of 2026-08-22; the reason is in §6.
+- **[REGRESSION] The pipeline never downloads an image from a source feed.** See §6 for
+  the incident and for what replaced it. Here the consequence is narrower and absolute:
+  no step of this pipeline may fetch, re-encode or write a byte of third-party media into
+  `public/`. The entry's illustration is generated from the entry's own Khmer text by
+  `devops/render_pulse_card.py`, which runs in the same job — Python only, so the
+  no-JavaScript rule further down this section is unaffected.
+- **The outbound link to the source recipe blog was removed 2026-08-22.** The Khmer text
+  is written from a dish name and a short feed description; it is never a translation of
+  the source article, so no attribution is owed. The generation prompt already instructs
+  the model not to mention the source blog — the template then named and linked it on
+  every page, contradicting the pipeline's own instruction and sending what little
+  authority these pages carry to a competitor's recipe site. Do not restore the link, and
+  keep any wording elsewhere on the site (the disclaimer page in particular) consistent
+  with this: the feed takes a dish name as a starting point, nothing more.
 - **[REGRESSION] The daily item is the NEWEST unseen one, not the first in `FEEDS` order.**
   Selection used to take the first unseen item while walking `FEEDS` in order, so the queue
   followed the source list rather than the calendar. Measured 2026-08-15 with 88 unseen
@@ -397,6 +441,19 @@ Every item below came out of an audit of the 15 live articles.
   perishable supply first; the dormant catalogue is the reserve that covers a lean day.
   Adding a feed to `FEEDS` therefore no longer changes *when* it is reached — only what is
   in the pool.
+- **Banquet fit re-ranks the queue; it does not filter it (owner directive 2026-08-22).**
+  Freshness alone kept selecting home-cooking posts under a banquet brand — the mismatch the
+  bullet below already notes about the feed sources. `BANQUET_REGEX` now adds a bounded
+  `BANQUET_FIT_BONUS_DAYS = 21` to the sort key of an item whose title carries a banquet
+  marker, so it ranks as if published 21 days later than it was. It is a bonus, never a
+  filter: nothing is excluded, and an item cannot overtake anything more than 21 days fresher.
+  21 days sits inside the ~17-day shelf life this file records for `omnivorescookbook.com`'s
+  10-item window, so no perishable item is held back long enough to scroll out unread and
+  nothing from the dormant archive can jump a fresh item. Items that fail date parsing
+  (`datetime.min`) are excluded from the bonus so "undated sorts last" stays exact.
+  Calibrated against real data, not guessed: over the 36 `source_title_en` values in
+  `pulseData.json` the first draft matched 3 and missed four Cambodian dishes; the shipped
+  pattern matches 9 of 36.
 - **[REGRESSION] Feed dates come in two formats and only one parser was applied.**
   WordPress feeds emit RFC 2822; Blogspot emits ISO 8601, and the extraction loop keeps the
   *last* matching element, which on Blogspot is the Atom `<updated>` field — so even a feed
@@ -672,35 +729,53 @@ python devops/gsc_query_report.py --days 90
 - **Always filter to `country = khm`.** Taiwan and US rows are the owner's own team and
   crawlers. Unfiltered totals overstate reach by roughly 25%.
 
-### [REGRESSION] GA4 is installed, and not in this repository
+### [REGRESSION] The analytics tag is not in this repository — verify it in a browser
 
-**Grepping the source for `gtag` / `googletagmanager` finds nothing, and concluding "this
-site has no analytics" is wrong.** GA4 is injected by **Cloudflare Zaraz**, configured in
-the Cloudflare dashboard — outside the repo, invisible to any code search.
+**The transferable rule, and the one that caught the change below: front-end injection
+must be verified in a real browser.** Cloudflare injects at the edge, so `git grep` finds
+nothing (the tag was never in the source) *and* `curl` finds nothing (injection is skipped
+for non-browser user agents). Two independent negatives, both wrong, both easy to mistake
+for "this site has no analytics". Load the page in a browser and read `window` and
+`document.cookie`.
 
-Worse, `curl https://ckmkh.com/` also finds nothing: Cloudflare skips Zaraz injection for
-non-browser user agents. Verify with a browser UA, which returns ~22 `zaraz` references:
+**What is true as of 2026-08-22: Cloudflare Web Analytics only.** The owner switched
+Cloudflare Zaraz and its GA4 tool off in the dashboard that day, across all four of their
+sites. Verified the same day in a real browser on `ckmkh.com`:
 
-```bash
-curl -s https://ckmkh.com/ -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) \
-AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" | grep -c zaraz
-```
+| Check | Result |
+| :--- | :--- |
+| `window.zaraz` | `undefined` |
+| `window.dataLayer` | `undefined` |
+| `document.cookie` | empty |
+| third-party scripts | `static.cloudflareinsights.com/beacon.min.js`, and nothing else |
 
-Zaraz is also the right answer to the weight objection — §4 removed Lenis over 19 KB, and
-`gtag.js` is larger than that. Zaraz loads third-party tools at the edge instead. Do not
-"fix" the missing tag by adding `gtag.js` to `Layout.astro`; that would double-count every
-page view and add the payload Zaraz exists to avoid.
+Consequences that other rules depend on:
 
-**GA4 is readable programmatically.** `ckm-analytics@` holds Viewer on property
-`534450350`, so `analyticsdata.googleapis.com/v1beta/properties/534450350:runReport`
-works with `google_service_account.json` and the `analytics.readonly` scope. Enabling the
-Data API alone is not enough — that grants the endpoint, not the data; without the
-property grant it returns 403.
+- **Measurement is cookieless and stores nothing on the visitor's device**, so no consent
+  banner is required. `src/pages/privacy.astro` was corrected the same day to say so; it
+  had described a consent banner that has never existed in this repo. If anything is ever
+  added that does set a cookie, that page stops being true.
+- **No GA4 collection after 2026-08-22.** The property (`534450350`) and the
+  `ckm-analytics@` reader still exist and whatever they hold ends on that date; it does
+  not grow. Whether the Data API still answers is a separate question — §16 records the
+  GA4 API pair as disabled in the Google Cloud project since 2026-08-14 — so check before
+  claiming either way. Either way, do not present GA4 output as current traffic.
+- **Do not "fix" the missing tag by adding `gtag.js` to `Layout.astro`.** GA4 was removed
+  deliberately; re-adding it by hand would reinstate the tool the owner turned off, put
+  back the cookie the privacy page now says is absent, and ship a payload larger than the
+  19 KB §4 rejected Lenis over. Analytics on this site is a dashboard decision, not a
+  `Layout.astro` edit.
 
-### Baseline before any Facebook activity — 90 days to 2026-08-14
+### Frozen GA4-era baseline — 90 days to 2026-08-14
 
 The reference point for whether distribution work is doing anything. 150 sessions,
-102 users, 1,322 page views.
+102 users, 1,322 page views. **This table is history, not a live report** — GA4 stopped
+collecting on 2026-08-22 (above), so it can never be extended and there is no "same
+measurement, later" to compare against. Cloudflare Web Analytics does not model sessions
+and users the way GA4 did, so a number taken from it is not a continuation of this series.
+Treat 2026-08-22 as a hard break: keep the table for what it establishes about the
+starting point, and state the source and date of any later figure rather than setting it
+beside these.
 
 | Channel | Sessions | | Country | Sessions |
 | :--- | ---: | :--- | :--- | ---: |
@@ -718,12 +793,15 @@ The reference point for whether distribution work is doing anything. 150 session
   team's own visits and crawlers, the count of real prospects is single digits, not 47.
   Treat that as calibration, not failure: the site is not underperforming, it is unknown.
 
-**GA4 is collecting but not worth reading yet.** Engagement time, bounce rate and scroll
-depth are *distributions* and need a sample; most articles take 0 clicks per quarter, so
-those numbers describe the one visitor, not the page. Discrete events — how many people
-tapped the Telegram or phone CTA — stay meaningful at any volume and are the only thing
-worth instrumenting at current traffic. Revisit behavioural reports somewhere north of
-1,000 sessions per month; the site is at roughly 15.
+**Behavioural metrics were never worth reading here, which is most of why losing GA4
+costs little.** Engagement time, bounce rate and scroll depth are *distributions* and need
+a sample; most articles take 0 clicks per quarter, so those numbers describe the one
+visitor, not the page. Revisit that argument somewhere north of 1,000 sessions per month;
+the site is at roughly 15. The one thing that does stay meaningful at any volume is
+discrete events — how many people tapped the Telegram or phone CTA — and the current
+setup does not report them. Nothing was lost, because they were never instrumented; but
+do not claim conversion data the site does not collect, and if the owner ever wants it,
+weigh it against the cookieless, banner-free position just gained.
 
 ### Measured demand, Cambodia only, 2026-05-15 → 2026-08-12
 

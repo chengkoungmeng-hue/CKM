@@ -1,0 +1,119 @@
+name: Migrate pulse images to generated cards
+
+# ONE-SHOT migration, 2026-08-22. Renders a share card for every pulse entry,
+# repoints pulseData.json at the cards, and deletes the 35 photographs that were
+# downloaded from third-party recipe blogs and rehosted here.
+#
+# It runs in CI rather than locally because Khmer needs the raqm shaping backend:
+# ubuntu-latest ships Pillow with raqm (measured 2026-08-22: Pillow 12.3.0,
+# raqm 0.10.5, shaped-to-naive advance ratio 0.556, subscripts stack), while the
+# Windows wheels report raqm=False and would bake broken glyphs into every PNG.
+#
+# Delete this workflow once the migration commit has landed.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Pillow
+        run: pip install --upgrade pip Pillow
+
+      - name: Refuse to run unshaped
+        run: |
+          python - <<'PY'
+          from PIL import features
+          import PIL, sys
+          print("pillow:", PIL.__version__, "raqm:", features.check("raqm"))
+          if not features.check("raqm"):
+              sys.exit("raqm unavailable: cards would render with unstacked Khmer subscripts")
+          PY
+
+      - name: Confirm the brand font is present
+        run: |
+          ls -l devops/fonts/
+          test -f devops/fonts/hanuman-khmer-400-normal.ttf
+          test -f devops/fonts/hanuman-khmer-700-normal.ttf
+
+      - name: Render a card for every entry and repoint pulseData.json
+        run: |
+          python - <<'PY'
+          import io, json, os, sys
+          sys.path.insert(0, "devops")
+          from render_pulse_card import write_card, card_filename
+
+          PATH = "src/data/pulseData.json"
+          raw = json.load(io.open(PATH, encoding="utf-8"))
+          entries = raw if isinstance(raw, list) else raw.get("items") or raw.get("pulse") or []
+
+          changed = 0
+          for e in entries:
+              write_card(e)
+              new_url = "/images/pulse/" + card_filename(e)
+              if e.get("image_url") != new_url:
+                  e["image_url"] = new_url
+                  changed += 1
+              # The old alt text described a photograph that no longer exists.
+              if e.get("image_alt") != e.get("title_km"):
+                  e["image_alt"] = e.get("title_km", "")
+          io.open(PATH, "w", encoding="utf-8", newline="\n").write(
+              json.dumps(raw, ensure_ascii=False, indent=2) + "\n")
+          print(f"[MIGRATE] {len(entries)} entries, {changed} image_url values repointed")
+          PY
+
+      - name: Delete the rehosted third-party photographs
+        run: |
+          before=$(ls public/images/pulse/*.webp 2>/dev/null | wc -l)
+          rm -f public/images/pulse/*.webp
+          after=$(ls public/images/pulse/*.png 2>/dev/null | wc -l)
+          echo "[MIGRATE] removed $before rehosted photographs, $after cards present"
+
+      - name: Verify every entry points at a card that exists
+        run: |
+          python - <<'PY'
+          import io, json, os, sys
+          raw = json.load(io.open("src/data/pulseData.json", encoding="utf-8"))
+          entries = raw if isinstance(raw, list) else raw.get("items") or raw.get("pulse") or []
+          missing = [e.get("slug") for e in entries
+                     if not os.path.exists(os.path.join("public", e.get("image_url", "").lstrip("/")))]
+          leftover = [f for f in os.listdir("public/images/pulse") if f.endswith(".webp")]
+          print("entries:", len(entries), "missing cards:", missing, "leftover webp:", leftover)
+          if missing or leftover:
+              sys.exit("migration incomplete")
+          PY
+
+      - name: Upload cards for review
+        uses: actions/upload-artifact@v4
+        with:
+          name: migrated-pulse-cards
+          path: public/images/pulse/*.png
+          retention-days: 5
+
+      - name: Commit the migration
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A public/images/pulse src/data/pulseData.json
+          if git diff --staged --quiet; then
+            echo "[MIGRATE] nothing to commit"
+          else
+            git commit -m "chore(pulse): replace rehosted photographs with generated cards
+
+          Renders a share card for all pulse entries from their own Khmer text and
+          deletes the photographs that were downloaded from seven third-party recipe
+          blogs and rehosted here without credit. Run in CI because Khmer subscript
+          stacking needs Pillow's raqm backend, which the Windows wheels omit."
+            git push
+          fi

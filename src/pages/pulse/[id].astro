@@ -5,7 +5,7 @@ import Layout from '../../layouts/Layout.astro';
 import pulseData from '../../data/pulseData.json';
 import ReadingProgress from '../../components/ReadingProgress.astro';
 import { getCollection } from 'astro:content';
-import { ArrowLeft, ArrowRight, ArrowUpRight, Calendar, Tag, User, Quote, BookOpen, Clock, Send, Globe } from '@lucide/astro';
+import { ArrowLeft, ArrowRight, Calendar, Tag, User, Quote, BookOpen, Clock, Send } from '@lucide/astro';
 
 export const prerender = true;
 
@@ -134,6 +134,15 @@ const relatedPosts = topByRelevance.some((p) => p.id === rotationPick.id)
 // already in og:site_name and the visible header.
 const pageTitle = item.title_km || 'បច្ចុប្បន្នភាពអន្តរជាតិ';
 const pageDesc = item.summary_km || '';
+// image_url is the share card — "/images/pulse/<slug>-card.png", a 1200x675 PNG that
+// devops/render_pulse_card.py draws from this entry's OWN Khmer text. It replaced the
+// photograph the pipeline used to download from the source recipe blog and rehost here.
+// Read from the data rather than rebuilt from the slug on purpose: render_pulse_cards()
+// derives the URL from the path write_card() actually returned, so the directory and the
+// "-card.png" suffix are stated in exactly one place. A copy of that contract here would
+// be a third one, free to disagree the day the cards move. An entry whose card failed to
+// render is not published (section 6: og:image must resolve).
+// One variable feeds og:image and the JSON-LD image array; do not fork it.
 const itemImage = item.image_url || '/images/blog_01_inline_khmer.webp';
 
 const articleSchema = JSON.stringify({
@@ -166,7 +175,8 @@ const articleSchema = JSON.stringify({
 });
 ---
 
-<Layout title={pageTitle} description={pageDesc} lang="km-KH" canonical={`/pulse/${canonicalId || item.slug || item.id}/`}>
+<!-- Layout resolves `image` against the canonical domain itself, so pass the site-relative card path. -->
+<Layout title={pageTitle} description={pageDesc} image={itemImage} lang="km-KH" canonical={`/pulse/${canonicalId || item.slug || item.id}/`}>
   <script type="application/ld+json" is:inline set:html={articleSchema}></script>
   <ReadingProgress />
 
@@ -211,32 +221,17 @@ const articleSchema = JSON.stringify({
       </div>
 
       <!-- Main Title -->
-      <h1 class="text-3xl md:text-5xl font-km-serif font-bold text-onyx mb-8 leading-relaxed text-left md:text-center max-w-3xl mx-auto py-1">
+      <!-- The cover banner that used to sit between this heading and the article body was
+           removed 2026-08-22 along with the rehosted source photographs. The card that
+           replaces them is a SHARE image (og:image / JSON-LD) — its text is one of the key
+           points printed further down this same page, so showing it here would repeat the
+           page's own content — and the banner requested the identical file twice, once more
+           as a blurred backdrop, the duplicate-fetch pattern section 6 records against
+           CateringPulse.astro, here on the LCP path rather than below the fold.
+           The heading now carries the full gap to the article card. -->
+      <h1 class="text-3xl md:text-5xl font-km-serif font-bold text-onyx mb-12 leading-relaxed text-left md:text-center max-w-3xl mx-auto py-1">
         {item.title_km}
       </h1>
-
-      <!-- Cover Image Banner with Ambient Frosted Blur Background -->
-      <div class="w-full aspect-[16/9] md:aspect-[16/10] max-h-[560px] rounded-sm overflow-hidden bg-onyx/90 mb-12 shadow-sm border border-slate-200/80 mx-auto relative block">
-        <!-- Ambient Blurred Background Image -->
-        <img 
-          src={itemImage} 
-          alt={item.image_alt || item.title_km || "CKM Pulse Article"} 
-          aria-hidden="true"
-          onerror="this.onerror=null; this.src='/images/blog_01_inline_khmer.webp';"
-          class="absolute inset-0 w-full h-full object-cover blur-2xl opacity-50 scale-125 pointer-events-none"
-        />
-        
-        <!-- Frosted Vignette Overlay -->
-        <div class="absolute inset-0 bg-gradient-to-t from-onyx/40 via-transparent to-black/20 pointer-events-none z-1"></div>
-
-        <!-- Main Foreground Image -->
-        <img 
-          src={itemImage} 
-          alt={item.image_alt || item.title_km}
-          onerror="this.onerror=null; this.src='/images/blog_01_inline_khmer.webp';"
-          class="w-full h-full object-cover object-center relative z-2 drop-shadow-md"
-        />
-      </div>
 
       <!-- ELEGANT EDITORIAL ARTICLE CARD CONTAINER (Matching user screenshot) -->
       <article class="bg-white rounded-sm border border-slate-200/90 p-8 md:p-14 shadow-sm relative overflow-hidden">
@@ -294,27 +289,12 @@ const articleSchema = JSON.stringify({
           </div>
         )}
 
-        <!-- Original Source Attribution Card (100% Pure Khmer, 0 English) -->
-        {item.source_link && item.source_link.startsWith('http') && (
-          <div class="bg-pearl/80 border border-slate-200/90 rounded-sm p-5 relative z-10 my-8 shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div class="flex items-center gap-3">
-              <Globe class="w-4 h-4 text-champagne-dark shrink-0" />
-              <div class="text-xs font-km-sans">
-                <span class="text-slate-500 block mb-0.5 font-bold">ប្រភពដើមអន្តរជាតិ:</span>
-                <span class="font-bold text-onyx line-clamp-1">{item.source_title_en || item.title_km}</span>
-              </div>
-            </div>
-            <a 
-              href={item.source_link}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center gap-1.5 bg-white hover:bg-onyx text-onyx hover:text-white border border-slate-300 hover:border-onyx px-4 py-2 rounded-sm text-xs font-bold font-km-sans transition-all shrink-0 shadow-2xs group/ext"
-            >
-              <span>អានអត្ថបទដើម</span>
-              <ArrowUpRight class="w-3.5 h-3.5 text-champagne-dark group-hover/ext:text-champagne transition-colors" />
-            </a>
-          </div>
-        )}
+        <!-- The outbound card that linked to the source recipe blog was removed 2026-08-22.
+             This page's Khmer prose is written here from a dish name and a short feed
+             description, never translated from the source, so no attribution is owed; the
+             generation prompt already forbids mentioning that blog, which this card
+             contradicted. source_link stays in pulseData.json — it is the de-duplication
+             key the fetcher matches on — it is simply no longer rendered. -->
 
         <!-- Internal Links / Related Articles Section -->
         <div class="relative z-10 mb-10 pt-6 border-t border-slate-100">
