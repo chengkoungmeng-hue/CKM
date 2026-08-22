@@ -306,6 +306,15 @@ holding (article 06 said 3 hours, article 04 said 2). Before stating a fact, gre
 - Dish names must match `src/data/homeData.ts` exactly. Lotus-leaf rice is
   **`បាយខ្ចប់ស្លឹកឈូក`** — `ខ្ចប់` means "to wrap" and is the root of `កញ្ចប់`; `ខ្ទប់` is
   not the word and was live on the homepage.
+- **[REGRESSION] A translation model is not a source for a Khmer dish name.** Google
+  Translate and Gemini both render `ត្រីតុកកែ` as marble goby, and their agreement was
+  taken as confirmation; two pulse seeds were deleted on that basis and had to be
+  restored. The two are not independent — overlapping training corpora make one shared
+  error read as two. Google **Images** settled it in a single search: every result is
+  grouper, which is what the owner says it is and what the menu sells.
+  `ត្រីដំរី` ("elephant fish") is the marble goby, and appears nowhere here. §0's rule
+  covers facts as well as code: verify with a different *kind* of mechanism, not with a
+  second text model. For a dish name that means image search, or the owner.
 
 ## 13. Khmer text integrity
 

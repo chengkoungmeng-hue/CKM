@@ -1,5 +1,27 @@
 # Work Log
 
+## 2026-08-23 (Dish-Name Correction: ត្រីតុកកែ Is Grouper, Not Marble Goby)
+
+- **Two pulse seeds were removed yesterday for a reason that was wrong, and are restored.**
+  `e5596e6` deleted `seed-006` and `seed-010`, and its commit message asserts that
+  `ត្រីតុកកែ` is a fish local guests do not eat. That is incorrect. The message is
+  pushed and cannot be amended, so the correction is recorded here instead:
+  - `ត្រីតុកកែ` is **grouper** — eaten, and on the owner's own menu
+    (`src/data/homeData.ts`, two entries).
+  - `ត្រីដំរី` ("elephant fish") is **marble goby**, the species the owner reports
+    local guests avoid. It appears nowhere in this repository.
+  - `devops/pulse_seeds.json` restored to 66 seeds; `load_pulse_seeds()` validates.
+  - `src/content/blog/01-traditional-8-course-wedding-menu.md` was **not** changed. The
+    fish it names, in the prose and in row 5 of the eight-course table, is grouper.
+  - The card-only decision made in the same commit stands and was not touched: it rests
+    on measured impressions and copyright exposure, not on the fish.
+
+- **How the wrong answer was reached.** Google Translate and Gemini both map
+  `ត្រីតុកកែ` to marble goby, and their agreement was treated as confirmation. They
+  are not independent sources; overlapping text corpora make one shared error read as
+  two. The owner resolved it with Google Images, which reflects how Khmer speakers
+  actually label the fish. Recorded as a rule in `.agents/AGENTS.md` §12.
+
 ## 2026-08-22 (GA4 Retirement Across Four Sites, Legal Page Corrections, Pulse Share Cards Replace Rehosted Photographs)
 
 - **Analytics: Zaraz + GA4 switched off, Cloudflare Web Analytics only**:
