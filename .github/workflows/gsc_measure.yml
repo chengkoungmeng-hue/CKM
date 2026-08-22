@@ -1,0 +1,71 @@
+name: GSC measurement snapshot
+
+# Pulls live Search Console data and uploads it as an artifact.
+#
+# The service-account key lives only in GitHub Secrets, and section 16 records
+# why that cannot be read back out: "To use a CI-only secret, move the work into
+# a workflow; there is no way to move the value out." So the measurement runs
+# here rather than locally. The local google_service_account.json is stale --
+# it fails with invalid_grant: Invalid JWT Signature as of 2026-08-22.
+#
+# Dispatch-only. It reads; it never writes to the repository.
+
+on:
+  workflow_dispatch:
+    inputs:
+      days:
+        description: Window in days
+        required: false
+        default: '90'
+
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install --upgrade pip google-auth requests
+
+      - name: Materialise the service account key
+        env:
+          SEARCH_CONSOLE_SA_JSON: ${{ secrets.SEARCH_CONSOLE_SA_JSON }}
+        run: |
+          if [ -z "$SEARCH_CONSOLE_SA_JSON" ]; then
+            echo "::error::SEARCH_CONSOLE_SA_JSON is empty"
+            exit 1
+          fi
+          printf '%s' "$SEARCH_CONSOLE_SA_JSON" > google_service_account.json
+          python -c "import json;d=json.load(open('google_service_account.json'));print('service account:', d.get('client_email'))"
+
+      - name: Query Search Console
+        run: python devops/gsc_query_report.py --days "${{ inputs.days }}"
+
+      - name: Break the report out by page so pulse can be judged separately
+        run: |
+          python - <<'PY'
+          import json, io, collections, os
+          p = "devops/reports/gsc_search_queries.json"
+          if not os.path.exists(p):
+              raise SystemExit("no report written")
+          d = json.load(io.open(p, encoding="utf-8"))
+          print("top-level keys:", list(d)[:12])
+          io.open("devops/reports/gsc_raw_keys.txt", "w", encoding="utf-8").write(repr(list(d))[:2000])
+          PY
+
+      - name: Remove the key before anything else runs
+        if: always()
+        run: rm -f google_service_account.json
+
+      - name: Upload the report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gsc-report
+          path: devops/reports/*
+          retention-days: 5
