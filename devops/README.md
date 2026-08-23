@@ -20,7 +20,6 @@ CI 一律從 repo 根目錄(`$GITHUB_WORKSPACE`)呼叫這些工具,沒有任何 
 | `generate_llms_txt.py` | 由站內既有內容產生 `public/llms.txt` 與 `public/llms-full.txt`;`--check` 於檔案過期時非零退出 | 同上 workflow:`python devops/generate_llms_txt.py` |
 | `check_pulse_health.py` | 停擺偵測器。不逐一檢查各種失敗成因,而是量測「資料集最新一筆有多舊」,涵蓋所有已知與未知的靜默失敗路徑 | 同上 workflow(`if: always()`,在 commit 步驟之後):`python devops/check_pulse_health.py --max-age-days 2` |
 | `notify_indexing.py` | Cloudflare 邊緣快取清除、IndexNow 提交、Search Console sitemap 重送;可由 git diff 推導受影響 URL | workflow `Publish`(push / `workflow_run` / 手動):`python devops/notify_indexing.py --urls …` 或 `--changed` |
-| `ckm_facebook_ledger.json` | Facebook 貼文發布與選題去重帳本，記錄已產出之主題、Hook、圖檔與高棉文/中文內文 | 手動維護或由社群發文工作流程讀寫，防止主題重複發布 |
 | `gsc_query_report.py` | 拉取 Search Console 即時搜尋數據。無任何 fallback 值,API 失敗即非零退出;原始輸出寫入 `devops/reports/gsc_search_queries.json` | workflow `Search Report`,cron `0 6 * * 1`:`python devops/gsc_query_report.py --days "$days"` |
 | `check_pulse_indexation.py` | 量測每個 pulse 頁面上線後實際取得的曝光、點擊與最佳排名,統計零曝光頁數。認證與 HTTP 呼叫直接沿用 `gsc_query_report.py`,缺憑證或 API 失敗一律在輸出任何數字前非零退出;結果寫入 `devops/reports/pulse_indexation.json` | workflow `GSC measurement snapshot`(手動觸發):`python devops/check_pulse_indexation.py`。屬報表工具,不得加入每日發布 workflow |
 
@@ -37,6 +36,7 @@ CI 一律從 repo 根目錄(`$GITHUB_WORKSPACE`)呼叫這些工具,沒有任何 
 
 | 檔案 | 用途 | 呼叫方式 |
 | :--- | :--- | :--- |
+| `make_fb_posts.py` | 由本站既有內容（菜色、FAQ、脈動種子）組裝 Facebook 貼文文案與生圖提示詞，輸出至 Central DevOps 獨立中樞（`C:\Projects\DevOps\Marketing\CKM\Facebook\`）。不呼叫模型 | `python devops/make_fb_posts.py --all --out <path>` |
 | `apply_internal_links.py` | 依 `src/data/internalLinks.json` 的宣告表,把文章內既有的精確錨點字串包成內鏈。冪等,錨點非唯一或位於標題 / 表格 / 既有連結內時拒絕寫入 | `python devops/apply_internal_links.py` 套用,`--check` 僅驗證 |
 | `fix_section_order.py` | 把 `## សេចក្តីសន្និដ្ឋាន`(結論)搬到 `## សំណួរដែលសួរញឹកញាប់`(FAQ)之後。純區塊搬移,寫入前驗證檔案行的多重集合不變 | `python devops/fix_section_order.py --check` 僅報告,不加參數則改寫 |
 | `build_width_table.cjs` | 在真實瀏覽器量測每個 codepoint 的 advance width,產生 `devops/reports/khmer_width_table.json`,供更新 `check_content.py` 內嵌的寬度表 | `node devops/build_width_table.cjs`(需 playwright) |
