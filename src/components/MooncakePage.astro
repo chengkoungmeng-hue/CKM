@@ -85,14 +85,34 @@ const t = {  // Front-load the exact brand name so Google ranks this official pa
         // we do not know them, and inventing them would put wrong information in
         // front of someone trying to visit.
         "areaServed": { "@type": "City", "name": "Phnom Penh" },
-        "makesOffer": [
-          { "@type": "Offer", "itemOffered": { "@type": "Product", "name": t.mcTitle,
-            "category": "Mooncake", "description": t.mcDesc } },
-          { "@type": "Offer", "itemOffered": { "@type": "Product", "name": t.sigTitle,
-            "category": "Pastry", "description": t.sigDesc } },
-          { "@type": "Offer", "itemOffered": { "@type": "Product", "name": t.fagaoTitle,
-            "category": "Steamed Cake", "description": t.fagaoDesc2 } }
-        ],
+        "hasMenu": {
+          "@type": "Menu",
+          "name": "មុខនំប្រចាំហាង",
+          "inLanguage": "km-KH",
+          "hasMenuSection": [
+            {
+              "@type": "MenuSection",
+              "name": "មុខនំប្រពៃណី និងនំព្រះខែ",
+              "hasMenuItem": [
+                {
+                  "@type": "MenuItem",
+                  "name": t.mcTitle,
+                  "description": t.mcDesc
+                },
+                {
+                  "@type": "MenuItem",
+                  "name": t.sigTitle,
+                  "description": t.sigDesc
+                },
+                {
+                  "@type": "MenuItem",
+                  "name": t.fagaoTitle,
+                  "description": t.fagaoDesc2
+                }
+              ]
+            }
+          ]
+        },
         "sameAs": [
           "https://www.facebook.com/people/%E1%9E%A0%E1%9E%B6%E1%9E%84%E1%9E%93%E1%9F%86-%E1%9E%8F%E1%9E%B6%E1%9F%86%E1%9E%84-%E1%9E%A0%E1%9E%BD%E1%9E%8F/100063625998376/"
         ]

@@ -1,5 +1,22 @@
 # Work Log
 
+## 2026-08-24 (Fixed GSC Product Snippet Schema Error on /tanghuot/)
+
+- **Google Search Console reported an invalid Product snippets error on `/tanghuot/`**:
+  `Either "offers", "review", or "aggregateRating" should be specified` affecting 3 items
+  (`sigTitle`, `mcTitle`, `fagaoTitle`).
+- **Root Cause**: `MooncakePage.astro` previously defined `makesOffer` containing
+  `itemOffered: { "@type": "Product" }`. Google's structured data parser extracts any
+  `@type: "Product"` entity and mandates e-commerce price offers (`offers`), reviews (`review`),
+  or aggregate ratings (`aggregateRating`), which do not apply to a physical bakery taking
+  custom wholesale/retail orders via direct contact.
+- **Fix**: Replaced `makesOffer` / `Product` with standard `hasMenu` -> `MenuSection` ->
+  `MenuItem` structured data under the `Bakery` / `FoodEstablishment` entity.
+  This accurately represents the bakery's signature items in the Knowledge Graph without
+  triggering false e-commerce Product snippet validation errors.
+- **Verification**: `python devops/check_content.py` passed (0 errors, 0 warnings);
+  `npm run build` generated clean `dist/tanghuot/index.html` with valid `Menu` / `MenuItem` JSON-LD.
+
 ## 2026-08-23 (Measured the Ceiling, Froze Pulse, Closed the Site Out)
 
 A full day of measurement ended in a decision to stop growing this site rather than to
