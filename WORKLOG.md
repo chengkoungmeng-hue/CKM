@@ -16,6 +16,10 @@
   triggering false e-commerce Product snippet validation errors.
 - **Verification**: `python devops/check_content.py` passed (0 errors, 0 warnings);
   `npm run build` generated clean `dist/tanghuot/index.html` with valid `Menu` / `MenuItem` JSON-LD.
+- **Fixed GitHub Actions YAML Syntax Error in daily_catering_pulse.yml**: When the pulse
+  cron was frozen on 2026-08-23, `schedule:` was left as an empty mapping key with the cron
+  commented out underneath, causing GitHub Actions to fail on every push with a workflow file
+  validation error. Commented out `schedule:` so `workflow_dispatch:` parses cleanly.
 
 ## 2026-08-23 (Measured the Ceiling, Froze Pulse, Closed the Site Out)
 

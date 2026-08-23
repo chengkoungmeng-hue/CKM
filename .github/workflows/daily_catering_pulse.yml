@@ -1,33 +1,13 @@
 name: Daily Catering Pulse & Auto-Indexing Pipeline
 
 on:
-  schedule:
-    # ONE run a day, at the morning Phnom Penh slot. Non-round minutes stay out of the
-    # GitHub Actions scheduling stampede.
-    #
-    # 20:47 UTC = 03:47 ICT (Phnom Penh) the following day.
-    #
-    # Dropped from twice daily to once on 2026-08-22 (owner directive: one article a
-    # day, five banquet topics and two food items per week). The second slot at
-    # 08:47 UTC was removed rather than kept as a retry: a second run publishes a
-    # SECOND article, it does not re-attempt the first, so keeping it would have made
-    # the cadence 14 a week against a directive of 7.
-    #
-    # This is also what makes fetch_catering_pulse.py's 5:2 rotation exact. The slot is
-    # derived from the Phnom Penh calendar date, so one run per local date gives five
-    # banquet articles and two food articles per week; two runs a day would have put two
-    # articles into the same slot and skewed the ratio inside every week.
-    #
-    # The run still publishes exactly ONE article and takes the whole verified path:
-    # fetch or seed, generate, validate, commit, then publish.yml waits for the page to
-    # be live before purging and indexing. The `concurrency` group below still
-    # serialises a scheduled run against a manual dispatch.
-    # FROZEN 2026-08-23 by owner decision. Measured over 90 days inside Cambodia the
-    # 36 pulse pages earned 2 impressions and 0 clicks, while the whole addressable
-    # Khmer commercial demand is about 78 impressions a month -- a ceiling no number
-    # of pages can raise. Generation is stopped; the 37 published pages stay live.
-    # Uncomment the line below to resume. workflow_dispatch still runs it by hand.
-    # - cron: '47 20 * * *'
+  # FROZEN 2026-08-23 by owner decision. Measured over 90 days inside Cambodia the
+  # 36 pulse pages earned 2 impressions and 0 clicks, while the whole addressable
+  # Khmer commercial demand is about 78 impressions a month -- a ceiling no number
+  # of pages can raise. Generation is stopped; the 37 published pages stay live.
+  # Uncomment the lines below to resume. workflow_dispatch still runs it by hand.
+  # schedule:
+  #   - cron: '47 20 * * *'
   workflow_dispatch:
 
 # A scheduled run and a manual dispatch overlapping would produce two commits
