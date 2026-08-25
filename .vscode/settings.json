@@ -3,5 +3,9 @@
   "scss.lint.unknownAtRules": "ignore",
   "tailwindCSS.includeLanguages": {
     "astro": "html"
+  },
+  "files.associations": {
+    "_headers": "plaintext",
+    "_redirects": "plaintext"
   }
 }
