@@ -1,5 +1,12 @@
 # Work Log
 
+## 2026-08-26 (Configured Strict Content-Security-Policy with Cloudflare RUM Whitelisted)
+
+- **Audited RUM & Browser Security Headers**: Verified Cloudflare Web Analytics (RUM) telemetry active and capturing 22 visits / 27 page loads.
+- **Enforced Strict CSP**: Updated `public/_headers` to enforce production-grade `Content-Security-Policy` with self-hosted fonts (`/fonts/`), script/connect whitelisting for Cloudflare RUM (`static.cloudflareinsights.com` and `cloudflareinsights.com`), and frame/object protections.
+- **Privacy Policy Alignment**: Confirmed 100% alignment with `privacy.astro` Section 3 (zero cookies, cookieless telemetry).
+- **Verification & Deployment**: `python devops/check_content.py` 15 articles 0 errors; live HTTP response verified on `https://ckmkh.com/` with active CSP.
+
 ## 2026-08-24 (Fixed GSC Product Snippet Schema Error on /tanghuot/)
 
 - **Google Search Console reported an invalid Product snippets error on `/tanghuot/`**:
