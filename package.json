@@ -6,6 +6,8 @@
     "dev": "astro dev",
     "start": "astro dev",
     "check": "node devops/run_content_check.mjs",
+    "//check:env": "Proves the local dev environment is healthy by actually calling each API, not by looking for variables. Exits non-zero naming what is missing.",
+    "check:env": "python devops/check_env.py",
     "build": "npm run check && astro check && astro build",
     "//build:deploy": "For build environments without Python 3 (e.g. a Cloudflare Pages image that lacks it). Content is already gated by the content-gate CI workflow before anything reaches main, so this skips only a check that has already run — it is not a way to bypass the gate locally.",
     "build:deploy": "astro check && astro build",

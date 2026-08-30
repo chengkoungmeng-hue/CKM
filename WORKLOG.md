@@ -134,7 +134,7 @@ Scope the constraint on every phase, not the ones that look dangerous.
    proves the site does not link to a place entity; it does **not** prove no profile
    exists. Check `business.google.com` before assuming either.
 4. **Pulse restarts by uncommenting one line** in `daily_catering_pulse.yml`.
-5. **The Facebook queue** is at `C:\Projects\DevOps\Marketing\CKM\Facebook\` and does
+5. **The Facebook queue** is at `devops/Marketing/Facebook/` and does
    not expire. Its zh-TW column is empty and must be filled before it is usable by an
    operator who does not read Khmer.
 6. **Do not write article 16.** Expected value is ~10 impressions a quarter (§18), and

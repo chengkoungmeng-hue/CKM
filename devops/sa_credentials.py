@@ -57,6 +57,48 @@ def _repo_root():
     return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
+def env_path():
+    """本專案憑證檔的絕對路徑。由 __file__ 推導,與呼叫端的工作目錄無關。"""
+    return os.path.join(_repo_root(), "devops", ".env")
+
+
+#: 本專案會用到的憑證鍵名。load_env() 只讓這些鍵吃到環境變數的覆蓋,
+#: 其餘 os.environ(PATH 之類)不會混進來。
+ENV_KEYS = (
+    "SEARCH_CONSOLE_SA_JSON",
+    "GOOGLE_SERVICE_ACCOUNT_KEY",
+    "CLOUDFLARE_API_TOKEN",
+    "CLOUDFLARE_ZONE_ID",
+    "CLOUDFLARE_ACCOUNT_ID",
+    "GEMINI_API_KEY",
+)
+
+
+def load_env(extra_keys=(), path=None):
+    """devops/.env 的內容,環境變數覆蓋之。回傳 dict。
+
+    2026-08-31 新增。devops/Tools/ 的三支工具(site_metrics、test_gsc_matrix、
+    seo_topic_injector)原本各有一份私有的 load_env(),只讀檔案、從不查
+    os.environ,而且檔案不在就 raise。在 CI 裡憑證是環境變數、根本沒有 .env,
+    於是那三支會把「憑證明明有」報成「未配置」——與本模組開頭記的是同一種錯:
+    判準停在載體(檔案),而不是問憑證本身。
+
+    順序與 load_service_account_info() 一致:環境變數優先於檔案。兩者都沒有時
+    回傳空 dict,由呼叫端決定怎麼失敗——本函式不猜測缺哪一把才算致命。
+
+    extra_keys 供仍在用專案後綴鍵名(CLOUDFLARE_API_TOKEN_CKM 之類)的呼叫端補充;
+    path 供已有自訂 .env 位置參數的呼叫端沿用,預設就是本專案的 devops/.env。
+    """
+    values = _dotenv_values(path or env_path())
+    for key in tuple(ENV_KEYS) + tuple(extra_keys):
+        raw = os.environ.get(key)
+        if raw:
+            # 與 verify_credentials.yml 同樣的正規化:貼進 secret 時帶到的
+            # 換行或引號會讓 header 變成非法值,在送出請求之前就爆掉。
+            values[key] = raw.strip().strip('"').strip("'").strip()
+    return values
+
+
 def load_service_account_info():
     """回傳 (info_dict, source_label)。找不到任何來源時 sys.exit。"""
     for key in _ENV_KEYS:

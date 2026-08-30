@@ -18,7 +18,6 @@
     python Tools/site_metrics.py --strict                  # 任何一個專案失敗就 exit 1
 """
 import argparse
-import io
 import json
 import os
 import sys
@@ -39,16 +38,27 @@ PROJECTS = {
 
 GSC_ROW_LIMIT = 50
 
+# 本檔在 devops/Tools/,憑證載入的單一真本在 devops/。
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from sa_credentials import load_env as shared_load_env  # noqa: E402
+
+#: 下面的查詢仍支援專案後綴鍵名(CLOUDFLARE_API_TOKEN_CKM),所以環境變數覆蓋也要涵蓋它們。
+SUFFIXED_ENV_KEYS = tuple(
+    f"{base}_{proj['suffix']}"
+    for proj in PROJECTS.values()
+    for base in ("CLOUDFLARE_API_TOKEN", "CLOUDFLARE_ZONE_ID",
+                 "CLOUDFLARE_ACCOUNT_ID", "GOOGLE_SERVICE_ACCOUNT_KEY")
+)
+
 
 def load_env(path=ENV_PATH):
-    env = {}
-    if not os.path.exists(path):
-        raise FileNotFoundError("找不到 .env:" + path)
-    for line in io.open(path, encoding="utf-8"):
-        line = line.strip()
-        if line and not line.startswith("#") and "=" in line:
-            k, v = line.split("=", 1)
-            env[k.strip()] = v.strip()
+    # 2026-08-31:改為委派 devops/sa_credentials.py 的 load_env()。原本這裡只讀檔案、
+    # 從不查 os.environ,而且檔案不在就 raise——在 CI 裡憑證是環境變數而且沒有 .env,
+    # 於是同一把有效憑證會被本工具報成「未配置」。環境變數優先於檔案,檔案來源不變。
+    # fail-closed 保留:兩個來源都湊不出任何憑證時仍然 raise,不讓它跑出一份空報表。
+    env = shared_load_env(extra_keys=SUFFIXED_ENV_KEYS, path=path)
+    if not env:
+        raise FileNotFoundError("環境變數與 .env 都沒有任何憑證:" + path)
     return env
 
 

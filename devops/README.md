@@ -31,6 +31,7 @@ CI 一律從 repo 根目錄(`$GITHUB_WORKSPACE`)呼叫這些工具,沒有任何 
 | 檔案 | 用途 | 呼叫方式 |
 | :--- | :--- | :--- |
 | `run_content_check.mjs` | `check_content.py --strict` 的 npm 端執行器。依序試 `python3` / `python` / `py`,找不到直譯器時明確失敗而非跳過檢查 | `npm run check`;`npm run build` 串接為 `npm run check && astro check && astro build` |
+| `check_env.py` | 一鍵驗環境。必備檔案與 Python 套件、Search Console(實際換 access token 再讀一次資源清單)、Cloudflare(token verify + 讀 zone)、Gemini(有 key 才實打,沒有則標成 SKIP 並說明它只在 CI)。全程唯讀,不清快取也不提交 sitemap;任何一項失敗即非零退出並印出缺什麼 | `npm run check:env`;等同 `python devops/check_env.py` |
 
 ### 手動執行
 
@@ -47,9 +48,13 @@ CI 一律從 repo 根目錄(`$GITHUB_WORKSPACE`)呼叫這些工具,沒有任何 
 | `apply_cf_settings.py` | 以 Cloudflare API 套用 zone 設定與三個 ruleset phase | 視為意圖紀錄,**不建議執行**:每個 `put_ruleset_phase()` 都是 `PUT` 整組取代,會清掉自上次編輯後在 dashboard 新增的規則(見 `.agents/AGENTS.md` §16 [REGRESSION]) |
 | `scan_seo_issues.py` | 掃描 `src/` 找缺 `alt` 的圖片與 meta description 問題 | `python devops/scan_seo_issues.py`。內含硬編碼絕對路徑 `C:\Projects\CKM\src`,換機器需先改 |
 | `compress_images.py` | 把 `public/images` 內的 blog inline PNG 轉為 WebP 並同步更新 markdown 引用 | `python devops/compress_images.py`(需 Pillow) |
-| `migrate_pulse_images.py` | 一次性遷移:把舊 `pulse-XX` 圖檔改名為 slug 命名、補 `image_alt`、重抓缺圖 | `python devops/migrate_pulse_images.py`(需 Pillow) |
 | `fix_h1_tags.py` | 移除 blog markdown 內文的第一個 H1 | 一次性腳本。內含硬編碼絕對路徑 `c:\Projects\CKM\src\content\blog`,換機器需先改 |
 | `takedown.py` | 權利人要求撤下時的整套處理:依 slug 或來源網域找出 pulse 項目、自 `pulseData.json` 移除、刪除圖檔、於 `public/_redirects` 追加 301 至 `/pulse/`(並把指向該 slug 的 `/pulse/pulse-NN/` 別名一併改指列表頁),最後印出可直接貼回覆的處理摘要。不 commit、不 push、不部署,後續指令一律只印出來 | 未加 `--yes` 時一律乾跑:`python devops/takedown.py --slug <slug>` 或 `--source <hostname>`;確認後 `--yes` 實跑。部署上線後再跑 `python devops/takedown.py --notify <url>`,該模式先確認該網址已不再回傳 200,才透過 `notify_indexing.py` 送出 IndexNow(Cloudflare 清快取與 sitemap 重送由 `Publish` workflow 負責,本機無該憑證) |
+
+> 2026-08-31:此表原本還有一列 `migrate_pulse_images.py`,但那個檔案已於 2026-08-23
+> 刪除(commit 86fa5f4)。它會重抓來源圖片、把 `image_url` 改寫成 `{slug}.webp`,卻從不
+> 寫 `image_source_link`——跑一次就會重建前一天才拆掉的「未標示出處的轉載」狀態。
+> 文件留著一條指向不存在檔案的指令,等於留著一條回到已知壞狀態的捷徑。不要復原它。
 
 ## 版控規則:哪些追蹤、哪些忽略
 

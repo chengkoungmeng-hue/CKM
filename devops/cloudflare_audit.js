@@ -1,10 +1,19 @@
 // devops/cloudflare_audit.js
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+// 2026-08-31:憑證與報告兩處路徑改由本檔位置推導。原本一個是 process.cwd()/.env、
+// 另一個是 process.cwd()/devops/reports/,兩個假設互相矛盾,於是從任何工作目錄都跑不完:
+// 從 repo 根跑(README 記載的用法)讀不到憑證,因為 .env 在 devops/ 底下;
+// 從 devops/ 跑讀得到憑證、四段 API 也都成功,卻在寫檔時 ENOENT 於 devops/devops/reports/。
+// devops/reports/cloudflare_audit_summary.json 自 07-28 起就沒再更新過,原因就是這個。
+// 與 devops/sa_credentials.py 的 _repo_root() 同一套做法:路徑不看工作目錄。
+const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 function getEnvToken() {
   if (process.env.CLOUDFLARE_API_TOKEN) return process.env.CLOUDFLARE_API_TOKEN;
-  const envPath = path.join(process.cwd(), '.env');
+  const envPath = path.join(ROOT, 'devops', '.env');
   if (fs.existsSync(envPath)) {
     const content = fs.readFileSync(envPath, 'utf-8');
     const match = content.match(/CLOUDFLARE_API_TOKEN=["']?([^"'\r\n]+)["']?/);
@@ -111,7 +120,7 @@ async function auditCloudflareDeep() {
     }
   };
 
-  const reportPath = path.join(process.cwd(), 'devops', 'reports', 'cloudflare_audit_summary.json');
+  const reportPath = path.join(ROOT, 'devops', 'reports', 'cloudflare_audit_summary.json');
   fs.writeFileSync(reportPath, JSON.stringify(auditReport, null, 2), 'utf-8');
   console.log(`\n✅ Deep Audit Complete! Report saved to ${reportPath}`);
 }

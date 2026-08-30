@@ -1,9 +1,21 @@
 import os
+import sys
 import requests
 from dotenv import load_dotenv
 
-load_dotenv('.env')
+# 2026-08-31:原本是 load_dotenv('.env'),相對於工作目錄。repo 根沒有 .env
+# (憑證 2026-08-30 拆到 devops/.env),所以照 README 從 repo 根執行時 TOKEN 是 None,
+# 而下面的 headers 會照樣組出字面上的 'Bearer None' 送出 PATCH/PUT。
+# 路徑改由本檔位置推導,與 devops/sa_credentials.py 的 _repo_root() 同一套。
+# load_dotenv 不覆蓋已存在的環境變數,所以「環境變數優先於檔案」仍然成立。
+load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), '.env'))
 TOKEN = os.getenv('CLOUDFLARE_API_TOKEN')
+
+# fail-closed。這是寫入路徑(改 zone 設定、Bot Management、ruleset),
+# 缺憑證一律拒絕服務,絕不讓 None 流到 header 去換一個看不懂的 400。
+if not TOKEN:
+    sys.exit('CLOUDFLARE_API_TOKEN 未設定(環境變數與 devops/.env 都沒有)——拒絕送出 zone 寫入。')
+
 ZONE_ID = 'd459c80e06d000c6e1927783fc6b3a7a'
 BASE_URL = f"https://api.cloudflare.com/client/v4/zones/{ZONE_ID}"
 

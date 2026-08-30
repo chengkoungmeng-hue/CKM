@@ -20,6 +20,10 @@ if sys.platform == 'win32':
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
     sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
+# 本檔在 devops/Tools/,憑證載入的單一真本在 devops/。
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from sa_credentials import env_path as sa_env_path, load_env as shared_load_env  # noqa: E402
+
 # 2026-08-30 自 DevOps hub 遷入並裁到只剩本專案。
 # 金鑰名同時去掉專案後綴——憑證已拆到本專案的 devops/.env,不再需要用專案名區分。
 PROJECTS = [
@@ -34,25 +38,15 @@ PROJECTS = [
 ]
 
 def load_env():
-    env_vars = {}
-    env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '.env'))
-    if not os.path.exists(env_path):
+    # 2026-08-31:改為委派 devops/sa_credentials.py 的 load_env()。原本這裡只讀
+    # devops/.env、從不查 os.environ,而 CI 的憑證是環境變數且那裡沒有 .env——
+    # 同一把有效憑證在 CI 會被本工具報成「未配置」。
+    # 檔案來源保留不動(2026-08-30 從 DevOps hub 收回來的就是它),只是環境變數優先。
+    env_vars = shared_load_env()
+    if not env_vars:
         # 2026-08-30:原本在此回退到 DevOps hub 的共用 .env。hub 已退役為
         # 各專案自持憑證,回退只會讓「憑證漏設」偽裝成「跑得起來」。
-        print(f"[ERROR] 找不到本專案的 .env:{env_path}")
-        return {}
-    if not os.path.exists(env_path):
-        print(f"[ERROR] .env file not found at: {env_path}")
-        return env_vars
-    
-    with open(env_path, 'r', encoding='utf-8') as f:
-        for line in f:
-            line = line.strip()
-            if not line or line.startswith('#'):
-                continue
-            if '=' in line:
-                key, val = line.split('=', 1)
-                env_vars[key.strip()] = val.strip()
+        print(f"[ERROR] 環境變數與 {sa_env_path()} 都沒有任何憑證。")
     return env_vars
 
 def test_gsc_for_project(proj, env_vars):
@@ -216,7 +210,14 @@ def main():
     print("==================================================================\n")
     
     env_vars = load_env()
-    
+
+    # 2026-08-31:本函式原本一律 return None,也就是不論兩項憑證死活都 exit 0。
+    # 實測過:把 .env 的服務帳號換成一把 Google 不認得的金鑰(invalid_grant)、
+    # token 換成無效字串,輸出是兩行「狀態: 失敗」而結束碼仍是 0——
+    # 一個永遠回綠的檢查器擋不住任何東西,也不能被任何閘門引用。
+    # 輸出格式刻意保持原樣,補的只有失敗追蹤與結束碼。
+    failures = []
+
     for proj in PROJECTS:
         print(f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         print(f"▶ 專案：{proj['name']} ({proj['domain']})")
@@ -238,10 +239,15 @@ def main():
                     print("    最近 28 天自然搜尋詞採樣: (暫無搜尋點擊數據或新站收錄中)")
             else:
                 print(f"    注意: 此服務帳號尚未加入 {proj['domain']} 的 GSC 權限名單")
+                # 憑證本身有效,但讀不到這個專案的資源——對一支「連得上嗎」的
+                # 檢查器而言這就是失敗,而且正是本專案反覆踩到的靜默失效那一類。
+                failures.append(f"{proj['name']} GSC: 服務帳號無 {proj['domain']} 權限")
         elif gsc_res["status"] == "MISSING":
             print(f"    狀態: 未配置 ({gsc_res['message']})")
+            failures.append(f"{proj['name']} GSC: {gsc_res['message']}")
         else:
             print(f"    狀態: 失敗 ({gsc_res.get('message')})")
+            failures.append(f"{proj['name']} GSC: {gsc_res.get('message')}")
 
         # 2. Cloudflare Analytics Test
         print(f"[2] Cloudflare Web Analytics (流量分析)")
@@ -256,11 +262,20 @@ def main():
                 print(f"    GraphQL 流量測試: 正常 (唯讀連線就緒)")
         elif cf_res["status"] == "MISSING":
             print(f"    狀態: 未配置 ({cf_res['message']})")
+            failures.append(f"{proj['name']} Cloudflare: {cf_res['message']}")
         else:
             print(f"    狀態: 失敗 ({cf_res.get('message')})")
+            failures.append(f"{proj['name']} Cloudflare: {cf_res.get('message')}")
         print()
 
     print("==================================================================")
 
+    if failures:
+        print("\n以下憑證不可用:")
+        for line in failures:
+            print(f"  - {line}")
+        return 1
+    return 0
+
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

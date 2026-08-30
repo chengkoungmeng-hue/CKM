@@ -27,8 +27,15 @@ def get_gemini_api_key():
         return _cached_gemini_key
 
     key = os.environ.get("GEMINI_API_KEY", "").strip().strip("\"'").strip()
-    if not key and os.path.exists(".env"):
-        with open(".env", "r", encoding="utf-8") as f:
+    # 2026-08-31:回退路徑原本是 CWD 相對的 "./.env"。憑證已於 2026-08-30 拆到
+    # devops/.env,所以從 repo 根執行時這裡找的是一個不存在的檔——本機無論如何
+    # 都拿不到 key,而錯誤看起來像「沒設定」而不是「找錯地方」。
+    # 路徑改由本檔位置推導,與 devops/sa_credentials.py 的 _repo_root() 同一套。
+    # 注意 devops/.env 目前並沒有 GEMINI_API_KEY:它只在 GitHub secret,
+    # 而本管線於 2026-08-23 凍結。要在本機跑就得自己把 key 加進 devops/.env。
+    env_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
+    if not key and os.path.exists(env_file):
+        with open(env_file, "r", encoding="utf-8") as f:
             for line in f:
                 if line.startswith("GEMINI_API_KEY="):
                     key = line.strip().split("=", 1)[1].strip().strip("\"'").strip()

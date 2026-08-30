@@ -12,7 +12,6 @@ SEO Topic Injector — GSC 站內搜尋詞 ➔ 每日選題閉環橋樑
 """
 
 import argparse
-import io
 import json
 import os
 import sys
@@ -34,16 +33,23 @@ PROJECTS = {
     'CKM': {'domain': 'ckmkh.com', 'suffix': 'CKM'},
 }
 
+# 本檔在 devops/Tools/,憑證載入的單一真本在 devops/。
+sys.path.insert(0, ROOT_DIR)
+from sa_credentials import load_env as shared_load_env  # noqa: E402
+
+#: 下面的查詢仍支援專案後綴鍵名(GOOGLE_SERVICE_ACCOUNT_KEY_CKM),環境變數覆蓋要涵蓋它。
+SUFFIXED_ENV_KEYS = tuple(
+    f"GOOGLE_SERVICE_ACCOUNT_KEY_{proj['suffix']}" for proj in PROJECTS.values()
+)
+
 def load_env(path=ENV_PATH):
-    env = {}
-    if not os.path.exists(path):
-        raise FileNotFoundError(f"找不到 .env: {path}")
-    with io.open(path, encoding="utf-8") as f:
-        for line in f:
-            line = line.strip()
-            if line and not line.startswith("#") and "=" in line:
-                k, v = line.split("=", 1)
-                env[k.strip()] = v.strip()
+    # 2026-08-31:改為委派 devops/sa_credentials.py 的 load_env()。原本這裡只讀檔案、
+    # 從不查 os.environ,而且檔案不在就 raise——在 CI 裡憑證是環境變數而且沒有 .env,
+    # 於是同一把有效憑證會被本工具報成「未配置」。環境變數優先於檔案,檔案來源不變。
+    # fail-closed 保留:兩個來源都湊不出任何憑證時仍然 raise。
+    env = shared_load_env(extra_keys=SUFFIXED_ENV_KEYS, path=path)
+    if not env:
+        raise FileNotFoundError(f"環境變數與 .env 都沒有任何憑證: {path}")
     return env
 
 def fetch_gsc_search_opportunities(key_json, domain, days=14):
