@@ -20,7 +20,9 @@ from datetime import date, datetime, timedelta, timezone
 
 sys.stdout.reconfigure(encoding="utf-8")
 
-ROOT_DIR = r"C:\Projects\DevOps"
+# 2026-08-30:改由 __file__ 推導本專案的 devops/。原本寫死 DevOps hub,
+# 而 hub 已於當日退役為純憑證庫。
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ENV_PATH = os.path.join(ROOT_DIR, ".env")
 DOWNLOADS_DIR = os.path.join(os.path.expanduser("~"), "Downloads")
 TODAY_STR = datetime.now().strftime("%Y-%m-%d")

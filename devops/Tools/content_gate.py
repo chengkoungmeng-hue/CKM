@@ -37,7 +37,9 @@ import ledger  # 同目錄;Marketing 的專案根註冊表在此模組
 sys.stdout.reconfigure(encoding="utf-8", line_buffering=True)
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-ROOT_DIR = r"C:\Projects\DevOps"
+# 2026-08-30:改由 __file__ 推導本專案的 devops/。原本寫死 DevOps hub,
+# 而 hub 已於當日退役為純憑證庫。
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MARKETING_DIR = os.path.join(ROOT_DIR, "Marketing")
 
 # --------------------------------------------------------------------- AI 味

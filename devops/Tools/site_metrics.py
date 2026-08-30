@@ -324,9 +324,12 @@ def collect(names, days, env):
         s = cfg["suffix"]
         rec = {"project": name, "domain": cfg["domain"], "days": days, "errors": []}
 
-        token = env.get("CLOUDFLARE_API_TOKEN_" + s)
-        zone = env.get("CLOUDFLARE_ZONE_ID_" + s)
-        acc_id = env.get("CLOUDFLARE_ACCOUNT_ID_" + s)
+        # 2026-08-30:加上無後綴回退。憑證拆到各專案自己的 devops/.env 之後,
+        # 鍵名不再需要用專案名當後綴;保留後綴查詢是為了相容尚未遷移的環境。
+        # seo_topic_injector.py 本來就是這個形狀,這裡補齊。
+        token = env.get("CLOUDFLARE_API_TOKEN_" + s) or env.get("CLOUDFLARE_API_TOKEN")
+        zone = env.get("CLOUDFLARE_ZONE_ID_" + s) or env.get("CLOUDFLARE_ZONE_ID")
+        acc_id = env.get("CLOUDFLARE_ACCOUNT_ID_" + s) or env.get("CLOUDFLARE_ACCOUNT_ID")
 
         if token and zone:
             # 1. 邊緣流量
