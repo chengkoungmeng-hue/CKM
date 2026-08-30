@@ -69,6 +69,9 @@ CI 一律從 repo 根目錄(`$GITHUB_WORKSPACE`)呼叫這些工具,沒有任何 
   這些檔案由工具重新產生,不需要人工維護。
   註:`astro_full_browser_audit_results.json`、`audit_summary.json`、
   `cloudflare_audit_summary.json` 三個檔案在更名前已被追蹤,以 `git mv` 搬入本目錄後
-  仍在 index 中(`.gitignore` 不影響已追蹤檔案)。若要讓它們比照其他報告不再進版控,
-  需另外執行 `git rm --cached`。
-- 更廣泛的一次性探索工具留在 repo 根目錄的 `scratch/`,該目錄整包被忽略,不在本次搬移範圍內。
+  一度仍留在 index 中(`.gitignore` 不影響已追蹤檔案),已於 2026-08-30 以
+  `git rm --cached` 移出版控,檔案仍留在磁碟。三者都由 `playwright_audit.js`、
+  `astro_full_browser_audit.js`、`cloudflare_audit.js` 重新產生,無人工維護價值。
+- 更廣泛的一次性探索工具留在 repo 根目錄的 `scratch/`。該目錄同樣曾有 22 個檔案在
+  `.gitignore` 規則加入前即被追蹤,規則因此對它們無效;已於 2026-08-30 一併
+  `git rm --cached` 移出版控(檔案留在磁碟),宣告與事實自此一致。
