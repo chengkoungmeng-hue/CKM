@@ -103,23 +103,14 @@ def submit_indexnow(urls):
 
 def notify_gsc_api():
     """Notify Google Search Console via Service Account REST API."""
-    creds_file = 'google_service_account.json'
-    if not os.path.exists(creds_file):
-        print("::error::GSC credentials not found - the sitemap was not submitted.")
-        return False
-
+    # 2026-08-30:改用 devops/sa_credentials.py 的單一取得點。原本判準是
+    # os.path.exists('google_service_account.json'),而那個檔裡是死金鑰,
+    # 於是 sitemap 提交靜默失敗卻回報成功路徑。
     try:
-        import requests
-        from google.oauth2 import service_account
-        import google.auth.transport.requests
+        import requests  # noqa: F401  (下方組 URL 時用到)
+        from sa_credentials import SCOPES_WRITE, get_access_token
 
-        SCOPES = ['https://www.googleapis.com/auth/webmasters']
-        credentials = service_account.Credentials.from_service_account_file(
-            creds_file, scopes=SCOPES
-        )
-        req = google.auth.transport.requests.Request()
-        credentials.refresh(req)
-        access_token = credentials.token
+        access_token, _source = get_access_token(SCOPES_WRITE)
 
         headers = {
             'Authorization': f'Bearer {access_token}',

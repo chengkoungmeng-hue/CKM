@@ -38,7 +38,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # Auth, the HTTP call and the console table come from the query report; parse_any_date
 # from the pulse generator. One date parser and one API client, not copies of each.
-from gsc_query_report import KEY_CANDIDATES, SITE, find_key_file, get_token, query, table
+import gsc_query_report
+from gsc_query_report import SITE, get_token, query, table
 from fetch_catering_pulse import parse_any_date
 
 DATA_FILE = "src/data/pulseData.json"
@@ -138,12 +139,9 @@ def main():
 
     # Fail on the credential BEFORE anything prints a number, so an unauthenticated run
     # can never be mistaken for a measured zero.
-    if not any(os.path.exists(c) for c in KEY_CANDIDATES):
-        print("::error::No Search Console service-account key found. Looked for: "
-              f"{', '.join(KEY_CANDIDATES)}. In CI the key is materialised from the "
-              "SEARCH_CONSOLE_SA_JSON secret; locally it is google_service_account.json. "
-              "Refusing to print an unmeasured report.")
-        return 2
+    # 2026-08-30:原本這裡先檢查「憑證檔存不存在」再往下跑。那個判準擋不住真正的
+    # 失敗模式——檔案在、但金鑰已被輪替——所以改由 sa_credentials 在換 token 時失敗。
+    # 保留「未取得憑證就不印數字」這個意圖:get_token() 失敗會直接以非零結束。
 
     end = (
         datetime.date.fromisoformat(args.end)
@@ -153,15 +151,15 @@ def main():
     start = end - datetime.timedelta(days=args.days - 1)
     s, e = start.isoformat(), end.isoformat()
 
-    key_file = find_key_file()
     try:
-        token = get_token(key_file)
+        token = get_token()
     except Exception as exc:                      # noqa: BLE001 - the reason varies
-        print(f"::error::Could not obtain a Search Console token from {key_file}: "
+        print(f"::error::Could not obtain a Search Console token from "
+              f"{gsc_query_report.CREDENTIAL_SOURCE}: "
               f"{type(exc).__name__}: {exc}")
         return 2
 
-    print(f"Site: {SITE}   Window: {s} -> {e} ({args.days} days)   Key: {key_file}")
+    print(f"Site: {SITE}   Window: {s} -> {e} ({args.days} days)   Key: {gsc_query_report.CREDENTIAL_SOURCE}")
     print(f"Entries: {len(entries)}   Reporting those live at least "
           f"{args.min_age_days} days\n")
 

@@ -25,27 +25,28 @@ ENDPOINT = (
     "sc-domain%3Ackmkh.com/searchAnalytics/query"
 )
 SCOPES = ["https://www.googleapis.com/auth/webmasters.readonly"]
-KEY_CANDIDATES = [
-    "google_service_account.json",
-    "gsc_service_account.json",
-    "service_account.json",
-]
+
+# 2026-08-30:憑證載入移到 devops/sa_credentials.py。原本這裡的判準是「檔案存不存在」,
+# 而本機 google_service_account.json 裡是一把已輪替掉的死金鑰,於是本檔與
+# check_pulse_indexation.py、notify_indexing.py 三支一起靜默失效——GSC 回不了資料,
+# 看起來卻像「這段期間沒有曝光」。新的載入器環境變數優先於檔案,而且回傳前會真的
+# 換一次 token,死憑證在那裡就會停下來。
+#
+# KEY_CANDIDATES 保留為 re-export,因為 check_pulse_indexation.py 從本模組 import 它。
+from sa_credentials import KEY_CANDIDATES, get_access_token  # noqa: E402
 
 
-def find_key_file():
-    for candidate in KEY_CANDIDATES:
-        if os.path.exists(candidate):
-            return candidate
-    sys.exit(f"No service-account key found. Looked for: {', '.join(KEY_CANDIDATES)}")
+#: 最近一次 get_token() 實際用到的憑證來源,供摘要行顯示。
+#: 這一行是刻意的:三支腳本原本印出「Key: <檔名>」,讓人以為憑證來自那個檔,
+#: 而真正生效的可能是環境變數。印來源而不是印檔名,看到的才是實際發生的事。
+CREDENTIAL_SOURCE = "(尚未取得)"
 
 
-def get_token(key_file):
-    from google.auth.transport.requests import Request
-    from google.oauth2 import service_account
-
-    creds = service_account.Credentials.from_service_account_file(key_file, scopes=SCOPES)
-    creds.refresh(Request())
-    return creds.token
+def get_token():
+    """回傳可用的 access token。憑證是死的會在 sa_credentials 內以非零結束。"""
+    global CREDENTIAL_SOURCE
+    token, CREDENTIAL_SOURCE = get_access_token(SCOPES)
+    return token
 
 
 def query(token, body):
@@ -116,9 +117,8 @@ def main():
     start = end - datetime.timedelta(days=args.days - 1)
     s, e = start.isoformat(), end.isoformat()
 
-    key_file = find_key_file()
-    token = get_token(key_file)
-    print(f"Site: {SITE}   Window: {s} → {e} ({args.days} days)   Key: {key_file}\n")
+    token = get_token()
+    print(f"Site: {SITE}   Window: {s} → {e} ({args.days} days)   Key: {CREDENTIAL_SOURCE}\n")
 
     kh_filter = [{"dimension": "country", "operator": "equals", "expression": "khm"}]
 
