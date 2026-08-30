@@ -60,7 +60,6 @@ import sys
 from datetime import datetime, timezone, timedelta
 
 SCHEMA_VERSION = "ledger/1"
-MARKETING = r"C:\Projects\DevOps\Marketing"
 
 # 各專案的 Marketing 根目錄。2026-08-30 加入。
 #

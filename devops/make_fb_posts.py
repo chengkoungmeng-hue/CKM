@@ -129,7 +129,8 @@ IMAGE_NEGATIVE = (
 # The palette, authoritative from tailwind.config.mjs, for any card or overlay drawn on
 # top of these photographs.
 #
-# NOTE for whoever maintains C:\Projects\DevOps\Marketing\CKM\Facebook\ASSET_SPEC.md:
+# NOTE:2026-08-30 之前這條指示指向 C:\Projects\DevOps\Marketing 底下的 ASSET_SPEC.md,
+# 那個 hub 已刪除。Facebook 的資產規格現在住在本 repo 的 devops/Marketing/Facebook/。
 # that file specifies #0F172A with #D97706/#F59E0B. Those are Tailwind slate-900 and
 # amber-600/500 -- the exact two colours CKM's design system was created to REPLACE. The
 # tailwind config says so in its own comments ("取代 slate-900", "取代 amber-600"), and

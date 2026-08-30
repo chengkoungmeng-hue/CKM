@@ -36,7 +36,7 @@ CI 一律從 repo 根目錄(`$GITHUB_WORKSPACE`)呼叫這些工具,沒有任何 
 
 | 檔案 | 用途 | 呼叫方式 |
 | :--- | :--- | :--- |
-| `make_fb_posts.py` | 由本站既有內容（菜色、FAQ、脈動種子）組裝 Facebook 貼文文案與生圖提示詞，輸出至 Central DevOps 獨立中樞（`C:\Projects\DevOps\Marketing\CKM\Facebook\`）。不呼叫模型 | `python devops/make_fb_posts.py --all --out <path>` |
+| `make_fb_posts.py` | 由本站既有內容（菜色、FAQ、脈動種子）組裝 Facebook 貼文文案與生圖提示詞，輸出至 `--out` 指定的路徑（原本預設寫入已於 2026-08-30 刪除的 Central DevOps hub）。不呼叫模型 | `python devops/make_fb_posts.py --all --out <path>` |
 | `apply_internal_links.py` | 依 `src/data/internalLinks.json` 的宣告表,把文章內既有的精確錨點字串包成內鏈。冪等,錨點非唯一或位於標題 / 表格 / 既有連結內時拒絕寫入 | `python devops/apply_internal_links.py` 套用,`--check` 僅驗證 |
 | `fix_section_order.py` | 把 `## សេចក្តីសន្និដ្ឋាន`(結論)搬到 `## សំណួរដែលសួរញឹកញាប់`(FAQ)之後。純區塊搬移,寫入前驗證檔案行的多重集合不變 | `python devops/fix_section_order.py --check` 僅報告,不加參數則改寫 |
 | `build_width_table.cjs` | 在真實瀏覽器量測每個 codepoint 的 advance width,產生 `devops/reports/khmer_width_table.json`,供更新 `check_content.py` 內嵌的寬度表 | `node devops/build_width_table.cjs`(需 playwright) |

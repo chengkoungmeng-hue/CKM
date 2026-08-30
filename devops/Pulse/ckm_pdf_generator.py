@@ -75,7 +75,9 @@ def generate_ckm_branded_pdf(json_file_path=None, output_dir=None):
     font_name, font_bold = register_fonts()
     today_str = datetime.now().strftime("%Y-%m-%d")
     
-    devops_root = r"C:\Projects\DevOps"
+    # 2026-08-30:原本寫死 C:\Projects\DevOps(hub 已刪除)。這個變數已無讀取端,
+    
+    # 但它曾經是「圖檔目錄找不到就靜默產出無圖 PDF」的來源之一,故一併移除。
     reports_ckm = os.path.join(devops_root, "Reports", "CKM")
     output_dir = output_dir or report_dir("CKM")   # 一天一個資料夾
     os.makedirs(output_dir, exist_ok=True)
