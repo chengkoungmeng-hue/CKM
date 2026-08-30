@@ -1,0 +1,74 @@
+{
+  "version": "1.0.0",
+  "project": "CKM",
+  "platform": "Facebook",
+  "account": {
+    "handle": "Taste & Culinary Arts (@TasteCulinaryArts / KoungMeng Cheng)",
+    "page_name": "រសជាតិ និងសិល្បៈធ្វើម្ហូប - Taste & Culinary Arts",
+    "page_url": "https://www.facebook.com/TasteCulinaryArts",
+    "admin": "KoungMeng Cheng",
+    "admin_id": "61593746811233"
+  },
+  "updated_at": "2026-08-24T11:19:11.557709+08:00",
+  "zero_link_policy": true,
+  "posts": [
+    {
+      "id": "post-002",
+      "status": "pending",
+      "published_at": "2026-08-24",
+      "url": null,
+      "topic": "សិល្បៈនៃការចម្អិនត្រីតុកកែចំហុយស៊ីអ៊ីវ (Culinary Art of Steamed Grouper with Superior Soy Sauce)",
+      "hook": "ត្រីតុកកែចំហុយស៊ីអ៊ីវ គឺជាមុខម្ហូបប្រពៃណីដ៏វិសេសវិសាលក្នុងពិធីជប់លៀងលំដាប់ខ្ពស់",
+      "source_urls": [],
+      "pulse_item_ids": [],
+      "assets": [
+        "CKM_2026-08-24_steamed_grouper.jpg"
+      ],
+      "metrics": {},
+      "extra": {
+        "content": "ត្រីតុកកែចំហុយស៊ីអ៊ីវ គឺជាមុខម្ហូបប្រពៃណីដ៏វិសេសវិសាលក្នុងពិធីជប់លៀងលំដាប់ខ្ពស់។ ភាពផ្អែមស្រស់ពីធម្មជាតិនៃសាច់ត្រី រួមផ្សំជាមួយខ្ញីនិងស្លឹកខ្ទឹមស្រស់ បន្ទាប់មកស្រោចស្រពដោយប្រេងក្តៅៗនិងទឹកស៊ីអ៊ីវពិសេស នឹងបង្កើតបានជាក្លិនឈ្ងុយនិងរសជាតិដ៏ស្រទន់ ផ្ដល់នូវភាពរីករាយយ៉ាងជ្រាលជ្រៅសម្រាប់លោកអ្នក។",
+        "format": "Image + Copy",
+        "language": "km",
+        "alt_text": "Traditional Cantonese banquet style steamed live grouper with ginger, scallions, and premium soy sauce on luxury dark dining table in Phnom Penh.",
+        "zero_link_verified": true,
+        "metadata_sanitized": true
+      },
+      "updated_at": "2026-08-24T11:19:11.557709+08:00"
+    },
+    {
+      "id": "post-001",
+      "status": "published",
+      "published_at": "2026-08-24T11:14:33.466600+08:00",
+      "url": null,
+      "topic": "សិល្បៈនៃការចម្អិនទឹកស៊ុប និងប្រេងខ្ទឹមបំពងឈ្ងុយស្រួយ (Culinary Secret of Aromatic Broth & Golden Garlic Infusion)",
+      "hook": "រសជាតិទឹកស៊ុបដ៏ឈ្ងុយឆ្ងាញ់ មិនត្រឹមតែអាស្រ័យលើការរម្ងាស់ទឹកដំបូងប៉ុណ្ណោះទេ",
+      "source_urls": [],
+      "pulse_item_ids": [],
+      "assets": [
+        "user_supplied_garlic_oil_broth_launch.jpg"
+      ],
+      "metrics": {},
+      "extra": {
+        "content": "រសជាតិទឹកស៊ុបដ៏ឈ្ងុយឆ្ងាញ់ មិនត្រឹមតែអាស្រ័យលើការរម្ងាស់ទឹកដំបូងប៉ុណ្ណោះទេ ប៉ុន្តែអាថ៌កំបាំងសំខាន់គឺការបន្ថែមប្រេងខ្ទឹមបំពងស្រួយពណ៌លឿងទុំនៅពេលចុងក្រោយ។ កម្ដៅនៃទឹកស៊ុបក្តៅៗ នឹងធ្វើឱ្យក្លិនឈ្ងុយនៃខ្ទឹមសាយភាយពេញចាន ជួយដាស់ឱជារសឱ្យកាន់តែដិតដល់ និងផ្ដល់នូវបទពិសោធន៍ម្ហូបអាហារដ៏វិសេសវិសាលសម្រាប់លោកអ្នក។",
+        "format": "Image + Copy",
+        "language": "km",
+        "alt_text": "Chef drizzling golden crispy fried garlic aromatic oil into steaming broth with scallions and sesame seeds.",
+        "zero_link_verified": true,
+        "draft_reserved_at": "2026-08-24T11:15:00+08:00"
+      },
+      "updated_at": "2026-08-24T11:10:33.461271+08:00"
+    }
+  ],
+  "schema_version": "ledger/1",
+  "security_milestones": {
+    "warmup_start_date": "2026-08-20",
+    "page_creation_safe_date": "2026-08-25 (週二)",
+    "first_post_safe_date": "2026-08-26 (週三)",
+    "anti_ban_rules": [
+      "嚴禁在 2026-08-25 前提早建立粉絲專頁 (避免觸發 Meta 新帳號商業濫用風控)",
+      "全程保持 0 好友，不主動發送交友邀請 (杜絕陌生人檢舉)",
+      "每次操作不超過 3 分鐘，維持單一固定 Chrome Profile 與乾淨 IP",
+      "粉專建立後靜置 24 小時，首篇貼文於 2026-08-26 發布且 100% 零貼文外鏈"
+    ]
+  }
+}

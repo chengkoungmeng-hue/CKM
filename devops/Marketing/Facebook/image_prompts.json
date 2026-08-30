@@ -1,0 +1,983 @@
+{
+  "project": "CKM",
+  "platform": "Facebook",
+  "purpose": "batch image generation for the zero-link Khmer post programme",
+  "count": 121,
+  "brand_palette": {
+    "onyx": "#171717",
+    "champagne": "#C5A059",
+    "champagne_dark": "#8C6D31",
+    "pearl": "#FDFCF8"
+  },
+  "instructions": "Generate one image per item at the given aspect ratio and save it under the given filename. Photographs of food only -- no text, no logo, no watermark burned into the image. These illustrate Khmer-Chinese banquet subjects and must depict authentic Cambodian banquet reality, never a Western stock kitchen.",
+  "items": [
+    {
+      "filename": "fb-seed-seed-054-124.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-054",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: coconut cream in banquet cooking. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-063-133.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-063",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: seasonal vegetables for banquets. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-058-128.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-058",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: kampot pepper in banquet dishes. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-060-130.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-060",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: chinese herbs in banquet soups. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-064-134.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-064",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: dipping sauces across the menu. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-044-114.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-044",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: course order in a banquet menu. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-057-127.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-057",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: palm sugar and flavour balance. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-059-129.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-059",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: soy sauce for steamed dishes. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-065-135.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-065",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: balancing flavours across courses. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-035-105.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-035",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: young guests at a banquet table. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-056-126.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-056",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: pandan leaf aroma in desserts. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-046-116.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-046",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: waitstaff roles in a large event. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-048-118.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-048",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: booking lead time and holding a date. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-055-125.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-055",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: lotus leaf as a cooking wrapper. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-027-097.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-027",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: ancestor offering ceremony menu. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-052-122.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-052",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: river prawn quality and season. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-062-132.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-062",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: ginger and aromatics in broth. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-020-090.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-020",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: evening reception service plan. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-033-103.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-033",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: menu choices for elder guests. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-036-106.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-036",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: spice level across guest groups. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-041-111.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-041",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: mobile kitchen space requirements. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-047-117.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-047",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: food tasting before booking. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-014-084.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-014",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: sour spicy river prawn soup course. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-024-094.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-024",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: kathina ceremony catering plan. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-037-107.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-037",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: outdoor reception in the rainy season. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-017-087.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-017",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: engagement ceremony catering menu. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-034-104.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-034",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: vegetarian guests banquet menu. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-043-113.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-043",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: service rhythm across a long reception. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-050-120.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-050",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: drinks and ice logistics planning. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-032-102.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-032",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: when fewer guests arrive than planned. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-038-108.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-038",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: dry season heat and holding food. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-011-081.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-011",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: lotus leaf rice banquet course. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-021-091.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-021",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: housewarming ceremony catering. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-049-119.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-049",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: coordinating food with the programme. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-066-136.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-066",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: aroma and presentation at the table. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-009-079.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-009",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: duck feet salad banquet course. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-053-123.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-053",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: handling seafood for large events. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-022-092.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-022",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: khmer new year family feast. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-051-121.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-051",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: choosing fresh river fish. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-018-088.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-018",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: gift procession morning refreshments. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-031-101.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-031",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: estimating banquet table count. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-013-083.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-013",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: traditional khmer dessert closing. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-019-089.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-019",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: morning wedding rites meal planning. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-045-115.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-045",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: table and seating arrangement. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-025-095.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-025",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: water festival gathering menu. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-028-098.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-028",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: company year end party catering. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-061-131.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-061",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: lime and sourness in khmer salads. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-023-093.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-023",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: pchum ben offering meal planning. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-026-096.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-026",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: chinese new year reunion banquet. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-008-078.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-008",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: ten treasure abalone soup banquet. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-016-086.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-016",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: lok lak beef banquet course. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-030-100.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-030",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: monk alms offering meal service. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-042-112.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-042",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: lighting and backup power planning. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-006-076.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-006",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: sweet and sour fish course. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-015-085.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-015",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: whole suckling pig centrepiece. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-040-110.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-040",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: borey permission and neighbours. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-001-071.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-001",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: cold appetiser platter banquet opening. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-004-074.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-004",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: river prawn with nuts banquet. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-039-109.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-039",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: borey access and parking planning. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-029-099.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-029",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: birthday and anniversary banquet. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-007-077.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-007",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: spicy fish with egg course. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-002-072.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-002",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: crispy fried whole fish banquet. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-012-082.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-012",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: hong kong roast duck banquet. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-005-075.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-005",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: roast suckling pig with bread. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-003-073.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-003",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: grilled beef salad banquet course. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-seed-seed-010-080.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "seed-010",
+      "kind": "seed",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: steamed fish soy sauce banquet. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-03-food-tasting-md-4-019.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "03-food-tasting.md#4",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: food tasting. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-01-traditional-8-course-wedding-menu-md-2-017.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "01-traditional-8-course-wedding-menu.md#2",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: traditional 8 course wedding menu. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-11-choosing-packages-md-28-043.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "11-choosing-packages.md#28",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: choosing packages. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-01-traditional-8-course-wedding-menu-md-3-018.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "01-traditional-8-course-wedding-menu.md#3",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: traditional 8 course wedding menu. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-08-waitstaff-service-flow-md-19-034.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "08-waitstaff-service-flow.md#19",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: waitstaff service flow. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-quick-06-signature-dishes-md-061.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "06-signature-dishes.md",
+      "kind": "quick",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: signature dishes. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-06-signature-dishes-md-13-028.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "06-signature-dishes.md#13",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: signature dishes. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-quick-01-traditional-8-course-wedding-menu-md-056.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "01-traditional-8-course-wedding-menu.md",
+      "kind": "quick",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: traditional 8 course wedding menu. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-quick-08-waitstaff-service-flow-md-063.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "08-waitstaff-service-flow.md",
+      "kind": "quick",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: waitstaff service flow. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-03-food-tasting-md-5-020.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "03-food-tasting.md#5",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: food tasting. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-quick-09-outdoor-tent-infrastructure-md-064.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "09-outdoor-tent-infrastructure.md",
+      "kind": "quick",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: outdoor tent infrastructure. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-01-traditional-8-course-wedding-menu-md-1-016.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "01-traditional-8-course-wedding-menu.md#1",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: traditional 8 course wedding menu. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-14-phnom-penh-master-chef-team-md-37-052.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "14-phnom-penh-master-chef-team.md#37",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: phnom penh master chef team. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-quick-11-choosing-packages-md-066.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "11-choosing-packages.md",
+      "kind": "quick",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: choosing packages. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-quick-12-catering-industry-trends-md-067.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "12-catering-industry-trends.md",
+      "kind": "quick",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: catering industry trends. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-05-corporate-private-catering-md-11-026.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "05-corporate-private-catering.md#11",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: corporate private catering. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-03-food-tasting-md-6-021.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "03-food-tasting.md#6",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: food tasting. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-quick-04-hygiene-and-temperature-control-md-059.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "04-hygiene-and-temperature-control.md",
+      "kind": "quick",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: hygiene and temperature control. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-08-waitstaff-service-flow-md-20-035.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "08-waitstaff-service-flow.md#20",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: waitstaff service flow. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-13-master-chef-catering-secrets-md-31-046.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "13-master-chef-catering-secrets.md#31",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: master chef catering secrets. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-quick-13-master-chef-catering-secrets-md-068.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "13-master-chef-catering-secrets.md",
+      "kind": "quick",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: master chef catering secrets. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-04-hygiene-and-temperature-control-md-8-023.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "04-hygiene-and-temperature-control.md#8",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: hygiene and temperature control. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-10-60-years-chef-experience-md-25-040.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "10-60-years-chef-experience.md#25",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: 60 years chef experience. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-quick-10-60-years-chef-experience-md-065.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "10-60-years-chef-experience.md",
+      "kind": "quick",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: 60 years chef experience. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-09-outdoor-tent-infrastructure-md-23-038.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "09-outdoor-tent-infrastructure.md#23",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: outdoor tent infrastructure. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-quick-07-housewarming-catering-setup-md-062.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "07-housewarming-catering-setup.md",
+      "kind": "quick",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: housewarming catering setup. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-quick-03-food-tasting-md-058.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "03-food-tasting.md",
+      "kind": "quick",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: food tasting. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-07-housewarming-catering-setup-md-18-033.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "07-housewarming-catering-setup.md#18",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: housewarming catering setup. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-06-signature-dishes-md-14-029.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "06-signature-dishes.md#14",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: signature dishes. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-07-housewarming-catering-setup-md-16-031.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "07-housewarming-catering-setup.md#16",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: housewarming catering setup. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-15-luxury-abalone-banquet-soup-md-40-055.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "15-luxury-abalone-banquet-soup.md#40",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: luxury abalone banquet soup. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-12-catering-industry-trends-md-29-044.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "12-catering-industry-trends.md#29",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: catering industry trends. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-quick-05-corporate-private-catering-md-060.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "05-corporate-private-catering.md",
+      "kind": "quick",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: corporate private catering. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-07-housewarming-catering-setup-md-17-032.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "07-housewarming-catering-setup.md#17",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: housewarming catering setup. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-13-master-chef-catering-secrets-md-32-047.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "13-master-chef-catering-secrets.md#32",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: master chef catering secrets. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-15-luxury-abalone-banquet-soup-md-38-053.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "15-luxury-abalone-banquet-soup.md#38",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: luxury abalone banquet soup. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-13-master-chef-catering-secrets-md-33-048.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "13-master-chef-catering-secrets.md#33",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: master chef catering secrets. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-05-corporate-private-catering-md-10-025.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "05-corporate-private-catering.md#10",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: corporate private catering. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-15-luxury-abalone-banquet-soup-md-39-054.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "15-luxury-abalone-banquet-soup.md#39",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: luxury abalone banquet soup. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-quick-02-wedding-catering-budget-guide-md-057.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "02-wedding-catering-budget-guide.md",
+      "kind": "quick",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: wedding catering budget guide. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-13-master-chef-catering-secrets-md-34-049.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "13-master-chef-catering-secrets.md#34",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: master chef catering secrets. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-quick-15-luxury-abalone-banquet-soup-md-070.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "15-luxury-abalone-banquet-soup.md",
+      "kind": "quick",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: luxury abalone banquet soup. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-09-outdoor-tent-infrastructure-md-21-036.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "09-outdoor-tent-infrastructure.md#21",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: outdoor tent infrastructure. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-14-phnom-penh-master-chef-team-md-35-050.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "14-phnom-penh-master-chef-team.md#35",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: phnom penh master chef team. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-14-phnom-penh-master-chef-team-md-36-051.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "14-phnom-penh-master-chef-team.md#36",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: phnom penh master chef team. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-04-hygiene-and-temperature-control-md-7-022.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "04-hygiene-and-temperature-control.md#7",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: hygiene and temperature control. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-12-catering-industry-trends-md-30-045.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "12-catering-industry-trends.md#30",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: catering industry trends. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-quick-14-phnom-penh-master-chef-team-md-069.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "14-phnom-penh-master-chef-team.md",
+      "kind": "quick",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: phnom penh master chef team. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-04-hygiene-and-temperature-control-md-9-024.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "04-hygiene-and-temperature-control.md#9",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: hygiene and temperature control. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-06-signature-dishes-md-15-030.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "06-signature-dishes.md#15",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: signature dishes. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-09-outdoor-tent-infrastructure-md-24-039.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "09-outdoor-tent-infrastructure.md#24",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: outdoor tent infrastructure. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-10-60-years-chef-experience-md-26-041.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "10-60-years-chef-experience.md#26",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: 60 years chef experience. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-09-outdoor-tent-infrastructure-md-22-037.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "09-outdoor-tent-infrastructure.md#22",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: outdoor tent infrastructure. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-05-corporate-private-catering-md-12-027.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "05-corporate-private-catering.md#12",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: corporate private catering. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    },
+    {
+      "filename": "fb-faq-11-choosing-packages-md-27-042.png",
+      "aspect_ratio": "4:5",
+      "size": "1080x1350",
+      "subject": "11-choosing-packages.md#27",
+      "kind": "faq",
+      "prompt": "8k professional culinary photography, traditional high-end Cambodian Chinese banquet dish, luxurious presentation, natural warm lighting, authentic Phnom Penh wedding banquet table setting, steam rising, shallow depth of field, deep charcoal and warm champagne-gold tones, no text, no watermark, no cgi, no rendering, 4:5 aspect ratio, 1080x1350. SUBJECT: choosing packages. AVOID: western plating, industrial kitchen, stock-photo chef, fake-looking food, text overlay, logos, hands in frame, cluttered background, blue-tinted shadows, orange amber cast"
+    }
+  ]
+}
