@@ -78,7 +78,6 @@ def generate_ckm_branded_pdf(json_file_path=None, output_dir=None):
     # 2026-08-30:原本寫死 C:\Projects\DevOps(hub 已刪除)。這個變數已無讀取端,
     
     # 但它曾經是「圖檔目錄找不到就靜默產出無圖 PDF」的來源之一,故一併移除。
-    reports_ckm = os.path.join(devops_root, "Reports", "CKM")
     output_dir = output_dir or report_dir("CKM")   # 一天一個資料夾
     os.makedirs(output_dir, exist_ok=True)
     
@@ -189,7 +188,17 @@ def generate_ckm_branded_pdf(json_file_path=None, output_dir=None):
     story.append(Paragraph("本特刊精選金邊高端婚宴（ម្ហូបការ）、企業商務外燴與名流私宴之時令頂級食材工法與美饌故事。", st_sub))
     story.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor(COLOR_GOLD), spaceAfter=8))
     
-    images_dir = os.path.join(reports_ckm, "images")
+    # 2026-08-30:原本是 os.path.join(reports_ckm, "images"),而 reports_ckm 指向
+    # 已刪除的 DevOps hub。圖片實際住在本 repo 的 public/images/pulse/
+    # (pulseData.json 的 image_url 是 /images/pulse/xxx-card.png,37 筆對 37 個檔)。
+    #
+    # 找不到圖的後果不是報錯,是每張菜色卡靜默少掉圖片,產出一份看起來正常的無圖 PDF
+    # ——那比報錯更難察覺。所以目錄不存在時直接非零離開,不產出半成品。
+    repo_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    images_dir = os.path.join(repo_root, "public", "images", "pulse")
+    if not os.path.isdir(images_dir):
+        print(f"[ERROR] 找不到圖片目錄:{images_dir}", file=sys.stderr)
+        return None
     
     for idx, item in enumerate(pulse_items[:6], 1):
         source_title_en = item.get("source_title_en", "")
