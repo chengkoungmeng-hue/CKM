@@ -698,15 +698,21 @@ Every item below came out of an audit of the 15 live articles.
 ## 16. Secrets
 
 **The agent is responsible for not exposing secrets. The user should never have to think
-about it.** Assume the user will say "the token is in `.env`" and nothing more — that is
-correct and sufficient. Never ask them to paste a value.
+about it.** Assume the user will say "the token is in `.env`" and nothing more — take that
+to mean `devops/.env`, and never ask them to paste a value.
+
+**There is no `.env` at the repository root** (`grep '^X=' .env` there returns
+"No such file or directory"). The local credential file is `devops/.env`, split out of the
+shared central DevOps credential file on 2026-08-30. Every path in this section is written
+against that location; earlier text that said a bare `.env` has been rewritten to it, while
+the incidents themselves are unchanged.
 
 ### Reading a secret
 
 Pipe it into an environment variable. It must never reach stdout.
 
 ```bash
-export GH_TOKEN=$(grep '^GITHUB_PAT=' .env | cut -d= -f2- | tr -d '\r\n"')
+export GH_TOKEN=$(grep '^GITHUB_PAT=' devops/.env | cut -d= -f2- | tr -d '\r\n"')
 curl -H "Authorization: Bearer $GH_TOKEN" https://api.github.com/...
 ```
 
@@ -722,7 +728,7 @@ Commands that require masking, always:
 | :--- | :--- |
 | `git remote -v` | `git remote -v \| sed 's#//[^@]*@#//<hidden>@#'` |
 | `git config -l` | `git config -l \| sed 's/=.*token.*/=<hidden>/I'` |
-| `cat .env` | `sed 's/=.*/=<hidden>/' .env` |
+| `cat devops/.env` | `sed 's/=.*/=<hidden>/' devops/.env` |
 | `env` / `printenv` | never dump wholesale; read one named variable |
 
 Before running any command that prints a URL, a config file, or an environment, ask
@@ -730,7 +736,7 @@ whether it could contain a credential. If it could, mask it.
 
 ### Storage
 
-The rule used to read "one secret, one home", immediately followed by "Local: `.env`.
+The rule used to read "one secret, one home", immediately followed by "Local: `devops/.env`.
 CI: GitHub Actions secrets" — two homes. That was self-contradictory and is replaced by:
 
 > **A credential lives only where it is genuinely needed, with only the power it needs
@@ -739,7 +745,7 @@ CI: GitHub Actions secrets" — two homes. That was self-contradictory and is re
 Two consequences, applied in order:
 
 1. **Delete unnecessary copies.** A copy that nothing reads is pure risk at zero benefit.
-   This is what the original rule was reaching for: the leaked PAT was in `.env` *and*
+   This is what the original rule was reaching for: the leaked PAT was in `devops/.env` *and*
    `.git/config` on the same machine for the same purpose, and the redundant one leaked.
 2. **Downgrade the necessary ones.** A copy that cannot be deleted should be able to do
    as little as possible. Splitting a credential in two is worthless unless the second is
@@ -751,7 +757,7 @@ and knowing which environment leaked when a key is abused.
 
 **"Not currently in use" and "not needed" are the same risk.** A credential that is used
 a few times a year should be created when needed, given an expiry, and revoked after —
-not parked in `.env` between uses.
+not parked in `devops/.env` between uses.
 
 ### Which copies are justified — audit, do not assume
 
@@ -767,7 +773,7 @@ Audited 2026-08-14:
 
 | Credential | Read by | Home |
 | :--- | :--- | :--- |
-| `CLOUDFLARE_API_TOKEN` | CI: `notify_indexing.py` (purge only). Local: `apply_cf_settings.py`, `cloudflare_audit.js` | CI only, scoped to **Cache Purge**. Local WAF work goes through the dashboard |
+| `CLOUDFLARE_API_TOKEN` | CI: `notify_indexing.py` (purge only). Local: `apply_cf_settings.py`, `cloudflare_audit.js` | CI + local `devops/.env` (key verified present 2026-08-30). The CI copy is scoped to **Cache Purge**; establish what the local copy can do with the token-verify call below before using it |
 | `GEMINI_API_KEY` | `fetch_catering_pulse.py`, run by CI | GitHub Actions secrets |
 | `GSC_SERVICE_ACCOUNT_JSON` | CI, written transiently to `google_service_account.json` and deleted in the same step | GitHub Actions secrets |
 | `google_service_account.json` | Local: `gsc_query_report.py` | Local only. Should be a **read-only** (`webmasters.readonly`) service account, separate from the CI one that can submit indexing |
@@ -824,7 +830,7 @@ for the rest. Re-enabling is one click.
   to purge cache. Verify what a token can do, not just that it is scoped:
 
   ```bash
-  export CF_TOKEN=$(grep '^CLOUDFLARE_API_TOKEN=' .env | cut -d= -f2- | tr -d '\r\n"')
+  export CF_TOKEN=$(grep '^CLOUDFLARE_API_TOKEN=' devops/.env | cut -d= -f2- | tr -d '\r\n"')
   curl -s https://api.cloudflare.com/client/v4/user/tokens/verify \
     -H "Authorization: Bearer $CF_TOKEN"
   ```
@@ -834,7 +840,7 @@ for the rest. Re-enabling is one click.
   that file holds exactly one rule. Running it silently deletes every rule added through
   the dashboard since it was last edited. Change Cloudflare settings in the dashboard;
   treat that file as a record of intent, not a tool.
-- The repository is **public**. `.env` and `google_service_account.json` are gitignored and
+- The repository is **public**. `devops/.env` and `google_service_account.json` are gitignored and
   have never been committed (verified across all refs, 2026-08-14). No workflow uses
   `pull_request` or `pull_request_target`, so fork PRs cannot reach the secrets — do not
   add such a trigger.
@@ -1116,6 +1122,11 @@ isolation.
 | **Sunder** | `sundermou-ship-it` | `github.com-sundermou` | `~/.ssh/id_ed25519_sundermou` |
 | **TWProbe** | `TWProbe` | `github.com-twprobe` | `~/.ssh/id_ed25519_twprobe` |
 | **PressaGen** | `pressagencom-svg` / `PressaGen-me` | `github.com-pressagen` | `~/.ssh/id_ed25519_pressagen` |
+
+`git remote -v` is the authority. If this table disagrees with it, the table is wrong — fix
+the table, not the remote. Verified for CKM on 2026-08-30: the remote is exactly the URL in
+rule 1 below. The other three rows are recorded from their own repositories and cannot be
+verified from here.
 
 ### Non-Interactive Shell Rules for AI Agents
 
