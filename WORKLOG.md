@@ -1,5 +1,21 @@
 # Work Log
 
+## 2026-09-05 (GSC 90-Day Audit & Content Expansion Freeze Affirmation)
+
+- **Audited Live Google Search Console Data**: Pulled 90-day search analytics (2026-06-06 to 2026-09-03) via `devops/gsc_query_report.py --days 90`. Output persisted to `devops/reports/gsc_search_queries.json`.
+- **Cambodia Filtered Performance (`country = khm`)**:
+  - Total: 1,254 impressions, 25 clicks, 1.99% CTR, average position 6.36.
+  - Primary commercial intent: `ម្ហូបការ` (245 impressions, 7 clicks, position 3.50), captured almost entirely by the homepage (`/`).
+  - Image/Graphic intent traps: `ចុងភៅ` cluster (149 impressions, 0 clicks, position 7.90) accompanied by `រូបចុងភៅ` (36 imp), `រូបភាពចុងភៅ` (7 imp), `logo ចុងភៅ` (2 imp), `មួកចុងភៅ` (1 imp). Confirmed zero conversion value.
+  - Intent mismatch: `ម៉ឺនុយ` (81 impressions, 0 clicks, position 5.33, landing on blog 01) reflects generic menu template hunting rather than catering enquiries.
+  - Secondary intent: `មុខម្ហូបការ` (60 impressions, 0 clicks, position 5.27).
+  - Only blog page generating organic clicks: `/blog/07-housewarming-catering-setup/` (14 impressions, 1 click on `កម្មវិធីឡើងផ្ទះ`, 7.14% CTR).
+  - Aggregate blog performance: All 15 existing blog articles combined gathered ~120 impressions and 1 click across the entire 90-day window in Cambodia.
+- **Content Expansion Freeze Reaffirmed**:
+  - Confirmed the market search volume ceiling (~100 commercial impressions/month across Cambodia). Marginal expected value of article 16 remains ~10 impressions and 0 clicks per quarter.
+  - Evaluated operational risk of over-promising: Physical catering execution in Cambodia relies on dynamic field conditions, seasonal variables, and owner-led negotiation. Adding speculative articles risks introducing unvetted operational commitments (temperature automation, rigid package guarantees, margin leaks) contradicting §11.
+  - Decision: Keep content creation frozen at 15 articles. Preserve site status in sealed, zero-error state (`python devops/check_content.py` 0 errors / 0 warnings). Continue passive monitoring.
+
 ## 2026-08-26 (Configured Strict Content-Security-Policy with Cloudflare RUM Whitelisted)
 
 - **Audited RUM & Browser Security Headers**: Verified Cloudflare Web Analytics (RUM) telemetry active and capturing 22 visits / 27 page loads.
