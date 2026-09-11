@@ -1,5 +1,18 @@
 # Work Log
 
+## 2026-09-11 (GSC 90-Day Refresh, Web Vitals Optimization & Technical SEO Cleanup)
+
+- **Audited GSC & Core Web Vitals**:
+  - Pulled live 90-day Search Console data (2026-06-12 to 2026-09-09) via `devops/gsc_query_report.py --days 90`. Clicks: 35 (27 Cambodia), Impressions: 1,727 (1,351 Cambodia), CTR: 2.03%.
+  - Ran Playwright Chromium live audits against `https://ckmkh.com`. Identified that desktop LCP is healthy (<1.5s), but mobile homepage was affected by a 292KB Hero AVIF.
+- **Executed Surgical Optimizations**:
+  - **Removed conflicting `hreflang="km"`**: Deleted legacy `<link rel="alternate" hreflang="km" href="https://ckmkh.com/" />` from `src/layouts/Layout.astro`. On a Khmer-only site, pointing subpages to the homepage as their Khmer alternate created canonical conflict signals.
+  - **Fixed Cloudflare font cache rule**: Changed `/*.woff` and `/*.woff2` to `/fonts/*` in `public/_headers`, ensuring self-hosted Hanuman fonts receive proper 1-year immutable caching rather than matching the root HTML revalidation header.
+  - **Optimized mobile Hero image payload**: Tuned `quality={68}` for `heroImageRelative` in `src/pages/index.astro`. Astro build verified that the mobile 400w/768w AVIF payload dropped from 292KB down to 35KB-89KB (~70-85% payload reduction) without impacting visual fidelity under the dark overlay.
+- **Verification**:
+  - `python devops/check_content.py`: 15 articles checked, 0 errors, 0 warnings.
+  - `npx astro build`: 66 pages built in 15.79s, 0 errors. Verified `hreflang` count across all generated HTML in `dist/` is 0.
+
 ## 2026-09-05 (GSC 90-Day Audit & Content Expansion Freeze Affirmation)
 
 - **Audited Live Google Search Console Data**: Pulled 90-day search analytics (2026-06-06 to 2026-09-03) via `devops/gsc_query_report.py --days 90`. Output persisted to `devops/reports/gsc_search_queries.json`.

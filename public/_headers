@@ -31,9 +31,7 @@
   Cache-Control: public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400
 
 # 4. Fonts — self-hosted and effectively permanent.
-/*.woff
-  Cache-Control: public, max-age=31536000, immutable
-/*.woff2
+/fonts/*
   Cache-Control: public, max-age=31536000, immutable
 
 # 5. Crawler and AI-discovery files. Short cache so a robots.txt or llms.txt fix
