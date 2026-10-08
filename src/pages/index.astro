@@ -302,7 +302,7 @@ const faqSchema = JSON.stringify({
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-slate-200">
           <article class="bg-white p-7 md:p-9">
-            <span class="eyebrow text-slate-400 font-sans block mb-5 tabular-nums">០១</span>
+            <span class="eyebrow text-slate-500 font-sans block mb-5 tabular-nums">០១</span>
             <Utensils class="w-7 h-7 text-champagne-dark mb-5" stroke-width={1.5} />
             <h3 class="text-lg md:text-xl font-km-serif font-bold text-onyx mb-3 leading-relaxed">ម្ហូបការប្រពៃណី និងតុបតែងទីតាំង</h3>
             <p class="text-slate-600 font-km-sans lead-km text-[15px]">
@@ -311,7 +311,7 @@ const faqSchema = JSON.stringify({
           </article>
 
           <article class="bg-white p-7 md:p-9">
-            <span class="eyebrow text-slate-400 font-sans block mb-5 tabular-nums">០២</span>
+            <span class="eyebrow text-slate-500 font-sans block mb-5 tabular-nums">០២</span>
             <Building2 class="w-7 h-7 text-champagne-dark mb-5" stroke-width={1.5} />
             <h3 class="text-lg md:text-xl font-km-serif font-bold text-onyx mb-3 leading-relaxed">ពិធីជប់លៀងបែបចិន និងកម្មវិធីក្រុមហ៊ុន</h3>
             <p class="text-slate-600 font-km-sans lead-km text-[15px]">
@@ -320,7 +320,7 @@ const faqSchema = JSON.stringify({
           </article>
 
           <article class="bg-white p-7 md:p-9">
-            <span class="eyebrow text-slate-400 font-sans block mb-5 tabular-nums">០៣</span>
+            <span class="eyebrow text-slate-500 font-sans block mb-5 tabular-nums">០៣</span>
             <Zap class="w-7 h-7 text-champagne-dark mb-5" stroke-width={1.5} />
             <h3 class="text-lg md:text-xl font-km-serif font-bold text-onyx mb-3 leading-relaxed">ភេសជ្ជៈ និងការដោះស្រាយបញ្ហាភ្លាមៗ</h3>
             <p class="text-slate-600 font-km-sans lead-km text-[15px]">
@@ -560,16 +560,16 @@ const faqSchema = JSON.stringify({
           </div>
 
           <div>
-            <p class="eyebrow text-slate-500 font-km-sans mb-5">លេខទូរស័ព្ទ</p>
+            <p class="eyebrow text-slate-400 font-km-sans mb-5">លេខទូរស័ព្ទ</p>
             <div class="divide-y divide-white/10 border-y border-white/10 mb-8">
               {phoneNumbers.map((contact) => (
                 <a href={`tel:+855${contact.num.replace(/\s/g, '').substring(1)}`} class="flex items-center justify-between gap-4 py-4 group">
                   <span class="text-lg md:text-xl font-bold text-white font-sans tracking-wide group-hover:text-champagne transition-colors tabular-nums">{contact.num}</span>
-                  <span class="text-[11px] text-slate-500 font-sans uppercase tracking-widest shrink-0">{contact.type}</span>
+                  <span class="text-[11px] text-slate-400 font-sans uppercase tracking-widest shrink-0">{contact.type}</span>
                 </a>
               ))}
             </div>
-            <p class="eyebrow text-slate-500 font-km-sans mb-2.5">ទីតាំង</p>
+            <p class="eyebrow text-slate-400 font-km-sans mb-2.5">ទីតាំង</p>
             <p class="text-slate-400 font-km-sans text-[15px] lead-km">
               ផ្ទះលេខ 33 ផ្លូវ 257 សង្កាត់ទឹកល្អក់ទី២ ខណ្ឌទួលគោក រាជធានីភ្នំពេញ
             </p>
