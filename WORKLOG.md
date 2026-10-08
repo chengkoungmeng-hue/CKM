@@ -1,5 +1,19 @@
 # Work Log
 
+## 2026-10-08 (Monthly SEO checkup: pagination duplicates, stale-slug 301s, llms drift, blog 07 title, a11y)
+
+- **Pagination duplicates**: `src/pages/blog/page/[page].astro` and `src/pages/pulse/[page].astro` now drop page 1 from `paginate()` (`props.page.currentPage !== 1`, field read from `node_modules/astro/dist/core/render/paginate.js`), so `/blog/page/1/` and `/pulse/1/` are no longer built; `public/_redirects` 301s both, with and without the slash, to `/blog/` and `/pulse/`.
+- **Stale-slug 301s**: `/blog/04-temperature-flavor-consistency/` to `/blog/04-hygiene-and-temperature-control/` (same topic), `/blog/02-khmer-chinese-fusion/` to `/blog/` (old article was menus for guests of every age; no successor), `/pulse/pickled-daikon-pulse-19/` to `/pulse/pickled-daikon-pulse-20/` (same entry, renumbered in `8f0dba9`). Each has its slash-less twin.
+- **llms drift**: regenerated `public/llms.txt` and `public/llms-full.txt` (the `បច្គេក` to `បច្ចេក` fix in the milk-pudding title and the wonton-soup summary, then blog 07's new description and quick answer). `content_gate.yml` now runs `python devops/generate_llms_txt.py --check` after the content check, and its paths add the two generator inputs that were not covered: `devops/generate_llms_txt.py` and `src/layouts/Layout.astro` (address and coordinates).
+- **Blog 07 metadata**: `seoTitle` now carries `កម្មវិធីឡើងផ្ទះ` and `ម្ហូបការ`; `description` carries `ពិធីឡើងគេហដ្ឋានថ្មី`; the quick answer gains `កម្មវិធីឡើងផ្ទះ` once and `សេវាកម្មម្ហូបការ` once (replacing the redundant `សេវាកម្មម្ហូបអាហារ (សេវាកម្មធ្វើម្ហូប)`). `title`, `date` unchanged; no `revision:`.
+- **Accessibility (Lighthouse mobile)**: removed the logo link's `aria-label` in `Layout.astro` (WCAG 2.5.3: `Home` did not contain the visible Khmer name; the image alt plus visible text now form the name). Contrast: homepage service numerals `text-slate-400` to `500` (white cards), contact labels `text-slate-500` to `400` (onyx), blog breadcrumb `<nav>` `text-slate-400` to `500`, author line and breadcrumb hover `amber-600` to `champagne-dark`. The `/tanghuot/` main CTA moved from `bg-kh-red` to `bg-champagne-dark`: `--kh-red` is read only by `.border-kh-red`, which no element uses, so changing the variable would have changed nothing, and `.bg-kh-red` hardcodes `#C5A059` and also colours three decorative rules that stay gold. The `/tanghuot/` Facebook button moved from `bg-[#1877F2]` (white text 4.23:1) to its own former hover value `bg-[#166FE5]` (about 4.7:1), with the hover one step darker at `#1565D8` so it still changes.
+- **Verification**:
+  - `npm run build`: content check 15 articles, 0 errors, 0 warnings; `astro check` 0 errors, 0 warnings; 64 pages built (66 at `HEAD` before the change). `dist/blog/page/1/` and `dist/pulse/1/` absent, pages 2 to 4 present; `dist/sitemap-0.xml` 65 to 63 URLs, the diff being exactly those two; no `href` anywhere in `dist/` points at either.
+  - Every target in `public/_redirects` exists in `dist/`; none of the new sources is shadowed by a built page.
+  - `python devops/generate_llms_txt.py --check`: exit 1 before each regeneration, exit 0 after.
+  - Rendered `dist/blog/07-housewarming-catering-setup/index.html` measured with `check_content.display_width`: `<title>` 55.4 units (was 52.1), description 140.3 (was 133.9); `datePublished` unchanged, no `dateModified`.
+  - Lighthouse accessibility against `npm run preview`, mobile, reports in `devops/reports/lh_a11y_*.json`: `/`, `/blog/07-housewarming-catering-setup/` and `/tanghuot/` all score 1.0 with `color-contrast` and `label-content-name-mismatch` both 1. `/tanghuot/` reached 1 only after the Facebook button change; before it, that button was the single failing node.
+
 ## 2026-09-11 (GSC 90-Day Refresh, Web Vitals Optimization & Technical SEO Cleanup)
 
 - **Audited GSC & Core Web Vitals**:

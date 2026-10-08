@@ -15,7 +15,10 @@ export async function getStaticPaths({ paginate }: any) {
 
   rawPosts.sort((a, b) => b.id.localeCompare(a.id));
 
-  return paginate(rawPosts, { pageSize: 12 });
+  // Page 1 is /blog/ (index.astro). Emitting it here too produced /blog/page/1/, a
+  // self-canonical duplicate of /blog/ that went into the sitemap and was indexed by
+  // Google (2026-10-08 checkup). public/_redirects 301s it to /blog/.
+  return paginate(rawPosts, { pageSize: 12 }).filter((p: any) => p.props.page.currentPage !== 1);
 }
 
 const { page } = Astro.props as any;

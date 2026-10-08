@@ -17,6 +17,9 @@ on:
       - 'src/pages/**'
       - 'public/llms*.txt'
       - 'devops/check_content.py'
+      # generate_llms_txt.py also reads the address and coordinates from Layout.astro.
+      - 'devops/generate_llms_txt.py'
+      - 'src/layouts/Layout.astro'
   pull_request:
     paths:
       - 'src/content/**'
@@ -24,6 +27,9 @@ on:
       - 'src/pages/**'
       - 'public/llms*.txt'
       - 'devops/check_content.py'
+      # generate_llms_txt.py also reads the address and coordinates from Layout.astro.
+      - 'devops/generate_llms_txt.py'
+      - 'src/layouts/Layout.astro'
   workflow_dispatch:
 
 jobs:
@@ -43,3 +49,9 @@ jobs:
       # job stays a few seconds and cannot fail for reasons unrelated to content.
       - name: Check content
         run: python devops/check_content.py --strict
+
+      # llms.txt / llms-full.txt are generated from the content above. The daily pulse
+      # workflow used to regenerate them; with pulse frozen nothing did, and by
+      # 2026-10-08 they had drifted. Stdlib only, like the step above.
+      - name: Check llms.txt is up to date
+        run: python devops/generate_llms_txt.py --check

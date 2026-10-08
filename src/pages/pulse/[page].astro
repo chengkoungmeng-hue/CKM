@@ -13,7 +13,10 @@ export async function getStaticPaths({ paginate }: any) {
   if (validItems.length === 0) {
     validItems.push({ id: 'pulse-01', title_km: 'បច្ចុប្បន្នភាពអន្តរជាតិ', summary_km: '', category: 'សេវាកម្មធ្វើម្ហូបចល័ត', image_url: '/images/blog_01_inline_khmer.webp', pub_date: '' });
   }
-  return paginate(validItems, { pageSize: 12 });
+  // Page 1 is /pulse/ (index.astro). Emitting it here too produced /pulse/1/, a
+  // self-canonical duplicate of /pulse/ that went into the sitemap and was indexed by
+  // Google (2026-10-08 checkup). public/_redirects 301s it to /pulse/.
+  return paginate(validItems, { pageSize: 12 }).filter((p: any) => p.props.page.currentPage !== 1);
 }
 
 const { page } = Astro.props as any;

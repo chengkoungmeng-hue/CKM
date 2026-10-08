@@ -4,6 +4,27 @@
 /en/*  /  301
 /en    /  301
 
+# Page 1 of each paginated listing duplicated the listing itself, self-canonical and
+# in the sitemap; the 2026-10-08 checkup found both indexed by Google. The [page]
+# routes no longer emit page 1, so these send the indexed URLs to the real page.
+/blog/page/1/  /blog/  301
+/blog/page/1   /blog/  301
+/pulse/1/  /pulse/  301
+/pulse/1   /pulse/  301
+
+# Article slugs deleted in 90b9a98 (2026-07-04) with no redirect; Google was still
+# crawling both 404s in 2026-08. Old 04 covered the same topic as the new 04. Old 02
+# (menus for guests of every age) has no successor, so it goes to the listing.
+/blog/04-temperature-flavor-consistency/  /blog/04-hygiene-and-temperature-control/  301
+/blog/04-temperature-flavor-consistency   /blog/04-hygiene-and-temperature-control/  301
+/blog/02-khmer-chinese-fusion/  /blog/  301
+/blog/02-khmer-chinese-fusion   /blog/  301
+
+# pickled-daikon-pulse-19 is the same entry, renumbered to -20 in 8f0dba9 by the
+# position-derived slug defect (AGENTS.md section 15). Google still crawled it on 2026-09-19.
+/pulse/pickled-daikon-pulse-19/  /pulse/pickled-daikon-pulse-20/  301
+/pulse/pickled-daikon-pulse-19   /pulse/pickled-daikon-pulse-20/  301
+
 # 301 Permanent Redirects for pulse alias routes (/pulse/pulse-NN/ -> /pulse/:slug/)
 /pulse/pulse-31/  /pulse/scrambled-eggs-with-shiso/  301
 /pulse/pulse-31   /pulse/scrambled-eggs-with-shiso/  301
