@@ -37,6 +37,7 @@ import argparse
 import datetime
 import json
 import os
+import re
 import sys
 import urllib.error
 import urllib.parse
@@ -212,6 +213,25 @@ def plan_redirects(text, slugs):
     return additions, rewrites
 
 
+def insertion_index(lines):
+    """Where new static rules go: above the dynamic block at the end of the file.
+
+    Cloudflare counts every rule below the first dynamic one (a splat or a
+    :placeholder) as dynamic too, and check_content.py fails the build on that
+    (AGENTS.md section 3). Appending at the end of the file would land there.
+    The comment block directly above the first dynamic rule stays with it.
+    """
+    for i, line in enumerate(lines):
+        s = line.strip()
+        if s and not s.startswith("#"):
+            source = s.split()[0]
+            if "*" in source or re.search(r":[A-Za-z]\w*", source):
+                while i > 0 and lines[i - 1].strip().startswith("#"):
+                    i -= 1
+                return i
+    return len(lines)
+
+
 def apply_redirects(additions, rewrites, slugs, reason):
     text = open(REDIRECTS_PATH, "r", encoding="utf-8").read()
     if rewrites:
@@ -227,7 +247,12 @@ def apply_redirects(additions, rewrites, slugs, reason):
         header = "# Takedown %s: %s removed at the rights holder's request" % (today, what)
         if reason:
             header += " (%s)" % reason
-        text = text.rstrip("\n") + "\n\n" + header + "\n" + "\n".join(additions) + "\n"
+        lines = text.rstrip("\n").split("\n")
+        at = insertion_index(lines)
+        gap = [""] if at > 0 and lines[at - 1].strip() else []
+        tail = [""] if at < len(lines) else []
+        lines[at:at] = gap + [header] + additions + tail
+        text = "\n".join(lines) + "\n"
     with open(REDIRECTS_PATH, "w", encoding="utf-8") as f:
         f.write(text)
 

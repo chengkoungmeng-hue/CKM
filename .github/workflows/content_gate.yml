@@ -16,6 +16,7 @@ on:
       - 'src/data/**'
       - 'src/pages/**'
       - 'public/llms*.txt'
+      - 'public/_redirects'
       - 'devops/check_content.py'
       # generate_llms_txt.py also reads the address and coordinates from Layout.astro.
       - 'devops/generate_llms_txt.py'
@@ -26,6 +27,7 @@ on:
       - 'src/data/**'
       - 'src/pages/**'
       - 'public/llms*.txt'
+      - 'public/_redirects'
       - 'devops/check_content.py'
       # generate_llms_txt.py also reads the address and coordinates from Layout.astro.
       - 'devops/generate_llms_txt.py'

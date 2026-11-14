@@ -59,6 +59,31 @@
   `/pulse/[slug]/` and `/pulse/[id]/` as 200 OK HTML pages causes Google Search Console to flag
   "Duplicate, Google chose different canonical than user". Static generation in `pulse/[id].astro`
   emits only `/pulse/[slug]/`, and `public/_redirects` 301-redirects `/pulse/pulse-NN/` to `/pulse/:slug/`.
+- **[REGRESSION] Dynamic rules go at the end of `public/_redirects`, and a change to that
+  file is verified on the live site, never against `dist/`.** Cloudflare's parser
+  (`cloudflare/workers-sdk`, `packages/workers-shared/utils/configuration/parseRedirects.ts`,
+  read 2026-11-14) treats a rule as dynamic when its source contains `*` or a
+  `:placeholder`, counts every rule after the first dynamic one as dynamic too, and stops
+  reading the file at the 101st dynamic rule without reporting anything. `/zh/*` sat on
+  line 2, so the whole file counted as dynamic and its real limit was 100 rules, not
+  2,000; at 90 rules it was ten from failing.
+  - What shipped: `e0c2ee5` (2026-11-14) added 120 retired-pulse-slug 301s, taking the
+    file to 210 rules. Requested one by one on `ckmkh.com` after the deploy, the first 98
+    of the 208 static rules returned 301 and the other 110 returned 404, the break at
+    line 119 of the file; 76 of the 110 had worked before the push. `a52bacf` reverted
+    it, and the 90 original rules then checked 90 of 90 on the live site.
+  - How it got past: both checks run before the push compared the file with `dist/`, and
+    both assumed every rule in the file is applied. Nothing in the repository showed how
+    many rules the host actually applies. This is §0's checker that shares an
+    assumption with the change it checks.
+  - Now: `/zh/*` and `/en/*` sit in their own block at the end of the file.
+    `check_content.py` (`check_redirects`) fails the build on a static rule below a
+    dynamic one, more than 2,000 static or 100 dynamic rules, a line over 1,000
+    characters (the documented limit; the source constant is 2,000), a token count
+    other than 2 or 3, a status outside 200/301/302/303/307/308, or a duplicate source.
+    `devops/takedown.py` inserts above the dynamic block instead of appending. After any
+    deploy that touches the file, run `python devops/verify_redirects_live.py`; that,
+    not a build, is the verification.
 
 ## 4. Client-side scripts
 
@@ -161,9 +186,9 @@
     changes, change it in `check_content.py` in the same commit.
   - **The takedown route has to work in five minutes, and it is `devops/takedown.py`.**
     A rights holder's email gives a slug or a hostname; the script removes the entries
-    from `pulseData.json`, deletes the image files, appends the 301 to `/pulse/` in
-    `public/_redirects` (retargeting the `/pulse/pulse-NN/` aliases so they do not
-    redirect into a 404), and prints a reply the owner can paste. It changes nothing
+    from `pulseData.json`, deletes the image files, adds the 301 to `/pulse/` in
+    `public/_redirects` above the dynamic rules at the end of the file (§3), retargeting
+    the `/pulse/pulse-NN/` aliases so they do not redirect into a 404, and prints a reply the owner can paste. It changes nothing
     without confirmation, never commits or deploys, and refuses to submit a removed URL
     to IndexNow while that URL still returns 200.
 - **The card renderer needs Pillow built against raqm, and a local render is not

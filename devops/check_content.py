@@ -917,6 +917,86 @@ def check_opener_variety(articles):
                     % (kind, prefix, len(paths), OPENER_CAP, names))
 
 
+# ---------------------------------------------------------------- rule 12
+
+# public/_redirects is read by Cloudflare's parser (cloudflare/workers-sdk,
+# packages/workers-shared/utils/configuration/parseRedirects.ts and constants.ts, read
+# 2026-11-14). A rule is dynamic when its source contains `*` or matches
+# `:[A-Za-z]\w*`. After the first dynamic rule the parser counts EVERY later rule as
+# dynamic, and at the 101st dynamic rule it stops reading the file without an error.
+# `/zh/*` sat on line 2, so the whole file was dynamic and its real limit was 100 rules.
+# e0c2ee5 took it from 90 rules to 210; on ckmkh.com every rule after the 100th returned
+# 404, 76 previously working ones among them, until a52bacf reverted it. Both checks run
+# that day compared the file against dist/, and both assumed every rule in the file is
+# applied, so neither could see it. The counts below follow Cloudflare's semantics. The
+# line limit is the documented 1,000 characters; the source constant is 2,000.
+REDIRECTS_FILE = os.path.join(ROOT, "public", "_redirects")
+REDIRECTS_MAX_STATIC = 2000
+REDIRECTS_MAX_DYNAMIC = 100
+REDIRECTS_MAX_LINE = 1000
+REDIRECTS_STATUS = {200, 301, 302, 303, 307, 308}
+REDIRECTS_PLACEHOLDER = re.compile(r":[A-Za-z]\w*")
+
+
+def check_redirects(path=REDIRECTS_FILE):
+    if not os.path.isfile(path):
+        return
+    static = dynamic = 0
+    first_dynamic = None      # line number of the first dynamic rule
+    demoted = []              # static rules below it, which Cloudflare counts as dynamic
+    cutoff = None             # line at which Cloudflare stops reading
+    seen = {}
+    for n, raw in enumerate(read(path).split("\n"), 1):
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+        if len(line) > REDIRECTS_MAX_LINE:
+            err("redirects-line-too-long", path, n,
+                "%d characters; Cloudflare ignores a rule over %d"
+                % (len(line), REDIRECTS_MAX_LINE))
+            continue
+        tokens = re.split(r"\s+", re.sub(r"\s+#.*$", "", line))
+        if len(tokens) not in (2, 3):
+            err("redirects-token-count", path, n,
+                "expected 2 or 3 whitespace-separated tokens, got %d" % len(tokens))
+            continue
+        source = tokens[0]
+        status = tokens[2] if len(tokens) == 3 else "302"
+        if "*" in source or REDIRECTS_PLACEHOLDER.search(source):
+            dynamic += 1
+            if first_dynamic is None:
+                first_dynamic = n
+        elif first_dynamic is not None:
+            dynamic += 1
+            demoted.append(n)
+        else:
+            static += 1
+        if dynamic == REDIRECTS_MAX_DYNAMIC + 1 and cutoff is None:
+            cutoff = n
+        if not status.isdigit() or int(status) not in REDIRECTS_STATUS:
+            err("redirects-bad-status", path, n,
+                "status %r; Cloudflare accepts only %s"
+                % (status, ", ".join(map(str, sorted(REDIRECTS_STATUS)))))
+        if source in seen:
+            err("redirects-duplicate", path, n,
+                "source %s already defined on line %d; Cloudflare keeps the first"
+                % (source, seen[source]))
+        else:
+            seen[source] = n
+    if demoted:
+        err("redirects-static-after-dynamic", path, demoted[0],
+            "%d static rule(s) sit below the first dynamic rule (line %d), so Cloudflare "
+            "counts them as dynamic, against a limit of %d. Move dynamic rules to the end"
+            % (len(demoted), first_dynamic, REDIRECTS_MAX_DYNAMIC))
+    if static > REDIRECTS_MAX_STATIC:
+        err("redirects-too-many-static", path, 1,
+            "%d static rules; Cloudflare's limit is %d" % (static, REDIRECTS_MAX_STATIC))
+    if dynamic > REDIRECTS_MAX_DYNAMIC:
+        err("redirects-too-many-dynamic", path, cutoff,
+            "%d rules count as dynamic; Cloudflare stops reading here, at dynamic rule "
+            "%d, and ignores the rest of the file" % (dynamic, REDIRECTS_MAX_DYNAMIC + 1))
+
+
 def main():
     strict = "--strict" in sys.argv
 
@@ -946,6 +1026,7 @@ def main():
     check_pulse()
     check_photo_credit_source()
     check_llms_txt()
+    check_redirects()
     check_secrets()
 
     for label, items in (("ERROR", ERRORS), ("WARN", WARNINGS)):
