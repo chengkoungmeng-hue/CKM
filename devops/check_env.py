@@ -27,7 +27,8 @@
 
 * **不寫入。** CI 版本會提交 sitemap、清空 Cloudflare 快取來證明寫入權限;
   本機版只讀,因為開發者一天可能跑它十次,而清快取是真的會清。
-  寫入權限的證明留給 verify_credentials.yml,那裡一週跑一次。
+  寫入權限的證明留給 verify_credentials.yml(自 2026-11-14 起只能手動觸發,
+  體檢時執行;見 .agents/AGENTS.md §24)。
 * **不檢查 pulse 資料新鮮度。** devops/check_pulse_health.py 量的是內容有多舊,
   而 pulse 已於 2026-08-23 由擁有者決定凍結(daily_catering_pulse.yml 的 cron
   已註解),資料集不可能再變新,那支檢查因此永遠是紅的。把它併進來會得到一個

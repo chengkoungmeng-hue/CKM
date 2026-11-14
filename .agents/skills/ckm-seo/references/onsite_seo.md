@@ -14,7 +14,7 @@ Astro 靜態站 + Cloudflare Pages。SEO 規則的唯一真本在 `.agents/AGENT
 | `gsc_query_report.py` | 拉 GSC 搜尋分析。**API 失敗即非零退出,不產生合成資料** |
 | `apply_internal_links.py` | 依 `src/data/internalLinks.json` **宣告表**注入內鏈 |
 | `scan_seo_issues.py` | 掃 `src/` 的 alt text 缺失與 meta description 問題 |
-| `check_pulse_health.py` | pulse 資料集停滯偵測(每日 cron 內建) |
+| `check_pulse_health.py` | pulse 資料集停滯偵測(內建於每日 pulse workflow;該 cron 自 2026-08-23 凍結起已註解) |
 
 ## 動工前先讀的規則(本體皆在 AGENTS.md,此處僅路由)
 
@@ -31,4 +31,4 @@ Facebook 粉絲團 + 社團,高棉文圖文三件套,零連結。見 AGENTS.md �
 
 ## 量測
 
-每週 `search_report.yml`(cron)自動拉 GSC;高曝光低 CTR 的高棉文查詢是改標題與寫新文的題材來源。
+`search_report.yml` 拉 GSC(自 2026-11-14 起只能手動觸發,體檢時執行;見 `.agents/AGENTS.md` §24);高曝光低 CTR 的高棉文查詢是改標題與寫新文的題材來源。

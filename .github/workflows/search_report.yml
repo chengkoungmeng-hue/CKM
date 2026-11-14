@@ -23,10 +23,21 @@ on:
         description: 'Window in days'
         required: false
         default: '90'
-  schedule:
-    # Monday 06:00 UTC = 13:00 ICT. Weekly is the right cadence: the site takes single
-    # digit clicks per week, so a daily report would be noise around zero.
-    - cron: '0 6 * * 1'
+  # PAUSED 2026-11-14 by owner decision, for the maintenance-free period (AGENTS.md
+  # section 24). It runs by hand at each checkup instead (Docs/SEO_MONTHLY_CHECKUP.md).
+  # - Nothing depends on the scheduled run: no workflow chains from this one and nothing
+  #   downloads its artifact. Its only output is a report for a person to read.
+  # - Scheduled alerts here reach no one: Verify Credentials failed on schedule on
+  #   2026-10-25, 11-01 and 11-08, and nobody acted until the 2026-11-14 checkup.
+  # - GitHub's docs (read 2026-11-14): "In a public repository, scheduled workflows are
+  #   automatically disabled when no repository activity has occurred in 60 days." No
+  #   pushes are planned for six months, and the docs do not define "activity", so a
+  #   schedule left on would stop at a point nobody could predict.
+  # To resume: uncomment the schedule lines below.
+  # schedule:
+  #   # Monday 06:00 UTC = 13:00 ICT. Weekly is the right cadence: the site takes single
+  #   # digit clicks per week, so a daily report would be noise around zero.
+  #   - cron: '0 6 * * 1'
 
 concurrency:
   group: search-report

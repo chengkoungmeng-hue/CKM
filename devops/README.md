@@ -11,19 +11,21 @@ CI 一律從 repo 根目錄(`$GITHUB_WORKSPACE`)呼叫這些工具,沒有任何 
 
 ## 工具清單
 
-### CI 排程執行
+### CI 執行
+
+自 2026-11-14 起沒有任何 workflow 以排程觸發(免維護期,見 `.agents/AGENTS.md` §24);下表的 workflow 只在 push / PR 或手動觸發時執行。
 
 | 檔案 | 用途 | 呼叫方式 |
 | :--- | :--- | :--- |
 | `check_content.py` | 內容閘門:高棉文字元完整性、`seoTitle` / `description` 渲染寬度預算、內鏈下限、開頭語重複上限、密鑰樣式掃描,pulse 圖片與出處配對(`image_url` 必須是本站實際存在的檔案;轉存的第三方照片必須有 `image_source_link`,自製文字圖卡則不得有),以及 `public/_redirects` 依 Cloudflare 解析器規則的檢查(動態規則必須在檔尾、靜態 / 動態條數上限、行長、token 數、狀態碼、重複來源)。無外部相依,全樹掃描一秒內完成 | workflow `Content gate`(push / PR 觸及 `src/content/**`、`src/data/**`、`public/llms*.txt`、`public/_redirects`、`devops/check_content.py` 時)與 `Daily Catering Pulse & Auto-Indexing Pipeline`,兩者皆執行 `python devops/check_content.py --strict` |
-| `fetch_catering_pulse.py` | 每日一篇高棉文短評。週一至週五題目取自 `pulse_seeds.json`(宴席種子,不觸網選題),週六日取自 RSS;Gemini 改寫後過閘門(章節數、食譜形態、需求詞、長度、外文字元),外部來源篇取回原圖轉存本地並記錄 `image_source_link`,無圖時退回 `render_pulse_card.py` 生成的文字圖卡。寫入 `src/data/pulseData.json` | workflow `Daily Catering Pulse & Auto-Indexing Pipeline`,cron `47 20 * * *`(每日一次):`python devops/fetch_catering_pulse.py` |
+| `fetch_catering_pulse.py` | 每日一篇高棉文短評。週一至週五題目取自 `pulse_seeds.json`(宴席種子,不觸網選題),週六日取自 RSS;Gemini 改寫後過閘門(章節數、食譜形態、需求詞、長度、外文字元),外部來源篇取回原圖轉存本地並記錄 `image_source_link`,無圖時退回 `render_pulse_card.py` 生成的文字圖卡。寫入 `src/data/pulseData.json` | workflow `Daily Catering Pulse & Auto-Indexing Pipeline`(cron `47 20 * * *` 自 2026-08-23 凍結起已註解,只能手動觸發):`python devops/fetch_catering_pulse.py` |
 | `generate_llms_txt.py` | 由站內既有內容產生 `public/llms.txt` 與 `public/llms-full.txt`;`--check` 於檔案過期時非零退出 | 同上 workflow:`python devops/generate_llms_txt.py` |
 | `check_pulse_health.py` | 停擺偵測器。不逐一檢查各種失敗成因,而是量測「資料集最新一筆有多舊」,涵蓋所有已知與未知的靜默失敗路徑 | 同上 workflow(`if: always()`,在 commit 步驟之後):`python devops/check_pulse_health.py --max-age-days 2` |
 | `notify_indexing.py` | Cloudflare 邊緣快取清除、IndexNow 提交、Search Console sitemap 重送;可由 git diff 推導受影響 URL | workflow `Publish`(push / `workflow_run` / 手動):`python devops/notify_indexing.py --urls …` 或 `--changed` |
-| `gsc_query_report.py` | 拉取 Search Console 即時搜尋數據。無任何 fallback 值,API 失敗即非零退出;原始輸出寫入 `devops/reports/gsc_search_queries.json` | workflow `Search Report`,cron `0 6 * * 1`:`python devops/gsc_query_report.py --days "$days"` |
+| `gsc_query_report.py` | 拉取 Search Console 即時搜尋數據。無任何 fallback 值,API 失敗即非零退出;原始輸出寫入 `devops/reports/gsc_search_queries.json` | workflow `Search Report`(手動觸發;原每週一 cron `0 6 * * 1` 自 2026-11-14 起已註解):`python devops/gsc_query_report.py --days "$days"` |
 | `check_pulse_indexation.py` | 量測每個 pulse 頁面上線後實際取得的曝光、點擊與最佳排名,統計零曝光頁數。認證與 HTTP 呼叫直接沿用 `gsc_query_report.py`,缺憑證或 API 失敗一律在輸出任何數字前非零退出;結果寫入 `devops/reports/pulse_indexation.json` | workflow `GSC measurement snapshot`(手動觸發):`python devops/check_pulse_indexation.py`。屬報表工具,不得加入每日發布 workflow |
 
-`Verify Credentials`(cron `0 19 * * 0`)以 inline 指令驗證三組憑證,不呼叫本目錄任何檔案;
+`Verify Credentials`(手動觸發;原每週日 cron `0 19 * * 0` 自 2026-11-14 起已註解)以 inline 指令驗證三組憑證,不呼叫本目錄任何檔案;
 其註解引用了 `devops/fetch_catering_pulse.py` 的 `MODEL_LADDER`。
 
 ### npm 執行

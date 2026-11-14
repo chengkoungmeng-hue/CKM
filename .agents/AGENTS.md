@@ -709,8 +709,9 @@ Every item below came out of an audit of the 15 live articles.
   11-01 and 11-08: the key authenticates (50 models visible), and both ladder models
   return 403 "The Gemini API free tier is not available for this project". Uncommenting
   the cron alone would give a red run that publishes nothing (`generation-*`). Run
-  `Verify Credentials` by hand and see its `gemini` job pass first; since 2026-11-14
-  that job runs on `workflow_dispatch` only.
+  `Verify Credentials` by hand and see its `gemini` job pass first; the workflow has had
+  no schedule since 2026-11-14 (§24). The owner reported deleting the key that day, so a
+  new key comes first.
 - **Pulse quality is now the site's quality.** The blog is frozen at 15 articles; pulse
   grows by one a day (`47 20 * * *`, a single daily run since 2026-08-22 — the second run
   published a second article rather than retrying the first, which would have given 14 a week
@@ -806,7 +807,7 @@ Audited 2026-08-14:
 | Credential | Read by | Home |
 | :--- | :--- | :--- |
 | `CLOUDFLARE_API_TOKEN` | CI: `notify_indexing.py` (purge only). Local: `apply_cf_settings.py`, `cloudflare_audit.js` | CI + local `devops/.env` (key verified present 2026-08-30). The CI copy is scoped to **Cache Purge**; establish what the local copy can do with the token-verify call below before using it |
-| `GEMINI_API_KEY` | `fetch_catering_pulse.py`, whose cron is commented out since the 2026-08-23 freeze, and the `gemini` job of `verify_credentials.yml`, manual-only since 2026-11-14. **Nothing scheduled reads it.** It authenticates but cannot generate: 403, free tier not available for this project (measured 2026-11-08) | GitHub Actions secrets. Whether to delete it is open, for the owner |
+| `GEMINI_API_KEY` | `fetch_catering_pulse.py`, whose cron is commented out since the 2026-08-23 freeze, and the `gemini` job of `verify_credentials.yml`, a workflow with no schedule since 2026-11-14 (§24). **Nothing scheduled reads it.** Last measured 2026-11-08: authenticated but could not generate (403, free tier not available for this project) | On 2026-11-14 the owner reported deleting the key. The same day `gh secret list` still listed a repository secret named `GEMINI_API_KEY`, updated 2026-08-14. Both are recorded as observed; neither establishes the other, so do not read this as "the secret is deleted" |
 | `GSC_SERVICE_ACCOUNT_JSON` | CI, written transiently to `google_service_account.json` and deleted in the same step | GitHub Actions secrets |
 | `google_service_account.json` | Local: `gsc_query_report.py` | Local only. Should be a **read-only** (`webmasters.readonly`) service account, separate from the CI one that can submit indexing |
 | `GSC_GA4_SERVICE_ACCOUNT_EMAIL` | **nothing** — re-audited 2026-08-17. Both readers (`generate_analytics_report.py`, `gsc_ga4_audit.js`) were deleted in `6292696`; `git grep` outside `*.md` returns zero hits | **Delete.** Not a secret — an email address — but a variable nothing reads is a variable nobody maintains |
@@ -1186,5 +1187,43 @@ verified from here.
    `git -c core.sshCommand="ssh -o BatchMode=yes" push origin <branch>`
 2. **GitHub CLI (`gh`) Operations**: Before creating/merging PRs or calling GitHub APIs:
    `gh auth switch --hostname github.com --user chengkoungmeng-hue`
+
+## 24. Maintenance-free period, 2026-11-14 to the 2027-05 checkup
+
+**Owner decision, 2026-11-14.** The owner moves between many project windows and loses
+them, so this project has to run for about six months with nobody looking after it.
+
+- **Start here:** `Docs/SEO_MONTHLY_CHECKUP.md`, the entry point for the next checkup.
+  The checkup cadence is now every six months; the next one is due in May 2027.
+- **No pushes for six months** once the 2026-11-14 redirect fix has been verified on the
+  live site (§3). A push rebuilds and redeploys the site, and the deployed site is the
+  thing that has to keep working untended.
+- **Nothing runs on a schedule.** The pulse cron has been commented out since the
+  2026-08-23 freeze (§15). On 2026-11-14 `search_report.yml` and `verify_credentials.yml`
+  had their `schedule:` blocks commented out too, not deleted; both keep
+  `workflow_dispatch` and are run by hand at each checkup. The reasons are written above
+  each commented-out block:
+  - `Verify Credentials` failed on schedule on 2026-10-25, 11-01 and 11-08, and nobody
+    acted until the 2026-11-14 checkup. A scheduled alert here reaches no one.
+  - Nothing depends on either scheduled run: `publish.yml` chains only from the pulse
+    workflow, and nothing downloads the `search-report` artifact.
+  - GitHub's documentation, read 2026-11-14: "In a public repository, scheduled
+    workflows are automatically disabled when no repository activity has occurred in 60
+    days." It does not define "activity", so a schedule left on through six months
+    without pushes would stop at a point nobody could predict.
+- **Astro 7 is not being taken now.** The deployed site is static files and does not
+  run Astro. The five `npm audit` findings left after 2026-11-14 (astro, sharp and
+  esbuild, which need astro 7, and `@tailwindcss/typography` with
+  `postcss-selector-parser`, which no 0.5.x release fixes) are all in the build
+  toolchain, which nothing runs while nothing is built. Decide again at the next
+  checkup, with these facts:
+  - `@astrojs/tailwind` cannot come along. 5.1.5, installed here, declares
+    `astro: ^3.0.0 || ^4.0.0 || ^5.0.0` and `npm ls` already marks astro 6.4.8 invalid.
+    The latest release, 6.0.2, declares the same range (`npm view`, 2026-11-14).
+  - The sister project Sunder shows a way through. Its `.github/dependabot.yml` holds
+    the astro major back because "astro 7 requires vite 8", and its
+    `postcss.config.cjs` wires Tailwind 3 through Astro's own PostCSS support instead
+    of `@astrojs/tailwind`, so dropping the integration does not force the Tailwind 4
+    migration. Both were read in Sunder's repository on 2026-11-14.
 
 </RULE[project_scoped]>
