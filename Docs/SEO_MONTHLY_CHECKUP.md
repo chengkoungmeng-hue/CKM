@@ -1,12 +1,44 @@
-# CKM 每季 SEO 體檢與維護
+# CKM 半年 SEO 體檢與維護
 
 建立於 2026-10-08。規則真本仍是 `.agents/AGENTS.md`;本文件只放**程序**與**台帳**,
-不復述規則。衝突時以 AGENTS.md 為準。
+不復述規則。衝突時以 AGENTS.md 為準。檔名保留以免改動既有引用。
 
-**節奏自 2026-11-14 起由每月改為每季(owner 決定)**,檔名保留以免改動既有引用。
-兩次體檢之間唯一的警報是每週的 `Search Report` 與 `Verify Credentials` 兩個 workflow,
-所以它們必須維持「綠燈 = 正常、紅燈 = 有事」:2026-11 發現後者已連續紅了三週而沒人處理(§4b)。
-每季另加一步依賴更新(§2.8)。
+## 交接頁:下次開工先讀這裡
+
+**狀態:免維護期,2026-11-14 起,下次體檢 2027 年 5 月。** owner 經常在多個專案的視窗之間
+切換,視窗會遺失,所以現況寫在這裡,不留在任何對話裡。
+
+現況(2026-11-14 收尾時):
+
+- 內容凍結:15 篇文章、pulse 停產但 37 頁保留上線。沒有任何排程 workflow 在跑,
+  `Search Report` 與 `Verify Credentials` 都只能手動觸發。沒有東西會自己動,也就沒有東西會自己壞。
+- 套件:astro 6.4.8,`npm audit` 剩 5 項,全都要升 major 才能解。**刻意不升 Astro 7**:
+  已部署的靜態站不執行 Astro,弱點都在建置工具鏈,不建置就不曝險。
+- `public/_redirects` 210 條,部署後對線上逐條驗證 210 / 210(§4b)。
+
+這段期間的規則只有一條:**不要推送。** 任何 push 都是一次正式部署。真的要改東西,
+改完照 §2 驗證,而且 `_redirects` 的改動要在部署後跑 `python devops/verify_redirects_live.py`。
+
+下次開工:
+
+1. 對 Claude 說「做 CKM 半年體檢」,照 §2 的程序跑。
+2. 先手動觸發一次 `Verify Credentials` 與 `Search Report`,確認憑證還活著。
+3. 看這次唯一的內容改動有沒有效:首頁菜單標題加進 `មុខម្ហូបការ`,
+   基準是 khm 排名 6.39(90 天)/ 7.17(28 天)。那行高棉文沒有經過母語者審閱。
+4. 再決定要不要升 Astro 7。路徑記在 AGENTS.md:`@astrojs/tailwind` 已不支援 astro 6 以上,
+   改用 PostCSS 直接接 Tailwind 3(姊妹專案 Sunder 的做法),不要順手升 Tailwind 4。
+
+留給 owner、這份文件管不到的事:
+
+- 沒有人在看,就沒有人會發現網站掛掉或被移出索引。Search Console 出現索引或安全問題時會寄信
+  給資源擁有者,請確認那個信箱有人收。
+- 網域續約、Cloudflare 帳務。
+- GitHub 上名為 `GEMINI_API_KEY` 的 secret 在 2026-11-14 仍然存在(owner 表示金鑰本身已刪除),
+  可以刪掉。
+- Cloudflare 的 Bot Fight Mode 仍在每頁注入偵測腳本(§4b),關不關都可以。
+
+節奏沿革:每月(2026-10)→ 每季(2026-11-14 上午)→ 每半年(2026-11-14,免維護期)。
+每次體檢含一步依賴更新(§2.8)。
 
 ## 0. 這份體檢在量什麼
 
@@ -17,7 +49,7 @@ AGENTS.md §18 已經量出這個市場的天花板:柬埔寨境內的高棉文�
 2. **確認既有判斷仍成立**:`ចុងភៅ` 仍是零點擊、`ម៉ឺនុយ` 仍是意圖錯配、品牌搜尋仍是零。
 3. **抓住極少數真的可做的事**:某個既有頁面對某個真實查詢排在第 8 至 12 名,而且標題裡沒有那個詞。
 
-每季產出一行台帳(§5),讓趨勢能跨期比較。
+每次體檢產出一行台帳(§5),讓趨勢能跨期比較。
 
 ## 1. 角色分工
 
@@ -29,7 +61,7 @@ AGENTS.md §18 已經量出這個市場的天花板:柬埔寨境內的高棉文�
 
 Worker **不 push**。commit 與 push 由 owner 看過 diff 後決定。
 
-## 2. 程序(每季第一週執行,約 60 分鐘)
+## 2. 程序(每半年執行一次,約 60 分鐘)
 
 每一步都寫「指令」與「什麼算發現」。沒有發現就只記一行數字,不要寫分析。
 
@@ -68,6 +100,16 @@ python devops/gsc_query_report.py --days 28
 | `/blog/page/1/`、`/pulse/1/` | 301 → `/blog/`、`/pulse/`(2026-10 批次修復後) |
 | `/blog/02-khmer-chinese-fusion/`、`/blog/04-temperature-flavor-consistency/` | 301(2026-10 批次修復後) |
 | `/sitemap-index.xml`、`/robots.txt`、`/llms.txt` | 200 |
+
+`public/_redirects` 裡的規則不要用抽查的:
+
+```bash
+python devops/verify_redirects_live.py
+```
+
+它對線上逐條請求並比對狀態碼與 `Location`,任何不符就 exit 非零。**拿 `_redirects` 對 `dist/`
+不算驗證**:2026-11-14 兩個這樣的檢查都通過,上線後卻有 110 條規則回 404(§4b)。
+每次部署動到 `_redirects` 之後都要跑。
 
 **(b) GSC 回報的每個頁面都還活著** —— 把 `devops/reports/gsc_search_queries.json` 的
 `pages_all` 逐一 `curl`,任何 404 都是發現(Google 仍在爬的死頁)。
@@ -129,7 +171,15 @@ gh auth switch --hostname github.com --user chengkoungmeng-hue
 gh run list --limit 12
 ```
 
-預期:`Search Report`(週一)與 `Verify Credentials`(週日)每週各一次綠燈。紅燈即發現。
+自 2026-11-14 起兩個 workflow 都沒有排程,所以這一步改成**手動各觸發一次**再看結果:
+
+```bash
+gh workflow run "Verify Credentials"
+gh workflow run "Search Report"
+```
+
+紅燈即發現。`Verify Credentials` 的 `gemini` job 預期失敗(金鑰已由 owner 刪除),
+另外兩個 job 才是要看的。
 
 ### 2.7 Cloudflare Web Analytics(owner 手動)
 
@@ -337,6 +387,21 @@ Worker 另外觀察到:`90b9a98` 還刪了 10 個舊 slug 都沒有 301,但 GSC 
 | 4 GSC 覆蓋率 | 腳本新增 `coverage()` 與警告,`meta` 寫入兩個覆蓋率欄位;AGENTS.md §18 更正 | 讀 diff;對照我先前獨立量到的 820 / 2,473 與 778 / 2,473 | 一致(33.2%、31.5%) |
 | 5 首頁菜單標題 | `index.astro` 第 68、255 行 | 讀 `dist/index.html` | 新字串 2 次、舊字串 0 次;`មុខម្ហូបការ` 在首頁由 0 次變為有 |
 
+**第 1 項的複驗是錯的,而且上了線才發現。** 上表那一列寫的「0 目標缺失、0 遮蔽」都是對
+`dist/` 量的,量不到主機實際套用幾條規則。`e0c2ee5` 推上去之後,對線上逐條請求 208 條靜態規則:
+前 98 條 301,後 110 條全部 404,斷點在檔案第 119 行;失效的 110 條裡有 76 條是推送前正常的
+舊規則。原因是 Cloudflare 的解析器一遇到動態規則就把之後每一條都算成動態,上限 100 條,
+而 `/zh/*` 在檔案第 2 行(`cloudflare/workers-sdk` 的 `parseRedirects.ts`,`canCreateStaticRule`)。
+`a52bacf` 還原,還原後線上 90 / 90 正確。
+Worker 與主 session 的兩個檢查共用了同一個假設,正是 AGENTS.md §0 說的那種「不是檢查的檢查」。
+
+重做(`38b2fe7`):`/zh/*` 與 `/en/*` 移到檔尾,120 條重新加入,共 208 靜態、2 動態。
+`check_content.py` 新增 `check_redirects` 閘門(靜態規則排在動態之後即建置失敗),
+`takedown.py` 改成插在動態區塊之上,並新增 `devops/verify_redirects_live.py`。
+推送前:Cloudflare 自己的 `parseRedirects.ts` 讀新檔得到 210 條套用、0 invalid,
+主 session 另寫的計數邏輯結果相同。**部署後對線上:`verify_redirects_live.py` 210 / 210、exit 0;主 session 另用 curl 逐條請求
+(動態規則換一個探測路徑)同樣 210 / 210。** 八個主要頁面皆 200,`Content gate` 與 `Publish` 綠燈。
+
 依賴更新的剩餘事項:
 
 - `@astrojs/check` 0.9.12 連帶的 language-server 2.17 換了 parser,遇到 `pulse/[id].astro` 第 259 行
@@ -368,4 +433,4 @@ Worker 另外觀察到:`90b9a98` 還刪了 10 個舊 slug 都沒有 301,但 GSC 
 | :--- | :--- | ---: | :--- | ---: | :--- |
 | 2026-09 | 27 / 1,351 | 3.50 | 未分拆 | 3 | hreflang、字型快取、hero 體積 |
 | 2026-10 | 30 / 1,864 | 3.21 | 51 imp / pos 8.5 | 7 | 分頁複本、舊 slug 301、llms 重生、blog 07 標題、aria-label、對比度 |
-| 2026-11 | 38 / 2,473 | 3.85 | 64 imp / pos 7.7 至 14 | 6 | pulse 舊 slug 301、Verify Credentials 紅燈、依賴更新、GSC 覆蓋率警告、首頁菜單標題 |
+| 2026-11 | 38 / 2,473 | 3.85 | 64 imp / pos 7.7 至 14 | 6 | pulse 舊 slug 301(含 `_redirects` 100 條上限事故與閘門)、Verify Credentials 紅燈、依賴更新、GSC 覆蓋率警告、首頁菜單標題;收尾進入免維護期 |

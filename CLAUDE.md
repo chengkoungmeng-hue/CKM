@@ -13,6 +13,9 @@
 
 ## 進場提醒
 
+- **先讀 [`Docs/SEO_MONTHLY_CHECKUP.md`](Docs/SEO_MONTHLY_CHECKUP.md) 最上面的「交接頁」。**
+  專案自 2026-11-14 起處於免維護期(下次體檢 2027 年 5 月),現況、未了事項與「這段期間不要推送」
+  的規則都寫在那裡。owner 經常切換視窗,所以狀態放在 repo,不放在對話裡。
 - 規則描述的是程式碼**現在實際的行為**,不是理想狀態。改動行為時,在同一個 commit 內更新規則。
 - 標記 `[REGRESSION]` 的規則對應真實上線過的缺陷,不要簡化掉。
 - 提交內容前執行 `python devops/check_content.py`。`npm run build` 會以 `--strict` 再跑一次,
