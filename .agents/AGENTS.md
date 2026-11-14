@@ -896,6 +896,16 @@ python devops/gsc_query_report.py --days 90
   rather than degrade to a plausible-looking placeholder.
 - **Always filter to `country = khm`.** Taiwan and US rows are the owner's own team and
   crawlers. Unfiltered totals overstate reach by roughly 25%.
+  - **[REGRESSION] Except per page: the khm-filtered page table is partial.** Measured
+    2026-11-14 over 2026-08-15 → 2026-11-12: khm with no dimension is 38 clicks / 2,473
+    impressions, but `dimensions=["page"]` with the khm filter returns 17 rows summing
+    to 8 / 820 (33% of impressions, 21% of clicks). `["country","page"]` unfiltered and
+    `aggregationType: "byPage"` return the same 17 rows; the all-countries page table
+    is 83 rows, 47 / 2,973. The cause is not established. `gsc_query_report.py` prints
+    the coverage under that table and warns below 80%; for per-page judgement use the
+    all-countries page table and state Cambodia's share of all impressions (88.1% in
+    that window). The khm query table is partial as well (778 / 2,473); that one is
+    Search Console withholding anonymised queries, which is known behaviour.
 
 ### [REGRESSION] The analytics tag is not in this repository — verify it in a browser
 
@@ -989,9 +999,18 @@ weigh it against the cookieless, banner-free position just gained.
   has an exactly-matching title (`ម៉ឺនុយម្ហូបការ ៨ មុខ…`), ranks 5.52, and took 0 clicks
   from 48 impressions. A perfect keyword match that never gets clicked is an intent
   mismatch, not an optimisation problem.
-- **Coverage is not the constraint.** 15 articles produce ~150 impressions per 90 days
-  combined. Writing article 16 has an expected value of ~10 impressions per quarter.
-  Do not propose "more content" as an SEO fix.
+- **Coverage is not the constraint.** Do not propose "more content" as an SEO fix; the
+  owner reaffirmed the content freeze on 2026-11-14. Measured that day over 2026-08-15 →
+  2026-11-12 in the all-countries page table: the 15 articles took 1,212 impressions and
+  20 clicks combined, and two carry most of it (`/blog/07-…` 534 / 8, `/blog/01-…`
+  236 / 5). The median article took 19 impressions and 13 of 15 took under 100. The
+  homepage alone took 950 / 19.
+  **[REGRESSION] This line said "~150 impressions per 90 days combined" and "~10
+  impressions per quarter" for a sixteenth article, and a 2026-09 worklog entry said
+  ~120 and 1 click.** Both were read from the khm-filtered page table, which holds about
+  a third of Cambodia's impressions (bullet above). Neither table gives the Cambodian
+  article total: the khm-filtered table shows 250 / 2 and undercounts, the all-countries
+  table includes other countries and overcounts, so it lies between the two.
 - **Rankings are not the constraint either.** `ម្ហូបការ` sits at position 2.66 over the
   last 28 days. The ceiling on this channel is total demand — roughly 300 commercial
   impressions per 90 days — not placement.

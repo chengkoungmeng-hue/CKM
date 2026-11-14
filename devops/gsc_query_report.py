@@ -86,6 +86,46 @@ def fetch(token, start, end, dimensions=None, filters=None, row_limit=1000):
     return rows_to_records(query(token, body), dimensions or [])
 
 
+#: Below this share of Cambodia's own total (impressions or clicks), the Cambodia page
+#: table is not fit for per-page judgement. See .agents/AGENTS.md section 18.
+COVERAGE_WARN_BELOW_PCT = 80
+
+
+def coverage(records, reference):
+    """Sum a table's clicks and impressions against a reference total row.
+
+    Measured 2026-11-14 over 2026-08-15..11-12: `dimensions=["page"]` with the khm
+    filter returned 17 rows summing to 8 clicks / 820 impressions, against 38 / 2,473
+    for khm with no dimension. Two other query shapes gave the same 17 rows. The cause
+    is not established. Printing coverage beside the table keeps a partial table from
+    being read as the whole country. `reference` is None when khm is absent from
+    by_country; the percentages are then None and the caller treats that as low.
+    """
+    clicks = sum(r.get("clicks", 0) for r in records)
+    impressions = sum(r.get("impressions", 0) for r in records)
+    ref_clicks = reference.get("clicks", 0) if reference else 0
+    ref_impressions = reference.get("impressions", 0) if reference else 0
+    return {
+        "table_clicks": clicks,
+        "table_impressions": impressions,
+        "khm_clicks": ref_clicks,
+        "khm_impressions": ref_impressions,
+        "clicks_pct": round(100 * clicks / ref_clicks, 1) if ref_clicks else None,
+        "impressions_pct": round(100 * impressions / ref_impressions, 1) if ref_impressions else None,
+    }
+
+
+def coverage_line(cov):
+    def part(n, d, pct):
+        return f"{n:,} / {d:,} ({pct}%)" if pct is not None else f"{n:,} / {d:,} (n/a)"
+
+    return (
+        "  coverage of khm total: impressions "
+        f"{part(cov['table_impressions'], cov['khm_impressions'], cov['impressions_pct'])}, "
+        f"clicks {part(cov['table_clicks'], cov['khm_clicks'], cov['clicks_pct'])}"
+    )
+
+
 def table(records, cols, widths, limit=None):
     if not records:
         return "  (no rows)"
@@ -146,6 +186,10 @@ def main():
         if "page" in rec:
             rec["path"] = rec["page"].replace("https://ckmkh.com", "") or "/"
 
+    khm_total = next((r for r in data["by_country"] if r.get("country") == "khm"), None)
+    data["meta"]["khm_page_coverage"] = coverage(data["pages_cambodia"], khm_total)
+    data["meta"]["khm_query_coverage"] = coverage(data["queries_cambodia"], khm_total)
+
     out_path = os.path.join("devops", "reports", "gsc_search_queries.json")
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as fh:
@@ -176,6 +220,7 @@ def main():
     print(f"TOP QUERIES — CAMBODIA ONLY ({len(data['queries_cambodia'])} rows)")
     print(table(data["queries_cambodia"], ["query", "clicks", "impressions", "ctr", "position"],
                 [44, 7, 12, 7, 9], 40))
+    print(coverage_line(data["meta"]["khm_query_coverage"]))
     print()
 
     print(f"TOP PAGES — ALL COUNTRIES ({len(data['pages_all'])} rows)")
@@ -186,6 +231,20 @@ def main():
     print(f"TOP PAGES — CAMBODIA ONLY ({len(data['pages_cambodia'])} rows)")
     print(table(data["pages_cambodia"], ["path", "clicks", "impressions", "ctr", "position"],
                 [52, 7, 12, 7, 9], 30))
+    page_cov = data["meta"]["khm_page_coverage"]
+    print(coverage_line(page_cov))
+    pcts = (page_cov["impressions_pct"], page_cov["clicks_pct"])
+    if any(p is None or p < COVERAGE_WARN_BELOW_PCT for p in pcts):
+        all_impressions = tot.get("impressions", 0)
+        share = (
+            f"{100 * page_cov['khm_impressions'] / all_impressions:.1f}%"
+            if all_impressions else "n/a"
+        )
+        print(
+            f"  WARNING: below {COVERAGE_WARN_BELOW_PCT}% of Cambodia's total, so this table is not "
+            "fit for per-page judgement. Use TOP PAGES — ALL COUNTRIES instead and state "
+            f"Cambodia's share of all impressions ({share} in this window)."
+        )
     print()
 
     print(f"\nSaved raw data to {out_path}")
