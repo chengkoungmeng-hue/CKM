@@ -679,6 +679,13 @@ Every item below came out of an audit of the 15 live articles.
   does not. `/pulse/` was also removed from the homepage the same day — it was putting
   generated cards on the only page with real Cambodian impressions. Everything below
   still describes the pipeline accurately for the day it is switched back on.
+  **Unfreezing has a precondition that does not hold today: `GEMINI_API_KEY` must be
+  able to generate.** Measured by the scheduled `Verify Credentials` runs of 2026-10-25,
+  11-01 and 11-08: the key authenticates (50 models visible), and both ladder models
+  return 403 "The Gemini API free tier is not available for this project". Uncommenting
+  the cron alone would give a red run that publishes nothing (`generation-*`). Run
+  `Verify Credentials` by hand and see its `gemini` job pass first; since 2026-11-14
+  that job runs on `workflow_dispatch` only.
 - **Pulse quality is now the site's quality.** The blog is frozen at 15 articles; pulse
   grows by one a day (`47 20 * * *`, a single daily run since 2026-08-22 — the second run
   published a second article rather than retrying the first, which would have given 14 a week
@@ -774,7 +781,7 @@ Audited 2026-08-14:
 | Credential | Read by | Home |
 | :--- | :--- | :--- |
 | `CLOUDFLARE_API_TOKEN` | CI: `notify_indexing.py` (purge only). Local: `apply_cf_settings.py`, `cloudflare_audit.js` | CI + local `devops/.env` (key verified present 2026-08-30). The CI copy is scoped to **Cache Purge**; establish what the local copy can do with the token-verify call below before using it |
-| `GEMINI_API_KEY` | `fetch_catering_pulse.py`, run by CI | GitHub Actions secrets |
+| `GEMINI_API_KEY` | `fetch_catering_pulse.py`, whose cron is commented out since the 2026-08-23 freeze, and the `gemini` job of `verify_credentials.yml`, manual-only since 2026-11-14. **Nothing scheduled reads it.** It authenticates but cannot generate: 403, free tier not available for this project (measured 2026-11-08) | GitHub Actions secrets. Whether to delete it is open, for the owner |
 | `GSC_SERVICE_ACCOUNT_JSON` | CI, written transiently to `google_service_account.json` and deleted in the same step | GitHub Actions secrets |
 | `google_service_account.json` | Local: `gsc_query_report.py` | Local only. Should be a **read-only** (`webmasters.readonly`) service account, separate from the CI one that can submit indexing |
 | `GSC_GA4_SERVICE_ACCOUNT_EMAIL` | **nothing** — re-audited 2026-08-17. Both readers (`generate_analytics_report.py`, `gsc_ga4_audit.js`) were deleted in `6292696`; `git grep` outside `*.md` returns zero hits | **Delete.** Not a secret — an email address — but a variable nothing reads is a variable nobody maintains |
